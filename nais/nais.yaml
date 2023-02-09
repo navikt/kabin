@@ -1,0 +1,44 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: kabin
+  namespace: klage
+  labels:
+    team: klage
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "100M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+spec:
+  image: {{image}}
+  replicas:
+    min: 2
+    max: 3
+  azure:
+    application:
+      enabled: true
+      tenant: {{tenant}}
+      claims:
+        groups:
+        {{#each roles as |role|}}
+          - id: {{role}}
+        {{/each}}
+        extra:
+          - NAVident
+    sidecar:
+      enabled: true
+      autoLogin: true
+  prometheus:
+    enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: kabin-api
+        - application: kabal-innstillinger
+      external:
+        - host: login.microsoftonline.com
+  ingresses:
+  {{#each ingresses as |url|}}
+    - {{url}}
+  {{/each}}
+  envFrom:
+    - secret: slack-url

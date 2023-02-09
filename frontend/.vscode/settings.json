@@ -1,0 +1,33 @@
+{
+  "typescript.validate.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+  ],
+  "eslint.run": "onType",
+  "eslint.codeActionsOnSave.mode": "all",
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "editor.linkedEditing": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "tslint.enable": false,
+  "prettier.requireConfig": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "liveshare.autoShareServers": true,
+  "liveshare.openSharedServers": false,
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.allowGuestDebugControl": true,
+  "liveshare.allowGuestTaskControl": true,
+  "liveshare.notebooks.allowGuestExecuteCells": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+}
