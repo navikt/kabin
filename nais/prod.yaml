@@ -1,0 +1,3 @@
+ingresses:
+  - https://kabin.intern.nav.no
+tenant: nav.no
