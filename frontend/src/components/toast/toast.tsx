@@ -7,7 +7,7 @@ import { Message } from './store';
 import { ToastType } from './types';
 
 export const Toast = React.memo(
-  ({ type, message, close, setExpiresAt, expiresAt }: Message) => {
+  ({ type, message, dismiss, setExpiresAt, expiresAt }: Message) => {
     const ref = useRef<HTMLDivElement>(null);
     const [remaining, setRemaining] = useState<number | null>(null);
 
@@ -47,7 +47,7 @@ export const Toast = React.memo(
 
     return (
       <StyledToast $type={type} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} $paused={paused} ref={ref}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={close} icon={<Close aria-hidden />} />
+        <StyledCloseButton variant="tertiary" size="xsmall" onClick={dismiss} icon={<Close aria-hidden />} />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>

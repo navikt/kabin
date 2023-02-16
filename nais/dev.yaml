@@ -1,3 +1,6 @@
 ingresses:
   - https://kabin.dev.nav.no
 tenant: trygdeetaten.no
+roles:
+  - 7ad08bfe-68d4-4c84-bddd-82d8894fb36e # KABAL_OPPGAVESTYRING_ALLE_ENHETER
+  - a9f5ef81-4e81-42e8-b368-0273071b64b9 # KABAL_ADMIN
