@@ -6,7 +6,7 @@ export interface Message extends NewMessage {
   id: string;
   createdAt: number;
   expiresAt: number;
-  close: () => void;
+  dismiss: () => void;
   setExpiresAt: (ms: number) => void;
 }
 
@@ -37,8 +37,6 @@ class Store {
     const timeout = setTimeout(() => this.removeMessage(id), TOAST_TIMEOUT);
     const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
 
-    const close = () => setExpiresAt(Date.now() + SLIDE_DURATION);
-
     this.messages = [
       ...this.messages,
       {
@@ -46,7 +44,7 @@ class Store {
         id,
         createdAt,
         expiresAt,
-        close,
+        dismiss: () => setExpiresAt(Date.now() + SLIDE_DURATION),
         setExpiresAt,
       },
     ];

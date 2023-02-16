@@ -4,9 +4,19 @@ interface IEnhet {
   lovligeYtelser: string[];
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export interface IUserData {
   navIdent: string;
   enheter: IEnhet[];
   ansattEnhet: IEnhet;
+}
+
+interface ICustomUserInfo {
+  customLongName: string | null;
+  customShortName: string | null;
+  customJobTitle: string | null;
+}
+
+export interface ISignatureResponse extends ICustomUserInfo {
+  longName: string;
+  generatedShortName: string;
 }

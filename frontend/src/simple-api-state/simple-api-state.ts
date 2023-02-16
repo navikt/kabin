@@ -1,5 +1,6 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useEffect, useState } from 'react';
+import { skipToken } from '../types/common';
+import { apiErrorToast } from './../components/toast/toast-content/fetch-error-toast';
 
 interface State<T> {
   data: T | undefined;
@@ -7,35 +8,54 @@ interface State<T> {
   isUninitialized: boolean;
   isError: boolean;
   error: Error | undefined;
+  isSuccess: boolean;
+  updateData: UpdateData<T>;
 }
 
-interface Options {
+interface InternalOptions {
   prefetch: boolean;
   cacheTime: number;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 }
 
-type Listener<T> = (state: State<T>) => void;
+export type RequestBody = Record<string, unknown> | string | undefined;
 
-// eslint-disable-next-line import/no-unused-modules
+export type Options = Partial<InternalOptions> | undefined;
+
+type Listener<T> = (state: State<T>) => void;
+type UpdateData<T> = (updater: (data: T | undefined) => T | undefined) => void;
+
 export class SimpleApiState<T> {
   private data: T | undefined = undefined;
   private isLoading = false;
   private isUninitialized = true;
   private isError = false;
+  private isSuccess = false;
   private error: Error | undefined = undefined;
   private listeners: Listener<T>[] = [];
-  private options: Options = {
-    prefetch: false,
-    cacheTime: 60000,
-  };
+  private options: InternalOptions = { prefetch: false, cacheTime: 60000, method: 'GET' };
+  private req: RequestInit;
 
-  constructor(private url: string, options?: Partial<Options>) {
+  constructor(private url: string, options?: Options, body: RequestBody = undefined) {
     this.options = Object.assign(this.options, options);
+    this.req = this.getRequest(this.options, body);
 
     if (this.options.prefetch) {
       this.fetchData();
     }
   }
+
+  private getRequest = ({ method }: InternalOptions, body: RequestBody): RequestInit => {
+    const req: RequestInit = { method, headers: { Accept: 'application/json' } };
+
+    if (method === 'POST' || method === 'PUT') {
+      req.cache = 'no-cache';
+      req.headers = { ...req.headers, 'Content-Type': 'application/json' };
+      req.body = body === undefined || typeof body === 'string' ? body : JSON.stringify(body);
+    }
+
+    return req;
+  };
 
   private fetchData = async () => {
     this.isUninitialized = false;
@@ -43,9 +63,10 @@ export class SimpleApiState<T> {
     this.onChange();
 
     try {
-      const response = await fetch(this.url, { method: 'GET' });
+      const response = await fetch(this.url, this.req);
 
       if (!response.ok) {
+        apiErrorToast(response, this.url);
         const error = new Error(`${response.status} ${response.statusText}`);
         this.isError = true;
         this.error = error;
@@ -53,6 +74,8 @@ export class SimpleApiState<T> {
       }
 
       this.data = (await response.json()) as T;
+
+      this.isSuccess = true;
     } catch (e) {
       this.data = undefined;
       this.isError = true;
@@ -68,12 +91,12 @@ export class SimpleApiState<T> {
     }
 
     this.isLoading = false;
-
     this.onChange();
   };
 
   private onChange = (): void => {
     const state = this.getState();
+
     this.listeners.forEach((listener) => listener(state));
   };
 
@@ -82,7 +105,9 @@ export class SimpleApiState<T> {
     isLoading: this.isLoading,
     isUninitialized: this.isUninitialized,
     isError: this.isError,
+    isSuccess: this.isSuccess,
     error: this.error,
+    updateData: this.updateData,
   });
 
   public listen = (listener: Listener<T>): void => {
@@ -112,6 +137,11 @@ export class SimpleApiState<T> {
     }
   };
 
+  public updateData: UpdateData<T> = (updater): void => {
+    this.data = updater(this.data);
+    this.onChange();
+  };
+
   private clear = (): void => {
     console.info('Clearing cached data for', this.url);
     this.data = undefined;
@@ -126,12 +156,23 @@ const SKIP_STATE = {
   isLoading: false,
   isUninitialized: false,
   isError: false,
+  isSuccess: false,
   error: undefined,
+  updateData: () => console.warn('Tried to update data on a skipped state'),
 };
 
-// eslint-disable-next-line import/no-unused-modules
+const INITIAL_STATE = {
+  data: undefined,
+  isLoading: false,
+  isUninitialized: true,
+  isError: false,
+  isSuccess: false,
+  error: undefined,
+  updateData: () => console.warn('Tried to update data on an uninitialized state'),
+};
+
 export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken): State<T> => {
-  const [state, setState] = useState<State<T> | typeof skipToken>(store === skipToken ? skipToken : store.getState());
+  const [state, setState] = useState<State<T>>(INITIAL_STATE);
 
   useEffect(() => {
     if (store === skipToken) {
@@ -143,9 +184,5 @@ export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken
     return () => store.unlisten(setState);
   }, [store]);
 
-  if (state === skipToken) {
-    return SKIP_STATE;
-  }
-
-  return state;
+  return store === skipToken ? SKIP_STATE : state;
 };

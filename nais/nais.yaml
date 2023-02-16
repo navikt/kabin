@@ -34,6 +34,7 @@ spec:
       rules:
         - application: kabin-api
         - application: kabal-innstillinger
+        - application: klage-kodeverk-api
       external:
         - host: login.microsoftonline.com
   ingresses:

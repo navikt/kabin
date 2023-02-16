@@ -47,11 +47,11 @@ const Version = () => {
   }
 
   return (
-    <Header.Title as="div">
+    <div>
       <IconText>
         <Success /> Kabin er klar til bruk!
       </IconText>
-    </Header.Title>
+    </div>
   );
 };
 
@@ -69,4 +69,5 @@ const IconText = styled.span`
 
 const UpdateButton = styled(Button)`
   ${iconText}
+  border-left: none;
 `;
