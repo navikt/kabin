@@ -4,7 +4,7 @@ export enum FieldNames {
 }
 
 const FIELD_NAMES: Record<FieldNames, string> = {
-  [FieldNames.MOTTATT_NAV]: 'Mottatt NAV',
+  [FieldNames.MOTTATT_NAV]: 'Mottatt NAV Klageinstans',
   [FieldNames.FRIST]: 'Frist',
 };
 

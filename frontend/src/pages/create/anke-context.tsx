@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { IBehandling } from '../../types/behandling';
 import { IPart, skipToken } from '../../types/common';
 import { getCreatePayload } from '../../types/create';
@@ -11,13 +11,13 @@ interface IAnkeContext {
   dokument: IArkivertDocument | null;
   klager: IPart | null;
   fullmektig: IPart | null;
-  mottattNav: string; // Date
+  mottattNav: string | null; // Date
   fristInWeeks: number; // Number of weeks
-  setAnkemulighet: (value: IBehandling) => void;
-  setDokument: (value: IArkivertDocument) => void;
+  setAnkemulighet: (value: IBehandling | null) => void;
+  setDokument: (value: IArkivertDocument | null) => void;
   setKlager: (value: IPart | null) => void;
   setFullmektig: (value: IPart | null) => void;
-  setMottattNav: (value: string) => void;
+  setMottattNav: (value: string | null) => void;
   setFristInWeeks: (value: number) => void;
 }
 
@@ -44,51 +44,28 @@ export const AnkeContext = createContext<IAnkeContext>({
 interface Props {
   children: React.ReactNode;
   fnr: string | typeof skipToken;
-  defaultDokument: IArkivertDocument;
-  defaultAnkemulighet: IBehandling;
 }
 
-export const AnkeContextState = ({ fnr, defaultDokument, defaultAnkemulighet, children }: Props) => {
+export const AnkeContextState = ({ fnr, children }: Props) => {
   const { setPayload } = useContext(ApiContext);
-  const [ankemulighet, setInternalAnkemulighet] = useState<IBehandling>(defaultAnkemulighet);
-  const [dokument, setInternalDokument] = useState<IArkivertDocument>(defaultDokument);
-  const [klager, setInternalKlager] = useState<IPart>(defaultAnkemulighet.klager);
+  const [ankemulighet, setAnkemulighet] = useState<IBehandling | null>(null);
+  const [journalpost, setDokument] = useState<IArkivertDocument | null>(null);
+  const [klager, setKlager] = useState<IPart | null>(null);
   const [fullmektig, setFullmektig] = useState<IPart | null>(null);
-  const [mottattNav, setMottattNav] = useState<string>(defaultDokument.registrert);
+  const [mottattNav, setMottattNav] = useState<string | null>(null);
   const [fristInWeeks, setFristInWeeks] = useState<number>(12);
-
-  const klagebehandlingId = ankemulighet.behandlingId;
-  const ankeDocumentJournalpostId = dokument.journalpostId;
 
   useEffect(() => {
     const payload = getCreatePayload({
-      klagebehandlingId,
-      ankeDocumentJournalpostId,
+      journalpost,
+      ankemulighet,
       mottattNav,
       fristInWeeks,
       klager,
       fullmektig,
     });
     setPayload(payload);
-  }, [mottattNav, klager, fullmektig, setPayload, klagebehandlingId, ankeDocumentJournalpostId, fristInWeeks]);
-
-  const setKlager = useCallback(
-    (newKlager: IPart | null) => setInternalKlager(newKlager ?? ankemulighet.klager),
-    [ankemulighet.klager]
-  );
-
-  const setAnkemulighet = useCallback(
-    (newAnkemulighet: IBehandling) => {
-      setInternalAnkemulighet(newAnkemulighet);
-      setKlager(newAnkemulighet.klager);
-    },
-    [setKlager]
-  );
-
-  const setDokument = useCallback((newDokument: IArkivertDocument) => {
-    setInternalDokument(newDokument);
-    setMottattNav(newDokument.registrert);
-  }, []);
+  }, [mottattNav, klager, fullmektig, setPayload, fristInWeeks, journalpost, ankemulighet]);
 
   const ankeContext: IAnkeContext = {
     fnr,
@@ -102,7 +79,7 @@ export const AnkeContextState = ({ fnr, defaultDokument, defaultAnkemulighet, ch
     setMottattNav,
     fristInWeeks,
     setFristInWeeks,
-    dokument,
+    dokument: journalpost,
     setDokument,
   };
 

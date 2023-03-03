@@ -3,10 +3,11 @@ import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { createAnke } from '../../api/api';
 import { ApiContext } from '../../pages/create/api-context';
-import { KABIN_API_BASE_PATH, useAnkemuligheter } from '../../simple-api-state/use-api';
+import { useAnkemuligheter } from '../../simple-api-state/use-api';
 import { skipToken } from '../../types/common';
-import { Create, CreateResponse } from '../../types/create';
+import { CreateResponse } from '../../types/create';
 import { errorToast } from '../toast/error-toast';
 import { toast } from '../toast/store';
 import { ToastType } from '../toast/types';
@@ -42,8 +43,6 @@ export const Confirm = ({ show, fnr, setError, closeConfirm }: Props) => {
       const res = await createAnke(payload);
 
       if (res.ok) {
-        toast({ type: ToastType.SUCCESS, message: `Anke opprettet` });
-
         updateAnkemuligheter((data) => data?.filter((d) => d.behandlingId !== payload.klagebehandlingId));
 
         setError(undefined);
@@ -98,13 +97,6 @@ export const Confirm = ({ show, fnr, setError, closeConfirm }: Props) => {
     </StyledConfirm>
   );
 };
-
-const createAnke = async (anke: Create) =>
-  fetch(`${KABIN_API_BASE_PATH}/createanke`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(anke),
-  });
 
 const StyledConfirm = styled.div`
   background: var(--a-surface-default);

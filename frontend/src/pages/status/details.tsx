@@ -47,7 +47,7 @@ export const Details = ({
       </StyledCard>
 
       <StyledCard title="Saksinfo" $gridArea="anke" titleSize="medium">
-        <InfoItem label="Mottatt NAV">
+        <InfoItem label="Mottatt NAV Klageinstans">
           <Time dateTime={mottattNav}>{isoDateToPretty(mottattNav) ?? mottattNav}</Time>
         </InfoItem>
         <InfoItem label="Frist">

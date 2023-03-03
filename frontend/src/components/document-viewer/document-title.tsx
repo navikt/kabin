@@ -1,60 +1,95 @@
-import { Cancel, Edit, SuccessStroke } from '@navikt/ds-icons';
+import { Cancel, Edit, ExternalLink, SuccessColored } from '@navikt/ds-icons';
 import { Button, Heading, TextField } from '@navikt/ds-react';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { editTitle } from '../../api/api';
+import { usePrevious } from '../../hooks/use-previous';
 import { AnkeContext } from '../../pages/create/anke-context';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
-import { KABIN_API_BASE_PATH, useDokumenter } from '../../simple-api-state/use-api';
+import { DocumentViewerContext, IViewedDocument } from '../../pages/create/document-viewer-context';
+import { useDokumenter } from '../../simple-api-state/use-api';
 import { isApiError } from '../footer/error-type-guard';
 import { errorToast } from '../toast/error-toast';
 import { toast } from '../toast/store';
 import { ToastType } from '../toast/types';
 
-export const DocumentTitle = () => {
+interface Props {
+  url: string;
+}
+
+export const DocumentTitle = ({ url }: Props) => {
   const [editMode, setEditMode] = useState(false);
+  const { dokument } = useContext(DocumentViewerContext);
+  const previous = usePrevious(dokument);
+
+  useEffect(() => {
+    if (dokument !== previous) {
+      setEditMode(false);
+    }
+  }, [dokument, previous]);
+
+  if (dokument === null) {
+    return null;
+  }
 
   const toggleEditMode = () => setEditMode(!editMode);
 
   return (
     <StyledDocumentTitle>
+      <Button
+        as="a"
+        variant="tertiary"
+        icon={<ExternalLink title="Åpne i nytt vindu" />}
+        size="small"
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+      />
       <ViewTitle show={!editMode} toggleEditMode={toggleEditMode} />
       <EditTitle show={editMode} toggleEditMode={toggleEditMode} />
     </StyledDocumentTitle>
   );
 };
 
-interface ViewTitleProps {
+interface TitleProps {
   show: boolean;
   toggleEditMode: () => void;
 }
 
-const ViewTitle = ({ show, toggleEditMode }: ViewTitleProps) => {
+const ViewTitle = ({ show, toggleEditMode }: TitleProps) => {
   const { dokument } = useContext(DocumentViewerContext);
 
   if (!show) {
     return null;
   }
 
-  const { tittel: title } = dokument;
-
   return (
     <>
       <StyledHeading size="small" level="1">
-        {title}
+        {dokument?.tittel ?? ''}
       </StyledHeading>
       <Button variant="tertiary" icon={<Edit title="Endre dokumenttittel" />} size="small" onClick={toggleEditMode} />
     </>
   );
 };
 
-interface EditTitleProps {
-  show: boolean;
+const EditTitle = ({ show, toggleEditMode }: TitleProps) => {
+  const { dokument } = useContext(DocumentViewerContext);
+
+  if (!show || dokument === null) {
+    return null;
+  }
+
+  return <EditLoadedTitle toggleEditMode={toggleEditMode} dokument={dokument} />;
+};
+
+interface EditLoadedTitleProps {
   toggleEditMode: () => void;
+  dokument: IViewedDocument;
 }
 
-const EditTitle = ({ show, toggleEditMode }: EditTitleProps) => {
-  const { dokument, viewDokument } = useContext(DocumentViewerContext);
-  const { fnr } = useContext(AnkeContext);
+const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => {
+  const { viewDokument } = useContext(DocumentViewerContext);
+  const { fnr, setDokument, dokument: contextDokument } = useContext(AnkeContext);
 
   const { updateData: updateDokumenter } = useDokumenter(fnr);
 
@@ -72,6 +107,7 @@ const EditTitle = ({ show, toggleEditMode }: EditTitleProps) => {
       if (res.ok) {
         toast({ type: ToastType.SUCCESS, message: `Dokumenttittel endret` });
 
+        setDokument(contextDokument === null ? null : { ...contextDokument, tittel: newTitle });
         viewDokument({ ...dokument, tittel: newTitle });
 
         updateDokumenter((data) =>
@@ -107,7 +143,17 @@ const EditTitle = ({ show, toggleEditMode }: EditTitleProps) => {
 
     setIsLoading(false);
     toggleEditMode();
-  }, [toggleEditMode, newTitle, journalpostId, dokumentInfoId, viewDokument, dokument, updateDokumenter]);
+  }, [
+    toggleEditMode,
+    newTitle,
+    journalpostId,
+    dokumentInfoId,
+    setDokument,
+    contextDokument,
+    viewDokument,
+    dokument,
+    updateDokumenter,
+  ]);
 
   const isChanged = title !== newTitle;
 
@@ -124,10 +170,6 @@ const EditTitle = ({ show, toggleEditMode }: EditTitleProps) => {
     [isChanged, onSaveClick, toggleEditMode]
   );
 
-  if (!show) {
-    return null;
-  }
-
   return (
     <>
       <StyledTextField
@@ -142,7 +184,7 @@ const EditTitle = ({ show, toggleEditMode }: EditTitleProps) => {
       <Button
         variant="tertiary"
         size="small"
-        icon={<SuccessStroke title="Lagre" />}
+        icon={<SuccessColored title="Lagre" />}
         onClick={isChanged ? onSaveClick : toggleEditMode}
         loading={isLoading}
       />
@@ -168,10 +210,3 @@ const StyledDocumentTitle = styled.div`
   gap: 8px;
   width: 100%;
 `;
-
-const editTitle = async (tittel: string, journalpostId: string, dokumentInfoId: string) =>
-  fetch(`${KABIN_API_BASE_PATH}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/tittel`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tittel }),
-  });

@@ -19,8 +19,8 @@ export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel, harTilgan
   );
 
   const onInternalClick = useCallback(
-    () => viewDokument({ tittel, dokumentInfoId, journalpostId }),
-    [viewDokument, tittel, dokumentInfoId, journalpostId]
+    () => viewDokument(harTilgangTilArkivvariant ? { tittel, dokumentInfoId, journalpostId } : null),
+    [viewDokument, harTilgangTilArkivvariant, tittel, dokumentInfoId, journalpostId]
   );
 
   if (!harTilgangTilArkivvariant) {

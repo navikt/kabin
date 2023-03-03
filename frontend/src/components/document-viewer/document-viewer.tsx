@@ -1,9 +1,11 @@
+import { FileContent } from '@navikt/ds-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { DocumentViewerContext, IViewedDocument } from '../../pages/create/document-viewer-context';
 import { KABIN_API_BASE_PATH } from '../../simple-api-state/use-api';
 import { Card } from '../card/card';
+import { Placeholder } from '../placeholder/placeholder';
 import { DocumentTitle } from './document-title';
 
 const DEFAULT_NAME = '<Mangler navn>';
@@ -13,33 +15,53 @@ export const DocumentViewer = () => {
 
   return (
     <Card fullHeight>
-      <DocumentTitle />
       <Container>
-        <StyledLoader size="3xlarge" />
-        <PDF {...dokument} />
+        <Content dokument={dokument} />
       </Container>
     </Card>
   );
 };
 
-const PDF = ({ journalpostId, dokumentInfoId, tittel: title }: IViewedDocument) => {
-  const url = `${KABIN_API_BASE_PATH}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
+const Content = ({ dokument }: { dokument: IViewedDocument | null }) => {
+  if (dokument === null) {
+    return (
+      <Placeholder>
+        <FileContent aria-hidden />
+      </Placeholder>
+    );
+  }
+
+  const url = `${KABIN_API_BASE_PATH}/journalposter/${dokument.journalpostId}/dokumenter/${dokument.dokumentInfoId}/pdf`;
 
   return (
+    <>
+      <DocumentTitle url={url} />
+      <PDF tittel={dokument.tittel} url={url} />
+    </>
+  );
+};
+
+interface PDFProps {
+  url: string;
+  tittel: string | null;
+}
+
+const PDF = ({ url, tittel }: PDFProps) => (
+  <>
+    <StyledLoader size="3xlarge" />
     <StyledObject
       data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
       role="document"
       type="application/pdf"
-      name={title ?? DEFAULT_NAME}
+      name={tittel ?? DEFAULT_NAME}
     />
-  );
-};
+  </>
+);
 
 const Container = styled.div`
   position: relative;
   width: 100%;
   border-radius: 4px;
-  background-color: var(--a-surface-neutral-subtle);
   flex-grow: 1;
 `;
 

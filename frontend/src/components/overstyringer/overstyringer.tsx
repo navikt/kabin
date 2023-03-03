@@ -1,21 +1,28 @@
-import { Label, TextField, ToggleGroup } from '@navikt/ds-react';
-import { parseISO } from 'date-fns';
-import React, { useCallback, useContext } from 'react';
+import { Detail, Label, TextField, ToggleGroup } from '@navikt/ds-react';
+import { addWeeks, format, parseISO } from 'date-fns';
+import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { FieldNames } from '../../hooks/use-field-name';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { AnkeContext } from '../../pages/create/anke-context';
 import { Card } from '../card/card';
 import { Datepicker } from '../date-picker/date-picker';
+import { PRETTY_FORMAT } from '../date-picker/formats';
 import { Part } from './part';
 import { PartRead } from './part-read';
 import { GridArea, gridAreas } from './types';
 
 export const Overstyringer = () => {
-  const { ankemulighet, klager, fullmektig, setKlager, setFullmektig } = useContext(AnkeContext);
+  const { setMottattNav, ankemulighet, klager, fullmektig, setKlager, setFullmektig } = useContext(AnkeContext);
+
+  useEffect(() => {
+    if (ankemulighet === null) {
+      setMottattNav(null);
+    }
+  }, [ankemulighet, setMottattNav]);
 
   return (
-    <Card>
+    <Card title="Tilpass anken">
       <Content>
         <EditMottattNAV />
         <EditFrist />
@@ -49,25 +56,23 @@ const EditMottattNAV = () => {
     [setMottattNav]
   );
 
-  const disabled = ankemulighet === null || dokument === null;
-
   return (
     <StyledDatepicker
-      label="Mottatt NAV"
+      label="Mottatt NAV Klageinstans"
       onChange={onChange}
-      value={parseISO(mottattNav)}
+      value={mottattNav === null ? undefined : parseISO(mottattNav)}
       size="small"
-      toDate={disabled ? undefined : parseISO(dokument.registrert)}
-      fromDate={disabled ? undefined : parseISO(ankemulighet.vedtakDate)}
+      toDate={dokument === null ? undefined : parseISO(dokument.registrert)}
+      fromDate={ankemulighet === null ? undefined : parseISO(ankemulighet.vedtakDate)}
       id={FieldNames.MOTTATT_NAV}
       error={error}
-      disabled={disabled}
+      disabled={dokument === null}
     />
   );
 };
 
 const EditFrist = () => {
-  const { fristInWeeks, setFristInWeeks, dokument, ankemulighet } = useContext(AnkeContext);
+  const { fristInWeeks, setFristInWeeks } = useContext(AnkeContext);
   const error = useValidationError(FieldNames.FRIST);
 
   const parseAndSet = useCallback(
@@ -84,8 +89,6 @@ const EditFrist = () => {
     [parseAndSet]
   );
 
-  const disabled = ankemulighet === null || dokument === null;
-
   return (
     <Row>
       <StyledTextField
@@ -97,7 +100,6 @@ const EditFrist = () => {
         value={fristInWeeks}
         onChange={onInputChange}
         error={error}
-        disabled={disabled}
       />
       <StyledToggleGroup value={fristInWeeks.toString(10)} onChange={parseAndSet} size="small">
         <PresetButton value={6} />
@@ -106,7 +108,28 @@ const EditFrist = () => {
         <PresetButton value={16} />
         <PresetButton value={20} />
       </StyledToggleGroup>
+
+      <Fristdato />
     </Row>
+  );
+};
+
+const Fristdato = () => {
+  const { mottattNav, fristInWeeks } = useContext(AnkeContext);
+
+  if (mottattNav === null) {
+    return null;
+  }
+
+  const fristDato = addWeeks(new Date(mottattNav), fristInWeeks);
+
+  return (
+    <StyledFristdato>
+      <Label size="small">Beregnet fristdato:</Label>
+      <Detail>
+        <time dateTime={fristDato.toISOString()}>{format(fristDato, PRETTY_FORMAT)}</time>
+      </Detail>
+    </StyledFristdato>
   );
 };
 
@@ -136,11 +159,19 @@ const StyledHeading = styled(Label)`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: 12px;
   grid-column: frist;
 `;
 
 const StyledToggleGroup = styled(ToggleGroup)`
   white-space: nowrap;
   align-self: flex-end;
+`;
+
+const StyledFristdato = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+  gap: 4px;
 `;
