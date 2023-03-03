@@ -1,4 +1,3 @@
-import { SuccessColored } from '@navikt/ds-icons';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
@@ -10,14 +9,15 @@ import { Journalposttype } from '../journalposttype/journalposttype';
 import { AttachmentList } from './attachment-list';
 import { formatAvsenderMottaker } from './avsender-mottaker';
 import { DocumentTitle } from './document-title';
-import { GridArea, GridButton, GridTag, StyledField, StyledGrid } from './styled-grid-components';
+import { SelectDocument } from './select-document';
+import { GridArea, GridTag, StyledField, StyledGrid } from './styled-grid-components';
 
 interface Props {
   dokument: IArkivertDocument;
 }
 
 export const Dokument = ({ dokument }: Props) => {
-  const { dokument: selectedDokument, setDokument } = useContext(AnkeContext);
+  const { dokument: selectedDokument, setDokument, setMottattNav } = useContext(AnkeContext);
   const { viewDokument } = useContext(DocumentViewerContext);
   const { dokumentInfoId, journalpostId, tittel, registrert, tema, avsenderMottaker, sak, journalposttype } = dokument;
 
@@ -25,23 +25,24 @@ export const Dokument = ({ dokument }: Props) => {
 
   const isSelected = selectedDokument?.journalpostId === journalpostId;
 
-  const icon = isSelected ? <SuccessColored title="Valgt" /> : undefined;
-  const buttonText = isSelected ? '' : 'Velg';
-
   const selectJournalpost = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setDokument(dokument);
 
       if (dokument.harTilgangTilArkivvariant) {
+        setDokument(dokument);
         viewDokument(dokument);
+        setMottattNav(dokument.registrert);
+      } else {
+        viewDokument(null);
+        setDokument(null);
       }
     },
-    [dokument, setDokument, viewDokument]
+    [dokument, setDokument, setMottattNav, viewDokument]
   );
 
   return (
-    <DocumentListItem $isSelected={isSelected}>
+    <DocumentListItem $isSelected={isSelected} $clickable={dokument.harTilgangTilArkivvariant}>
       <StyledGrid
         as="article"
         onClick={selectJournalpost}
@@ -65,17 +66,11 @@ export const Dokument = ({ dokument }: Props) => {
         <StyledField $gridArea={GridArea.TYPE}>
           <Journalposttype journalposttype={journalposttype} />
         </StyledField>
-        <GridButton
-          size="small"
-          variant="tertiary"
-          icon={icon}
-          onClick={selectJournalpost}
-          aria-pressed={isSelected}
-          data-testid="select-document"
-          $gridArea={GridArea.SELECT}
-        >
-          {buttonText}
-        </GridButton>
+        <SelectDocument
+          isSelected={isSelected}
+          selectJournalpost={selectJournalpost}
+          harTilgangTilArkivvariant={dokument.harTilgangTilArkivvariant}
+        />
       </StyledGrid>
       <AttachmentList dokument={dokument} />
     </DocumentListItem>
@@ -92,8 +87,8 @@ const AvsenderMottaker = ({ journalposttype, avsenderMottaker }: AvsenderMottake
   return <StyledField $gridArea={GridArea.AVSENDER_MOTTAKER}>{formatAvsenderMottaker(avsenderMottaker)}</StyledField>;
 };
 
-const DocumentListItem = styled.li<{ $isSelected: boolean }>`
-  cursor: pointer;
+const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }>`
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   border-radius: 4px;
   background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-blue-50)' : 'var(--a-white)')};
 

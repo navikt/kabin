@@ -55,8 +55,8 @@ export const Datepicker = ({
   const [month, setMonth] = useState(value);
 
   const validateDate = useCallback(
-    (dateObject: Date | undefined): boolean => {
-      const isValidDate = dateObject !== undefined && isValid(dateObject);
+    (dateObject: Date): boolean => {
+      const isValidDate = isValid(dateObject);
 
       if (!isValidDate) {
         setInputError('Ugyldig dato');
@@ -91,7 +91,9 @@ export const Datepicker = ({
   );
 
   useEffect(() => {
-    validateDate(value);
+    if (typeof value !== 'undefined') {
+      validateDate(value);
+    }
   }, [value, validateDate]);
 
   const onBlur = useCallback(() => {
@@ -101,6 +103,7 @@ export const Datepicker = ({
 
       return;
     }
+
     requestAnimationFrame(() => {
       const dateString = parseUserInput(input, fromDate, toDate, centuryThreshold);
 

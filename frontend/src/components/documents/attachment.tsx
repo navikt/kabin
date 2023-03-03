@@ -17,7 +17,12 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
   const selectVedlegg = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setDokument(dokument);
+
+      if (dokument.harTilgangTilArkivvariant) {
+        setDokument(dokument);
+      } else {
+        setDokument(null);
+      }
     },
     [dokument, setDokument]
   );

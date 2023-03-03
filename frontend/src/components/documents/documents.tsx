@@ -1,21 +1,63 @@
-import { Collapse } from '@navikt/ds-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { Collapse, FileFolder } from '@navikt/ds-icons';
+import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
+import { AnkeContext } from '../../pages/create/anke-context';
+import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
+import { useDokumenter } from '../../simple-api-state/use-api';
 import { IArkivertDocument } from '../../types/dokument';
 import { Card } from '../card/card';
+import { Placeholder } from '../placeholder/placeholder';
 import { SelectedDocument } from '../selected/selected-document';
 import { ColumnHeaders } from './column-headers';
 import { Dokument } from './document';
 import { useFilteredDocuments } from './filter-helpers';
 
-interface Props {
+export const Dokumenter = () => {
+  const { setDokument, fnr, dokument } = useContext(AnkeContext);
+  const { data: dokumenter, isLoading } = useDokumenter(fnr);
+  const { viewDokument } = useContext(DocumentViewerContext);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (typeof dokumenter === 'undefined') {
+      setIsExpanded(true);
+      viewDokument(null);
+      setDokument(null);
+    }
+  }, [dokumenter, setDokument, viewDokument]);
+
+  if (!isExpanded && dokument !== null) {
+    return <SelectedDocument onClick={() => setIsExpanded(true)} />;
+  }
+
+  return (
+    <Card>
+      <Header>
+        <Heading size="small" level="1">
+          Velg anke
+        </Heading>
+        {dokument === null ? null : (
+          <StyledButton
+            size="small"
+            variant="tertiary-neutral"
+            onClick={() => setIsExpanded(false)}
+            icon={<Collapse aria-hidden />}
+            title="Vis kun valgt journalpost"
+          />
+        )}
+      </Header>
+      <Content dokumenter={dokumenter?.dokumenter} isLoading={isLoading} />
+    </Card>
+  );
+};
+
+interface DocumentTableProps {
   dokumenter: IArkivertDocument[];
 }
 
-export const Dokumenter = ({ dokumenter }: Props) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+const DocumentTable = ({ dokumenter }: DocumentTableProps) => {
   const [search, setSearch] = useState<string>('');
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -33,31 +75,8 @@ export const Dokumenter = ({ dokumenter }: Props) => {
     search
   );
 
-  if (!isExpanded) {
-    return <SelectedDocument onClick={() => setIsExpanded(true)} />;
-  }
-
-  const children =
-    filteredDokumenter.length === 0 ? (
-      <BodyShort>Ingen dokumenter</BodyShort>
-    ) : (
-      filteredDokumenter.map((d) => <Dokument key={`${d.journalpostId}-${d.dokumentInfoId}`} dokument={d} />)
-    );
-
   return (
-    <Card>
-      <Header>
-        <Heading size="small" level="1">
-          Dokumenter
-        </Heading>
-        <StyledButton
-          size="small"
-          variant="tertiary-neutral"
-          onClick={() => setIsExpanded(false)}
-          icon={<Collapse aria-hidden />}
-          title="Vis kun valgt journalpost"
-        />
-      </Header>
+    <>
       <ColumnHeaders
         search={search}
         setSearch={setSearch}
@@ -73,9 +92,42 @@ export const Dokumenter = ({ dokumenter }: Props) => {
         setSelectedDateRange={setSelectedDateRange}
         documents={dokumenter}
       />
-      <StyledList>{children}</StyledList>
-    </Card>
+      <StyledList>
+        {filteredDokumenter.map((d) => (
+          <Dokument key={`${d.journalpostId}-${d.dokumentInfoId}`} dokument={d} />
+        ))}
+      </StyledList>
+    </>
   );
+};
+
+interface ContentProps {
+  dokumenter: IArkivertDocument[] | undefined;
+  isLoading: boolean;
+}
+
+const Content = ({ dokumenter, isLoading }: ContentProps) => {
+  if (isLoading) {
+    return (
+      <Placeholder>
+        <Loader size="3xlarge" title="Laster..." />
+      </Placeholder>
+    );
+  }
+
+  if (dokumenter === undefined) {
+    return (
+      <Placeholder>
+        <FileFolder aria-hidden />
+      </Placeholder>
+    );
+  }
+
+  if (dokumenter.length === 0) {
+    <BodyShort>Ingen dokumenter</BodyShort>;
+  }
+
+  return <DocumentTable dokumenter={dokumenter} />;
 };
 
 const StyledList = styled.ul`

@@ -1,10 +1,13 @@
-import { Label, TextField, ToggleGroup } from '@navikt/ds-react';
+import { Detail, Label, Loader, TextField } from '@navikt/ds-react';
 import { parseISO } from 'date-fns';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { isoDateToPretty } from '../../domain/date';
 import { FieldNames } from '../../hooks/use-field-name';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { AnkeContext } from '../../pages/create/anke-context';
+import { useCalculateFristdato } from '../../simple-api-state/use-api';
+import { skipToken } from '../../types/common';
 import { Card } from '../card/card';
 import { Datepicker } from '../date-picker/date-picker';
 import { Part } from './part';
@@ -12,10 +15,16 @@ import { PartRead } from './part-read';
 import { GridArea, gridAreas } from './types';
 
 export const Overstyringer = () => {
-  const { ankemulighet, klager, fullmektig, setKlager, setFullmektig } = useContext(AnkeContext);
+  const { setMottattNav, ankemulighet, klager, fullmektig, setKlager, setFullmektig } = useContext(AnkeContext);
+
+  useEffect(() => {
+    if (ankemulighet === null) {
+      setMottattNav(null);
+    }
+  }, [ankemulighet, setMottattNav]);
 
   return (
-    <Card>
+    <Card title="Tilpass anken">
       <Content>
         <EditMottattNAV />
         <EditFrist />
@@ -49,25 +58,23 @@ const EditMottattNAV = () => {
     [setMottattNav]
   );
 
-  const disabled = ankemulighet === null || dokument === null;
-
   return (
     <StyledDatepicker
-      label="Mottatt NAV"
+      label="Mottatt NAV Klageinstans"
       onChange={onChange}
-      value={parseISO(mottattNav)}
+      value={mottattNav === null ? undefined : parseISO(mottattNav)}
       size="small"
-      toDate={disabled ? undefined : parseISO(dokument.registrert)}
-      fromDate={disabled ? undefined : parseISO(ankemulighet.vedtakDate)}
+      toDate={dokument === null ? undefined : parseISO(dokument.registrert)}
+      fromDate={ankemulighet === null ? undefined : parseISO(ankemulighet.vedtakDate)}
       id={FieldNames.MOTTATT_NAV}
       error={error}
-      disabled={disabled}
+      disabled={dokument === null}
     />
   );
 };
 
 const EditFrist = () => {
-  const { fristInWeeks, setFristInWeeks, dokument, ankemulighet } = useContext(AnkeContext);
+  const { fristInWeeks, setFristInWeeks } = useContext(AnkeContext);
   const error = useValidationError(FieldNames.FRIST);
 
   const parseAndSet = useCallback(
@@ -84,10 +91,8 @@ const EditFrist = () => {
     [parseAndSet]
   );
 
-  const disabled = ankemulighet === null || dokument === null;
-
   return (
-    <Row>
+    <StyledEditFrist>
       <StyledTextField
         type="number"
         label="Frist i uker"
@@ -97,27 +102,34 @@ const EditFrist = () => {
         value={fristInWeeks}
         onChange={onInputChange}
         error={error}
-        disabled={disabled}
       />
-      <StyledToggleGroup value={fristInWeeks.toString(10)} onChange={parseAndSet} size="small">
-        <PresetButton value={6} />
-        <PresetButton value={8} />
-        <PresetButton value={12} />
-        <PresetButton value={16} />
-        <PresetButton value={20} />
-      </StyledToggleGroup>
-    </Row>
+      <Fristdato />
+    </StyledEditFrist>
   );
 };
 
-interface PresetButtonProps {
-  value: number;
-}
+const Fristdato = () => {
+  const { mottattNav, fristInWeeks } = useContext(AnkeContext);
+  const { data: fristdato, isLoading } = useCalculateFristdato(
+    mottattNav === null ? skipToken : { fromDate: mottattNav, fristInWeeks }
+  );
 
-const PresetButton = ({ value }: PresetButtonProps) => {
-  const valueAsString = value.toString(10);
+  if (mottattNav === null) {
+    return null;
+  }
 
-  return <ToggleGroup.Item value={valueAsString}>{valueAsString} uker</ToggleGroup.Item>;
+  return (
+    <StyledFristdato>
+      <Label size="small">Beregnet fristdato:</Label>
+      {isLoading ? (
+        <Loader size="xsmall" />
+      ) : (
+        <Detail>
+          <time dateTime={fristdato}>{isoDateToPretty(fristdato)}</time>
+        </Detail>
+      )}
+    </StyledFristdato>
+  );
 };
 
 const StyledDatepicker = styled(Datepicker)`
@@ -133,14 +145,15 @@ const StyledHeading = styled(Label)`
   grid-area: title;
 `;
 
-const Row = styled.div`
+const StyledEditFrist = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  gap: 8px;
   grid-column: frist;
 `;
 
-const StyledToggleGroup = styled(ToggleGroup)`
-  white-space: nowrap;
-  align-self: flex-end;
+const StyledFristdato = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
