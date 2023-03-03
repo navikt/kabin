@@ -70,3 +70,20 @@ export const useStatus = (params: StatusParams | typeof skipToken) => {
 
   return useSimpleApiState(state);
 };
+
+interface CalculateFristdatoParams {
+  fromDate: string; // LocalDate
+  fristInWeeks: number;
+}
+
+const calculateFristdatoState = getStateFactory<string, CalculateFristdatoParams>(
+  `${KABIN_API_BASE_PATH}/calculatefrist`,
+  { method: 'POST' }
+);
+
+export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken) =>
+  useSimpleApiState(
+    params === skipToken
+      ? skipToken
+      : calculateFristdatoState({ path: '' }, { fromDate: params.fromDate, fristInWeeks: params.fristInWeeks })
+  );

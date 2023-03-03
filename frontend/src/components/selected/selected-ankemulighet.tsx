@@ -37,7 +37,7 @@ const RenderAnkemulighet = ({ ankemulighet, onClick }: RenderProps) => {
     <Card>
       <Header>
         <Heading size="small" level="1">
-          Valgt ankemulighet
+          Valgt vedtak
         </Heading>
         <Button
           size="small"

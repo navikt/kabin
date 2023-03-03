@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const Ankemulighet = ({ ankemulighet }: Props) => {
-  const { ankemulighet: selectedAnkemulighet, setAnkemulighet } = useContext(AnkeContext);
+  const { ankemulighet: selectedAnkemulighet, setAnkemulighet, setKlager } = useContext(AnkeContext);
   const utfallName = useUtfallName(ankemulighet.utfallId);
   const ytelseName = useYtelseName(ankemulighet.ytelseId);
 
@@ -26,8 +26,9 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
       setAnkemulighet(ankemulighet);
+      setKlager(ankemulighet.klager);
     },
-    [ankemulighet, setAnkemulighet]
+    [ankemulighet, setAnkemulighet, setKlager]
   );
 
   return (

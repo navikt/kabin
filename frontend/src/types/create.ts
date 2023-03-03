@@ -1,4 +1,6 @@
+import { IBehandling } from './behandling';
 import { IPart, IPartId, PartType } from './common';
+import { IArkivertDocument } from './dokument';
 
 export interface Create {
   klagebehandlingId: string;
@@ -9,16 +11,36 @@ export interface Create {
   ankeDocumentJournalpostId: string;
 }
 
-interface Argument extends Omit<Create, 'klager' | 'fullmektig'> {
-  klager: IPart;
+interface Argument {
+  klager: IPart | null;
   fullmektig: IPart | null;
+  journalpost: IArkivertDocument | null;
+  ankemulighet: IBehandling | null;
+  mottattNav: string | null;
+  fristInWeeks: number;
 }
 
-export const getCreatePayload = ({ klager, fullmektig, ...rest }: Argument): Create => ({
-  ...rest,
-  klager: getPart(klager),
-  fullmektig: getPart(fullmektig),
-});
+export const getCreatePayload = ({
+  klager,
+  fullmektig,
+  ankemulighet,
+  journalpost,
+  mottattNav,
+  fristInWeeks,
+}: Argument): Create | null => {
+  if (ankemulighet === null || journalpost === null || mottattNav === null) {
+    return null;
+  }
+
+  return {
+    klagebehandlingId: ankemulighet.behandlingId,
+    mottattNav,
+    fristInWeeks,
+    ankeDocumentJournalpostId: journalpost.journalpostId,
+    klager: getPart(klager),
+    fullmektig: getPart(fullmektig),
+  };
+};
 
 const getPart = (part: IPart | null): IPartId | null => {
   if (part === null) {

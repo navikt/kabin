@@ -1,20 +1,29 @@
-import { Collapse } from '@navikt/ds-icons';
-import { Button, Heading, Table } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { Collapse, Paragraph } from '@navikt/ds-icons';
+import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { AnkeContext } from '../../pages/create/anke-context';
+import { useAnkemuligheter } from '../../simple-api-state/use-api';
 import { IBehandling } from '../../types/behandling';
 import { Card } from '../card/card';
+import { Placeholder } from '../placeholder/placeholder';
 import { SelectedAnkemulighet } from '../selected/selected-ankemulighet';
 import { Ankemulighet } from './ankemulighet';
 
-interface Props {
-  ankemuligheter: IBehandling[];
-}
-
-export const Ankemuligheter = ({ ankemuligheter }: Props) => {
+export const Ankemuligheter = () => {
+  const { setAnkemulighet, fnr, setKlager, ankemulighet } = useContext(AnkeContext);
+  const { data: ankemuligheter, isLoading } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  if (!isExpanded) {
+  useEffect(() => {
+    if (typeof ankemuligheter === 'undefined') {
+      setIsExpanded(true);
+      setAnkemulighet(null);
+      setKlager(null);
+    }
+  }, [ankemuligheter, isLoading, setAnkemulighet, setKlager]);
+
+  if (!isExpanded && ankemulighet !== null) {
     return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
   }
 
@@ -22,40 +31,73 @@ export const Ankemuligheter = ({ ankemuligheter }: Props) => {
     <Card>
       <Header>
         <Heading level="1" size="small">
-          Ankemuligheter
+          Velg vedtaket anken gjelder
         </Heading>
 
-        <StyledButton
-          size="small"
-          variant="tertiary-neutral"
-          title="Vis kun valgt ankemulighet"
-          onClick={() => setIsExpanded(false)}
-          icon={<Collapse aria-hidden />}
-        />
+        {ankemulighet === null ? null : (
+          <StyledButton
+            size="small"
+            variant="tertiary-neutral"
+            title="Vis kun valgt ankemulighet"
+            onClick={() => setIsExpanded(false)}
+            icon={<Collapse aria-hidden />}
+          />
+        )}
       </Header>
-      <TableContainer $showShadow={ankemuligheter.length >= 3}>
-        <Table zebraStripes size="small">
-          <StyledTableHeader>
-            <Table.Row>
-              <Table.HeaderCell>Ytelse</Table.HeaderCell>
-              <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-              <Table.HeaderCell>Saken gjelder</Table.HeaderCell>
-              <Table.HeaderCell>Klager</Table.HeaderCell>
-              <Table.HeaderCell>Utfall</Table.HeaderCell>
-              <Table.HeaderCell>Fullmektig</Table.HeaderCell>
-              <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
-              <Table.HeaderCell>Fagsystem</Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </StyledTableHeader>
-          <Table.Body>
-            {ankemuligheter.map((m) => (
-              <Ankemulighet key={m.behandlingId} ankemulighet={m} />
-            ))}
-          </Table.Body>
-        </Table>
-      </TableContainer>
+      <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </Card>
+  );
+};
+
+interface ContentProps {
+  ankemuligheter: IBehandling[] | undefined;
+  isLoading: boolean;
+}
+
+const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
+  if (isLoading) {
+    return (
+      <Placeholder>
+        <Loader size="3xlarge" title="Laster..." />
+      </Placeholder>
+    );
+  }
+
+  if (ankemuligheter === undefined) {
+    return (
+      <Placeholder>
+        <Paragraph aria-hidden />
+      </Placeholder>
+    );
+  }
+
+  if (ankemuligheter.length === 0) {
+    return <BodyShort>Ingen ankemuligheter</BodyShort>;
+  }
+
+  return (
+    <TableContainer $showShadow={ankemuligheter.length >= 3}>
+      <Table zebraStripes size="small">
+        <StyledTableHeader>
+          <Table.Row>
+            <Table.HeaderCell>Ytelse</Table.HeaderCell>
+            <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
+            <Table.HeaderCell>Saken gjelder</Table.HeaderCell>
+            <Table.HeaderCell>Klager</Table.HeaderCell>
+            <Table.HeaderCell>Utfall</Table.HeaderCell>
+            <Table.HeaderCell>Fullmektig</Table.HeaderCell>
+            <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
+            <Table.HeaderCell>Fagsystem</Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </StyledTableHeader>
+        <Table.Body>
+          {ankemuligheter.map((m) => (
+            <Ankemulighet key={m.behandlingId} ankemulighet={m} />
+          ))}
+        </Table.Body>
+      </Table>
+    </TableContainer>
   );
 };
 
