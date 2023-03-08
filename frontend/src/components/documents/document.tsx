@@ -30,9 +30,11 @@ export const Dokument = ({ dokument }: Props) => {
       e.stopPropagation();
 
       if (dokument.harTilgangTilArkivvariant) {
-        setDokument(dokument);
+        if (!dokument.alreadyUsed) {
+          setDokument(dokument);
+          setMottattNav(dokument.registrert);
+        }
         viewDokument(dokument);
-        setMottattNav(dokument.registrert);
       } else {
         viewDokument(null);
         setDokument(null);
@@ -70,6 +72,7 @@ export const Dokument = ({ dokument }: Props) => {
           isSelected={isSelected}
           selectJournalpost={selectJournalpost}
           harTilgangTilArkivvariant={dokument.harTilgangTilArkivvariant}
+          alreadyUsed={dokument.alreadyUsed}
         />
       </StyledGrid>
       <AttachmentList dokument={dokument} />

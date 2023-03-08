@@ -141,4 +141,5 @@ export interface IArkivertDocument {
   kanal: Kanal | null;
   kanalnavn: string | null;
   utsendingsinfo: IUtsendingsinfo | null;
+  alreadyUsed: boolean;
 }
