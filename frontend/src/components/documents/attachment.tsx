@@ -18,7 +18,7 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (dokument.harTilgangTilArkivvariant) {
+      if (dokument.harTilgangTilArkivvariant && !dokument.alreadyUsed) {
         setDokument(dokument);
       } else {
         setDokument(null);

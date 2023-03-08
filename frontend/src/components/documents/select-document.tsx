@@ -7,13 +7,22 @@ interface Props {
   isSelected: boolean;
   selectJournalpost: (e: React.MouseEvent) => void;
   harTilgangTilArkivvariant: boolean;
+  alreadyUsed: boolean;
 }
 
-export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJournalpost }: Props) => {
+export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJournalpost, alreadyUsed }: Props) => {
   if (!harTilgangTilArkivvariant) {
     return (
       <StyledWarning>
         <Warning title="Du har ikke tilgang til dette dokumentet" />
+      </StyledWarning>
+    );
+  }
+
+  if (alreadyUsed) {
+    return (
+      <StyledWarning>
+        <Warning title="Dette dokumentet er allerede benyttet i en eksisterende klage eller anke" />
       </StyledWarning>
     );
   }
