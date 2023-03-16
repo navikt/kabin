@@ -42,7 +42,7 @@ export const StatusPage = ({ type }: IStatusPage) => {
             </Button>
             <Button
               as={NavLink}
-              to={KABAL_URL}
+              to={`${KABAL_URL}/sok`}
               variant="tertiary"
               target="_blank"
               icon={<ExternalLink title="Ekstern lenke" />}
