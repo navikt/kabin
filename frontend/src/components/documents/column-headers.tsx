@@ -1,4 +1,4 @@
-import { Reset } from '@navikt/ds-icons';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -90,7 +90,7 @@ export const ColumnHeaders = ({
         variant="secondary"
         onClick={resetFilters}
         disabled={resetFiltersDisabled}
-        icon={<Reset aria-hidden />}
+        icon={<ArrowCirclepathIcon aria-hidden />}
       >
         Fjern filtere
       </StyledButton>

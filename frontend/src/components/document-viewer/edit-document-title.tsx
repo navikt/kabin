@@ -1,4 +1,4 @@
-import { Cancel, SuccessColored } from '@navikt/ds-icons';
+import { ArrowUndoIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
@@ -128,11 +128,11 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
       <Button
         variant="tertiary"
         size="small"
-        icon={<SuccessColored title="Lagre" />}
+        icon={<CheckmarkCircleIcon title="Lagre" />}
         onClick={isChanged ? onSaveClick : toggleEditMode}
         loading={isLoading}
       />
-      <Button variant="tertiary" size="small" icon={<Cancel title="Avbryt" />} onClick={toggleEditMode} />
+      <Button variant="tertiary" size="small" icon={<ArrowUndoIcon title="Avbryt" />} onClick={toggleEditMode} />
     </>
   );
 };

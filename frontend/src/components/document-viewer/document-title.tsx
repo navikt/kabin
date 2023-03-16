@@ -1,4 +1,4 @@
-import { Edit, ExternalLink } from '@navikt/ds-icons';
+import { ExternalLinkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -32,7 +32,7 @@ export const DocumentTitle = ({ url }: Props) => {
       <Button
         as="a"
         variant="tertiary"
-        icon={<ExternalLink title="Åpne i nytt vindu" />}
+        icon={<ExternalLinkIcon title="Åpne i nytt vindu" />}
         size="small"
         href={url}
         target="_blank"
@@ -61,7 +61,12 @@ const ViewTitle = ({ show, toggleEditMode }: TitleProps) => {
       <StyledHeading size="small" level="1">
         {dokument?.tittel ?? ''}
       </StyledHeading>
-      <Button variant="tertiary" icon={<Edit title="Endre dokumenttittel" />} size="small" onClick={toggleEditMode} />
+      <Button
+        variant="tertiary"
+        icon={<PencilIcon title="Endre dokumenttittel" />}
+        size="small"
+        onClick={toggleEditMode}
+      />
     </>
   );
 };

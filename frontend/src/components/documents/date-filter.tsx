@@ -1,4 +1,4 @@
-import { Close, Filter2, Filter2Filled, Reset } from '@navikt/ds-icons';
+import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, DatePickerProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
@@ -21,7 +21,7 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
   useOnClickOutside(() => setIsOpen(false), ref);
 
   const isSelected = isSetDateRange(selected);
-  const Icon = isSelected ? Filter2Filled : Filter2;
+  const Icon = isSelected ? FunnelFillIcon : FunnelIcon;
   const title = isSelected
     ? `${format(selected.from, PRETTY_FORMAT)} - ${format(selected.to, PRETTY_FORMAT)}`
     : 'Velg periode';
@@ -43,14 +43,14 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
                 setIsOpen(false);
               }}
               title="Nullstill"
-              icon={<Reset aria-hidden />}
+              icon={<ArrowCirclepathIcon aria-hidden />}
             />
             <Button
               size="small"
               variant="secondary"
               onClick={() => setIsOpen(false)}
               title="Lukk"
-              icon={<Close aria-hidden />}
+              icon={<XMarkIcon aria-hidden />}
             />
           </StyledHeader>
           <Datepicker.Standalone {...datepickerProps} selected={selected} mode="range" onSelect={onChange} />

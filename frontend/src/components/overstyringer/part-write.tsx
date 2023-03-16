@@ -1,4 +1,4 @@
-import { People } from '@navikt/ds-icons';
+import { PersonPencilIcon } from '@navikt/aksel-icons';
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import React, { useMemo, useState } from 'react';
@@ -106,7 +106,7 @@ const StyledPartSearch = styled.div`
 
 const ICON_SIZE = 24;
 
-const Icon = styled(People)`
+const Icon = styled(PersonPencilIcon)`
   grid-area: icon;
   align-self: center;
   width: ${ICON_SIZE}px;

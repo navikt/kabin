@@ -1,4 +1,4 @@
-import { ExternalLink, Home, InformationColored } from '@navikt/ds-icons';
+import { ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
@@ -32,12 +32,11 @@ export const StatusPage = ({ type }: IStatusPage) => {
         </StyledAlert>
 
         <InfoPanel>
-          <InfoPanelText>
-            <InformationColored aria-hidden />
+          <Alert variant="info" inline>
             Anken er nå registrert og klar for saksbehandling i Kabal.
-          </InfoPanelText>
+          </Alert>
           <Buttons>
-            <Button as={NavLink} to="/" variant="tertiary" icon={<Home aria-hidden />}>
+            <Button as={NavLink} to="/" variant="tertiary" icon={<HouseIcon aria-hidden />}>
               Tilbake til forsiden
             </Button>
             <Button
@@ -45,7 +44,7 @@ export const StatusPage = ({ type }: IStatusPage) => {
               to={`${KABAL_URL}/sok`}
               variant="tertiary"
               target="_blank"
-              icon={<ExternalLink title="Ekstern lenke" />}
+              icon={<ExternalLinkIcon title="Ekstern lenke" />}
             >
               Åpne Kabal
             </Button>
@@ -97,18 +96,7 @@ const StyledAlert = styled(Alert)<{ $gridArea: string }>`
 const InfoPanel = styled.div`
   display: flex;
   grid-area: info;
-`;
-
-const InfoPanelText = styled.div`
-  display: flex;
   align-items: center;
-  flex-grow: 1;
-  gap: 16px;
-  font-size: 18px;
-
-  svg {
-    font-size: 24px;
-  }
 `;
 
 const Buttons = styled.div`

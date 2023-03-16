@@ -1,4 +1,4 @@
-import { Collapse, Paragraph } from '@navikt/ds-icons';
+import { ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -40,7 +40,7 @@ export const Ankemuligheter = () => {
             variant="tertiary-neutral"
             title="Vis kun valgt ankemulighet"
             onClick={() => setIsExpanded(false)}
-            icon={<Collapse aria-hidden />}
+            icon={<ChevronUpIcon aria-hidden />}
           />
         )}
       </Header>
@@ -66,7 +66,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (ankemuligheter === undefined) {
     return (
       <Placeholder>
-        <Paragraph aria-hidden />
+        <ParagraphIcon aria-hidden />
       </Placeholder>
     );
   }

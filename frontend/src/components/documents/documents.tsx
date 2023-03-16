@@ -1,4 +1,4 @@
-import { Collapse, FileFolder } from '@navikt/ds-icons';
+import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -43,7 +43,7 @@ export const Dokumenter = () => {
             size="small"
             variant="tertiary-neutral"
             onClick={() => setIsExpanded(false)}
-            icon={<Collapse aria-hidden />}
+            icon={<ChevronUpIcon aria-hidden />}
             title="Vis kun valgt journalpost"
           />
         )}
@@ -118,7 +118,7 @@ const Content = ({ dokumenter, isLoading }: ContentProps) => {
   if (dokumenter === undefined) {
     return (
       <Placeholder>
-        <FileFolder aria-hidden />
+        <FolderFileIcon aria-hidden />
       </Placeholder>
     );
   }

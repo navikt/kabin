@@ -1,4 +1,4 @@
-import { Cancel, SuccessStroke } from '@navikt/ds-icons';
+import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -83,14 +83,14 @@ export const Confirm = ({ show, fnr, setError, closeConfirm }: Props) => {
         <Button
           variant="primary"
           size="small"
-          icon={<SuccessStroke aria-hidden />}
+          icon={<CheckmarkIcon aria-hidden />}
           loading={loading}
           onClick={onClick}
           disabled={payload === null}
         >
           Bekreft
         </Button>
-        <Button variant="secondary" size="small" onClick={closeConfirm} icon={<Cancel aria-hidden />}>
+        <Button variant="secondary" size="small" onClick={closeConfirm} icon={<ArrowUndoIcon aria-hidden />}>
           Avbryt
         </Button>
       </Buttons>
