@@ -1,6 +1,7 @@
-import { SuccessColored, Warning } from '@navikt/ds-icons';
+import { CircleSlashIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styled from 'styled-components';
+import { CheckmarkCircleFillIconColored } from '../colored-icons/colored-icons';
 import { GridArea, GridButton } from './styled-grid-components';
 
 interface Props {
@@ -14,7 +15,7 @@ export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJo
   if (!harTilgangTilArkivvariant) {
     return (
       <StyledWarning>
-        <Warning title="Du har ikke tilgang til dette dokumentet" />
+        <CircleSlashIcon title="Du har ikke tilgang til dette dokumentet" />
       </StyledWarning>
     );
   }
@@ -22,12 +23,12 @@ export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJo
   if (alreadyUsed) {
     return (
       <StyledWarning>
-        <Warning title="Dette dokumentet er allerede benyttet i en eksisterende klage eller anke" />
+        <ExclamationmarkTriangleIcon title="Dette dokumentet er allerede benyttet i en eksisterende klage eller anke" />
       </StyledWarning>
     );
   }
 
-  const icon = isSelected ? <SuccessColored title="Valgt" /> : undefined;
+  const icon = isSelected ? <CheckmarkCircleFillIconColored /> : undefined;
   const buttonText = isSelected ? '' : 'Velg';
 
   return (

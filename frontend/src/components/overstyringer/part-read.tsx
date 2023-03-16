@@ -1,4 +1,4 @@
-import { Down, Edit, Office1, People, Reset } from '@navikt/ds-icons';
+import { ArrowCirclepathIcon, Buldings2Icon, PencilIcon, PersonIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React, { useContext } from 'react';
@@ -47,7 +47,7 @@ const EditButton = ({ enterEditMode }: EditButtonProps) => {
   }
 
   return (
-    <Button size="small" variant="secondary" icon={<Edit />} title="Endre" onClick={enterEditMode}>
+    <Button size="small" variant="secondary" icon={<PencilIcon />} title="Endre" onClick={enterEditMode}>
       Endre
     </Button>
   );
@@ -79,7 +79,7 @@ const ResetPartButton = ({ type, part }: ResetPartButtonProps) => {
       size="small"
       variant="secondary"
       title={`Benytt samme ${type} som i klagen`}
-      icon={<Down aria-hidden />}
+      icon={<ArrowCirclepathIcon aria-hidden />}
       onClick={() => setPart(klagePart)}
     >
       Fra klagen
@@ -99,7 +99,7 @@ const RemoveFullmektigButton = ({ type }: ResetPartButtonProps) => {
       size="small"
       variant="secondary"
       title="Fjern"
-      icon={<Reset aria-hidden />}
+      icon={<XMarkIcon aria-hidden />}
       onClick={() => setFullmektig(null)}
     >
       Fjern
@@ -112,7 +112,7 @@ const Icon = ({ part }: PartProps) => {
     return <CompanyIcon aria-hidden />;
   }
 
-  return <PersonIcon aria-hidden />;
+  return <StyledPersonIcon aria-hidden />;
 };
 
 export const CopyIdButton = ({ part }: PartProps) => {
@@ -135,14 +135,14 @@ export const CopyIdButton = ({ part }: PartProps) => {
 
 const ICON_SIZE = 24;
 
-const PersonIcon = styled(People)`
+const StyledPersonIcon = styled(PersonIcon)`
   align-self: center;
   width: ${ICON_SIZE}px;
   height: ${ICON_SIZE}px;
   flex-shrink: 0;
 `;
 
-const CompanyIcon = styled(Office1)`
+const CompanyIcon = styled(Buldings2Icon)`
   align-self: center;
   width: ${ICON_SIZE}px;
   height: ${ICON_SIZE}px;

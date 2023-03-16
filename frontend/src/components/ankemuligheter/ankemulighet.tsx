@@ -1,4 +1,3 @@
-import { SuccessColored } from '@navikt/ds-icons';
 import { Button, Table } from '@navikt/ds-react';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
@@ -7,6 +6,7 @@ import { getSakspartName } from '../../domain/name';
 import { useUtfallName, useYtelseName } from '../../hooks/kodeverk';
 import { AnkeContext } from '../../pages/create/anke-context';
 import { IBehandling } from '../../types/behandling';
+import { CheckmarkCircleFillIconColored } from '../colored-icons/colored-icons';
 
 interface Props {
   ankemulighet: IBehandling;
@@ -19,7 +19,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
 
   const isSelected = selectedAnkemulighet?.behandlingId === ankemulighet.behandlingId;
 
-  const icon = isSelected ? <SuccessColored title="Valgt" /> : undefined;
+  const icon = isSelected ? <CheckmarkCircleFillIconColored /> : undefined;
   const buttonText = isSelected ? '' : 'Velg';
 
   const selectAnke = useCallback(

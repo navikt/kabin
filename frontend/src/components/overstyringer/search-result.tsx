@@ -1,4 +1,4 @@
-import { Close, SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Loader, Tag, TagProps, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -68,7 +68,7 @@ const Render = ({ children, variant, onConfirm, onDismiss }: RenderProps) => {
     onConfirm === undefined ? null : (
       <CustomButton
         onClick={onConfirm}
-        icon={<SuccessStroke aria-hidden />}
+        icon={<CheckmarkIcon aria-hidden />}
         label="Bruk"
         keys={['enter']}
         variant="primary"
@@ -79,7 +79,7 @@ const Render = ({ children, variant, onConfirm, onDismiss }: RenderProps) => {
     onDismiss === undefined ? null : (
       <CustomButton
         onClick={onDismiss}
-        icon={<Close aria-hidden />}
+        icon={<XMarkIcon aria-hidden />}
         label="Avbryt"
         keys={['esc']}
         variant="secondary"

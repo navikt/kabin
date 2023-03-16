@@ -1,4 +1,4 @@
-import { SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
@@ -27,7 +27,7 @@ export const Footer = ({ fnr }: Props) => {
       <Button
         onClick={toggleConfirm}
         size="small"
-        icon={<SuccessStroke aria-hidden />}
+        icon={<CheckmarkIcon aria-hidden />}
         variant="primary"
         disabled={payload === null}
       >

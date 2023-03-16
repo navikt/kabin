@@ -1,4 +1,4 @@
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
@@ -26,7 +26,7 @@ const Content = ({ dokument }: { dokument: IViewedDocument | null }) => {
   if (dokument === null) {
     return (
       <Placeholder>
-        <FileContent aria-hidden />
+        <FileTextIcon aria-hidden />
       </Placeholder>
     );
   }

@@ -1,4 +1,4 @@
-import { Collapse, Expand } from '@navikt/ds-icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -28,7 +28,7 @@ export const ValidationSummaryPopup = ({ error }: Props) => {
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  const Icon = isOpen ? Expand : Collapse;
+  const Icon = isOpen ? ChevronDownIcon : ChevronUpIcon;
 
   return (
     <>
