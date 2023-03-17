@@ -1,4 +1,4 @@
-import { ExpandIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
@@ -43,7 +43,7 @@ const RenderAnkemulighet = ({ ankemulighet, onClick }: RenderProps) => {
           size="small"
           title="Vis alle ankemuligheter"
           onClick={onClick}
-          icon={<ExpandIcon aria-hidden />}
+          icon={<ChevronDownIcon aria-hidden />}
           variant="tertiary-neutral"
         />
       </Header>
