@@ -120,7 +120,7 @@ const Fristdato = () => {
 
   return (
     <StyledFristdato>
-      <Label size="small">Beregnet fristdato:</Label>
+      <Label size="small">Beregnet fristdato</Label>
       {isLoading ? (
         <Loader size="xsmall" />
       ) : (
