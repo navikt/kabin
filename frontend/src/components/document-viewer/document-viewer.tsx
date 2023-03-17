@@ -50,7 +50,7 @@ const PDF = ({ url, tittel }: PDFProps) => (
   <>
     <StyledLoader size="3xlarge" />
     <StyledObject
-      data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
+      data={`${url}#toolbar=1&view=fitH&zoom=page-width`}
       role="document"
       type="application/pdf"
       name={tittel ?? DEFAULT_NAME}
