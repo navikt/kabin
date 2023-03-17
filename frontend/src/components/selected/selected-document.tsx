@@ -1,4 +1,4 @@
-import { ExpandIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
@@ -44,7 +44,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
           size="small"
           variant="tertiary-neutral"
           onClick={onClick}
-          icon={<ExpandIcon aria-hidden />}
+          icon={<ChevronDownIcon aria-hidden />}
           title="Vis alle journalposter"
         />
       </Header>
