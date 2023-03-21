@@ -17,7 +17,7 @@ export interface IApiValidationResponse {
   sections: IValidationSection[];
 }
 
-interface IError {
+interface IError extends GenericObject {
   type: string;
   title: string;
   status: number;
@@ -32,22 +32,24 @@ export interface IApiErrorReponse extends IError {
   detail: string;
 }
 
-const isIError = (error: unknown): error is IError =>
-  typeof error === 'object' &&
-  error !== null &&
+type GenericObject = Record<string | number | symbol, unknown>;
+
+const isIError = (error: GenericObject): error is IError =>
   typeof error['type'] === 'string' &&
   typeof error['title'] === 'string' &&
   typeof error['status'] === 'number' &&
   typeof error['instance'] === 'string';
 
+const isObject = (obj: unknown): obj is GenericObject => typeof obj === 'object' && obj !== null;
+
 export const isApiError = (response: unknown): response is IApiErrorReponse =>
-  isIError(response) && typeof response['detail'] === 'string';
+  isObject(response) && isIError(response) && typeof response['detail'] === 'string';
 
-export const isValidationResponse = (error: unknown): error is IValidationResponse =>
-  isIError(error) && Array.isArray(error['sections']) && error['sections'].every(isValidationSection);
+export const isValidationResponse = (response: unknown): response is IValidationResponse =>
+  isObject(response) &&
+  isIError(response) &&
+  Array.isArray(response['sections']) &&
+  response['sections'].every(isValidationSection);
 
-const isValidationSection = (error: unknown): error is IValidationSection =>
-  typeof error === 'object' &&
-  error !== null &&
-  typeof error['section'] === 'string' &&
-  Array.isArray(error['properties']);
+const isValidationSection = (section: unknown): section is IValidationSection =>
+  isObject(section) && typeof section['section'] === 'string' && Array.isArray(section['properties']);
