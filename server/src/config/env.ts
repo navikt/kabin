@@ -27,7 +27,7 @@ export const ENVIRONMENT = getEnvironmentVersion('local', 'test', 'development',
 export const DOMAIN: string = getEnvironmentVersion(
   `http://localhost:${serverConfig.port}`,
   `http://localhost:${serverConfig.port}`,
-  'https://kabin.dev.nav.no',
+  'https://kabin.intern.dev.nav.no',
   'https://kabin.intern.nav.no'
 );
 
