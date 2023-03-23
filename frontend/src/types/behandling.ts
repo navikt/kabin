@@ -1,6 +1,6 @@
+import { Ytelse } from '@app/types/ytelse';
 import { IPart, ITilknyttetDokument } from './common';
 import { UtfallEnum } from './kodeverk';
-import { Ytelse } from './ytelse';
 
 export interface IBehandling {
   behandlingId: string;
