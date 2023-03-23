@@ -1,4 +1,4 @@
-import qs from 'qs';
+import { stringify } from 'qs';
 import { Options, RequestBody, SimpleApiState } from './simple-api-state';
 
 interface PathParams<Q> {
@@ -10,7 +10,7 @@ export const getStateFactory = <T, Q>(basePath: string, options?: Options) => {
   const STATES: Map<string, SimpleApiState<T>> = new Map();
 
   return ({ path = '', query }: PathParams<Q>, body: RequestBody = undefined) => {
-    const q: string = qs.stringify(query, { arrayFormat: 'comma', skipNulls: true, addQueryPrefix: true });
+    const q: string = stringify(query, { arrayFormat: 'comma', skipNulls: true, addQueryPrefix: true });
     const b: string | undefined = serializeBody(body);
     const url = `${basePath}${path}${q}`;
     const stateKey = `${url}:${b ?? 'undefined'}`;
