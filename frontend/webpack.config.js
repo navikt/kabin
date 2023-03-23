@@ -47,7 +47,7 @@ module.exports = (_env, { mode }) => ({
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: 'https://kabin.dev.nav.no',
+        target: 'https://kabin.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,
         withCredentials: true,

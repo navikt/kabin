@@ -9,7 +9,7 @@ import { SaksTypeEnum, skipToken } from '../../types/common';
 import { IStatus } from '../../types/status';
 import { Details } from './details';
 
-const KABAL_URL = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.dev.nav.no';
+const KABAL_URL = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.intern.dev.nav.no';
 
 interface IStatusPage {
   type: SaksTypeEnum;
