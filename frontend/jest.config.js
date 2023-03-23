@@ -1,16 +1,13 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('./tsconfig');
+
 module.exports = {
   preset: "ts-jest",
-  passWithNoTests: true,
-  moduleNameMapper: {
-    "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-  },
-  transform: {
-    "\\.js?x$": ["ts-jest"],
-  },
-  transformIgnorePatterns: [
-    "node_modules/(?!(nav-frontend-typografi-style|nav-frontend-alertstriper-style|nav-frontend-spinner-style|nav-frontend-etiketter-style|nav-frontend-knapper-style)/)",
-  ],
   testEnvironment: "node",
+  passWithNoTests: true,
+  roots: ["<rootDir>"],
+  modulePaths: [compilerOptions.baseUrl],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   globals: {
     window: {
       location: {
@@ -18,9 +15,4 @@ module.exports = {
       },
     },
   },
-  collectCoverage: true,
-  coverageReporters: [
-    "json",
-    "html"
-  ]
 };
