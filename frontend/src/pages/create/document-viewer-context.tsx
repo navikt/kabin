@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 interface IViewedDocumentId {
   journalpostId: string;
@@ -20,7 +20,7 @@ interface IDocumentViewerContext {
 
 const DEFAULT_DOKUMENT_NAME = 'Ukjent dokumentnavn';
 
-export const DocumentViewerContext = React.createContext<IDocumentViewerContext>({
+export const DocumentViewerContext = createContext<IDocumentViewerContext>({
   dokument: null,
   viewDokument: () => {},
 });
