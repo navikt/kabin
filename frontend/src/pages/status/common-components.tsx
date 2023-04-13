@@ -1,7 +1,8 @@
 import { BodyShort, Label, Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { ISak } from '../../types/dokument';
+import { useFagsystemName } from '@app/hooks/kodeverk';
+import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
   label: string;
@@ -41,17 +42,19 @@ const StyledCode = styled(Tag)`
 `;
 
 interface SakProps {
-  sak: Omit<ISak, 'datoOpprettet'> | null;
+  sak: Omit<ISak, 'datoOpprettet' | 'fagsaksystem'> | null;
 }
 
 export const Sak = ({ sak }: SakProps) => {
+  const fagsystemName = useFagsystemName(sak?.fagsystemId);
+
   if (sak === null) {
     return null;
   }
 
   return (
     <StyledSak>
-      <InfoItem label="Fagsystem">{sak.fagsaksystem}</InfoItem>
+      <InfoItem label="Fagsystem">{fagsystemName}</InfoItem>
       <InfoItem label="Saks-ID">
         <Code>{sak.fagsakId}</Code>
       </InfoItem>

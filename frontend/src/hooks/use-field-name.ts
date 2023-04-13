@@ -1,11 +1,13 @@
-export enum FieldNames {
+export enum ValidationFieldNames {
   MOTTATT_NAV = 'mottattNav',
   FRIST = 'frist',
+  AVSENDER = 'avsender',
 }
 
-const FIELD_NAMES: Record<FieldNames, string> = {
-  [FieldNames.MOTTATT_NAV]: 'Mottatt NAV Klageinstans',
-  [FieldNames.FRIST]: 'Frist',
+const FIELD_NAMES: Record<ValidationFieldNames, string> = {
+  [ValidationFieldNames.MOTTATT_NAV]: 'Mottatt NAV Klageinstans',
+  [ValidationFieldNames.FRIST]: 'Frist',
+  [ValidationFieldNames.AVSENDER]: 'Avsender',
 };
 
-export const useFieldName = (field: FieldNames) => FIELD_NAMES[field] ?? field;
+export const useFieldName = (field: ValidationFieldNames) => FIELD_NAMES[field] ?? field;

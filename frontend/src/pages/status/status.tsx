@@ -3,10 +3,10 @@ import { Alert, Button, Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { ENVIRONMENT } from '../../environment';
-import { useStatus } from '../../simple-api-state/use-api';
-import { SaksTypeEnum, skipToken } from '../../types/common';
-import { IStatus } from '../../types/status';
+import { ENVIRONMENT } from '@app/environment';
+import { useStatus } from '@app/simple-api-state/use-api';
+import { SaksTypeEnum, skipToken } from '@app/types/common';
+import { IStatus } from '@app/types/status';
 import { Details } from './details';
 
 const KABAL_URL = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.intern.dev.nav.no';

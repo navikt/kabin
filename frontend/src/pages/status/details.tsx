@@ -1,13 +1,13 @@
 import { BodyShort } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { Card } from '../../components/card/card';
-import { CopyIdButton } from '../../components/overstyringer/part-read';
-import { isoDateTimeToPrettyDate, isoDateToPretty } from '../../domain/date';
-import { getSakspartName } from '../../domain/name';
-import { useUtfallName, useYtelseName } from '../../hooks/kodeverk';
-import { IPart } from '../../types/common';
-import { IStatus } from '../../types/status';
+import { Card } from '@app/components/card/card';
+import { CopyIdButton } from '@app/components/overstyringer/part-read';
+import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
+import { getSakspartName } from '@app/domain/name';
+import { useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
+import { IPart } from '@app/types/common';
+import { IStatus } from '@app/types/status';
 import { InfoItem, Sak, Time } from './common-components';
 import { Journalpost } from './journalpost';
 
@@ -20,8 +20,8 @@ export const Details = ({
   fullmektig,
   journalpost,
   klager,
-  sakFagsakId: fagsakId,
-  sakFagsystem: fagsaksystem,
+  fagsakId,
+  fagsystemId,
   sakenGjelder,
 }: IStatus) => {
   const ytelse = useYtelseName(ytelseId);
@@ -43,7 +43,7 @@ export const Details = ({
         <InfoItem label="Ytelse">{ytelse}</InfoItem>
         <InfoItem label="Utfall">{utfall}</InfoItem>
 
-        <Sak sak={{ fagsaksystem, fagsakId }} />
+        <Sak sak={{ fagsystemId, fagsakId }} />
       </StyledCard>
 
       <StyledCard title="Saksinfo" $gridArea="anke" titleSize="medium">

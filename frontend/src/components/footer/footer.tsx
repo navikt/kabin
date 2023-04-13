@@ -2,17 +2,12 @@ import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { ApiContext } from '../../pages/create/api-context';
-import { skipToken } from '../../types/common';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Confirm } from './confirm';
 import { IApiErrorReponse, IApiValidationResponse } from './error-type-guard';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
-interface Props {
-  fnr: string | typeof skipToken;
-}
-
-export const Footer = ({ fnr }: Props) => {
+export const Footer = () => {
   const [error, setError] = useState<IApiValidationResponse | IApiErrorReponse | Error | undefined>();
   const { payload } = useContext(ApiContext);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -34,7 +29,7 @@ export const Footer = ({ fnr }: Props) => {
         Fullfør
       </Button>
 
-      <Confirm show={showConfirm} fnr={fnr} setError={setError} closeConfirm={closeConfirm} />
+      <Confirm show={showConfirm} setError={setError} closeConfirm={closeConfirm} />
 
       <ValidationSummaryPopup error={error} />
     </FooterStyle>

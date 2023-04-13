@@ -1,10 +1,10 @@
 import { isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
-import { isNotNull } from '../../functions/is-not';
-import { stringToRegExp } from '../../functions/string-to-regex';
-import { skipToken } from '../../types/common';
-import { IArkivertDocument, IdType } from '../../types/dokument';
+import { isNotNull } from '@app/functions/is-not';
+import { stringToRegExp } from '@app/functions/string-to-regex';
+import { IdType, skipToken } from '@app/types/common';
+import { IArkivertDocument } from '@app/types/dokument';
 
 interface IOption<T> {
   value: T;
@@ -77,8 +77,8 @@ export const useFilteredDocuments = (
   return useMemo(
     () =>
       documents.filter(
-        ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg }) =>
-          (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
+        ({ tittel, journalpostId, temaId, journalposttype, avsenderMottaker, registrert, sak, vedlegg }) =>
+          (selectedTemaer.length === 0 || (temaId !== null && selectedTemaer.includes(temaId))) &&
           (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
           (selectedAvsenderMottakere.length === 0 ||
             selectedAvsenderMottakere.includes(

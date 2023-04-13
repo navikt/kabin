@@ -1,37 +1,69 @@
-import { Detail, Label, Loader, TextField } from '@navikt/ds-react';
-import { parseISO } from 'date-fns';
-import React, { useCallback, useContext, useEffect } from 'react';
+import { DocPencilIcon } from '@navikt/aksel-icons';
+import { Label } from '@navikt/ds-react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { FieldNames } from '../../hooks/use-field-name';
-import { useValidationError } from '../../hooks/use-validation-error';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { useCalculateFristdato } from '../../simple-api-state/use-api';
-import { skipToken } from '../../types/common';
-import { Card } from '../card/card';
-import { Datepicker } from '../date-picker/date-picker';
+import { Card } from '@app/components/card/card';
+import { Avsender } from '@app/components/overstyringer/avsender';
+import { StyledFullmektigIcon, StyledKlagerIcon, StyledSakenGjelderIcon } from '@app/components/overstyringer/icons';
+import { Placeholder } from '@app/components/placeholder/placeholder';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { EditFrist } from './edit-frist';
+import { EditMottattNAV } from './edit-mottatt-nav';
 import { Part } from './part';
 import { PartRead } from './part-read';
-import { GridArea, gridAreas } from './types';
+import { FieldNames, GridArea } from './types';
 
-export const Overstyringer = () => {
-  const { setMottattNav, ankemulighet, klager, fullmektig, setKlager, setFullmektig } = useContext(AnkeContext);
+interface Props {
+  title: string;
+  klagerLabel: string;
+}
 
-  useEffect(() => {
-    if (ankemulighet === null) {
-      setMottattNav(null);
-    }
-  }, [ankemulighet, setMottattNav]);
+export const Overstyringer = ({ title, klagerLabel }: Props) => {
+  const { type, payload, updatePayload } = useContext(ApiContext);
+
+  if (type === Type.NONE || payload.mulighet === null) {
+    return (
+      <Card title={title}>
+        <Placeholder>
+          <DocPencilIcon aria-hidden />
+        </Placeholder>
+      </Card>
+    );
+  }
+
+  const { overstyringer, mulighet } = payload;
 
   return (
-    <Card title="Tilpass anken">
+    <Card title={title}>
       <Content>
         <EditMottattNAV />
         <EditFrist />
         <StyledHeading size="small">Parter</StyledHeading>
-        <PartRead gridArea={GridArea.SAKEN_GJELDER} part={ankemulighet?.sakenGjelder ?? null} label="Saken gjelder" />
-        <Part gridArea={GridArea.ANKER} part={klager} setPart={setKlager} label="Ankende part" />
-        <Part gridArea={GridArea.FULLMEKTIG} part={fullmektig} setPart={setFullmektig} label="Fullmektig" />
+        <PartRead
+          gridArea={GridArea.SAKEN_GJELDER}
+          partField={FieldNames.SAKEN_GJELDER}
+          part={mulighet.sakenGjelder}
+          label="Saken gjelder"
+          icon={<StyledSakenGjelderIcon aria-hidden />}
+        />
+        <Part
+          gridArea={GridArea.ANKER}
+          partField={FieldNames.KLAGER}
+          part={overstyringer.klager}
+          setPart={(klager) => updatePayload({ overstyringer: { klager } })}
+          label={klagerLabel}
+          icon={<StyledKlagerIcon aria-hidden />}
+        />
+        <Part
+          gridArea={GridArea.FULLMEKTIG}
+          partField={FieldNames.FULLMEKTIG}
+          part={overstyringer.fullmektig}
+          setPart={(fullmektig) => updatePayload({ overstyringer: { fullmektig } })}
+          label="Fullmektig"
+          icon={<StyledFullmektigIcon aria-hidden />}
+        />
+        <Avsender />
       </Content>
     </Card>
   );
@@ -39,121 +71,12 @@ export const Overstyringer = () => {
 
 const Content = styled.div`
   display: grid;
-  grid-template-areas: 'mottattnav frist frist' 'title title title' '${gridAreas.join(' ')}';
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 'mottattnav frist' 'title title' '${GridArea.SAKEN_GJELDER} ${GridArea.ANKER}' '${GridArea.FULLMEKTIG} ${GridArea.AVSENDER}';
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 16px;
 `;
 
-const EditMottattNAV = () => {
-  const { mottattNav, setMottattNav, dokument, ankemulighet } = useContext(AnkeContext);
-  const error = useValidationError(FieldNames.MOTTATT_NAV);
-
-  const onChange = useCallback(
-    (date: string | null): void => {
-      if (date !== null) {
-        setMottattNav(date);
-      }
-    },
-    [setMottattNav]
-  );
-
-  return (
-    <StyledDatepicker
-      label="Mottatt NAV Klageinstans"
-      onChange={onChange}
-      value={mottattNav === null ? undefined : parseISO(mottattNav)}
-      size="small"
-      toDate={dokument === null ? undefined : parseISO(dokument.registrert)}
-      fromDate={ankemulighet === null ? undefined : parseISO(ankemulighet.vedtakDate)}
-      id={FieldNames.MOTTATT_NAV}
-      error={error}
-      disabled={dokument === null}
-    />
-  );
-};
-
-const EditFrist = () => {
-  const { fristInWeeks, setFristInWeeks } = useContext(AnkeContext);
-  const error = useValidationError(FieldNames.FRIST);
-
-  const parseAndSet = useCallback(
-    (value: string): void => {
-      const parsed = Number.parseInt(value, 10);
-
-      setFristInWeeks(parsed);
-    },
-    [setFristInWeeks]
-  );
-
-  const onInputChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    ({ target }): void => parseAndSet(target.value),
-    [parseAndSet]
-  );
-
-  return (
-    <StyledEditFrist>
-      <StyledTextField
-        type="number"
-        label="Frist i uker"
-        size="small"
-        min={0}
-        id={FieldNames.FRIST}
-        value={fristInWeeks}
-        onChange={onInputChange}
-        error={error}
-      />
-      <Fristdato />
-    </StyledEditFrist>
-  );
-};
-
-const Fristdato = () => {
-  const { mottattNav, fristInWeeks } = useContext(AnkeContext);
-  const { data: fristdato, isLoading } = useCalculateFristdato(
-    mottattNav === null ? skipToken : { fromDate: mottattNav, fristInWeeks }
-  );
-
-  if (mottattNav === null) {
-    return null;
-  }
-
-  return (
-    <StyledFristdato>
-      <Label size="small">Beregnet fristdato</Label>
-      {isLoading ? (
-        <Loader size="xsmall" />
-      ) : (
-        <Detail>
-          <time dateTime={fristdato}>{isoDateToPretty(fristdato)}</time>
-        </Detail>
-      )}
-    </StyledFristdato>
-  );
-};
-
-const StyledDatepicker = styled(Datepicker)`
-  grid-area: mottattnav;
-`;
-
-const StyledTextField = styled(TextField)`
-  grid-area: frist;
-  width: 100px;
-`;
-
 const StyledHeading = styled(Label)`
   grid-area: title;
-`;
-
-const StyledEditFrist = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  grid-column: frist;
-`;
-
-const StyledFristdato = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 `;

@@ -2,27 +2,27 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { useFullTemaNameFromId } from '../../hooks/kodeverk';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
-import { IArkivertDocument, IJournalposttype } from '../../types/dokument';
-import { Card } from '../card/card';
-import { formatAvsenderMottaker } from '../documents/avsender-mottaker';
-import { Journalposttype } from '../journalposttype/journalposttype';
+import { Card } from '@app/components/card/card';
+import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
+import { Journalposttype } from '@app/components/journalposttype/journalposttype';
+import { isoDateToPretty } from '@app/domain/date';
+import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 
 interface Props {
   onClick: () => void;
 }
 
 export const SelectedDocument = ({ onClick }: Props) => {
-  const { dokument } = useContext(AnkeContext);
+  const { journalpost } = useContext(ApiContext);
 
-  if (dokument === null) {
+  if (journalpost === null) {
     return null;
   }
 
-  return <RenderDokument dokument={dokument} onClick={onClick} />;
+  return <RenderDokument dokument={journalpost} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
@@ -30,9 +30,9 @@ interface RenderProps extends Props {
 }
 
 const RenderDokument = ({ dokument, onClick }: RenderProps) => {
-  const { tittel, tema, registrert, avsenderMottaker, journalposttype, sak, vedlegg } = dokument;
+  const { tittel, temaId, registrert, avsenderMottaker, journalposttype, sak, vedlegg } = dokument;
 
-  const temaName = useFullTemaNameFromId(tema);
+  const temaName = useFullTemaNameFromId(temaId);
 
   return (
     <Card>
@@ -108,11 +108,11 @@ const ViewDocumentButton = ({ dokument }: VirewDocumentButtonProps) => {
 type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
 
 const AvsenderMottaker = ({ journalposttype, avsenderMottaker }: AvsenderMottakerProps) => {
-  if (journalposttype === IJournalposttype.NOTAT) {
+  if (journalposttype === JournalposttypeEnum.NOTAT) {
     return null;
   }
 
-  const title = journalposttype === IJournalposttype.INNGAAENDE ? 'Mottaker' : 'Avsender';
+  const title = journalposttype === JournalposttypeEnum.INNGAAENDE ? 'Mottaker' : 'Avsender';
 
   return (
     <Column>

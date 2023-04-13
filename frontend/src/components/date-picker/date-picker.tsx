@@ -20,10 +20,12 @@ interface Props {
   className?: string;
 }
 
+const DEFAULT_FROM_DATE = new Date(1970);
+
 export const Datepicker = ({
   disabled,
   error,
-  fromDate = new Date(1970),
+  fromDate = DEFAULT_FROM_DATE,
   id,
   label,
   onChange,
@@ -42,15 +44,23 @@ export const Datepicker = ({
     setInputError(undefined);
   }, [value]);
 
-  const onDateChange = (dateObject?: Date) => {
-    setInputError(undefined);
+  const onDateChange = useCallback(
+    (dateObject?: Date) => {
+      setInputError(undefined);
 
-    if (dateObject === undefined) {
-      onChange(null);
-    } else {
-      onChange(format(dateObject, FORMAT));
-    }
-  };
+      if (dateObject === undefined) {
+        return onChange(null);
+      }
+
+      const prettyFormatted = format(dateObject, PRETTY_FORMAT);
+
+      if (prettyFormatted !== input) {
+        const isoFormatted = format(dateObject, FORMAT);
+        onChange(isoFormatted);
+      }
+    },
+    [input, onChange]
+  );
 
   const [month, setMonth] = useState(value);
 
@@ -64,7 +74,12 @@ export const Datepicker = ({
         return false;
       }
 
-      onChange(format(dateObject, FORMAT));
+      const prettyFormatted = format(dateObject, PRETTY_FORMAT);
+
+      if (prettyFormatted !== input) {
+        const isoFormatted = format(dateObject, FORMAT);
+        onChange(isoFormatted);
+      }
 
       const isValidRange = validateRange(dateObject, fromDate, toDate);
 
@@ -78,7 +93,7 @@ export const Datepicker = ({
 
       return true;
     },
-    [fromDate, onChange, toDate]
+    [fromDate, input, onChange, toDate]
   );
 
   const validateInput = useCallback(

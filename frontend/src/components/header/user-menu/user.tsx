@@ -1,7 +1,7 @@
 import { Dropdown, Header } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled from 'styled-components';
-import { useSignature, useUser } from '../../../simple-api-state/use-api';
+import { useSignature, useUser } from '@app/simple-api-state/use-api';
 import { UserDropdown } from './dropdown';
 
 export const User = () => {

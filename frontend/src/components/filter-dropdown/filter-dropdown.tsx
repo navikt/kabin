@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../hooks/use-on-click-outside';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Dropdown } from './dropdown';
 import { BaseProps } from './props';
 import { ToggleButton } from './toggle-button';

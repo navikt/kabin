@@ -1,9 +1,9 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { useFullTemaNameFromId } from '../../hooks/kodeverk';
-import { IArkivertDocument, IAvsenderMottaker, IJournalposttype } from '../../types/dokument';
+import { isoDateToPretty } from '@app/domain/date';
+import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { IArkivertDocument, IAvsenderMottaker, JournalposttypeEnum } from '@app/types/dokument';
 import { InfoItem, Sak, Time } from './common-components';
 
 interface JournalpostProps {
@@ -11,9 +11,9 @@ interface JournalpostProps {
 }
 
 export const Journalpost = ({ journalpost }: JournalpostProps) => {
-  const { tema, tittel, registrert, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
+  const { temaId, tittel, registrert, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
 
-  const temaName = useFullTemaNameFromId(tema);
+  const temaName = useFullTemaNameFromId(temaId);
 
   return (
     <>
@@ -70,21 +70,21 @@ const Ellipsis = styled.div`
   white-space: nowrap;
 `;
 
-const getAvsenderMottaker = (avsenderMottaker: IAvsenderMottaker) => {
-  if (avsenderMottaker.id === null) {
+const getAvsenderMottaker = (avsenderMottaker: IAvsenderMottaker | null) => {
+  if (avsenderMottaker === null || avsenderMottaker.id === null) {
     return 'Ingen';
   }
 
   return avsenderMottaker.navn ?? 'Navn mangler';
 };
 
-const getJournalposttype = (type: IJournalposttype) => {
+const getJournalposttype = (type: JournalposttypeEnum) => {
   switch (type) {
-    case IJournalposttype.INNGAAENDE:
+    case JournalposttypeEnum.INNGAAENDE:
       return 'Inngående';
-    case IJournalposttype.UTGAAENDE:
+    case JournalposttypeEnum.UTGAAENDE:
       return 'Utgående';
-    case IJournalposttype.NOTAT:
+    case JournalposttypeEnum.NOTAT:
       return 'Notat';
   }
 };

@@ -1,9 +1,9 @@
-import { FieldNames } from '../../hooks/use-field-name';
-import { SectionNames } from '../../hooks/use-section-title';
+import { ValidationFieldNames } from '@app/hooks/use-field-name';
+import { SectionNames } from '@app/hooks/use-section-title';
 
 export interface IValidationError {
   reason: string;
-  field: FieldNames;
+  field: ValidationFieldNames;
 }
 
 export interface IValidationSection {

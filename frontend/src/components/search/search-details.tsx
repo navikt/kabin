@@ -1,9 +1,9 @@
 import { Loader, Tag, TagProps } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { getSakspartNameAndId } from '../../domain/name';
-import { formatFoedselsnummer } from '../../functions/format-id';
-import { IPart, skipToken } from '../../types/common';
+import { getSakspartNameAndId } from '@app/domain/name';
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { IPart, skipToken } from '@app/types/common';
 
 interface Props {
   searchString: string | typeof skipToken;

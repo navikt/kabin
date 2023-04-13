@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 
 interface Props {
   journalpostId: string;

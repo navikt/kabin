@@ -1,13 +1,6 @@
-export enum IdType {
-  FNR = 'FNR',
-  ORGNR = 'ORGNR',
-  HPRNR = 'HPRNR',
-  UTL_ORG = 'UTL_ORG',
-  UKJENT = 'UKJENT',
-  NULL = 'NULL',
-}
+import { IAvsenderMottakerId } from '@app/types/common';
 
-export enum IJournalposttype {
+export enum JournalposttypeEnum {
   INNGAAENDE = 'I',
   UTGAAENDE = 'U',
   NOTAT = 'N',
@@ -37,15 +30,11 @@ export interface IVedlegg {
 export interface ISak {
   datoOpprettet: string;
   fagsakId: string;
-  fagsaksystem: string;
+  fagsystemId: string;
 }
 
-export interface IAvsenderMottaker {
-  id: string | null;
-  type: IdType;
-  navn: string | null;
-  land: string | null;
-  erLikBruker: boolean;
+export interface IAvsenderMottaker extends IAvsenderMottakerId {
+  navn: string;
 }
 
 enum Datotype {
@@ -121,16 +110,16 @@ export interface IArkivertDocument {
   journalpostId: string;
   dokumentInfoId: string;
   tittel: string | null;
-  tema: string | null;
+  temaId: string | null;
   registrert: string;
   harTilgangTilArkivvariant: boolean;
   vedlegg: IVedlegg[];
-  journalposttype: IJournalposttype;
+  journalposttype: JournalposttypeEnum;
   journalstatus: Journalstatus;
   behandlingstema: string | null;
   behandlingstemanavn: string | null;
   sak: ISak;
-  avsenderMottaker: IAvsenderMottaker;
+  avsenderMottaker: IAvsenderMottaker | null;
   journalfoerendeEnhet: string;
   journalfortAvNavn: string;
   opprettetAvNavn: string;

@@ -2,14 +2,14 @@ import { ArrowUndoIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
-import { editTitle } from '../../api/api';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { DocumentViewerContext, IViewedDocument } from '../../pages/create/document-viewer-context';
-import { useDokumenter } from '../../simple-api-state/use-api';
-import { isApiError } from '../footer/error-type-guard';
-import { errorToast } from '../toast/error-toast';
-import { toast } from '../toast/store';
-import { ToastType } from '../toast/types';
+import { editTitle } from '@app/api/api';
+import { isApiError } from '@app/components/footer/error-type-guard';
+import { errorToast } from '@app/components/toast/error-toast';
+import { toast } from '@app/components/toast/store';
+import { ToastType } from '@app/components/toast/types';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
+import { useDokumenter } from '@app/simple-api-state/use-api';
 
 interface Props {
   show: boolean;
@@ -33,7 +33,7 @@ interface EditLoadedTitleProps {
 
 const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => {
   const { viewDokument } = useContext(DocumentViewerContext);
-  const { fnr, setDokument, dokument: contextDokument } = useContext(AnkeContext);
+  const { fnr, setJournalpost } = useContext(ApiContext);
 
   const { updateData: updateDokumenter } = useDokumenter(fnr);
 
@@ -51,7 +51,14 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
       if (res.ok) {
         toast({ type: ToastType.SUCCESS, message: `Dokumenttittel endret` });
 
-        setDokument(contextDokument === null ? null : { ...contextDokument, tittel: newTitle });
+        setJournalpost((journalpost) => {
+          if (journalpost === null) {
+            return null;
+          }
+
+          return { ...journalpost, tittel: newTitle };
+        });
+
         viewDokument({ ...dokument, tittel: newTitle });
 
         updateDokumenter((data) =>
@@ -92,11 +99,10 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
     newTitle,
     journalpostId,
     dokumentInfoId,
-    setDokument,
-    contextDokument,
     viewDokument,
     dokument,
     updateDokumenter,
+    setJournalpost,
   ]);
 
   const isChanged = title !== newTitle;

@@ -3,19 +3,20 @@ import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
-import { useDokumenter } from '../../simple-api-state/use-api';
-import { IArkivertDocument } from '../../types/dokument';
-import { Card } from '../card/card';
-import { Placeholder } from '../placeholder/placeholder';
-import { SelectedDocument } from '../selected/selected-document';
+import { Card } from '@app/components/card/card';
+import { Placeholder } from '@app/components/placeholder/placeholder';
+import { SelectedDocument } from '@app/components/selected/selected-document';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { useDokumenter } from '@app/simple-api-state/use-api';
+import { IArkivertDocument } from '@app/types/dokument';
 import { ColumnHeaders } from './column-headers';
 import { Dokument } from './document';
 import { useFilteredDocuments } from './filter-helpers';
 
 export const Dokumenter = () => {
-  const { setDokument, fnr, dokument } = useContext(AnkeContext);
+  const { type, fnr, journalpost, setJournalpost } = useContext(ApiContext);
   const { data: dokumenter, isLoading } = useDokumenter(fnr);
   const { viewDokument } = useContext(DocumentViewerContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -24,11 +25,14 @@ export const Dokumenter = () => {
     if (typeof dokumenter === 'undefined') {
       setIsExpanded(true);
       viewDokument(null);
-      setDokument(null);
-    }
-  }, [dokumenter, setDokument, viewDokument]);
 
-  if (!isExpanded && dokument !== null) {
+      if (type !== Type.NONE && journalpost !== null) {
+        setJournalpost(null);
+      }
+    }
+  }, [dokumenter, journalpost, setJournalpost, type, viewDokument]);
+
+  if (!isExpanded && type !== Type.NONE && journalpost !== null) {
     return <SelectedDocument onClick={() => setIsExpanded(true)} />;
   }
 
@@ -36,9 +40,9 @@ export const Dokumenter = () => {
     <Card>
       <Header>
         <Heading size="small" level="1">
-          Velg anke
+          Velg journalpost
         </Heading>
-        {dokument === null ? null : (
+        {journalpost === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"
@@ -124,7 +128,7 @@ const Content = ({ dokumenter, isLoading }: ContentProps) => {
   }
 
   if (dokumenter.length === 0) {
-    <BodyShort>Ingen dokumenter</BodyShort>;
+    <BodyShort>Ingen journalposter</BodyShort>;
   }
 
   return <DocumentTable dokumenter={dokumenter} />;

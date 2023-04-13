@@ -2,16 +2,17 @@ import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Loader, Tag, TagProps, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { getSakspartName } from '../../domain/name';
-import { formatId } from '../../functions/format-id';
-import { IPart } from '../../types/common';
+import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
+import { getSakspartName } from '@app/domain/name';
+import { formatId } from '@app/functions/format-id';
+import { IPart } from '@app/types/common';
 
 interface Props {
   label: string;
   data: IPart | undefined;
   setPart: (part: IPart) => void;
   isLoading: boolean;
-  dismiss: () => void;
+  dismiss?: () => void;
   searchString: string;
   isValid: boolean;
 }
@@ -28,7 +29,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
   if (typeof data !== 'undefined' && (data.person !== null || data.virksomhet !== null)) {
     return (
       <Render variant="alt3" onConfirm={() => setPart(data)} onDismiss={dismiss}>
-        {getSakspartName(data)}
+        <Icon part={data} /> {getSakspartName(data)}
       </Render>
     );
   }
@@ -135,3 +136,15 @@ const Buttons = styled.div`
   justify-content: flex-end;
   column-gap: 8px;
 `;
+
+interface IconProps {
+  part: IPart | null;
+}
+
+const Icon = ({ part }: IconProps) => {
+  if (part !== null && part.virksomhet !== null) {
+    return <CompanyIcon aria-hidden />;
+  }
+
+  return <PersonIcon aria-hidden />;
+};

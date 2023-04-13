@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { ApiContext } from '../pages/create/api-context';
-import { FieldNames } from './use-field-name';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { ValidationFieldNames } from './use-field-name';
 
-export const useValidationError = (field: FieldNames): string | undefined => {
+export const useValidationError = (field: ValidationFieldNames): string | undefined => {
   const { errors } = useContext(ApiContext);
 
   if (errors === null) {

@@ -7,7 +7,7 @@ import {
   ExclamationmarkTriangleFillIconColored,
   InformationSquareFillIconColored,
   XMarkOctagonFillIconColored,
-} from '../colored-icons/colored-icons';
+} from '@app/components/colored-icons/colored-icons';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
 import { Message } from './store';
 import { ToastType } from './types';

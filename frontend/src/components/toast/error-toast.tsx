@@ -1,5 +1,5 @@
 import React from 'react';
-import { isApiError } from '../footer/error-type-guard';
+import { isApiError } from '@app/components/footer/error-type-guard';
 import { ErrorDetails } from './error-details';
 import { toast } from './store';
 import { ToastType } from './types';

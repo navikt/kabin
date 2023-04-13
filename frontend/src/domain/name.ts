@@ -1,8 +1,8 @@
-import { formatFoedselsnummer, formatOrgNum } from '../functions/format-id';
-import { IPart } from '../types/common';
-import { Name } from './types';
+import { INavn } from '@app/domain/types';
+import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
+import { IPart } from '@app/types/common';
 
-const getFullName = (nameObject?: Name | null): string => {
+export const getFullName = (nameObject?: INavn | null): string => {
   if (nameObject === null || typeof nameObject === 'undefined') {
     return '-';
   }
