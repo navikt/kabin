@@ -11,6 +11,8 @@ import { ApiContext } from './api-context/api-context';
 import { isType } from './api-context/helpers';
 import { Type } from './api-context/types';
 
+const KLAGER_ENABLED = false; // TODO: Remove when klage is supported.
+
 export const TypeInput = () => {
   const { type, setType } = useContext(ApiContext);
 
@@ -18,12 +20,15 @@ export const TypeInput = () => {
 
   return (
     <>
-      <Row>
-        <ToggleGroup onChange={onChange} value={type} size="small">
-          <ToggleGroup.Item value={Type.KLAGE}>Klage</ToggleGroup.Item>
-          <ToggleGroup.Item value={Type.ANKE}>Anke</ToggleGroup.Item>
-        </ToggleGroup>
-      </Row>
+      {KLAGER_ENABLED ? (
+        <Row>
+          <ToggleGroup onChange={onChange} value={type} size="small">
+            <ToggleGroup.Item value={Type.KLAGE}>Klage</ToggleGroup.Item>
+            <ToggleGroup.Item value={Type.ANKE}>Anke</ToggleGroup.Item>
+          </ToggleGroup>
+        </Row>
+      ) : null}
+
       <RenderTypeInput />
     </>
   );
