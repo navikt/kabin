@@ -1,7 +1,7 @@
 import { idnr } from '@navikt/fnrvalidator';
 import { useEffect, useState } from 'react';
-import { useSearchPart } from '../../simple-api-state/use-api';
-import { IPart, skipToken } from '../../types/common';
+import { useSearchPart } from '@app/simple-api-state/use-api';
+import { IPart, skipToken } from '@app/types/common';
 
 export interface IPersonSearch {
   rawSearch: string;

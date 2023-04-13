@@ -1,12 +1,18 @@
 import { useMemo } from 'react';
-import { useSimpleYtelser, useTema, useUtfall } from './../simple-api-state/use-kodeverk';
-import { UtfallEnum } from './../types/kodeverk';
+import {
+  useFagsystemer,
+  useSimpleYtelser,
+  useTema,
+  useUtfall,
+  useVedtaksenheter,
+} from '@app/simple-api-state/use-kodeverk';
+import { UtfallEnum } from '@app/types/kodeverk';
 
-export const useUtfallName = (utfallId: UtfallEnum): string => {
+export const useUtfallName = (utfallId: UtfallEnum | null): string => {
   const { data } = useUtfall();
 
   return useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (utfallId === null || typeof data === 'undefined') {
       return '';
     }
 
@@ -38,4 +44,28 @@ export const useYtelseName = (ytelseId?: string | null): string => {
 
     return data.find(({ id }) => id === ytelseId)?.navn ?? ytelseId ?? '';
   }, [data, ytelseId]);
+};
+
+export const useVedtaksenhetName = (vedtaksenhetId?: string | null): string => {
+  const { data } = useVedtaksenheter();
+
+  return useMemo(() => {
+    if (typeof data === 'undefined') {
+      return '';
+    }
+
+    return data.find(({ id }) => id === vedtaksenhetId)?.navn ?? vedtaksenhetId ?? '';
+  }, [data, vedtaksenhetId]);
+};
+
+export const useFagsystemName = (fagsystemId?: string | null): string => {
+  const { data } = useFagsystemer();
+
+  return useMemo(() => {
+    if (typeof data === 'undefined') {
+      return '';
+    }
+
+    return data.find(({ id }) => id === fagsystemId)?.beskrivelse ?? fagsystemId ?? '';
+  }, [data, fagsystemId]);
 };

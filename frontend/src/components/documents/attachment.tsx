@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { IArkivertDocument, IVedlegg } from '../../types/dokument';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { IArkivertDocument, IVedlegg } from '@app/types/dokument';
 import { DocumentTitle } from './document-title';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const Attachment = ({ vedlegg, dokument }: Props) => {
-  const { setDokument } = useContext(AnkeContext);
+  const { setJournalpost } = useContext(ApiContext);
   const { journalpostId } = dokument;
   const { dokumentInfoId, tittel = 'Ukjent dokumentnavn' } = vedlegg;
 
@@ -19,12 +19,14 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
       e.stopPropagation();
 
       if (dokument.harTilgangTilArkivvariant && !dokument.alreadyUsed) {
-        setDokument(dokument);
-      } else {
-        setDokument(null);
+        setJournalpost(dokument);
+
+        return;
       }
+
+      setJournalpost(null);
     },
-    [dokument, setDokument]
+    [dokument, setJournalpost]
   );
 
   return (

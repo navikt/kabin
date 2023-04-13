@@ -2,7 +2,7 @@ import { Header } from '@navikt/ds-react-internal';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { VersionCheckerStatus } from '../version-checker/version-checker-status';
+import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
 import { User } from './user-menu/user';
 
 export const NavHeader = () => (

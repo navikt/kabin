@@ -1,8 +1,8 @@
-import { IBehandling } from './behandling';
+import { IAnkeMulighet } from './ankemulighet';
 import { SaksTypeEnum } from './common';
 import { IArkivertDocument } from './dokument';
 
-export interface IStatus extends IBehandling {
+export interface IStatus extends IAnkeMulighet {
   typeId: SaksTypeEnum;
   mottattNav: string; // LocalDate
   frist: string; // LocalDate

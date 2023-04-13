@@ -2,8 +2,8 @@ import { ExternalLinkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { usePrevious } from '../../hooks/use-previous';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
+import { usePrevious } from '@app/hooks/use-previous';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { EditTitle } from './edit-document-title';
 
 interface Props {

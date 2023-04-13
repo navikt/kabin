@@ -1,83 +1,51 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { createAnke } from '../../api/api';
-import { ApiContext } from '../../pages/create/api-context';
-import { useAnkemuligheter } from '../../simple-api-state/use-api';
-import { skipToken } from '../../types/common';
-import { CreateResponse } from '../../types/create';
-import { errorToast } from '../toast/error-toast';
-import { toast } from '../toast/store';
-import { ToastType } from '../toast/types';
-import { IApiErrorReponse, IApiValidationResponse, isApiError, isValidationResponse } from './error-type-guard';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { useCreateAnke } from './anke-hooks';
+import { IApiErrorReponse, IApiValidationResponse } from './error-type-guard';
+import { useCreateKlage } from './klage-hooks';
 
 interface Props {
   show: boolean;
   closeConfirm: () => void;
-  fnr: string | typeof skipToken;
   setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void;
 }
 
-export const Confirm = ({ show, fnr, setError, closeConfirm }: Props) => {
+export const Confirm = ({ show, setError, closeConfirm }: Props) => {
   const [loading, setLoading] = useState(false);
-  const { payload, setErrors } = useContext(ApiContext);
-  const { updateData: updateAnkemuligheter } = useAnkemuligheter(fnr);
-  const navigate = useNavigate();
+  const { type, payload, setErrors } = useContext(ApiContext);
+  const createAnkeCallback = useCreateAnke(setError);
+  const createKlageCallback = useCreateKlage(setError);
 
-  if (!show) {
+  if (!show || type === Type.NONE) {
     return null;
   }
 
-  const onClick = async () => {
-    if (payload === null) {
-      return;
-    }
+  const text = getText(type);
 
+  const onClick = async () => {
     setLoading(true);
     setError(undefined);
     setErrors(null);
 
-    try {
-      const res = await createAnke(payload);
-
-      if (res.ok) {
-        updateAnkemuligheter((data) => data?.filter((d) => d.behandlingId !== payload.klagebehandlingId));
-
-        setError(undefined);
-
-        const json = (await res.json()) as CreateResponse;
-
-        navigate(`/anker/${json.mottakId}/status`);
-      } else {
-        const json: unknown = await res.json();
-
-        errorToast(json);
-
-        if (isApiError(json)) {
-          setError(json);
-        } else if (isValidationResponse(json)) {
-          setError(json);
-          setErrors(json.sections);
-        }
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        toast({ type: ToastType.ERROR, message: `Feil ved oppretting av anke: ${e.message}` });
-
-        setError(e);
-      }
-    } finally {
-      setLoading(false);
+    if (type === Type.ANKE) {
+      await createAnkeCallback();
     }
+
+    if (type === Type.KLAGE) {
+      await createKlageCallback();
+    }
+
+    setLoading(false);
   };
 
   return (
     <StyledConfirm>
       <Alert size="small" variant="info" inline>
-        Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du
-        ønsker å fullføre registrering av anken.
+        {text}
       </Alert>
       <Buttons>
         <Button
@@ -115,3 +83,12 @@ const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const getText = (type: Type.KLAGE | Type.ANKE) => {
+  switch (type) {
+    case Type.ANKE:
+      return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av anken.';
+    case Type.KLAGE:
+      return 'Du fullfører nå registrering av klagen. Klagen blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
+  }
+};

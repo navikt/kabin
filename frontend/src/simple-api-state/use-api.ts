@@ -1,8 +1,9 @@
-import { IBehandling } from '../types/behandling';
-import { ISignatureResponse, IUserData } from '../types/bruker';
-import { IPart, SaksTypeEnum, skipToken } from '../types/common';
-import { IArkivertDocument } from '../types/dokument';
-import { IStatus } from '../types/status';
+import { IAnkeMulighet } from '@app/types/ankemulighet';
+import { ISignatureResponse, IUserData } from '@app/types/bruker';
+import { IPart, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IArkivertDocument } from '@app/types/dokument';
+import { IStatus } from '@app/types/status';
+import { IKlagemulighet } from './../types/klagemulighet';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
 
@@ -27,20 +28,28 @@ interface IdParams {
 }
 
 const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
-  `${KABIN_API_BASE_PATH}/arkivertedokumenter`,
+  `${KABIN_API_BASE_PATH}/arkivertedokumenter?antall=50000`,
   { method: 'POST' }
 );
 
 export const useDokumenter = (idnummer: string | typeof skipToken) =>
   useSimpleApiState(idnummer === skipToken ? skipToken : getDokumenterState({ path: '' }, { idnummer }));
 
-const getAnkemuligheterState = getStateFactory<IBehandling[], IdParams>(
+const getAnkemuligheterState = getStateFactory<IAnkeMulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
   { method: 'POST' }
 );
 
 export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
   useSimpleApiState(idnummer === skipToken ? skipToken : getAnkemuligheterState({ path: '' }, { idnummer }));
+
+const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
+  `${KABIN_API_BASE_PATH}/klagemuligheter?antall=50000`,
+  { method: 'POST' }
+);
+
+export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
+  useSimpleApiState(idnummer === skipToken ? skipToken : getKlagemuligheterState({ path: '' }, { idnummer }));
 
 interface SearchPartParams {
   identifikator: string;
@@ -58,17 +67,21 @@ interface StatusParams {
   type: SaksTypeEnum;
 }
 
-const getStatusState = getStateFactory<IStatus, void>(KABIN_API_BASE_PATH, {
-  method: 'GET',
-});
+const getStatusState = getStateFactory<IStatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
 
 export const useStatus = (params: StatusParams | typeof skipToken) => {
-  const state =
-    params === skipToken
-      ? skipToken
-      : getStatusState({ path: `/${params.type === SaksTypeEnum.ANKE ? 'anker' : 'klager'}/${params.id}/status` });
+  const state = params === skipToken ? skipToken : getStatusState({ path: getPath(params) });
 
   return useSimpleApiState(state);
+};
+
+const getPath = ({ type, id }: StatusParams) => {
+  switch (type) {
+    case SaksTypeEnum.ANKE:
+      return `/anker/${id}/status`;
+    case SaksTypeEnum.KLAGE:
+      return `/klager/${id}/status`;
+  }
 };
 
 interface CalculateFristdatoParams {

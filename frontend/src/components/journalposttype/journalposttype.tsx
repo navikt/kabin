@@ -1,9 +1,9 @@
 import { Tag, TagProps } from '@navikt/ds-react';
 import React from 'react';
-import { IJournalposttype } from '../../types/dokument';
+import { JournalposttypeEnum } from '@app/types/dokument';
 
 interface Props {
-  journalposttype: IJournalposttype;
+  journalposttype: JournalposttypeEnum;
   size?: TagProps['size'];
 }
 
@@ -13,14 +13,14 @@ export const Journalposttype = ({ journalposttype, size = 'small' }: Props) => (
   </Tag>
 );
 
-const JOURNALPOST_TYPE_NAME: Record<IJournalposttype, string> = {
-  [IJournalposttype.NOTAT]: 'Notat',
-  [IJournalposttype.INNGAAENDE]: 'Inngående',
-  [IJournalposttype.UTGAAENDE]: 'Utgående',
+const JOURNALPOST_TYPE_NAME: Record<JournalposttypeEnum, string> = {
+  [JournalposttypeEnum.NOTAT]: 'Notat',
+  [JournalposttypeEnum.INNGAAENDE]: 'Inngående',
+  [JournalposttypeEnum.UTGAAENDE]: 'Utgående',
 };
 
-const JOURNALPOST_TYPE_VARIANT: Record<IJournalposttype, TagProps['variant']> = {
-  [IJournalposttype.NOTAT]: 'alt1',
-  [IJournalposttype.INNGAAENDE]: 'alt2',
-  [IJournalposttype.UTGAAENDE]: 'alt3',
+const JOURNALPOST_TYPE_VARIANT: Record<JournalposttypeEnum, TagProps['variant']> = {
+  [JournalposttypeEnum.NOTAT]: 'alt1',
+  [JournalposttypeEnum.INNGAAENDE]: 'alt2',
+  [JournalposttypeEnum.UTGAAENDE]: 'alt3',
 };

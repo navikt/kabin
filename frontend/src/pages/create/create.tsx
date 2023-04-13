@@ -1,18 +1,16 @@
 import { Loader } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Ankemuligheter } from '../../components/ankemuligheter/ankemuligheter';
-import { DocumentViewer } from '../../components/document-viewer/document-viewer';
-import { Dokumenter } from '../../components/documents/documents';
-import { Footer } from '../../components/footer/footer';
-import { Overstyringer } from '../../components/overstyringer/overstyringer';
-import { usePersonSearch } from '../../components/search/hook';
-import { PersonSearch } from '../../components/search/search';
-import { useAnkemuligheter, useDokumenter } from '../../simple-api-state/use-api';
-import { skipToken } from '../../types/common';
-import { AnkeContextState } from './anke-context';
-import { ApiContextState } from './api-context';
+import { DocumentViewer } from '@app/components/document-viewer/document-viewer';
+import { Dokumenter } from '@app/components/documents/documents';
+import { Footer } from '@app/components/footer/footer';
+import { usePersonSearch } from '@app/components/search/hook';
+import { PersonSearch } from '@app/components/search/search';
+import { useDokumenter } from '@app/simple-api-state/use-api';
+import { skipToken } from '@app/types/common';
+import { ApiContextState } from './api-context/api-context';
 import { DocumentViewerContextState } from './document-viewer-context';
+import { TypeInput } from './type-input';
 
 export const CreatePage = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -20,33 +18,29 @@ export const CreatePage = () => {
 
   const { search } = personSearch;
 
-  const { isLoading: dokumenterIsloading } = useDokumenter(search);
-  const { isLoading: ankemuligheterIsLoading } = useAnkemuligheter(search);
-
-  const isLoading = dokumenterIsloading || ankemuligheterIsLoading;
+  const { isLoading } = useDokumenter(search);
 
   useEffect(() => setIsInitialized((v) => (v ? v : search !== skipToken && !isLoading)), [isLoading, search]);
 
   return (
     <PageWrapper>
-      <ApiContextState>
+      <ApiContextState fnr={search}>
         <StyledMain $isIinitialized={isInitialized}>
           <PersonSearch isInitialized={isInitialized} {...personSearch} />
-          <CreatePageLoader fnr={search} isInitialized={isInitialized} isLoading={isLoading} />
+          <CreatePageLoader isInitialized={isInitialized} isLoading={isLoading} />
         </StyledMain>
-        <Footer fnr={search} />
+        <Footer />
       </ApiContextState>
     </PageWrapper>
   );
 };
 
 interface LoaderProps {
-  fnr: string | typeof skipToken;
   isInitialized: boolean;
   isLoading: boolean;
 }
 
-const CreatePageLoader = ({ fnr, isLoading, isInitialized }: LoaderProps) => {
+const CreatePageLoader = ({ isLoading, isInitialized }: LoaderProps) => {
   if (!isInitialized) {
     if (isLoading) {
       return <Loader size="3xlarge">Laster...</Loader>;
@@ -56,18 +50,15 @@ const CreatePageLoader = ({ fnr, isLoading, isInitialized }: LoaderProps) => {
   }
 
   return (
-    <AnkeContextState fnr={fnr}>
-      <DocumentViewerContextState>
-        <LeftColumn>
-          <Dokumenter />
-          <Ankemuligheter />
-          <Overstyringer />
-        </LeftColumn>
-        <RightColumn>
-          <DocumentViewer />
-        </RightColumn>
-      </DocumentViewerContextState>
-    </AnkeContextState>
+    <DocumentViewerContextState>
+      <LeftColumn>
+        <Dokumenter />
+        <TypeInput />
+      </LeftColumn>
+      <RightColumn>
+        <DocumentViewer />
+      </RightColumn>
+    </DocumentViewerContextState>
   );
 };
 

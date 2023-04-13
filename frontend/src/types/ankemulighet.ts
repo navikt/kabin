@@ -2,7 +2,7 @@ import { Ytelse } from '@app/types/ytelse';
 import { IPart, ITilknyttetDokument } from './common';
 import { UtfallEnum } from './kodeverk';
 
-export interface IBehandling {
+export interface IAnkeMulighet {
   behandlingId: string;
   ytelseId: Ytelse;
   utfallId: UtfallEnum;
@@ -11,6 +11,6 @@ export interface IBehandling {
   klager: IPart;
   fullmektig: IPart | null;
   tilknyttedeDokumenter: ITilknyttetDokument[];
-  sakFagsakId: string;
-  sakFagsystem: string;
+  fagsakId: string;
+  fagsystemId: string;
 }

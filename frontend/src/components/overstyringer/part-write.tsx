@@ -1,13 +1,12 @@
-import { PersonPencilIcon } from '@navikt/aksel-icons';
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { isValidOrgnr } from '../../domain/orgnr';
-import { useSearchPart } from '../../simple-api-state/use-api';
-import { IPart, skipToken } from '../../types/common';
+import { isValidOrgnr } from '@app/domain/orgnr';
+import { useSearchPart } from '@app/simple-api-state/use-api';
+import { IPart, skipToken } from '@app/types/common';
 import { SearchResult } from './search-result';
-import { StyledContainer } from './styled-components';
+import { States, StyledContainer } from './styled-components';
 import { BaseProps, PartSearchProps } from './types';
 
 interface ExtraProps {
@@ -17,7 +16,7 @@ interface ExtraProps {
 export type PartWriteProps = BaseProps & PartSearchProps;
 
 export const PartWrite = (props: PartWriteProps & ExtraProps) => {
-  const { part, setPart, label, gridArea, exitEditMode } = props;
+  const { part, setPart, label, gridArea, exitEditMode, icon } = props;
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
@@ -57,8 +56,8 @@ export const PartWrite = (props: PartWriteProps & ExtraProps) => {
   };
 
   return (
-    <StyledContainer $gridArea={gridArea} $inactive={part === null}>
-      <Icon />
+    <StyledContainer $gridArea={gridArea} $state={part === null ? States.UNSET : States.SET}>
+      {icon}
       <Content>
         <StyledPartSearch>
           <Search
@@ -101,14 +100,4 @@ const StyledPartSearch = styled.div`
   flex-direction: row;
   row-gap: 8px;
   align-items: flex-start;
-  flex-grow: 1;
-`;
-
-const ICON_SIZE = 24;
-
-const Icon = styled(PersonPencilIcon)`
-  grid-area: icon;
-  align-self: center;
-  width: ${ICON_SIZE}px;
-  height: ${ICON_SIZE}px;
 `;

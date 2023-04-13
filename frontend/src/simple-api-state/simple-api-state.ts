@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { skipToken } from '../types/common';
-import { apiErrorToast } from './../components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { loggedOutToast } from '@app/components/toast/toast-content/logged-out';
+import { skipToken } from '@app/types/common';
 
 interface State<T> {
   data: T | undefined;
@@ -66,7 +67,12 @@ export class SimpleApiState<T> {
       const response = await fetch(this.url, this.req);
 
       if (!response.ok) {
-        apiErrorToast(response, this.url);
+        if (response.status === 401) {
+          loggedOutToast();
+        } else {
+          apiErrorToast(response, this.url);
+        }
+
         const error = new Error(`${response.status} ${response.statusText}`);
         this.isError = true;
         this.error = error;

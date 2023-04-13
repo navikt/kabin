@@ -2,10 +2,10 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { DocumentViewerContext, IViewedDocument } from '../../pages/create/document-viewer-context';
-import { KABIN_API_BASE_PATH } from '../../simple-api-state/use-api';
-import { Card } from '../card/card';
-import { Placeholder } from '../placeholder/placeholder';
+import { Card } from '@app/components/card/card';
+import { Placeholder } from '@app/components/placeholder/placeholder';
+import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
+import { KABIN_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { DocumentTitle } from './document-title';
 
 const DEFAULT_NAME = '<Mangler navn>';

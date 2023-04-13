@@ -1,11 +1,11 @@
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { useFullTemaNameFromId } from '../../hooks/kodeverk';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { DocumentViewerContext } from '../../pages/create/document-viewer-context';
-import { IArkivertDocument, IJournalposttype } from '../../types/dokument';
-import { Journalposttype } from '../journalposttype/journalposttype';
+import { Journalposttype } from '@app/components/journalposttype/journalposttype';
+import { isoDateToPretty } from '@app/domain/date';
+import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { AttachmentList } from './attachment-list';
 import { formatAvsenderMottaker } from './avsender-mottaker';
 import { DocumentTitle } from './document-title';
@@ -17,13 +17,14 @@ interface Props {
 }
 
 export const Dokument = ({ dokument }: Props) => {
-  const { dokument: selectedDokument, setDokument, setMottattNav } = useContext(AnkeContext);
+  const { journalpost, setJournalpost } = useContext(ApiContext);
   const { viewDokument } = useContext(DocumentViewerContext);
-  const { dokumentInfoId, journalpostId, tittel, registrert, tema, avsenderMottaker, sak, journalposttype } = dokument;
+  const { dokumentInfoId, journalpostId, tittel, registrert, temaId, avsenderMottaker, sak, journalposttype } =
+    dokument;
 
-  const temaName = useFullTemaNameFromId(tema);
+  const temaName = useFullTemaNameFromId(temaId);
 
-  const isSelected = selectedDokument?.journalpostId === journalpostId;
+  const isSelected = journalpost?.journalpostId === journalpostId;
 
   const selectJournalpost = useCallback(
     (e: React.MouseEvent) => {
@@ -31,16 +32,15 @@ export const Dokument = ({ dokument }: Props) => {
 
       if (dokument.harTilgangTilArkivvariant) {
         if (!dokument.alreadyUsed) {
-          setDokument(dokument);
-          setMottattNav(dokument.registrert);
+          setJournalpost(dokument);
         }
         viewDokument(dokument);
       } else {
         viewDokument(null);
-        setDokument(null);
+        setJournalpost(null);
       }
     },
-    [dokument, setDokument, setMottattNav, viewDokument]
+    [dokument, setJournalpost, viewDokument]
   );
 
   return (
@@ -83,7 +83,7 @@ export const Dokument = ({ dokument }: Props) => {
 type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
 
 const AvsenderMottaker = ({ journalposttype, avsenderMottaker }: AvsenderMottakerProps) => {
-  if (journalposttype === IJournalposttype.NOTAT) {
+  if (journalposttype === JournalposttypeEnum.NOTAT) {
     return null;
   }
 

@@ -3,9 +3,9 @@ import { Button } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
-import { useTema } from '../../simple-api-state/use-kodeverk';
-import { IArkivertDocument, IJournalposttype } from '../../types/dokument';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { useTema } from '@app/simple-api-state/use-kodeverk';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { DateFilter } from './date-filter';
 import { getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
 import { GridArea, GridSearch, StyledGrid } from './styled-grid-components';
@@ -13,9 +13,9 @@ import { GridArea, GridSearch, StyledGrid } from './styled-grid-components';
 const EMPTY_LIST: [] = [];
 
 const JOURNALPOSTTYPE_OPTIONS = [
-  { label: 'Inngående', value: IJournalposttype.INNGAAENDE },
-  { label: 'Utgående', value: IJournalposttype.UTGAAENDE },
-  { label: 'Notat', value: IJournalposttype.NOTAT },
+  { label: 'Inngående', value: JournalposttypeEnum.INNGAAENDE },
+  { label: 'Utgående', value: JournalposttypeEnum.UTGAAENDE },
+  { label: 'Notat', value: JournalposttypeEnum.NOTAT },
 ];
 
 interface Props {

@@ -2,36 +2,38 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { isoDateTimeToPrettyDate } from '../../domain/date';
-import { getSakspartName } from '../../domain/name';
-import { useUtfallName, useYtelseName } from '../../hooks/kodeverk';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { IBehandling } from '../../types/behandling';
-import { Card } from '../card/card';
+import { Card } from '@app/components/card/card';
+import { isoDateTimeToPrettyDate } from '@app/domain/date';
+import { getSakspartName } from '@app/domain/name';
+import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { IAnkeMulighet } from '@app/types/ankemulighet';
 
 interface Props {
   onClick: () => void;
 }
 
 export const SelectedAnkemulighet = ({ onClick }: Props) => {
-  const { ankemulighet } = useContext(AnkeContext);
+  const { type, payload } = useContext(ApiContext);
 
-  if (ankemulighet === null) {
+  if (type !== Type.ANKE || payload.mulighet === null) {
     return null;
   }
 
-  return <RenderAnkemulighet ankemulighet={ankemulighet} onClick={onClick} />;
+  return <RenderAnkemulighet mulighet={payload.mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
-  ankemulighet: IBehandling;
+  mulighet: IAnkeMulighet;
 }
 
-const RenderAnkemulighet = ({ ankemulighet, onClick }: RenderProps) => {
-  const { ytelseId, vedtakDate, sakenGjelder, klager, utfallId, fullmektig, sakFagsakId, sakFagsystem } = ankemulighet;
+const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
+  const { ytelseId, vedtakDate, sakenGjelder, klager, utfallId, fullmektig, fagsakId, fagsystemId } = mulighet;
 
   const utfallName = useUtfallName(utfallId);
   const ytelseName = useYtelseName(ytelseId);
+  const fagsystemName = useFagsystemName(fagsystemId);
 
   return (
     <Card>
@@ -57,7 +59,7 @@ const RenderAnkemulighet = ({ ankemulighet, onClick }: RenderProps) => {
         <Column>
           <Label size="small">Dato</Label>
           <Detail as="time" dateTime={vedtakDate}>
-            {isoDateTimeToPrettyDate(vedtakDate) ?? ''}
+            {isoDateTimeToPrettyDate(vedtakDate) ?? vedtakDate}
           </Detail>
         </Column>
         <Column>
@@ -80,11 +82,11 @@ const RenderAnkemulighet = ({ ankemulighet, onClick }: RenderProps) => {
         </Column>
         <Column>
           <Label size="small">Fagsak-ID</Label>
-          <Detail>{sakFagsakId}</Detail>
+          <Detail>{fagsakId}</Detail>
         </Column>
         <Column>
           <Label size="small">Fagsystem</Label>
-          <Detail>{sakFagsystem}</Detail>
+          <Detail>{fagsystemName}</Detail>
         </Column>
       </Ankemulighet>
     </Card>

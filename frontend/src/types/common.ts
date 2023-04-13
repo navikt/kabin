@@ -1,10 +1,6 @@
-export const skipToken = Symbol('skipToken');
+import { INavn } from '@app/domain/types';
 
-interface INavn {
-  fornavn: string | null;
-  mellomnavn: string | null;
-  etternavn: string | null;
-}
+export const skipToken = Symbol('skipToken');
 
 interface IPerson {
   foedselsnummer: string;
@@ -52,4 +48,18 @@ export interface ITilknyttetDokument {
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
+}
+
+export enum IdType {
+  FNR = 'FNR',
+  ORGNR = 'ORGNR',
+  HPRNR = 'HPRNR',
+  UTL_ORG = 'UTL_ORG',
+  UKJENT = 'UKJENT',
+  NULL = 'NULL',
+}
+
+export interface IAvsenderMottakerId {
+  id: string;
+  type: IdType;
 }

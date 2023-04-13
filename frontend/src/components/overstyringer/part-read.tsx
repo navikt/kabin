@@ -1,13 +1,15 @@
-import { ArrowCirclepathIcon, Buldings2Icon, PencilIcon, PersonIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Buldings2Icon, PersonCrossIcon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, Heading } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { getSakspartId, getSakspartName } from '../../domain/name';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { IPart } from '../../types/common';
-import { StyledContainer } from './styled-components';
-import { BaseProps, GridArea } from './types';
+import { EditButton } from '@app/components/overstyringer/common/edit-button';
+import { getSakspartId, getSakspartName } from '@app/domain/name';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { IPart, skipToken } from '@app/types/common';
+import { StyledContainer, StyledPartName, getState } from './styled-components';
+import { BaseProps, FieldNames } from './types';
 
 interface PartProps {
   part: IPart | null;
@@ -19,78 +21,76 @@ interface Callback {
   enterEditMode?: () => void;
 }
 
-export const PartRead = ({ label, part, gridArea, enterEditMode }: PartReadProps & Callback) => (
-  <StyledContainer $gridArea={gridArea} $inactive={part === null}>
-    <Icon part={part} />
+export const PartRead = ({ label, part, partField, gridArea, enterEditMode, icon }: PartReadProps & Callback) => (
+  <StyledContainer $gridArea={gridArea} $state={getState(part)}>
+    {icon}
     <Content>
       <TextContent>
-        <Label size="small">{label}</Label>
+        <Heading level="3" size="xsmall">
+          {label}
+        </Heading>
         <CopyIdButton part={part} />
-        <BodyShort size="small">{getSakspartName(part, null) ?? 'Ingen'}</BodyShort>
+        <StyledPartName size="small">
+          <Icon part={part} />
+          {getSakspartName(part, null) ?? 'Ingen'}
+        </StyledPartName>
       </TextContent>
+
       <Actions>
-        <ResetPartButton type={gridArea} part={part} />
-        <RemoveFullmektigButton type={gridArea} part={part} />
+        <ResetPartButton partField={partField} part={part} />
+        <RemoveFullmektigButton partField={partField} part={part} />
         <EditButton enterEditMode={enterEditMode} />
       </Actions>
     </Content>
   </StyledContainer>
 );
 
-interface EditButtonProps {
-  enterEditMode?: () => void;
-}
-
-const EditButton = ({ enterEditMode }: EditButtonProps) => {
-  if (enterEditMode === undefined) {
-    return null;
-  }
-
-  return (
-    <Button size="small" variant="secondary" icon={<PencilIcon />} title="Endre" onClick={enterEditMode}>
-      Endre
-    </Button>
-  );
-};
-
 interface ResetPartButtonProps {
-  type: BaseProps['gridArea'];
+  partField: BaseProps['partField'];
   part: IPart | null;
 }
 
-const ResetPartButton = ({ type, part }: ResetPartButtonProps) => {
-  const { ankemulighet, setKlager, setFullmektig } = useContext(AnkeContext);
+const useDefaultPart = (fieldId: BaseProps['partField']) => {
+  const { type, payload } = useContext(ApiContext);
 
-  if (type === GridArea.SAKEN_GJELDER || ankemulighet === null) {
+  switch (type) {
+    case Type.ANKE:
+      return payload.mulighet?.[fieldId] ?? null;
+    case Type.KLAGE:
+      return null;
+    case Type.NONE:
+      return skipToken;
+  }
+};
+
+const ResetPartButton = ({ part, partField }: ResetPartButtonProps) => {
+  const { type, updatePayload } = useContext(ApiContext);
+  const defaultPart = useDefaultPart(partField);
+
+  if (type === Type.NONE || defaultPart === skipToken || defaultPart === part) {
     return null;
   }
-
-  const isAnker = type === GridArea.ANKER;
-  const klagePart = isAnker ? ankemulighet.klager : ankemulighet.fullmektig;
-
-  if (klagePart === part || klagePart === null) {
-    return null;
-  }
-
-  const setPart = isAnker ? setKlager : setFullmektig;
 
   return (
     <Button
       size="small"
       variant="secondary"
-      title={`Benytt samme ${type} som i klagen`}
-      icon={<ArrowCirclepathIcon aria-hidden />}
-      onClick={() => setPart(klagePart)}
+      title={`Benytt samme ${partField} som i klagen`}
+      onClick={() => updatePayload({ overstyringer: { [partField]: defaultPart } })}
     >
       Fra klagen
     </Button>
   );
 };
 
-const RemoveFullmektigButton = ({ type }: ResetPartButtonProps) => {
-  const { fullmektig, setFullmektig } = useContext(AnkeContext);
+const RemoveFullmektigButton = ({ partField }: ResetPartButtonProps) => {
+  const { type, payload, updatePayload } = useContext(ApiContext);
 
-  if (type !== GridArea.FULLMEKTIG || fullmektig === null) {
+  if (
+    partField !== FieldNames.FULLMEKTIG ||
+    type === Type.NONE ||
+    (payload.overstyringer?.fullmektig ?? null) === null
+  ) {
     return null;
   }
 
@@ -99,8 +99,8 @@ const RemoveFullmektigButton = ({ type }: ResetPartButtonProps) => {
       size="small"
       variant="secondary"
       title="Fjern"
-      icon={<XMarkIcon aria-hidden />}
-      onClick={() => setFullmektig(null)}
+      icon={<TrashIcon aria-hidden />}
+      onClick={() => updatePayload({ overstyringer: { fullmektig: null } })}
     >
       Fjern
     </Button>
@@ -109,10 +109,14 @@ const RemoveFullmektigButton = ({ type }: ResetPartButtonProps) => {
 
 const Icon = ({ part }: PartProps) => {
   if (part !== null && part.virksomhet !== null) {
-    return <CompanyIcon aria-hidden />;
+    return <Buldings2Icon aria-hidden />;
   }
 
-  return <StyledPersonIcon aria-hidden />;
+  if (part !== null && part.person !== null) {
+    return <PersonIcon aria-hidden />;
+  }
+
+  return <PersonCrossIcon aria-hidden />;
 };
 
 export const CopyIdButton = ({ part }: PartProps) => {
@@ -132,22 +136,6 @@ export const CopyIdButton = ({ part }: PartProps) => {
     </StyledCopyButton>
   );
 };
-
-const ICON_SIZE = 24;
-
-const StyledPersonIcon = styled(PersonIcon)`
-  align-self: center;
-  width: ${ICON_SIZE}px;
-  height: ${ICON_SIZE}px;
-  flex-shrink: 0;
-`;
-
-const CompanyIcon = styled(Buldings2Icon)`
-  align-self: center;
-  width: ${ICON_SIZE}px;
-  height: ${ICON_SIZE}px;
-  flex-shrink: 0;
-`;
 
 const Content = styled.div`
   display: flex;
@@ -172,7 +160,7 @@ const StyledCopyButton = styled(CopyToClipboard)`
 const Actions = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: right;
+  justify-content: left;
   justify-self: end;
   column-gap: 8px;
   flex-shrink: 0;

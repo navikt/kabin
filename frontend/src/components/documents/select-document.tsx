@@ -1,7 +1,6 @@
 import { CircleSlashIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import styled from 'styled-components';
-import { CheckmarkCircleFillIconColored } from '../colored-icons/colored-icons';
+import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { GridArea, GridButton } from './styled-grid-components';
 
 interface Props {
@@ -11,44 +10,52 @@ interface Props {
   alreadyUsed: boolean;
 }
 
-export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJournalpost, alreadyUsed }: Props) => {
+export const SelectDocument = ({ harTilgangTilArkivvariant, isSelected, selectJournalpost, alreadyUsed }: Props) => (
+  <GridButton
+    disabled={!harTilgangTilArkivvariant || alreadyUsed}
+    size="small"
+    variant="tertiary"
+    icon={getIcon(harTilgangTilArkivvariant, alreadyUsed, isSelected)}
+    onClick={selectJournalpost}
+    aria-pressed={isSelected}
+    data-testid="select-document"
+    $gridArea={GridArea.SELECT}
+    title={getTitle(harTilgangTilArkivvariant, alreadyUsed)}
+  >
+    {getText(harTilgangTilArkivvariant, alreadyUsed, isSelected)}
+  </GridButton>
+);
+
+const getTitle = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean) => {
   if (!harTilgangTilArkivvariant) {
-    return (
-      <StyledWarning>
-        <CircleSlashIcon title="Du har ikke tilgang til dette dokumentet" />
-      </StyledWarning>
-    );
+    return 'Du har ikke tilgang til dette dokumentet';
   }
 
   if (alreadyUsed) {
-    return (
-      <StyledWarning>
-        <ExclamationmarkTriangleIcon title="Dette dokumentet er allerede benyttet i en eksisterende klage eller anke" />
-      </StyledWarning>
-    );
+    return 'Dette dokumentet er allerede benyttet i en eksisterende klage eller anke';
   }
-
-  const icon = isSelected ? <CheckmarkCircleFillIconColored /> : undefined;
-  const buttonText = isSelected ? '' : 'Velg';
-
-  return (
-    <GridButton
-      size="small"
-      variant="tertiary"
-      icon={icon}
-      onClick={selectJournalpost}
-      aria-pressed={isSelected}
-      data-testid="select-document"
-      $gridArea={GridArea.SELECT}
-    >
-      {buttonText}
-    </GridButton>
-  );
 };
 
-const StyledWarning = styled.div`
-  grid-area: ${GridArea.SELECT};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const getText = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean, isSelected: boolean) => {
+  if (!harTilgangTilArkivvariant || alreadyUsed || isSelected) {
+    return '';
+  }
+
+  return 'Velg';
+};
+
+const getIcon = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean, isSelected: boolean) => {
+  if (!harTilgangTilArkivvariant) {
+    return <CircleSlashIcon />;
+  }
+
+  if (alreadyUsed) {
+    return <ExclamationmarkTriangleIcon />;
+  }
+
+  if (isSelected) {
+    return <CheckmarkCircleFillIconColored />;
+  }
+
+  return undefined;
+};

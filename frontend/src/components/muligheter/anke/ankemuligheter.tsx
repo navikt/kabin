@@ -1,40 +1,51 @@
 import { ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
+import { BodyShort, Heading, Loader, Table } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { AnkeContext } from '../../pages/create/anke-context';
-import { useAnkemuligheter } from '../../simple-api-state/use-api';
-import { IBehandling } from '../../types/behandling';
-import { Card } from '../card/card';
-import { Placeholder } from '../placeholder/placeholder';
-import { SelectedAnkemulighet } from '../selected/selected-ankemulighet';
+import { Card } from '@app/components/card/card';
+import {
+  CardHeader,
+  StyledButton,
+  StyledTableHeader,
+  TableContainer,
+} from '@app/components/muligheter/common/styled-components';
+import { Placeholder } from '@app/components/placeholder/placeholder';
+import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
+import { useAnkemuligheter } from '@app/simple-api-state/use-api';
+import { IAnkeMulighet } from '@app/types/ankemulighet';
+import { Warning } from '../common/warning';
 import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
-  const { setAnkemulighet, fnr, setKlager, ankemulighet } = useContext(AnkeContext);
+  const { type, payload, updatePayload, fnr, journalpost } = useContext(ApiContext);
+
   const { data: ankemuligheter, isLoading } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
 
   useEffect(() => {
-    if (typeof ankemuligheter === 'undefined') {
+    if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && payload.mulighet !== null) {
       setIsExpanded(true);
-      setAnkemulighet(null);
-      setKlager(null);
+      updatePayload({ mulighet: null });
     }
-  }, [ankemuligheter, isLoading, setAnkemulighet, setKlager]);
+  }, [ankemuligheter, isLoading, payload?.mulighet, type, updatePayload]);
 
-  if (!isExpanded && ankemulighet !== null) {
+  if (type !== Type.ANKE) {
+    return null;
+  }
+
+  if (!isExpanded && payload.mulighet !== null) {
     return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
   }
 
   return (
     <Card>
-      <Header>
+      <CardHeader>
         <Heading level="1" size="small">
           Velg vedtaket anken gjelder
         </Heading>
 
-        {ankemulighet === null ? null : (
+        {payload.mulighet === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"
@@ -43,14 +54,17 @@ export const Ankemuligheter = () => {
             icon={<ChevronUpIcon aria-hidden />}
           />
         )}
-      </Header>
+      </CardHeader>
+
+      <Warning mottattDate={journalpost?.datoOpprettet} vedtakDate={payload.mulighet?.vedtakDate} />
+
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </Card>
   );
 };
 
 interface ContentProps {
-  ankemuligheter: IBehandling[] | undefined;
+  ankemuligheter: IAnkeMulighet[] | undefined;
   isLoading: boolean;
 }
 
@@ -92,47 +106,11 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
           </Table.Row>
         </StyledTableHeader>
         <Table.Body>
-          {ankemuligheter.map((m) => (
-            <Ankemulighet key={m.behandlingId} ankemulighet={m} />
+          {ankemuligheter.map((ankemulighet) => (
+            <Ankemulighet key={ankemulighet.behandlingId} mulighet={ankemulighet} />
           ))}
         </Table.Body>
       </Table>
     </TableContainer>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TableContainer = styled.div<{ $showShadow: boolean }>`
-  overflow-y: auto;
-  max-height: 200px;
-
-  ::after {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    content: '';
-    display: ${({ $showShadow }) => ($showShadow ? 'block' : 'none')};
-    height: 15px;
-    width: 100%;
-    background: linear-gradient(rgba(255, 255, 255, 0), #fff);
-  }
-`;
-
-const StyledTableHeader = styled(Table.Header)`
-  position: sticky;
-  top: 0;
-  background: #fff;
-  box-shadow: 0 5px 5px -5px #000;
-  z-index: 1;
-`;
-
-const StyledButton = styled(Button)`
-  justify-self: flex-end;
-  flex-grow: 0;
-  width: fit-content;
-  align-self: flex-end;
-`;

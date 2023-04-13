@@ -4,8 +4,8 @@ import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { PRETTY_FORMAT } from '../date-picker/formats';
+import { PRETTY_FORMAT } from '@app/components/date-picker/formats';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
   children: React.ReactNode;
