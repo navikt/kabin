@@ -27,6 +27,9 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
+      autoLoginIgnorePaths:
+        - /api/*
+        - /static/*
   prometheus:
     enabled: true
   accessPolicy:
@@ -38,8 +41,6 @@ spec:
       external:
         - host: login.microsoftonline.com
   ingresses:
-  {{#each ingresses as |url|}}
-    - {{url}}
-  {{/each}}
+    - {{ingress}}
   envFrom:
     - secret: slack-url

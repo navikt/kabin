@@ -18,7 +18,7 @@ const sendIndexFile = (req: express.Request, res: express.Response) => {
 export const setupStaticRoutes = () => {
   router.get('/', sendIndexFile);
 
-  router.use(express.static(frontendDistDirectoryPath, { index: false }));
+  router.use('/static', express.static(frontendDistDirectoryPath, { index: false }));
 
   router.get('*', sendIndexFile);
 
