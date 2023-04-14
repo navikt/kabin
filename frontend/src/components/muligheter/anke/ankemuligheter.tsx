@@ -13,7 +13,7 @@ import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemuli
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { IAnkeMulighet } from '@app/types/ankemulighet';
+import { IAnkeMulighet } from '@app/types/mulighet';
 import { Warning } from '../common/warning';
 import { Ankemulighet } from './ankemulighet';
 

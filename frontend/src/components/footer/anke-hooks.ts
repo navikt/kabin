@@ -4,14 +4,13 @@ import { createAnke } from '@app/api/api';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
-import { avsenderMottakerToPartId } from '@app/domain/converters';
+import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
 import { IApiErrorReponse, IApiValidationResponse, isApiError, isValidationResponse } from './error-type-guard';
-import { getPartId } from './part-id';
 
 const useAnkeApiPayload = (): CreateAnkeApiPayload | null => {
   const { payload, type, journalpost } = useContext(ApiContext);
@@ -20,18 +19,18 @@ const useAnkeApiPayload = (): CreateAnkeApiPayload | null => {
     return null;
   }
 
-  const { mottattNav, fristInWeeks, klager, fullmektig, avsender: avsenderMottaker } = payload.overstyringer;
+  const { mottattKlageinstans, fristInWeeks, klager, fullmektig, avsender: avsenderMottaker } = payload.overstyringer;
 
-  if (mottattNav === null || fristInWeeks === null) {
+  if (mottattKlageinstans === null || fristInWeeks === null) {
     return null;
   }
 
   return {
     klagebehandlingId: payload.mulighet.behandlingId,
-    mottattNav,
+    mottattKlageinstans,
     fristInWeeks,
-    klager: getPartId(klager),
-    fullmektig: getPartId(fullmektig),
+    klager: partToPartId(klager),
+    fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     ankeDocumentJournalpostId: journalpost.journalpostId,
   };

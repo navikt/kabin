@@ -1,5 +1,8 @@
+import { format } from 'date-fns';
 import React, { createContext, useCallback, useState } from 'react';
 import { IValidationSection } from '@app/components/footer/error-type-guard';
+import { avsenderIsPart } from '@app/domain/converters';
+import { FORMAT } from '@app/domain/date-formats';
 import { skipToken } from '@app/types/common';
 import {
   NOOP,
@@ -36,10 +39,13 @@ export const ApiContextState = ({ fnr, children }: Props) => {
 const INITIAL_KLAGE: IKlageState = {
   mulighet: null,
   overstyringer: {
+    mottattVedtaksinstans: null,
+    mottattKlageinstans: null,
+    hjemmelIdList: [],
+    ytelseId: null,
     fristInWeeks: 12,
     fullmektig: null,
     klager: null,
-    mottattNav: null,
     avsender: null,
   },
 };
@@ -50,7 +56,7 @@ const INITIAL_ANKE: IAnkeState = {
     fristInWeeks: 12,
     fullmektig: null,
     klager: null,
-    mottattNav: null,
+    mottattKlageinstans: null,
     avsender: null,
   },
 };
@@ -74,9 +80,18 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
       setKlageErrors(removeAvsenderError);
       setAnkeErrors(removeAvsenderError);
 
+      const avsender =
+        update !== null && update.avsenderMottaker !== null && avsenderIsPart(update.avsenderMottaker)
+          ? update.avsenderMottaker
+          : null;
+
       const mottattNav = update?.datoOpprettet ?? null;
-      updateKlage((k) => getStateWithOverstyringer(k, { mottattNav, avsender: update?.avsenderMottaker ?? null }));
-      updateAnke((a) => getStateWithOverstyringer(a, { mottattNav, avsender: update?.avsenderMottaker ?? null }));
+      const now = format(new Date(), FORMAT);
+
+      updateKlage((k) =>
+        getStateWithOverstyringer(k, { mottattVedtaksinstans: mottattNav, mottattKlageinstans: now, avsender })
+      );
+      updateAnke((a) => getStateWithOverstyringer(a, { mottattKlageinstans: mottattNav, avsender }));
     },
     [journalpost, setAnkeErrors, setKlageErrors, updateAnke, updateKlage]
   );

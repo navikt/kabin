@@ -1,8 +1,7 @@
 import { IValidationSection } from '@app/components/footer/error-type-guard';
-import { IAnkeMulighet } from '@app/types/ankemulighet';
 import { IPart, skipToken } from '@app/types/common';
-import { IArkivertDocument, IAvsenderMottaker } from '@app/types/dokument';
-import { IKlagemulighet } from '@app/types/klagemulighet';
+import { IArkivertDocument } from '@app/types/dokument';
+import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 
 export enum Type {
   NONE = 'NONE',
@@ -14,8 +13,11 @@ interface IKlageOverstyringer {
   fristInWeeks: number; // Number of weeks
   fullmektig: IPart | null;
   klager: IPart | null;
-  mottattNav: string | null; // LocalDate
-  avsender: IAvsenderMottaker | null;
+  mottattVedtaksinstans: string | null; // LocalDate
+  mottattKlageinstans: string | null; // LocalDate
+  avsender: IPart | null;
+  ytelseId: string | null;
+  hjemmelIdList: string[];
 }
 
 export interface IKlageState {
@@ -27,8 +29,8 @@ interface IAnkeOverstyringer {
   fristInWeeks: number; // Number of weeks
   fullmektig: IPart | null;
   klager: IPart | null;
-  mottattNav: string | null; // LocalDate
-  avsender: IAvsenderMottaker | null;
+  mottattKlageinstans: string | null; // LocalDate
+  avsender: IPart | null;
 }
 
 export interface IAnkeState {

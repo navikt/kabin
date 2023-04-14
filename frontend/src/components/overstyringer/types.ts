@@ -1,10 +1,9 @@
 import React from 'react';
-import { IAnkeMulighet } from '@app/types/ankemulighet';
 import { IPart } from '@app/types/common';
 
 export enum GridArea {
   SAKEN_GJELDER = 'sakengjelder',
-  ANKER = 'anker',
+  KLAGER = 'klager',
   FULLMEKTIG = 'fullmektig',
   AVSENDER = 'avsender',
 }
@@ -16,16 +15,10 @@ export enum FieldNames {
   AVSENDER = 'avsender',
 }
 
-type FieldIds = keyof Pick<IAnkeMulighet, FieldNames.KLAGER | FieldNames.FULLMEKTIG | FieldNames.SAKEN_GJELDER>;
-
 export interface BaseProps {
+  part: IPart | null;
+  partField: FieldNames;
   label: string;
-  partField: FieldIds;
   gridArea: GridArea;
   icon: React.ReactNode;
-}
-
-export interface PartSearchProps {
-  part: IPart | null;
-  setPart: (part: IPart | null) => void;
 }

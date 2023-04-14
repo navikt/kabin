@@ -50,32 +50,32 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
       </Header>
       <DocumentLine>
         <Column>
-          <Label size="small">Tittel</Label>
+          <StyledLabel size="small">Tittel</StyledLabel>
           <Detail>{tittel}</Detail>
         </Column>
         <Column>
-          <Label size="small">Antall vedlegg</Label>
+          <StyledLabel size="small">Antall vedlegg</StyledLabel>
           <Detail>{vedlegg.length}</Detail>
         </Column>
         <Column>
-          <Label size="small">Tema</Label>
-          <Tag variant="alt3" size="small" title={temaName}>
+          <StyledLabel size="small">Tema</StyledLabel>
+          <StyledTag variant="alt3" size="small" title={temaName}>
             <Ellipsis>{temaName}</Ellipsis>
-          </Tag>
+          </StyledTag>
         </Column>
         <Column>
-          <Label size="small">Dato</Label>
+          <StyledLabel size="small">Dato</StyledLabel>
           <Detail as="time" dateTime={registrert}>
             {isoDateToPretty(registrert) ?? ''}
           </Detail>
         </Column>
         <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
         <Column>
-          <Label size="small">Saks-ID</Label>
+          <StyledLabel size="small">Saks-ID</StyledLabel>
           <Detail>{sak?.fagsakId ?? 'Ingen'}</Detail>
         </Column>
         <Column>
-          <Label size="small">Type</Label>
+          <StyledLabel size="small">Type</StyledLabel>
           <Journalposttype journalposttype={journalposttype} />
         </Column>
         <ViewDocumentButton dokument={dokument} />
@@ -132,7 +132,7 @@ const DocumentLine = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   column-gap: 16px;
   background-color: var(--a-blue-50);
   border: 1px solid var(--a-blue-200);
@@ -141,7 +141,6 @@ const DocumentLine = styled.div`
 `;
 
 const Ellipsis = styled.div`
-  font-size: 16px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -152,4 +151,13 @@ const Ellipsis = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 8px;
+`;
+
+const StyledLabel = styled(Label)`
+  white-space: nowrap;
+`;
+
+const StyledTag = styled(Tag)`
+  max-width: 150px;
 `;

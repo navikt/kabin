@@ -1,22 +1,25 @@
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { isValidOrgnr } from '@app/domain/orgnr';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { Type } from '@app/pages/create/api-context/types';
 import { useSearchPart } from '@app/simple-api-state/use-api';
 import { IPart, skipToken } from '@app/types/common';
 import { SearchResult } from './search-result';
-import { States, StyledContainer } from './styled-components';
-import { BaseProps, PartSearchProps } from './types';
+import { PartContent, States, StyledContainer } from './styled-components';
+import { BaseProps } from './types';
 
-interface ExtraProps {
+interface Callback {
   exitEditMode: () => void;
 }
 
-export type PartWriteProps = BaseProps & PartSearchProps;
+export type PartWriteProps = BaseProps;
 
-export const PartWrite = (props: PartWriteProps & ExtraProps) => {
-  const { part, setPart, label, gridArea, exitEditMode, icon } = props;
+export const PartWrite = (props: PartWriteProps & Callback) => {
+  const { part, partField, label, gridArea, exitEditMode, icon } = props;
+  const { type, updatePayload } = useContext(ApiContext);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
@@ -24,6 +27,12 @@ export const PartWrite = (props: PartWriteProps & ExtraProps) => {
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
   const { data, isLoading } = useSearchPart(isValid ? search : skipToken);
+
+  if (type === Type.NONE) {
+    return null;
+  }
+
+  const setPart = (newPart: IPart | null) => updatePayload({ overstyringer: { [partField]: newPart } });
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
@@ -58,7 +67,7 @@ export const PartWrite = (props: PartWriteProps & ExtraProps) => {
   return (
     <StyledContainer $gridArea={gridArea} $state={part === null ? States.UNSET : States.SET}>
       {icon}
-      <Content>
+      <PartContent>
         <StyledPartSearch>
           <Search
             label={label}
@@ -82,18 +91,10 @@ export const PartWrite = (props: PartWriteProps & ExtraProps) => {
           searchString={search}
           isValid={isValid}
         />
-      </Content>
+      </PartContent>
     </StyledContainer>
   );
 };
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  row-gap: 8px;
-  flex-grow: 1;
-`;
 
 const StyledPartSearch = styled.div`
   display: flex;

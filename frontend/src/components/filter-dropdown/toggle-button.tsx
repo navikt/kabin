@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ToggleButton = styled.button<Props>`
-  border: 1px solid ${({ $error }) => ($error === true ? '#ba3a26' : '#78706a')};
+  border: 1px solid ${({ $error }) => ($error === true ? '#ba3a26' : 'var(--a-border-default)')};
   box-shadow: ${({ $error }) => ($error === true ? '0 0 0 1px #ba3a26' : 'none')};
   padding: 0 1.75rem 0 0.5rem;
   min-height: ${({ $minHeight }) => (typeof $minHeight === 'undefined' ? '2rem' : $minHeight)};
@@ -21,8 +21,7 @@ export const ToggleButton = styled.button<Props>`
   position: relative;
   font-size: 14px;
   font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  color: #3e3832;
+  color: var(--a-text-default);
 
   ::before,
   ::after {
@@ -30,8 +29,8 @@ export const ToggleButton = styled.button<Props>`
     position: absolute;
     width: 0.5rem;
     border-radius: 2px;
-    height: 2px;
-    background: #59514b;
+    height: 1.5px;
+    background: var(--a-text-default);
     right: 0.5rem;
     top: 50%;
     transition: transform 0.1s ease;

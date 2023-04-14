@@ -56,3 +56,29 @@ export const StyledPartName = styled(BodyShort)`
   align-items: center;
   column-gap: 8px;
 `;
+
+export const PartContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 8px;
+  flex-grow: 1;
+`;
+
+export const PartTextContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  flex-grow: 1;
+`;
+
+export const PartActionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: left;
+  justify-self: end;
+  flex-shrink: 0;
+  flex-grow: 0;
+`;

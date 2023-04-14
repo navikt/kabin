@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import { Label } from '@navikt/ds-react';
+import React, { useId, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Dropdown } from './dropdown';
@@ -6,9 +7,15 @@ import { BaseProps } from './props';
 import { ToggleButton } from './toggle-button';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
-  children: string;
+  fullWidth?: boolean;
+  children?: string;
   testId?: string;
+  align?: PopupProps['align'];
   direction?: PopupProps['direction'];
+  label?: string;
+  className?: string;
+  disabled?: boolean;
+  title?: string;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -16,12 +23,19 @@ export const FilterDropdown = <T extends string>({
   selected,
   onChange,
   children,
+  label,
   testId,
+  align,
   direction,
+  fullWidth,
+  className,
+  disabled = false,
+  title,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonId = useId();
 
   useOnClickOutside(() => setIsOpen(false), ref, true);
 
@@ -31,56 +45,88 @@ export const FilterDropdown = <T extends string>({
   };
 
   return (
-    <Container ref={ref} data-testid={testId}>
-      <ToggleButton $open={isOpen} onClick={() => setIsOpen(!isOpen)} ref={buttonRef} data-testid="toggle-button">
-        {children} ({selected.length})
-      </ToggleButton>
-      <Popup isOpen={isOpen} direction={direction}>
-        <Dropdown
-          selected={selected}
-          options={options}
-          isOpen={isOpen}
-          onChange={onChange}
-          closeDropdown={closeDropdown}
-        />
-      </Popup>
-    </Container>
+    <StyledFilterDropdown ref={ref} data-testid={testId} className={className} title={title}>
+      {typeof label === 'string' ? (
+        <Label htmlFor={buttonId} size="small">
+          {label}
+        </Label>
+      ) : null}
+      <Container>
+        <ToggleButton
+          id={buttonId}
+          $open={isOpen}
+          onClick={() => setIsOpen(!isOpen)}
+          ref={buttonRef}
+          disabled={disabled}
+          data-testid="toggle-button"
+        >
+          {getSelectedLength(children, selected.length, options.length)}
+        </ToggleButton>
+        <Popup isOpen={isOpen} align={align} direction={direction} fullWidth={fullWidth}>
+          <Dropdown
+            selected={selected}
+            options={options}
+            isOpen={isOpen}
+            onChange={onChange}
+            closeDropdown={closeDropdown}
+          />
+        </Popup>
+      </Container>
+    </StyledFilterDropdown>
   );
 };
 
-const Container = styled.section`
+const Container = styled.div`
   position: relative;
+`;
+
+const StyledFilterDropdown = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-2);
 `;
 
 interface PopupProps {
   isOpen: boolean;
+  align: StyledPopupProps['$align'];
   direction: StyledPopupProps['$direction'];
   children: React.ReactNode;
+  fullWidth?: boolean;
 }
 
-const Popup = ({ isOpen, direction, children }: PopupProps) => {
+const Popup = ({ isOpen, align, direction, children, fullWidth = false }: PopupProps) => {
   if (!isOpen) {
     return null;
   }
 
-  return <StyledPopup $direction={direction}>{children}</StyledPopup>;
+  return (
+    <StyledPopup $align={align} $direction={direction} $fullWidth={fullWidth}>
+      {children}
+    </StyledPopup>
+  );
 };
 
 interface StyledPopupProps {
-  $direction?: 'left' | 'right';
+  $align?: 'left' | 'right';
+  $direction?: 'up' | 'down';
+  $fullWidth: boolean;
 }
 
 const StyledPopup = styled.div<StyledPopupProps>`
   display: flex;
   position: absolute;
-  top: 100%;
-  left: ${({ $direction }) => ($direction === 'left' ? 'auto' : '0')};
-  right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
-  width: 275px;
-  max-height: 256px;
+  top: ${({ $direction }) => ($direction === 'up' ? 'auto' : '100%')};
+  bottom: ${({ $direction }) => ($direction === 'up' ? '100%' : 'auto')};
+  left: ${({ $align }) => ($align === 'left' ? 'auto' : '0')};
+  right: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
+  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : '275px')};
+  max-height: 350px;
   z-index: 3;
   background-color: white;
   border-radius: 0.25rem;
   border: 1px solid #c6c2bf;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 `;
+
+const getSelectedLength = (label: string | undefined, num: number, total: number) =>
+  label === undefined ? `${num}/${total} valgt` : `${label} (${num}/${total})`;

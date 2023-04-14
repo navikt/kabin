@@ -4,14 +4,13 @@ import { createKlage } from '@app/api/api';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
-import { avsenderMottakerToPartId } from '@app/domain/converters';
+import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiErrorReponse, IApiValidationResponse, isApiError, isValidationResponse } from './error-type-guard';
-import { getPartId } from './part-id';
 
 const useKlageApiPayload = (): CreateKlageApiPayload | null => {
   const { payload, type, journalpost } = useContext(ApiContext);
@@ -20,20 +19,35 @@ const useKlageApiPayload = (): CreateKlageApiPayload | null => {
     return null;
   }
 
-  const { mottattNav, fristInWeeks, klager, fullmektig, avsender: avsenderMottaker } = payload.overstyringer;
+  const {
+    mottattKlageinstans,
+    mottattVedtaksinstans,
+    fristInWeeks,
+    klager,
+    fullmektig,
+    avsender: avsenderMottaker,
+  } = payload.overstyringer;
 
-  if (mottattNav === null || fristInWeeks === null) {
+  if (
+    mottattKlageinstans === null ||
+    mottattVedtaksinstans === null ||
+    fristInWeeks === null ||
+    payload.overstyringer.ytelseId === null
+  ) {
     return null;
   }
 
   return {
-    saksId: payload.mulighet.sakId,
-    mottattNav,
+    sakId: payload.mulighet.sakId,
+    mottattKlageinstans,
+    mottattVedtaksinstans,
     fristInWeeks,
-    klager: getPartId(klager),
-    fullmektig: getPartId(fullmektig),
+    klager: partToPartId(klager),
+    fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
-    klageDocumentJournalpostId: journalpost.journalpostId,
+    klageJournalpostId: journalpost.journalpostId,
+    hjemmelIdList: payload.overstyringer.hjemmelIdList,
+    ytelseId: payload.overstyringer.ytelseId,
   };
 };
 
@@ -55,7 +69,7 @@ export const useCreateKlage = (
       const res = await createKlage(payload);
 
       if (res.ok) {
-        updateData((data) => data?.filter((d) => d.sakId !== payload.saksId));
+        updateData((data) => data?.filter((d) => d.sakId !== payload.sakId));
 
         setError(undefined);
 

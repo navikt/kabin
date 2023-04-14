@@ -1,19 +1,18 @@
 import { parseISO } from 'date-fns';
 import React, { useCallback, useContext, useMemo } from 'react';
-import styled from 'styled-components';
 import { Datepicker } from '@app/components/date-picker/date-picker';
-import { ValidationFieldNames } from '@app/hooks/use-field-name';
+import { FIELD_NAMES, ValidationFieldNames } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 
-export const EditMottattNAV = () => {
+export const EditMottattVedtaksinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
 
   if (
-    type === Type.NONE ||
+    type !== Type.KLAGE ||
     journalpost === null ||
-    payload.overstyringer.mottattNav === null ||
+    payload.overstyringer.mottattVedtaksinstans === null ||
     payload.mulighet === null
   ) {
     return null;
@@ -21,7 +20,7 @@ export const EditMottattNAV = () => {
 
   return (
     <RenderEditMottattNAV
-      value={payload.overstyringer.mottattNav}
+      value={payload.overstyringer.mottattVedtaksinstans}
       toDate={journalpost.registrert}
       fromDate={payload.mulighet.vedtakDate}
     />
@@ -36,37 +35,35 @@ interface Props {
 
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
   const { type, updatePayload } = useContext(ApiContext);
-  const error = useValidationError(ValidationFieldNames.MOTTATT_NAV);
+  const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
 
   const parsedValue = useMemo(() => parseISO(value), [value]);
   const parsedToDate = useMemo(() => parseISO(toDate), [toDate]);
   const parsedFromDate = useMemo(() => parseISO(fromDate), [fromDate]);
 
   const onChange = useCallback(
-    (mottattNav: string | null) => {
+    (mottattVedtaksinstans: string | null) => {
       if (type === Type.NONE) {
         return;
       }
 
-      updatePayload({ overstyringer: { mottattNav } });
+      updatePayload({ overstyringer: { mottattVedtaksinstans } });
     },
     [type, updatePayload]
   );
 
   return (
-    <StyledDatepicker
-      label="Mottatt NAV Klageinstans"
-      onChange={onChange}
-      value={parsedValue}
-      size="small"
-      toDate={parsedToDate}
-      fromDate={parsedFromDate}
-      id={ValidationFieldNames.MOTTATT_NAV}
-      error={error}
-    />
+    <div>
+      <Datepicker
+        label={FIELD_NAMES[ValidationFieldNames.MOTTATT_VEDTAKSINSTANS]}
+        onChange={onChange}
+        value={parsedValue}
+        size="small"
+        toDate={parsedToDate}
+        fromDate={parsedFromDate}
+        id={ValidationFieldNames.MOTTATT_VEDTAKSINSTANS}
+        error={error}
+      />
+    </div>
   );
 };
-
-const StyledDatepicker = styled(Datepicker)`
-  grid-area: mottattnav;
-`;

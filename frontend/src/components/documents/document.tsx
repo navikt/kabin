@@ -1,10 +1,11 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { AttachmentList } from './attachment-list';
 import { formatAvsenderMottaker } from './avsender-mottaker';
@@ -19,8 +20,7 @@ interface Props {
 export const Dokument = ({ dokument }: Props) => {
   const { journalpost, setJournalpost } = useContext(ApiContext);
   const { viewDokument } = useContext(DocumentViewerContext);
-  const { dokumentInfoId, journalpostId, tittel, registrert, temaId, avsenderMottaker, sak, journalposttype } =
-    dokument;
+  const { dokumentInfoId, journalpostId, tittel, registrert, temaId, sak, journalposttype } = dokument;
 
   const temaName = useFullTemaNameFromId(temaId);
 
@@ -63,7 +63,7 @@ export const Dokument = ({ dokument }: Props) => {
           <Ellipsis>{temaName}</Ellipsis>
         </GridTag>
         <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
-        <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
+        <AvsenderMottakerNotatforer {...dokument} />
         <StyledField $gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</StyledField>
         <StyledField $gridArea={GridArea.TYPE}>
           <Journalposttype journalposttype={journalposttype} />
@@ -80,14 +80,44 @@ export const Dokument = ({ dokument }: Props) => {
   );
 };
 
-type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
+type AvsenderMottakerProps = Pick<
+  IArkivertDocument,
+  'journalposttype' | 'avsenderMottaker' | 'journalfortAvNavn' | 'journalfoerendeEnhet'
+>;
 
-const AvsenderMottaker = ({ journalposttype, avsenderMottaker }: AvsenderMottakerProps) => {
-  if (journalposttype === JournalposttypeEnum.NOTAT) {
-    return null;
-  }
+const AvsenderMottakerNotatforer = ({
+  journalposttype,
+  avsenderMottaker,
+  journalfortAvNavn,
+  journalfoerendeEnhet,
+}: AvsenderMottakerProps) => {
+  const { data: enheter } = useKlageenheter();
+  const enhetNavn = useMemo(
+    () => enheter?.find((enhet) => enhet.id === journalfoerendeEnhet)?.navn,
+    [enheter, journalfoerendeEnhet]
+  );
 
-  return <StyledField $gridArea={GridArea.AVSENDER_MOTTAKER}>{formatAvsenderMottaker(avsenderMottaker)}</StyledField>;
+  const [text, title] = useMemo<[string, string | undefined]>(() => {
+    if (journalposttype === JournalposttypeEnum.NOTAT) {
+      if (journalfortAvNavn === null) {
+        if (typeof enhetNavn === 'string') {
+          return [enhetNavn, undefined];
+        }
+
+        return ['Ukjent', undefined];
+      }
+
+      return [journalfortAvNavn, enhetNavn];
+    }
+
+    return [formatAvsenderMottaker(avsenderMottaker), undefined];
+  }, [avsenderMottaker, enhetNavn, journalfortAvNavn, journalposttype]);
+
+  return (
+    <StyledField $gridArea={GridArea.AVSENDER_MOTTAKER} title={title}>
+      {text}
+    </StyledField>
+  );
 };
 
 const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }>`

@@ -3,47 +3,95 @@ import { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
 import { isNotNull } from '@app/functions/is-not';
 import { stringToRegExp } from '@app/functions/string-to-regex';
-import { IdType, skipToken } from '@app/types/common';
-import { IArkivertDocument } from '@app/types/dokument';
+import { useKlageenheter, useVedtaksenheter } from '@app/simple-api-state/use-kodeverk';
+import { AvsenderMottakerType, skipToken } from '@app/types/common';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 
 interface IOption<T> {
   value: T;
   label: string;
 }
 
-export const getAvsenderMottakerOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
-  documents.reduce<IOption<string>[]>((acc, { avsenderMottaker }) => {
-    if (avsenderMottaker === null) {
-      if (acc.every((am) => am.value !== 'NONE')) {
-        acc.push({ label: 'Ingen', value: 'NONE' });
-      }
+const NONE = 'NONE';
+const UNKNOWN = 'UNKNOWN';
 
-      return acc;
-    }
+export const useAvsenderMottakerNoteurOptions = (documents: IArkivertDocument[]): IOption<string>[] => {
+  const { data: klageenheter = [] } = useKlageenheter();
+  const { data: vedtaksenheter = [] } = useVedtaksenheter();
 
-    const { navn, id, type } = avsenderMottaker;
+  return useMemo(
+    () =>
+      documents.reduce<IOption<string>[]>(
+        (acc, { avsenderMottaker, journalfortAvNavn, journalfoerendeEnhet, journalposttype }) => {
+          if (avsenderMottaker !== null) {
+            const { name: navn, id, type } = avsenderMottaker;
 
-    if (type === IdType.NULL) {
-      return acc;
-    }
+            if (type === AvsenderMottakerType.NULL) {
+              return acc;
+            }
 
-    const label = navn ?? id ?? 'Ukjent';
-    const value = id ?? 'UNKNOWN';
+            const label = navn ?? id ?? 'Ukjent';
+            const value = id ?? UNKNOWN;
 
-    if (acc.some((am) => am.value === value)) {
-      return acc;
-    }
+            if (acc.some((am) => am.value === value)) {
+              return acc;
+            }
 
-    acc.push({ label, value });
+            acc.push({ label, value });
 
-    return acc;
-  }, []);
+            return acc;
+          }
+
+          if (journalposttype !== JournalposttypeEnum.NOTAT) {
+            return acc;
+          }
+
+          if (journalfortAvNavn !== null) {
+            const label = journalfortAvNavn;
+            const value = journalfortAvNavn;
+
+            if (acc.some((am) => am.value === value)) {
+              return acc;
+            }
+
+            acc.push({ label, value });
+
+            return acc;
+          }
+
+          if (journalfoerendeEnhet !== null) {
+            const label = journalfoerendeEnhet;
+            const value =
+              klageenheter.find((k) => k.id === journalfoerendeEnhet)?.navn ??
+              vedtaksenheter.find((v) => v.id === journalfoerendeEnhet)?.navn ??
+              'Ukjent';
+
+            if (acc.some((am) => am.value === value)) {
+              return acc;
+            }
+
+            acc.push({ label, value });
+
+            return acc;
+          }
+
+          if (acc.every((am) => am.value !== NONE)) {
+            acc.push({ label: 'Ingen', value: NONE });
+          }
+
+          return acc;
+        },
+        []
+      ),
+    [documents, klageenheter, vedtaksenheter]
+  );
+};
 
 export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
   documents.reduce<IOption<string>[]>((acc, { sak }) => {
     if (sak === null) {
-      if (acc.every((am) => am.value !== 'NONE')) {
-        acc.push({ label: 'Ingen', value: 'NONE' });
+      if (acc.every((am) => am.value !== NONE)) {
+        acc.push({ label: 'Ingen', value: NONE });
       }
 
       return acc;
@@ -52,7 +100,7 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
     const { fagsakId } = sak;
 
     const label = fagsakId ?? 'Ukjent';
-    const value = fagsakId ?? 'UNKNOWN';
+    const value = fagsakId ?? UNKNOWN;
 
     if (acc.some((am) => am.value === value)) {
       return acc;
@@ -77,15 +125,25 @@ export const useFilteredDocuments = (
   return useMemo(
     () =>
       documents.filter(
-        ({ tittel, journalpostId, temaId, journalposttype, avsenderMottaker, registrert, sak, vedlegg }) =>
+        ({
+          tittel,
+          journalpostId,
+          temaId,
+          journalposttype,
+          avsenderMottaker,
+          registrert,
+          sak,
+          vedlegg,
+          journalfortAvNavn,
+          journalfoerendeEnhet,
+        }) =>
           (selectedTemaer.length === 0 || (temaId !== null && selectedTemaer.includes(temaId))) &&
           (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
           (selectedAvsenderMottakere.length === 0 ||
             selectedAvsenderMottakere.includes(
-              avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
+              avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN
             )) &&
-          (selectedSaksIds.length === 0 ||
-            selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+          (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
           (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
           (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
       ),
