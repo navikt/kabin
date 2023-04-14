@@ -4,10 +4,10 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useVedtaksenhetName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useUtfallStringName, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
-import { IKlagemulighet } from '@app/types/klagemulighet';
+import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
   onClick: () => void;
@@ -30,7 +30,7 @@ interface RenderProps extends Props {
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
   const { sakId, temaId, utfall, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
 
-  const utfallName = useUtfallName(utfall);
+  const utfallName = useUtfallStringName(utfall);
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(fagsystemId);
@@ -51,37 +51,37 @@ const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
       </Header>
       <Klagemulighet>
         <Column>
-          <Label size="small">Saks-Id</Label>
+          <StyledLabel size="small">Saks-Id</StyledLabel>
           <Detail>{sakId}</Detail>
         </Column>
         <Column>
-          <Label size="small">Tema</Label>
+          <StyledLabel size="small">Tema</StyledLabel>
           <Tag size="small" variant="alt3">
             {temaName}
           </Tag>
         </Column>
         <Column>
-          <Label size="small">Dato</Label>
+          <StyledLabel size="small">Dato</StyledLabel>
           <Detail as="time" dateTime={vedtakDate}>
             {isoDateToPretty(vedtakDate) ?? vedtakDate}
           </Detail>
         </Column>
         <Column>
-          <Label size="small">Utfall</Label>
+          <StyledLabel size="small">Utfall</StyledLabel>
           <Tag size="small" variant="alt1">
             {utfallName}
           </Tag>
         </Column>
         <Column>
-          <Label size="small">Behandlende enhet</Label>
+          <StyledLabel size="small">Behandlende enhet</StyledLabel>
           <Detail>{vedtaksenhetName}</Detail>
         </Column>
         <Column>
-          <Label size="small">Fagsak-ID</Label>
+          <StyledLabel size="small">Fagsak-ID</StyledLabel>
           <Detail>{fagsakId}</Detail>
         </Column>
         <Column>
-          <Label size="small">Fagsystem</Label>
+          <StyledLabel size="small">Fagsystem</StyledLabel>
           <Detail>{fagsystemName}</Detail>
         </Column>
       </Klagemulighet>
@@ -110,4 +110,9 @@ const Klagemulighet = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 8px;
+`;
+
+const StyledLabel = styled(Label)`
+  white-space: nowrap;
 `;

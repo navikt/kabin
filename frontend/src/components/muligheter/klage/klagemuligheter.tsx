@@ -13,7 +13,7 @@ import { SelectedKlagemulighet } from '@app/components/selected/selected-klagemu
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
-import { IKlagemulighet } from '@app/types/klagemulighet';
+import { IKlagemulighet } from '@app/types/mulighet';
 import { Warning } from '../common/warning';
 import { Klagemulighet } from './klagemulighet';
 

@@ -7,7 +7,7 @@ import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown'
 import { useTema } from '@app/simple-api-state/use-kodeverk';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { DateFilter } from './date-filter';
-import { getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
+import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from './filter-helpers';
 import { GridArea, GridSearch, StyledGrid } from './styled-grid-components';
 
 const EMPTY_LIST: [] = [];
@@ -56,7 +56,7 @@ export const ColumnHeaders = ({
     [allTemaer]
   );
 
-  const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
+  const avsenderMottakerOptions = useAvsenderMottakerNoteurOptions(documents);
   const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
 
   const resetFilters = () => {
@@ -123,17 +123,18 @@ export const ColumnHeaders = ({
           options={avsenderMottakerOptions}
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
-          direction="left"
+          align="left"
           $area={GridArea.AVSENDER_MOTTAKER}
+          title="Avsender/mottaker/notatfører"
         >
-          Avsender/mottaker
+          Avs./mot./not.
         </StyledFilterDropdown>
 
         <StyledFilterDropdown
           options={saksIdOptions}
           onChange={setSelectedSaksIds}
           selected={selectedSaksIds}
-          direction="left"
+          align="left"
           $area={GridArea.SAKS_ID}
         >
           Saks-ID
@@ -143,7 +144,7 @@ export const ColumnHeaders = ({
           options={JOURNALPOSTTYPE_OPTIONS}
           onChange={setSelectedTypes}
           selected={selectedTypes}
-          direction="left"
+          align="left"
           $area={GridArea.TYPE}
         >
           Type

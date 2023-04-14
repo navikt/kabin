@@ -33,7 +33,7 @@ export const StyledFullmektigIcon = styled(FullmektigIcon)`
   ${iconCss}
 `;
 
-const AvsenderIcon = EnvelopeClosedIcon;
+export const AvsenderIcon = EnvelopeClosedIcon;
 export const StyledAvsenderIcon = styled(AvsenderIcon)`
   ${iconCss}
 `;

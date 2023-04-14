@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { PartRead } from './part-read';
+import { PartRead, PartReadProps } from './part-read/part-read';
 import { PartWrite, PartWriteProps } from './part-write';
 
-export const Part = (props: PartWriteProps) => {
+export const Part = (props: PartWriteProps & PartReadProps) => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   if (isEditMode) {

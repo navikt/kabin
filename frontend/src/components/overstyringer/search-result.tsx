@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
 import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';
-import { IPart } from '@app/types/common';
+import { IPart, PartType } from '@app/types/common';
 
 interface Props {
   label: string;
@@ -26,7 +26,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
     );
   }
 
-  if (typeof data !== 'undefined' && (data.person !== null || data.virksomhet !== null)) {
+  if (typeof data !== 'undefined') {
     return (
       <Render variant="alt3" onConfirm={() => setPart(data)} onDismiss={dismiss}>
         <Icon part={data} /> {getSakspartName(data)}
@@ -142,7 +142,7 @@ interface IconProps {
 }
 
 const Icon = ({ part }: IconProps) => {
-  if (part !== null && part.virksomhet !== null) {
+  if (part !== null && part.type === PartType.ORGNR) {
     return <CompanyIcon aria-hidden />;
   }
 

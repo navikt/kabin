@@ -23,7 +23,7 @@ const gridTemplateAreas = [
 
 export const StyledGrid = styled.div`
   display: grid;
-  grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 100px 82px 55px;
+  grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 55px;
   grid-template-areas: '${gridTemplateAreas.join(' ')}';
   grid-gap: 16px;
 `;

@@ -1,5 +1,5 @@
 import { addYears, format, isAfter, isBefore, isValid, parse, subYears } from 'date-fns';
-import { PRETTY_FORMAT } from './formats';
+import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { isDateParts, isEightChars, isFourChars, isSixChars } from './guards';
 
 export const parseUserInput = (input: string, fromDate: Date, toDate: Date, centuryThreshold: number): string => {

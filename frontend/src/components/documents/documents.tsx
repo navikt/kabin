@@ -32,7 +32,7 @@ export const Dokumenter = () => {
     }
   }, [dokumenter, journalpost, setJournalpost, type, viewDokument]);
 
-  if (!isExpanded && type !== Type.NONE && journalpost !== null) {
+  if (!isExpanded && journalpost !== null) {
     return <SelectedDocument onClick={() => setIsExpanded(true)} />;
   }
 

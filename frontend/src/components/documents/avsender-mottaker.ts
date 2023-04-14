@@ -1,10 +1,10 @@
-import { IAvsenderMottaker } from '@app/types/dokument';
+import { IAvsenderMottaker } from '@app/types/common';
 
 export const formatAvsenderMottaker = (avsenderMottaker: IAvsenderMottaker | null): string => {
   if (avsenderMottaker === null) {
     return 'Ingen';
   }
-  const { navn, id } = avsenderMottaker;
+  const { name: navn, id } = avsenderMottaker;
 
   return navn ?? id ?? 'Ukjent';
 };

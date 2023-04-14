@@ -50,7 +50,7 @@ const RenderTypeInput = () => {
     return (
       <>
         <Klagemuligheter />
-        <Overstyringer title="Tilpass klagen" klagerLabel="Klagende part" />
+        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
       </>
     );
   }

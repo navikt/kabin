@@ -1,9 +1,8 @@
-import { IAnkeMulighet } from '@app/types/ankemulighet';
 import { ISignatureResponse, IUserData } from '@app/types/bruker';
 import { IPart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
-import { IStatus } from '@app/types/status';
-import { IKlagemulighet } from './../types/klagemulighet';
+import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
 
@@ -67,10 +66,17 @@ interface StatusParams {
   type: SaksTypeEnum;
 }
 
-const getStatusState = getStateFactory<IStatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
+const getAnkeStatusState = getStateFactory<IAnkestatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
+const getKlageStatusState = getStateFactory<IKlagestatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
 
-export const useStatus = (params: StatusParams | typeof skipToken) => {
-  const state = params === skipToken ? skipToken : getStatusState({ path: getPath(params) });
+export const useAnkeStatus = (params: StatusParams | typeof skipToken) => {
+  const state = params === skipToken ? skipToken : getAnkeStatusState({ path: getPath(params) });
+
+  return useSimpleApiState(state);
+};
+
+export const useKlageStatus = (params: StatusParams | typeof skipToken) => {
+  const state = params === skipToken ? skipToken : getKlageStatusState({ path: getPath(params) });
 
   return useSimpleApiState(state);
 };

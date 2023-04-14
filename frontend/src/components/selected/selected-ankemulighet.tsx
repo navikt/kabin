@@ -8,7 +8,7 @@ import { getSakspartName } from '@app/domain/name';
 import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
-import { IAnkeMulighet } from '@app/types/ankemulighet';
+import { IAnkeMulighet } from '@app/types/mulighet';
 
 interface Props {
   onClick: () => void;
@@ -51,41 +51,41 @@ const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
       </Header>
       <Ankemulighet>
         <Column>
-          <Label size="small">Ytelse</Label>
+          <StyledLabel size="small">Ytelse</StyledLabel>
           <Tag size="small" variant="alt3">
             {ytelseName}
           </Tag>
         </Column>
         <Column>
-          <Label size="small">Dato</Label>
+          <StyledLabel size="small">Dato</StyledLabel>
           <Detail as="time" dateTime={vedtakDate}>
             {isoDateTimeToPrettyDate(vedtakDate) ?? vedtakDate}
           </Detail>
         </Column>
         <Column>
-          <Label size="small">Saken gjelder</Label>
+          <StyledLabel size="small">Saken gjelder</StyledLabel>
           <Detail>{getSakspartName(sakenGjelder)}</Detail>
         </Column>
         <Column>
-          <Label size="small">Klager</Label>
+          <StyledLabel size="small">Klager</StyledLabel>
           <Detail>{getSakspartName(klager)}</Detail>
         </Column>
         <Column>
-          <Label size="small">Utfall</Label>
+          <StyledLabel size="small">Utfall</StyledLabel>
           <Tag size="small" variant="alt1">
             {utfallName}
           </Tag>
         </Column>
         <Column>
-          <Label size="small">Fullmektig</Label>
+          <StyledLabel size="small">Fullmektig</StyledLabel>
           <Detail>{getSakspartName(fullmektig)}</Detail>
         </Column>
         <Column>
-          <Label size="small">Fagsak-ID</Label>
+          <StyledLabel size="small">Fagsak-ID</StyledLabel>
           <Detail>{fagsakId}</Detail>
         </Column>
         <Column>
-          <Label size="small">Fagsystem</Label>
+          <StyledLabel size="small">Fagsystem</StyledLabel>
           <Detail>{fagsystemName}</Detail>
         </Column>
       </Ankemulighet>
@@ -114,4 +114,9 @@ const Ankemulighet = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 8px;
+`;
+
+const StyledLabel = styled(Label)`
+  white-space: nowrap;
 `;

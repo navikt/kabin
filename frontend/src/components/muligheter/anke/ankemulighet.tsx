@@ -8,7 +8,7 @@ import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
-import { IAnkeMulighet } from '@app/types/ankemulighet';
+import { IAnkeMulighet } from '@app/types/mulighet';
 
 interface Props {
   mulighet: IAnkeMulighet;

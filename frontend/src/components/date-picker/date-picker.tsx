@@ -1,7 +1,7 @@
 import { DateInputProps, UNSAFE_DatePicker } from '@navikt/ds-react';
 import { addDays, format, isAfter, isBefore, isValid, parse, subDays } from 'date-fns';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FORMAT, PRETTY_FORMAT } from './formats';
+import { FORMAT, PRETTY_FORMAT } from '@app/domain/date-formats';
 import { parseUserInput } from './parse-user-input';
 import { Warning } from './warning';
 

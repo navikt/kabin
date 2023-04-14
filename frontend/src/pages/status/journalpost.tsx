@@ -3,20 +3,22 @@ import React from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { IArkivertDocument, IAvsenderMottaker, JournalposttypeEnum } from '@app/types/dokument';
-import { InfoItem, Sak, Time } from './common-components';
+import { StyledCard } from '@app/pages/status/styled-components';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import { InfoItem, Part, Sak, Time } from './common-components';
 
 interface JournalpostProps {
+  title: string;
   journalpost: IArkivertDocument;
 }
 
-export const Journalpost = ({ journalpost }: JournalpostProps) => {
+export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
   const { temaId, tittel, registrert, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
 
   const temaName = useFullTemaNameFromId(temaId);
 
   return (
-    <>
+    <StyledCard title={title} $gridArea="journalpost" titleSize="medium">
       <InfoItem label="Tittel">{tittel ?? '-'}</InfoItem>
 
       <InfoItem label="Tema">
@@ -29,7 +31,7 @@ export const Journalpost = ({ journalpost }: JournalpostProps) => {
         <Time dateTime={registrert}>{isoDateToPretty(registrert) ?? registrert}</Time>
       </InfoItem>
 
-      <InfoItem label="Avsender/mottaker">{getAvsenderMottaker(avsenderMottaker)}</InfoItem>
+      <Part title="Avsender/mottaker" part={avsenderMottaker} />
 
       <Sak sak={sak} />
       <InfoItem label="Type">{getJournalposttype(journalposttype)}</InfoItem>
@@ -45,7 +47,7 @@ export const Journalpost = ({ journalpost }: JournalpostProps) => {
           </List>
         )}
       </InfoItem>
-    </>
+    </StyledCard>
   );
 };
 
@@ -69,14 +71,6 @@ const Ellipsis = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-
-const getAvsenderMottaker = (avsenderMottaker: IAvsenderMottaker | null) => {
-  if (avsenderMottaker === null || avsenderMottaker.id === null) {
-    return 'Ingen';
-  }
-
-  return avsenderMottaker.navn ?? 'Navn mangler';
-};
 
 const getJournalposttype = (type: JournalposttypeEnum) => {
   switch (type) {

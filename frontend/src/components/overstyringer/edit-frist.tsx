@@ -1,4 +1,4 @@
-import { Detail, Label, Loader, TextField } from '@navikt/ds-react';
+import { BodyShort, Label, Loader, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
@@ -54,9 +54,11 @@ const Fristdato = () => {
   const { type, payload } = useContext(ApiContext);
 
   const params =
-    type === Type.NONE || payload.overstyringer.mottattNav === null || payload.overstyringer.fristInWeeks === null
+    type === Type.NONE ||
+    payload.overstyringer.mottattKlageinstans === null ||
+    payload.overstyringer.fristInWeeks === null
       ? skipToken
-      : { fromDate: payload.overstyringer.mottattNav, fristInWeeks: payload.overstyringer.fristInWeeks };
+      : { fromDate: payload.overstyringer.mottattKlageinstans, fristInWeeks: payload.overstyringer.fristInWeeks };
 
   const { data: fristdato, isLoading } = useCalculateFristdato(params);
 
@@ -70,9 +72,9 @@ const Fristdato = () => {
       {isLoading ? (
         <Loader size="xsmall" />
       ) : (
-        <Detail>
-          {typeof fristdato === 'undefined' ? '' : <time dateTime={fristdato}>{isoDateToPretty(fristdato)}</time>}
-        </Detail>
+        <BodyShort as="time" dateTime={fristdato}>
+          {isoDateToPretty(fristdato) ?? '-'}
+        </BodyShort>
       )}
     </StyledFristdato>
   );
@@ -87,7 +89,6 @@ const StyledEditFrist = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
-  grid-column: frist;
 `;
 
 const StyledFristdato = styled.div`

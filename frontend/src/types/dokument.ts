@@ -1,4 +1,4 @@
-import { IAvsenderMottakerId } from '@app/types/common';
+import { IAvsenderMottaker } from '@app/types/common';
 
 export enum JournalposttypeEnum {
   INNGAAENDE = 'I',
@@ -31,10 +31,6 @@ export interface ISak {
   datoOpprettet: string;
   fagsakId: string;
   fagsystemId: string;
-}
-
-export interface IAvsenderMottaker extends IAvsenderMottakerId {
-  navn: string;
 }
 
 enum Datotype {
@@ -118,11 +114,11 @@ export interface IArkivertDocument {
   journalstatus: Journalstatus;
   behandlingstema: string | null;
   behandlingstemanavn: string | null;
-  sak: ISak;
+  sak: ISak | null;
   avsenderMottaker: IAvsenderMottaker | null;
-  journalfoerendeEnhet: string;
-  journalfortAvNavn: string;
-  opprettetAvNavn: string;
+  journalfoerendeEnhet: string | null;
+  journalfortAvNavn: string | null;
+  opprettetAvNavn: string | null;
   datoOpprettet: string;
   relevanteDatoer: IRelerendeDato[];
   antallRetur: number | null;
