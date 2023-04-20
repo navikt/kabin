@@ -73,7 +73,7 @@ const INITIAL_ANKE: IAnkeState = {
 };
 
 const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
-  const [type, setType] = useState<Type>(Type.ANKE); // TODO: Set to NONE when klage is supported.
+  const [type, setType] = useState<Type>(Type.NONE);
   const [journalpost, setInternalJournalpost] = useState<IApiContext['journalpost']>(null);
   const [klage, updateKlage, klageErrors, setKlageErrors] = useApiContext<IKlageStateUpdate, IKlageState>(
     INITIAL_KLAGE
