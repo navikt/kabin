@@ -74,13 +74,6 @@ export const Datepicker = ({
         return false;
       }
 
-      const prettyFormatted = format(dateObject, PRETTY_FORMAT);
-
-      if (prettyFormatted !== input) {
-        const isoFormatted = format(dateObject, FORMAT);
-        onChange(isoFormatted);
-      }
-
       const isValidRange = validateRange(dateObject, fromDate, toDate);
 
       if (!isValidRange) {
@@ -93,7 +86,7 @@ export const Datepicker = ({
 
       return true;
     },
-    [fromDate, input, onChange, toDate]
+    [fromDate, toDate]
   );
 
   const validateInput = useCallback(
@@ -122,9 +115,9 @@ export const Datepicker = ({
     requestAnimationFrame(() => {
       const dateString = parseUserInput(input, fromDate, toDate, centuryThreshold);
 
-      if (validateInput(dateString)) {
-        setInput(dateString);
-      }
+      validateInput(dateString);
+
+      setInput(dateString);
     });
   }, [centuryThreshold, fromDate, input, onChange, toDate, validateInput]);
 

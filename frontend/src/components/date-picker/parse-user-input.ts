@@ -2,15 +2,38 @@ import { addYears, format, isAfter, isBefore, isValid, parse, subYears } from 'd
 import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { isDateParts, isEightChars, isFourChars, isSixChars } from './guards';
 
+const DELIMITERS = ['.', '-', '/'];
+
 export const parseUserInput = (input: string, fromDate: Date, toDate: Date, centuryThreshold: number): string => {
-  const parts = input.split('.');
+  for (const delimiter of DELIMITERS) {
+    const parsed = customParse(input, fromDate, toDate, centuryThreshold, delimiter);
+
+    if (parsed !== null) {
+      return parsed;
+    }
+  }
+
+  return input;
+};
+
+const customParse = (
+  input: string,
+  fromDate: Date,
+  toDate: Date,
+  centuryThreshold: number,
+  delimiter: string
+): string | null => {
+  const parts = input.split(delimiter);
 
   // Prefix with reasonable century, e.g. 20 for 2022 and 19 for 1999.
   if (isDateParts(parts)) {
-    const [dd, mm, yy] = parts;
-    const dateString = `${dd.padStart(2, '0')}.${mm.padStart(2, '0')}.${getFullYear(yy, centuryThreshold)}`;
+    const [first, second, third] = parts;
 
-    return dateString;
+    if (first.length === 4) {
+      return `${third.padStart(2, '0')}.${second.padStart(2, '0')}.${first}`;
+    }
+
+    return `${first.padStart(2, '0')}.${second.padStart(2, '0')}.${getFullYear(third, centuryThreshold)}`;
   }
 
   const chars = input.split('');
@@ -56,7 +79,7 @@ export const parseUserInput = (input: string, fromDate: Date, toDate: Date, cent
     return format(dateObject, PRETTY_FORMAT);
   }
 
-  return input;
+  return null;
 };
 
 const getFullYear = (year: string, centuryThreshold: number): string => {

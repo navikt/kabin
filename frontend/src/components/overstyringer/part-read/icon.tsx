@@ -3,10 +3,10 @@ import React from 'react';
 import { AvsenderMottakerType, PartType } from '@app/types/common';
 
 interface Props {
-  type: PartType | AvsenderMottakerType | null;
+  type?: PartType | AvsenderMottakerType | null;
 }
 
-export const Icon = ({ type }: Props) => {
+export const Icon = ({ type = null }: Props) => {
   if (type === PartType.ORGNR) {
     return <Buldings2Icon aria-hidden />;
   }
