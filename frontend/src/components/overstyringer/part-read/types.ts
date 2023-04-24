@@ -6,3 +6,7 @@ export interface ISetPart {
   defaultPart: IPart | null;
   icon?: React.ReactNode;
 }
+
+export interface EnterEditModeCallback {
+  enterEditMode?: () => void;
+}

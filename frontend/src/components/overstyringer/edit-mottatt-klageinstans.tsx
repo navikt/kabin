@@ -23,26 +23,22 @@ export const EditMottattKlageinstans = () => {
     }
   }, [journalpost, payload?.mulighet, payload?.overstyringer.mottattKlageinstans, type]);
 
-  if (currentDate === null) {
-    return null;
-  }
-
   return <RenderEditMottattNAV value={currentDate} toDate={toDate} fromDate={fromDate} />;
 };
 
 interface Props {
-  value: string;
-  toDate: string;
-  fromDate: string;
+  value: string | null;
+  toDate: string | null;
+  fromDate: string | null;
 }
 
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
   const { type, updatePayload } = useContext(ApiContext);
   const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
 
-  const parsedValue = useMemo(() => parseISO(value), [value]);
-  const parsedToDate = useMemo(() => parseISO(toDate), [toDate]);
-  const parsedFromDate = useMemo(() => parseISO(fromDate), [fromDate]);
+  const parsedValue = useMemo(() => (value === null ? undefined : parseISO(value)), [value]);
+  const parsedToDate = useMemo(() => (toDate === null ? undefined : parseISO(toDate)), [toDate]);
+  const parsedFromDate = useMemo(() => (fromDate === null ? undefined : parseISO(fromDate)), [fromDate]);
 
   const onChange = useCallback(
     (mottattKlageinstans: string | null) => {

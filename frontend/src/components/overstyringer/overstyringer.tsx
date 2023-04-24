@@ -3,13 +3,11 @@ import { Label } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Card } from '@app/components/card/card';
+import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';
 import {
   AvsenderIcon,
-  FullmektigIcon,
-  KlagerIcon,
   SakenGjelderIcon,
-  StyledAvsenderIcon,
   StyledFullmektigIcon,
   StyledKlagerIcon,
   StyledSakenGjelderIcon,
@@ -92,33 +90,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
             },
           ]}
         />
-        <Part
-          gridArea={GridArea.AVSENDER}
-          partField={FieldNames.AVSENDER}
-          part={overstyringer.avsender}
-          label="Avsender"
-          icon={<StyledAvsenderIcon aria-hidden />}
-          options={[
-            {
-              label: 'Saken gjelder',
-              defaultPart: mulighet.sakenGjelder,
-              title: 'Saken gjelder',
-              icon: <SakenGjelderIcon aria-hidden />,
-            },
-            {
-              label: getKlagerLabel(type),
-              defaultPart: overstyringer.klager,
-              title: getKlagerLabel(type),
-              icon: <KlagerIcon aria-hidden />,
-            },
-            {
-              label: 'Fullmektig',
-              defaultPart: overstyringer.fullmektig,
-              title: 'Fullmektig',
-              icon: <FullmektigIcon aria-hidden />,
-            },
-          ]}
-        />
+        <Avsender />
         <Klageoverstyringer />
       </Content>
     </Card>
@@ -148,12 +120,3 @@ const Content = styled.div`
 const StyledHeading = styled(Label)`
   grid-area: title;
 `;
-
-const getKlagerLabel = (type: Type.ANKE | Type.KLAGE) => {
-  switch (type) {
-    case Type.ANKE:
-      return 'Ankende part';
-    case Type.KLAGE:
-      return 'Klager';
-  }
-};
