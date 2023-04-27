@@ -11,7 +11,7 @@ export const KlageDetails = ({
   mottattVedtaksinstans,
   mottattKlageinstans,
   vedtakDate,
-  utfall,
+  utfallId,
   ytelseId,
   fullmektig,
   journalpost,
@@ -36,7 +36,7 @@ export const KlageDetails = ({
       fagsakId={fagsakId}
       fagsystemId={fagsystemId}
       sakenGjelder={sakenGjelder}
-      utfallId={utfall}
+      utfallId={utfallId}
       vedtakDate={vedtakDate}
       ytelseId={ytelseId}
     />

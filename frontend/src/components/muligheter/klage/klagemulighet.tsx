@@ -4,7 +4,7 @@ import { SelectMulighet } from '@app/components/muligheter/common/select-button'
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallStringName, useVedtaksenhetName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
@@ -16,7 +16,7 @@ interface Props {
 export const Klagemulighet = ({ mulighet }: Props) => {
   const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
 
-  const utfallName = useUtfallStringName(mulighet.utfall);
+  const utfallName = useUtfallName(mulighet.utfallId);
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
