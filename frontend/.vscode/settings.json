@@ -1,4 +1,12 @@
 {
+  "search.exclude": {
+    "**/public": true,
+    "**/assets": true
+  },
+  "files.watcherExclude": {
+    "**/public": true,
+    "**/assets": true
+  },
   "eslint.validate": [
     "javascript",
     "javascriptreact",
