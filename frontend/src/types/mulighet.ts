@@ -1,27 +1,23 @@
-import { IPart, ITilknyttetDokument } from '@app/types/common';
+import { IPart } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 import { UtfallEnum } from './kodeverk';
 
 interface IBasemulighet {
+  behandlingId: string;
   fagsakId: string;
-  vedtakDate: string;
-  sakenGjelder: IPart;
   fagsystemId: string;
+  sakenGjelder: IPart;
+  utfallId: UtfallEnum;
+  vedtakDate: string;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
-  sakId: string;
   temaId: string;
   klageBehandlendeEnhet: string;
-  utfallId: UtfallEnum;
 }
 
 export interface IAnkeMulighet extends IBasemulighet {
-  behandlingId: string;
   ytelseId: Ytelse;
-  vedtakDate: string;
   klager: IPart;
   fullmektig: IPart | null;
-  utfallId: UtfallEnum;
-  tilknyttedeDokumenter: ITilknyttetDokument[];
 }

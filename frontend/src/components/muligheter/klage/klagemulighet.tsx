@@ -22,11 +22,11 @@ export const Klagemulighet = ({ mulighet }: Props) => {
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
   const isInvalid = useMemo(
-    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet),
+    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
     [journalpost, mulighet.vedtakDate]
   );
 
-  const isSelected = type === Type.KLAGE && payload.mulighet?.sakId === mulighet.sakId;
+  const isSelected = type === Type.KLAGE && payload.mulighet?.behandlingId === mulighet.behandlingId;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
@@ -45,7 +45,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
 
   return (
     <StyledTableRow selected={isSelected} onClick={selectKlage} $isInvalid={isInvalid} $isSelected={isSelected}>
-      <Table.DataCell>{mulighet.sakId}</Table.DataCell>
+      <Table.DataCell>{mulighet.behandlingId}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
       <Table.DataCell>{utfallName}</Table.DataCell>

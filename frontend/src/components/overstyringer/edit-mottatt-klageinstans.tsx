@@ -2,10 +2,11 @@ import { format, parseISO } from 'date-fns';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
 import { FORMAT } from '@app/domain/date-formats';
-import { FIELD_NAMES, ValidationFieldNames } from '@app/hooks/use-field-name';
+import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
+import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattKlageinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);

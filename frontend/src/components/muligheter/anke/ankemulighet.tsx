@@ -24,7 +24,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
   const isSelected = type === Type.ANKE && payload.mulighet?.behandlingId === mulighet.behandlingId;
 
   const isInvalid = useMemo(
-    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet),
+    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
     [journalpost, mulighet.vedtakDate]
   );
 

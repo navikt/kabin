@@ -2,10 +2,11 @@ import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
+import { IApiValidationResponse } from '@app/types/validation';
 import { useCreateAnke } from './anke-hooks';
-import { IApiErrorReponse, IApiValidationResponse } from './error-type-guard';
 import { useCreateKlage } from './klage-hooks';
 
 interface Props {

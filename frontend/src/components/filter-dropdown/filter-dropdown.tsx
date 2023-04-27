@@ -1,6 +1,7 @@
 import { Label } from '@navikt/ds-react';
 import React, { useId, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Dropdown } from './dropdown';
 import { BaseProps } from './props';
@@ -16,6 +17,8 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   className?: string;
   disabled?: boolean;
   title?: string;
+  error?: string;
+  id?: string;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -31,11 +34,14 @@ export const FilterDropdown = <T extends string>({
   className,
   disabled = false,
   title,
+  error,
+  id,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const buttonId = useId();
+  const fallbackId = useId();
+  const buttonId = id ?? fallbackId;
 
   useOnClickOutside(() => setIsOpen(false), ref, true);
 
@@ -72,6 +78,7 @@ export const FilterDropdown = <T extends string>({
           />
         </Popup>
       </Container>
+      <ValidationErrorMessage error={error} />
     </StyledFilterDropdown>
   );
 };

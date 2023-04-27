@@ -1,7 +1,7 @@
-import { IValidationSection } from '@app/components/footer/error-type-guard';
 import { IPart, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IValidationSection } from '@app/types/validation';
 
 export enum Type {
   NONE = 'NONE',
@@ -20,7 +20,7 @@ interface IKlageOverstyringer {
   hjemmelIdList: string[];
 }
 
-export interface IKlageState {
+export interface IKlageState extends IKlageStateUpdate {
   mulighet: IKlagemulighet | null;
   overstyringer: IKlageOverstyringer;
 }
@@ -33,16 +33,29 @@ interface IAnkeOverstyringer {
   avsender: IPart | null;
 }
 
-export interface IAnkeState {
+export interface IAnkeState extends IAnkeStateUpdate {
   mulighet: IAnkeMulighet | null;
   overstyringer: IAnkeOverstyringer;
 }
 
-type PayloadFn<T> = (p: T) => DeepPartial<T>;
-export type Payload<T> = DeepPartial<T> | PayloadFn<T>;
-export type UpdateFn<T> = (p: Payload<T>) => void;
+export interface IKlageStateUpdate {
+  mulighet?: IKlagemulighet | null;
+  overstyringer?: Partial<IKlageOverstyringer>;
+}
 
-interface IBaseContext<T> {
+export interface IAnkeStateUpdate {
+  mulighet?: IAnkeMulighet | null;
+  overstyringer?: Partial<IAnkeOverstyringer>;
+}
+
+type PayloadFn<P, S> = (p: S) => P;
+export type Payload<P, S> = P | PayloadFn<P, S>;
+export type UpdateFn<P, S> = (p: Payload<P, S>) => void;
+
+interface IBaseContext<
+  P extends IKlageStateUpdate | IAnkeStateUpdate | null,
+  S extends IKlageState | IAnkeState | null
+> {
   type: Type;
   setType: React.Dispatch<React.SetStateAction<Type>>;
   errors: IValidationSection[] | null;
@@ -50,31 +63,20 @@ interface IBaseContext<T> {
   journalpost: IArkivertDocument | null;
   setJournalpost: React.Dispatch<React.SetStateAction<IArkivertDocument | null>>;
   fnr: string | typeof skipToken;
-
-  payload: T;
-  updatePayload: UpdateFn<T>;
+  payload: S;
+  updatePayload: UpdateFn<P, S>;
 }
 
-interface INoneContext extends IBaseContext<null> {
+interface INoneContext extends IBaseContext<null, null> {
   type: Type.NONE;
-  // payload: null;
-  // updatePayload: UpdateFn<null>;
 }
 
-interface IKlageContext extends IBaseContext<IKlageState> {
+interface IKlageContext extends IBaseContext<IKlageStateUpdate, IKlageState> {
   type: Type.KLAGE;
-  // payload: IKlageState;
-  // updatePayload: UpdateFn<IKlageState>;
 }
 
-interface IAnkeContext extends IBaseContext<IAnkeState> {
+interface IAnkeContext extends IBaseContext<IAnkeStateUpdate, IAnkeState> {
   type: Type.ANKE;
-  // payload: IAnkeState;
-  // updatePayload: UpdateFn<IAnkeState>;
 }
 
 export type IApiContext = INoneContext | IKlageContext | IAnkeContext;
-
-type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
-};

@@ -2,7 +2,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IApiErrorReponse, IApiValidationResponse, isValidationResponse } from './error-type-guard';
+import { IApiErrorReponse, isValidationResponse } from '@app/components/footer/error-type-guard';
+import { IApiValidationResponse } from '@app/types/validation';
 import { ValidationSummary } from './validation-summary';
 
 interface Props {

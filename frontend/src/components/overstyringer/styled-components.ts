@@ -28,13 +28,13 @@ interface ContainerProps {
 const BACKGROUND_COLORS: Record<States, string> = {
   [States.SET]: 'var(--a-blue-50)',
   [States.UNSET]: 'var(--a-gray-100)',
-  [States.ERROR]: 'var(--a-red-100)',
+  [States.ERROR]: 'var(--a-surface-danger-subtle)',
 };
 
 const BORDER_COLORS: Record<States, string> = {
   [States.SET]: 'var(--a-blue-200)',
   [States.UNSET]: 'var(--a-gray-400)',
-  [States.ERROR]: 'var(--a-red-400)',
+  [States.ERROR]: 'var(--a-border-danger)',
 };
 
 export const StyledContainer = styled.div<ContainerProps>`

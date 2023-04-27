@@ -14,16 +14,15 @@ interface IBaseStatus {
   sakenGjelder: IPart;
   vedtakDate: string;
   ytelseId: string;
+  utfallId: UtfallEnum;
 }
 
 export interface IAnkestatus extends IBaseStatus {
   typeId: SaksTypeEnum.ANKE;
   tilknyttedeDokumenter: ITilknyttetDokument[];
-  utfallId: UtfallEnum;
 }
 
 export interface IKlagestatus extends IBaseStatus {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
-  utfallId: UtfallEnum;
 }

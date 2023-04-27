@@ -2,9 +2,10 @@ import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { IApiValidationResponse } from '@app/types/validation';
 import { Confirm } from './confirm';
-import { IApiErrorReponse, IApiValidationResponse } from './error-type-guard';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const Footer = () => {

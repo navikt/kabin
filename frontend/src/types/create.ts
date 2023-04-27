@@ -1,24 +1,21 @@
 import { IPartId } from './common';
 
 interface CreateBasePayload {
-  mottattKlageinstans: string; // LocalDate
-  fristInWeeks: number; // Number of weeks
-  klager: IPartId | null;
-  fullmektig: IPartId | null;
   avsender: IPartId | null;
+  behandlingId: string | null;
+  fristInWeeks: number | null; // Number of weeks
+  fullmektig: IPartId | null;
+  journalpostId: string | null;
+  klager: IPartId | null;
+  mottattKlageinstans: string | null; // LocalDate
 }
 
-export interface CreateAnkeApiPayload extends CreateBasePayload {
-  klagebehandlingId: string;
-  ankeDocumentJournalpostId: string;
-}
+export type CreateAnkeApiPayload = CreateBasePayload;
 
 export interface CreateKlageApiPayload extends CreateBasePayload {
-  sakId: string;
-  klageJournalpostId: string;
-  mottattVedtaksinstans: string; // LocalDate
-  ytelseId: string;
   hjemmelIdList: string[];
+  mottattVedtaksinstans: string | null; // LocalDate
+  ytelseId: string | null;
 }
 
 export interface CreateResponse {

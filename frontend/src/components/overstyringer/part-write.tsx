@@ -2,6 +2,7 @@ import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import React, { useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
@@ -11,14 +12,22 @@ import { SearchResult } from './search-result';
 import { PartContent, States, StyledContainer } from './styled-components';
 import { BaseProps } from './types';
 
-interface Callback {
+interface InternalProps {
   exitEditMode: () => void;
+  error?: string;
 }
 
 export type PartWriteProps = BaseProps;
 
-export const PartWrite = (props: PartWriteProps & Callback) => {
-  const { part, partField, label, gridArea, exitEditMode, icon } = props;
+export const PartWrite = ({
+  part,
+  partField,
+  label,
+  gridArea,
+  exitEditMode,
+  icon,
+  error: validationError,
+}: PartWriteProps & InternalProps) => {
   const { type, updatePayload } = useContext(ApiContext);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
@@ -80,6 +89,7 @@ export const PartWrite = (props: PartWriteProps & Callback) => {
             error={error}
             onKeyDown={onKeyDown}
             autoFocus
+            id={partField}
           />
         </StyledPartSearch>
         <SearchResult
@@ -92,6 +102,7 @@ export const PartWrite = (props: PartWriteProps & Callback) => {
           isValid={isValid}
         />
       </PartContent>
+      <ValidationErrorMessage error={validationError} />
     </StyledContainer>
   );
 };

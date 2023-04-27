@@ -1,21 +1,4 @@
-import { ValidationFieldNames } from '@app/hooks/use-field-name';
-import { SectionNames } from '@app/hooks/use-section-title';
-
-export interface IValidationError {
-  reason: string;
-  field: ValidationFieldNames;
-}
-
-export interface IValidationSection {
-  section: SectionNames;
-  properties: IValidationError[];
-}
-
-export interface IApiValidationResponse {
-  status: number;
-  title: string;
-  sections: IValidationSection[];
-}
+import { IValidationSection } from '@app/types/validation';
 
 interface IError extends GenericObject {
   type: string;

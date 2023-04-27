@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createKlage } from '@app/api/api';
+import { IApiErrorReponse, isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
@@ -10,12 +11,12 @@ import { Type } from '@app/pages/create/api-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
-import { IApiErrorReponse, IApiValidationResponse, isApiError, isValidationResponse } from './error-type-guard';
+import { IApiValidationResponse } from '@app/types/validation';
 
 const useKlageApiPayload = (): CreateKlageApiPayload | null => {
   const { payload, type, journalpost } = useContext(ApiContext);
 
-  if (type !== Type.KLAGE || payload.mulighet === null || journalpost === null) {
+  if (type !== Type.KLAGE || journalpost === null) {
     return null;
   }
 
@@ -28,24 +29,15 @@ const useKlageApiPayload = (): CreateKlageApiPayload | null => {
     avsender: avsenderMottaker,
   } = payload.overstyringer;
 
-  if (
-    mottattKlageinstans === null ||
-    mottattVedtaksinstans === null ||
-    fristInWeeks === null ||
-    payload.overstyringer.ytelseId === null
-  ) {
-    return null;
-  }
-
   return {
-    sakId: payload.mulighet.sakId,
+    behandlingId: payload.mulighet === null ? null : payload.mulighet.behandlingId,
     mottattKlageinstans,
     mottattVedtaksinstans,
     fristInWeeks,
     klager: partToPartId(klager),
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
-    klageJournalpostId: journalpost.journalpostId,
+    journalpostId: journalpost.journalpostId,
     hjemmelIdList: payload.overstyringer.hjemmelIdList,
     ytelseId: payload.overstyringer.ytelseId,
   };
@@ -69,7 +61,7 @@ export const useCreateKlage = (
       const res = await createKlage(payload);
 
       if (res.ok) {
-        updateData((data) => data?.filter((d) => d.sakId !== payload.sakId));
+        updateData((data) => data?.filter((d) => d.behandlingId !== payload.behandlingId));
 
         setError(undefined);
 

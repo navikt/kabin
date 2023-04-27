@@ -1,6 +1,6 @@
 import { IPart } from '@app/types/common';
 
-export const compareParts = (a: IPart | null, b: IPart | null) => {
+export const compareParts = (a: IPart | null, b: IPart | null): boolean => {
   if (a === null && b === null) {
     return true;
   }

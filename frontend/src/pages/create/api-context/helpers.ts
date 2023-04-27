@@ -1,10 +1,10 @@
-import { IValidationSection } from '@app/components/footer/error-type-guard';
+import { avsenderIsPart } from '@app/domain/converters';
 import { isNotUndefined } from '@app/functions/is-not';
-import { ValidationFieldNames } from '@app/hooks/use-field-name';
-import { SectionNames } from '@app/hooks/use-section-title';
 import { IPart } from '@app/types/common';
+import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
-import { IAnkeState, IKlageState, Payload, Type } from './types';
+import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
+import { IAnkeState, IAnkeStateUpdate, IKlageState, IKlageStateUpdate, Payload, Type } from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -24,19 +24,45 @@ export const getStateWithOverstyringer = <T extends IKlageState | IAnkeState>(
   },
 });
 
-export const removeAvsenderError = (errors: IValidationSection[] | null) =>
+const removeSaksdataErrors = (errors: IValidationSection[] | null, fields: ValidationFieldNames[]) =>
   errors === null
     ? errors
     : errors.map((error) =>
         error.section === SectionNames.SAKSDATA
           ? {
               section: SectionNames.SAKSDATA,
-              properties: error.properties.filter(({ field }) => field !== ValidationFieldNames.AVSENDER),
+              properties: error.properties.filter((p) => !fields.includes(p.field)),
             }
           : error
       );
 
-export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeState>): IAnkeState => {
+export const removeErrorsOnMulighetChange = (errors: IValidationSection[] | null) =>
+  removeSaksdataErrors(errors, [ValidationFieldNames.FULLMEKTIG, ValidationFieldNames.KLAGER]);
+
+export const removeErrorsOnJournalpostChange = (errors: IValidationSection[] | null) =>
+  removeSaksdataErrors(errors, [
+    ValidationFieldNames.MOTTATT_KLAGEINSTANS,
+    ValidationFieldNames.MOTTATT_VEDTAKSINSTANS,
+    ValidationFieldNames.AVSENDER,
+  ]);
+
+export const getUpdateAvsender = (update: IArkivertDocument | null): IPart | null => {
+  if (
+    update === null ||
+    update.avsenderMottaker === null ||
+    update.journalposttype !== JournalposttypeEnum.INNGAAENDE
+  ) {
+    return null;
+  }
+
+  if (avsenderIsPart(update.avsenderMottaker)) {
+    return update.avsenderMottaker;
+  }
+
+  return null;
+};
+
+export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeStateUpdate, IAnkeState>): IAnkeState => {
   const update = typeof newState === 'function' ? newState(state) : newState;
 
   const updateMulighet = update.mulighet;
@@ -65,7 +91,10 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
   };
 };
 
-export const getUpdatedKlageState = (state: IKlageState, newState: Payload<IKlageState>): IKlageState => {
+export const getUpdatedKlageState = (
+  state: IKlageState,
+  newState: Payload<IKlageStateUpdate, IKlageState>
+): IKlageState => {
   const update = typeof newState === 'function' ? newState(state) : newState;
 
   const updateMulighet = update.mulighet;
