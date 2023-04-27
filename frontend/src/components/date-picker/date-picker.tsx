@@ -1,6 +1,7 @@
 import { DateInputProps, UNSAFE_DatePicker } from '@navikt/ds-react';
-import { addDays, format, isAfter, isBefore, isValid, parse, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import React, { useCallback, useEffect, useState } from 'react';
+import { prettyDateToISO } from '@app/domain/date';
 import { FORMAT, PRETTY_FORMAT } from '@app/domain/date-formats';
 import { parseUserInput } from './parse-user-input';
 import { Warning } from './warning';
@@ -36,18 +37,14 @@ export const Datepicker = ({
   warningThreshhold,
   className,
 }: Props) => {
-  const [inputError, setInputError] = useState<string>();
   const [input, setInput] = useState<string>(value === undefined ? '' : format(value, PRETTY_FORMAT));
 
   useEffect(() => {
     setInput(value === undefined ? '' : format(value, PRETTY_FORMAT));
-    setInputError(undefined);
   }, [value]);
 
   const onDateChange = useCallback(
     (dateObject?: Date) => {
-      setInputError(undefined);
-
       if (dateObject === undefined) {
         return onChange(null);
       }
@@ -64,49 +61,8 @@ export const Datepicker = ({
 
   const [month, setMonth] = useState(value);
 
-  const validateDate = useCallback(
-    (dateObject: Date): boolean => {
-      const isValidDate = isValid(dateObject);
-
-      if (!isValidDate) {
-        setInputError('Ugyldig dato');
-
-        return false;
-      }
-
-      const isValidRange = validateRange(dateObject, fromDate, toDate);
-
-      if (!isValidRange) {
-        setInputError(`Dato må være mellom ${format(fromDate, PRETTY_FORMAT)} og ${format(toDate, PRETTY_FORMAT)}`);
-
-        return false;
-      }
-
-      setInputError(undefined);
-
-      return true;
-    },
-    [fromDate, toDate]
-  );
-
-  const validateInput = useCallback(
-    (fullInput: string): boolean => {
-      const dateObject = parse(fullInput, PRETTY_FORMAT, new Date());
-
-      return validateDate(dateObject);
-    },
-    [validateDate]
-  );
-
-  useEffect(() => {
-    if (typeof value !== 'undefined') {
-      validateDate(value);
-    }
-  }, [value, validateDate]);
-
   const onBlur = useCallback(() => {
     if (input === '') {
-      setInputError(undefined);
       onChange(null);
 
       return;
@@ -115,11 +71,10 @@ export const Datepicker = ({
     requestAnimationFrame(() => {
       const dateString = parseUserInput(input, fromDate, toDate, centuryThreshold);
 
-      validateInput(dateString);
-
+      onChange(dateString === null ? null : prettyDateToISO(dateString));
       setInput(dateString);
     });
-  }, [centuryThreshold, fromDate, input, onChange, toDate, validateInput]);
+  }, [centuryThreshold, fromDate, input, onChange, toDate]);
 
   return (
     <UNSAFE_DatePicker
@@ -139,7 +94,7 @@ export const Datepicker = ({
     >
       <UNSAFE_DatePicker.Input
         id={id}
-        error={error ?? inputError}
+        error={error}
         label={label}
         disabled={disabled}
         value={input}
@@ -151,6 +106,3 @@ export const Datepicker = ({
     </UNSAFE_DatePicker>
   );
 };
-
-const validateRange = (dateObject: Date, fromDate: Date, toDate: Date) =>
-  isAfter(dateObject, subDays(fromDate, 1)) && isBefore(dateObject, addDays(toDate, 1));

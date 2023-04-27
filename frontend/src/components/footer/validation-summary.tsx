@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
-import { IValidationError, IValidationSection } from './error-type-guard';
+import { IValidationError, IValidationSection } from '@app/types/validation';
 
 interface Props {
   sections: IValidationSection[];

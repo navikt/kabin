@@ -10,10 +10,13 @@ import {
 } from '@app/components/muligheter/common/styled-components';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { IAnkeMulighet } from '@app/types/mulighet';
+import { ValidationFieldNames } from '@app/types/validation';
 import { Warning } from '../common/warning';
 import { Ankemulighet } from './ankemulighet';
 
@@ -22,6 +25,7 @@ export const Ankemuligheter = () => {
 
   const { data: ankemuligheter, isLoading } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
+  const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
   useEffect(() => {
     if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && payload.mulighet !== null) {
@@ -56,7 +60,9 @@ export const Ankemuligheter = () => {
         )}
       </CardHeader>
 
-      <Warning mottattDate={journalpost?.datoOpprettet} vedtakDate={payload.mulighet?.vedtakDate} />
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+
+      <Warning mottattDate={journalpost?.registrert} vedtakDate={payload.mulighet?.vedtakDate} />
 
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </Card>

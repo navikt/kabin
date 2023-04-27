@@ -1,20 +1,16 @@
 import { parseISO } from 'date-fns';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
-import { FIELD_NAMES, ValidationFieldNames } from '@app/hooks/use-field-name';
+import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
+import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattVedtaksinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
 
-  if (
-    type !== Type.KLAGE ||
-    journalpost === null ||
-    payload.overstyringer.mottattVedtaksinstans === null ||
-    payload.mulighet === null
-  ) {
+  if (type !== Type.KLAGE || journalpost === null || payload.mulighet === null) {
     return null;
   }
 
@@ -28,18 +24,18 @@ export const EditMottattVedtaksinstans = () => {
 };
 
 interface Props {
-  value: string;
-  toDate: string;
-  fromDate: string;
+  value: string | null;
+  toDate: string | null;
+  fromDate: string | null;
 }
 
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
   const { type, updatePayload } = useContext(ApiContext);
-  const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
+  const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
 
-  const parsedValue = useMemo(() => parseISO(value), [value]);
-  const parsedToDate = useMemo(() => parseISO(toDate), [toDate]);
-  const parsedFromDate = useMemo(() => parseISO(fromDate), [fromDate]);
+  const parsedValue = useMemo(() => (value === null ? undefined : parseISO(value)), [value]);
+  const parsedToDate = useMemo(() => (toDate === null ? undefined : parseISO(toDate)), [toDate]);
+  const parsedFromDate = useMemo(() => (fromDate === null ? undefined : parseISO(fromDate)), [fromDate]);
 
   const onChange = useCallback(
     (mottattVedtaksinstans: string | null) => {

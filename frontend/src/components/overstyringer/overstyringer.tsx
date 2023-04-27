@@ -15,8 +15,10 @@ import {
 import { Klageoverstyringer } from '@app/components/overstyringer/klageoverstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
+import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
+import { ValidationFieldNames } from '@app/types/validation';
 import { EditFrist } from './edit-frist';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
@@ -30,6 +32,9 @@ interface Props {
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
   const { type, payload } = useContext(ApiContext);
+
+  const klagerError = useValidationError(ValidationFieldNames.KLAGER);
+  const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
   if (type === Type.NONE || payload.mulighet === null) {
     return (
@@ -65,6 +70,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           part={overstyringer.klager}
           label={klagerLabel}
           icon={<StyledKlagerIcon aria-hidden />}
+          error={klagerError}
           options={[
             {
               label: 'Saken gjelder',
@@ -81,6 +87,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           label="Fullmektig"
           icon={<StyledFullmektigIcon aria-hidden />}
           required={false}
+          error={fullmektigError}
           options={[
             {
               label: 'Avsender',

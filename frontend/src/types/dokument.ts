@@ -103,28 +103,44 @@ interface IUtsendingsinfo {
 }
 
 export interface IArkivertDocument {
+  /** Unik identifikator per journalpost. */
   journalpostId: string;
   dokumentInfoId: string;
+  /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
   tittel: string | null;
   temaId: string | null;
+  /** Samme som datoOpprettet, men uten tidspunkt. */
   registrert: string;
+  /** Om bruker har tilgang til å se dokumentet. */
   harTilgangTilArkivvariant: boolean;
   vedlegg: IVedlegg[];
+  /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */
   journalposttype: JournalposttypeEnum;
+  /** Status på journalposten i joark, f.eks. MOTTATT eller JOURNALFØRT. Journalstatusen gir et indikasjon på hvor i journalførings- eller dokumentproduksjonsprosessen journalposten befinner seg. Journalposter som er resultat av en feilsituasjon og ikke skal hensyntas for saksbehandling har egne koder, som UTGAAR eller AVBRUTT.  */
   journalstatus: Journalstatus;
   behandlingstema: string | null;
   behandlingstemanavn: string | null;
   sak: ISak | null;
+  /** Personen eller organisasjonen som er avsender eller mottaker av dokumentene i journalposten. */
   avsenderMottaker: IAvsenderMottaker | null;
+  /** NAV-enheten som har journalført forsendelsen. I noen tilfeller brukes journalfEnhet til å rute journalføringsoppgaven til korrekt enhet i NAV. I slike tilfeller vil journalfEnhet være satt også for ikke-journalførte dokumenter. */
   journalfoerendeEnhet: string | null;
+  /** Personen eller systembrukeren i NAV som har journalført forsendelsen. Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. Dersom forsendelsen er automatisk journalført, kan innholdet være f.eks. en servicebruker eller et batchnavn. */
   journalfortAvNavn: string | null;
+  /** Personen eller systembrukeren i NAV som har opprettet journalposten. Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. For inngående dokumenter kan innholdet være f.eks. en servicebruker eller et batchnavn. */
   opprettetAvNavn: string | null;
+  /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder. */
   datoOpprettet: string;
   relevanteDatoer: IRelerendeDato[];
+  /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til NAV. Vil kun være satt for utgående forsendelser. */
   antallRetur: number | null;
+  /** Liste over fagspesifikke metadata som er tilknyttet journalpost. */
   tilleggsopplysninger: ITilleggsopplysning[];
+  /** Kanalen dokumentene ble mottatt i eller sendt ut på f.eks. "SENTRAL_UTSKRIFT" eller "ALTINN". Dersom journalposten ikke har noen kjent kanal, returneres verdien "UKJENT". */
   kanal: Kanal | null;
+  /** Dekode av Enum: Kanal, f.eks "Sentral utskrift" */
   kanalnavn: string | null;
+  /** Utsendingsinfo tilknyttet journalposten. Beskriver hvor forsendelsen er distribuert, eller hvor varsel er sendt. Settes kun for utgående journalposter. */
   utsendingsinfo: IUtsendingsinfo | null;
   alreadyUsed: boolean;
 }

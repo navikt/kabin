@@ -2,6 +2,7 @@ import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { Icon } from '@app/components/overstyringer/part-read/icon';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { getSakspartName } from '@app/domain/name';
 import { PartContent, PartTextContent, StyledContainer, StyledPartName, getState } from '../styled-components';
 import { Actions, ActionsProps } from './actions';
@@ -9,10 +10,20 @@ import { EnterEditModeCallback } from './types';
 
 export interface PartReadProps extends ActionsProps {
   children?: React.ReactNode;
+  error?: string;
 }
 
-export const PartRead = ({ label, part, gridArea, icon, children, ...rest }: PartReadProps & EnterEditModeCallback) => (
-  <StyledContainer $gridArea={gridArea} $state={getState(part)}>
+export const PartRead = ({
+  label,
+  part,
+  gridArea,
+  icon,
+  children,
+  partField,
+  error,
+  ...rest
+}: PartReadProps & EnterEditModeCallback) => (
+  <StyledContainer $gridArea={gridArea} $state={getState(part, error)} id={partField}>
     {icon}
     <PartContent>
       <PartTextContent>
@@ -20,9 +31,10 @@ export const PartRead = ({ label, part, gridArea, icon, children, ...rest }: Par
           {label}
         </Heading>
         <Content part={part}>{children}</Content>
+        <ValidationErrorMessage error={error} />
       </PartTextContent>
 
-      <Actions {...rest} part={part} label={label} gridArea={gridArea} icon={icon} />
+      <Actions {...rest} part={part} partField={partField} label={label} gridArea={gridArea} icon={icon} />
     </PartContent>
   </StyledContainer>
 );

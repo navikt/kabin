@@ -6,11 +6,14 @@ import styled from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument } from '@app/types/dokument';
+import { ValidationFieldNames } from '@app/types/validation';
 import { ColumnHeaders } from './column-headers';
 import { Dokument } from './document';
 import { useFilteredDocuments } from './filter-helpers';
@@ -20,6 +23,7 @@ export const Dokumenter = () => {
   const { data: dokumenter, isLoading } = useDokumenter(fnr);
   const { viewDokument } = useContext(DocumentViewerContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const error = useValidationError(ValidationFieldNames.JOURNALPOST_ID);
 
   useEffect(() => {
     if (typeof dokumenter === 'undefined') {
@@ -42,6 +46,7 @@ export const Dokumenter = () => {
         <Heading size="small" level="1">
           Velg journalpost
         </Heading>
+
         {journalpost === null ? null : (
           <StyledButton
             size="small"
@@ -52,6 +57,9 @@ export const Dokumenter = () => {
           />
         )}
       </Header>
+
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.JOURNALPOST_ID} />
+
       <Content dokumenter={dokumenter?.dokumenter} isLoading={isLoading} />
     </Card>
   );

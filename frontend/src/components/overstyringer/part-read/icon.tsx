@@ -1,4 +1,4 @@
-import { Buldings2Icon, PersonCrossIcon, PersonIcon } from '@navikt/aksel-icons';
+import { Buldings2Icon, PersonIcon, QuestionmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { AvsenderMottakerType, PartType } from '@app/types/common';
 
@@ -8,12 +8,12 @@ interface Props {
 
 export const Icon = ({ type = null }: Props) => {
   if (type === PartType.ORGNR) {
-    return <Buldings2Icon aria-hidden />;
+    return <Buldings2Icon aria-hidden fontSize={20} />;
   }
 
   if (type === PartType.FNR) {
-    return <PersonIcon aria-hidden />;
+    return <PersonIcon aria-hidden fontSize={20} />;
   }
 
-  return <PersonCrossIcon aria-hidden />;
+  return <QuestionmarkIcon aria-hidden fontSize={20} />;
 };

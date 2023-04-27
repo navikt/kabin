@@ -10,29 +10,26 @@ import { Type } from '@app/pages/create/api-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
-import { IApiErrorReponse, IApiValidationResponse, isApiError, isValidationResponse } from './error-type-guard';
+import { IApiValidationResponse } from '@app/types/validation';
+import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const useAnkeApiPayload = (): CreateAnkeApiPayload | null => {
   const { payload, type, journalpost } = useContext(ApiContext);
 
-  if (type !== Type.ANKE || payload.mulighet === null || journalpost === null) {
+  if (type !== Type.ANKE || journalpost === null) {
     return null;
   }
 
   const { mottattKlageinstans, fristInWeeks, klager, fullmektig, avsender: avsenderMottaker } = payload.overstyringer;
 
-  if (mottattKlageinstans === null || fristInWeeks === null) {
-    return null;
-  }
-
   return {
-    klagebehandlingId: payload.mulighet.behandlingId,
+    behandlingId: payload.mulighet === null ? null : payload.mulighet.behandlingId,
     mottattKlageinstans,
     fristInWeeks,
     klager: partToPartId(klager),
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
-    ankeDocumentJournalpostId: journalpost.journalpostId,
+    journalpostId: journalpost.journalpostId,
   };
 };
 
@@ -54,7 +51,7 @@ export const useCreateAnke = (
       const res = await createAnke(payload);
 
       if (res.ok) {
-        updateAnkemuligheter((data) => data?.filter((d) => d.behandlingId !== payload.klagebehandlingId));
+        updateAnkemuligheter((data) => data?.filter((d) => d.behandlingId !== payload.behandlingId));
 
         setError(undefined);
 

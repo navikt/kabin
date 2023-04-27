@@ -2,12 +2,12 @@ import { BodyShort, Label, Loader, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { ValidationFieldNames } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useCalculateFristdato } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
+import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditFrist = () => {
   const { type, payload, updatePayload } = useContext(ApiContext);
@@ -89,6 +89,7 @@ const StyledEditFrist = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
+  align-items: flex-start;
 `;
 
 const StyledFristdato = styled.div`

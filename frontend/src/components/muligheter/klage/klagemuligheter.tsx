@@ -10,10 +10,13 @@ import {
 } from '@app/components/muligheter/common/styled-components';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedKlagemulighet } from '@app/components/selected/selected-klagemulighet';
+import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { IKlagemulighet } from '@app/types/mulighet';
+import { ValidationFieldNames } from '@app/types/validation';
 import { Warning } from '../common/warning';
 import { Klagemulighet } from './klagemulighet';
 
@@ -22,6 +25,7 @@ export const Klagemuligheter = () => {
 
   const { data: klagemuligheter, isLoading } = useKlagemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
+  const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
   useEffect(() => {
     if (typeof klagemuligheter === 'undefined' && type === Type.KLAGE) {
@@ -59,7 +63,9 @@ export const Klagemuligheter = () => {
         )}
       </CardHeader>
 
-      <Warning mottattDate={journalpost?.datoOpprettet} vedtakDate={payload.mulighet?.vedtakDate} />
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+
+      <Warning mottattDate={journalpost?.registrert} vedtakDate={payload.mulighet?.vedtakDate} />
 
       <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
     </Card>
@@ -109,7 +115,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
         </StyledTableHeader>
         <Table.Body>
           {klagemuligheter.map((klagemulighet) => (
-            <Klagemulighet key={klagemulighet.sakId} mulighet={klagemulighet} />
+            <Klagemulighet key={klagemulighet.behandlingId} mulighet={klagemulighet} />
           ))}
         </Table.Body>
       </Table>
