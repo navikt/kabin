@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallStringName, useVedtaksenhetName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
@@ -28,9 +28,9 @@ interface RenderProps extends Props {
 }
 
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { sakId, temaId, utfall, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+  const { sakId, temaId, utfallId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
 
-  const utfallName = useUtfallStringName(utfall);
+  const utfallName = useUtfallName(utfallId);
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(fagsystemId);

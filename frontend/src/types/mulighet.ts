@@ -13,7 +13,7 @@ export interface IKlagemulighet extends IBasemulighet {
   sakId: string;
   temaId: string;
   klageBehandlendeEnhet: string;
-  utfall: string;
+  utfallId: UtfallEnum;
 }
 
 export interface IAnkeMulighet extends IBasemulighet {

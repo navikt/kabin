@@ -8,18 +8,6 @@ import {
 } from '@app/simple-api-state/use-kodeverk';
 import { UtfallEnum } from '@app/types/kodeverk';
 
-export const useUtfallStringName = (utfallId: string | UtfallEnum | null): string => {
-  const { data } = useUtfall();
-
-  return useMemo(() => {
-    if (utfallId === null || typeof data === 'undefined') {
-      return '';
-    }
-
-    return data.find(({ id }) => id === utfallId)?.navn ?? utfallId;
-  }, [data, utfallId]);
-};
-
 export const useUtfallName = (utfallId: UtfallEnum | null): string => {
   const { data } = useUtfall();
 

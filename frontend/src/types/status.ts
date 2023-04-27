@@ -25,5 +25,5 @@ export interface IAnkestatus extends IBaseStatus {
 export interface IKlagestatus extends IBaseStatus {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
-  utfall: string;
+  utfallId: UtfallEnum;
 }

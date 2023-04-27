@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
-import { useUtfallStringName, useYtelseName } from '@app/hooks/kodeverk';
+import { useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
 import { InfoItem, Part, Sak } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { IPart } from '@app/types/common';
@@ -12,14 +12,14 @@ interface Props {
   fagsystemId: string;
   sakenGjelder: IPart;
   title: string;
-  utfallId: UtfallEnum | string;
+  utfallId: UtfallEnum;
   vedtakDate: string;
   ytelseId: string;
 }
 
 export const Mulighet = ({ title, sakenGjelder, ytelseId, utfallId, vedtakDate, fagsystemId, fagsakId }: Props) => {
   const ytelse = useYtelseName(ytelseId);
-  const utfall = useUtfallStringName(utfallId);
+  const utfall = useUtfallName(utfallId);
 
   return (
     <StyledCard title={title} $gridArea="mulighet" titleSize="medium">
