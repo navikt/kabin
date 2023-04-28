@@ -121,7 +121,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
         type,
         payload: klage,
         updatePayload: (newPayload) => updateKlage(getUpdatedKlageState(klage, newPayload)),
-        errors: removeErrorsOnMulighetChange(klageErrors),
+        errors: klageErrors,
         setErrors: setKlageErrors,
       };
     case Type.ANKE:
@@ -130,7 +130,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
         type,
         payload: anke,
         updatePayload: (newPayload) => updateAnke(getUpdatedAnkeState(anke, newPayload)),
-        errors: removeErrorsOnMulighetChange(ankeErrors),
+        errors: ankeErrors,
         setErrors: setAnkeErrors,
       };
   }
