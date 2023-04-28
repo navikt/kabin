@@ -4,7 +4,7 @@ import { SelectMulighet } from '@app/components/muligheter/common/select-button'
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useVedtaksenhetName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
@@ -16,7 +16,6 @@ interface Props {
 export const Klagemulighet = ({ mulighet }: Props) => {
   const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
 
-  const utfallName = useUtfallName(mulighet.utfallId);
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
@@ -48,7 +47,6 @@ export const Klagemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{mulighet.behandlingId}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
-      <Table.DataCell>{utfallName}</Table.DataCell>
       <Table.DataCell>{vedtaksenhetName}</Table.DataCell>
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>

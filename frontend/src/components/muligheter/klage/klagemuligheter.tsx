@@ -106,7 +106,6 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
             <Table.HeaderCell>Saks-ID</Table.HeaderCell>
             <Table.HeaderCell>Tema</Table.HeaderCell>
             <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-            <Table.HeaderCell>Utfall</Table.HeaderCell>
             <Table.HeaderCell>Behandlende enhet</Table.HeaderCell>
             <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
             <Table.HeaderCell>Fagsystem</Table.HeaderCell>
