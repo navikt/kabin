@@ -10,7 +10,7 @@ import { ValidationFieldNames } from '@app/types/validation';
 export const EditMottattVedtaksinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
 
-  if (type !== Type.KLAGE || journalpost === null || payload.mulighet === null) {
+  if (type !== Type.KLAGE || journalpost === null) {
     return null;
   }
 
@@ -18,7 +18,7 @@ export const EditMottattVedtaksinstans = () => {
     <RenderEditMottattNAV
       value={payload.overstyringer.mottattVedtaksinstans}
       toDate={journalpost.registrert}
-      fromDate={payload.mulighet.vedtakDate}
+      fromDate={null}
     />
   );
 };

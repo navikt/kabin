@@ -1,9 +1,8 @@
 import { Table } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
@@ -14,16 +13,11 @@ interface Props {
 }
 
 export const Klagemulighet = ({ mulighet }: Props) => {
-  const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
+  const { type, updatePayload, payload } = useContext(ApiContext);
 
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
-
-  const isInvalid = useMemo(
-    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
-    [journalpost, mulighet.vedtakDate]
-  );
 
   const isSelected = type === Type.KLAGE && payload.mulighet?.behandlingId === mulighet.behandlingId;
 
@@ -31,19 +25,15 @@ export const Klagemulighet = ({ mulighet }: Props) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (isInvalid) {
-        return;
-      }
-
       if (type === Type.KLAGE && payload.mulighet !== mulighet) {
         updatePayload({ mulighet });
       }
     },
-    [isInvalid, mulighet, payload?.mulighet, type, updatePayload]
+    [mulighet, payload?.mulighet, type, updatePayload]
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectKlage} $isInvalid={isInvalid} $isSelected={isSelected}>
+    <StyledTableRow selected={isSelected} onClick={selectKlage} $isInvalid={false} $isSelected={isSelected}>
       <Table.DataCell>{mulighet.behandlingId}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
@@ -51,7 +41,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectKlage} isInvalid={isInvalid} />
+        <SelectMulighet isSelected={isSelected} select={selectKlage} isInvalid={false} />
       </StyledButtonCell>
     </StyledTableRow>
   );
