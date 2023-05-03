@@ -17,11 +17,10 @@ import { Type } from '@app/pages/create/api-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Warning } from '../common/warning';
 import { Klagemulighet } from './klagemulighet';
 
 export const Klagemuligheter = () => {
-  const { type, payload, updatePayload, fnr, journalpost } = useContext(ApiContext);
+  const { type, payload, updatePayload, fnr } = useContext(ApiContext);
 
   const { data: klagemuligheter, isLoading } = useKlagemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -65,8 +64,6 @@ export const Klagemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning mottattDate={journalpost?.registrert} vedtakDate={payload.mulighet?.vedtakDate} />
-
       <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
     </Card>
   );
@@ -105,7 +102,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
           <Table.Row>
             <Table.HeaderCell>Saks-ID</Table.HeaderCell>
             <Table.HeaderCell>Tema</Table.HeaderCell>
-            <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
+            <Table.HeaderCell>Vedtak/innstilling</Table.HeaderCell>
             <Table.HeaderCell>Behandlende enhet</Table.HeaderCell>
             <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
             <Table.HeaderCell>Fagsystem</Table.HeaderCell>
