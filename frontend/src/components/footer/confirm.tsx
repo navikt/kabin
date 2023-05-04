@@ -90,6 +90,6 @@ const getText = (type: Type.KLAGE | Type.ANKE) => {
     case Type.ANKE:
       return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av anken.';
     case Type.KLAGE:
-      return 'Du fullfører nå registrering av klagen. Klagen blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
+      return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
   }
 };
