@@ -1,43 +1,27 @@
-import { ArrowUndoIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
 import { editTitle } from '@app/api/api';
 import { isApiError } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 
 interface Props {
-  show: boolean;
-  toggleEditMode: () => void;
+  exitEditMode: () => void;
+  dokumentInfoId: string;
+  journalpostId: string;
+  title: string;
 }
 
-export const EditTitle = ({ show, toggleEditMode }: Props) => {
-  const { dokument } = useContext(DocumentViewerContext);
-
-  if (!show || dokument === null) {
-    return null;
-  }
-
-  return <EditLoadedTitle toggleEditMode={toggleEditMode} dokument={dokument} />;
-};
-
-interface EditLoadedTitleProps {
-  toggleEditMode: () => void;
-  dokument: IViewedDocument;
-}
-
-const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => {
+export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }: Props) => {
   const { viewDokument } = useContext(DocumentViewerContext);
   const { fnr, setJournalpost } = useContext(ApiContext);
 
   const { updateData: updateDokumenter } = useDokumenter(fnr);
-
-  const { tittel: title, dokumentInfoId, journalpostId } = dokument;
 
   const [newTitle, setNewTitle] = useState(title ?? '');
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +43,7 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
           return { ...journalpost, tittel: newTitle };
         });
 
-        viewDokument({ ...dokument, tittel: newTitle });
+        viewDokument({ tittel: newTitle, journalpostId, dokumentInfoId });
 
         updateDokumenter((data) =>
           data === undefined
@@ -93,36 +77,27 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
     }
 
     setIsLoading(false);
-    toggleEditMode();
-  }, [
-    toggleEditMode,
-    newTitle,
-    journalpostId,
-    dokumentInfoId,
-    viewDokument,
-    dokument,
-    updateDokumenter,
-    setJournalpost,
-  ]);
+    exitEditMode();
+  }, [exitEditMode, newTitle, journalpostId, dokumentInfoId, viewDokument, updateDokumenter, setJournalpost]);
 
   const isChanged = title !== newTitle;
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
-        isChanged ? onSaveClick() : toggleEditMode();
+        isChanged ? onSaveClick() : exitEditMode();
       }
 
       if (e.key === 'Escape') {
-        toggleEditMode();
+        exitEditMode();
       }
     },
-    [isChanged, onSaveClick, toggleEditMode]
+    [isChanged, onSaveClick, exitEditMode]
   );
 
   return (
     <>
-      <StyledTextField
+      <TextField
         value={newTitle}
         onChange={({ target }) => setNewTitle(target.value)}
         label="Endre tittel"
@@ -133,17 +108,23 @@ const EditLoadedTitle = ({ toggleEditMode, dokument }: EditLoadedTitleProps) => 
       />
       <Button
         variant="tertiary"
-        size="small"
-        icon={<CheckmarkCircleIcon title="Lagre" />}
-        onClick={isChanged ? onSaveClick : toggleEditMode}
+        size="xsmall"
+        icon={<CheckmarkIcon title="Lagre" />}
+        onClick={(e) => {
+          e.stopPropagation();
+          isChanged ? onSaveClick() : exitEditMode();
+        }}
         loading={isLoading}
       />
-      <Button variant="tertiary" size="small" icon={<ArrowUndoIcon title="Avbryt" />} onClick={toggleEditMode} />
+      <Button
+        variant="tertiary"
+        size="xsmall"
+        icon={<ArrowUndoIcon title="Avbryt" />}
+        onClick={(e) => {
+          e.stopPropagation();
+          exitEditMode();
+        }}
+      />
     </>
   );
 };
-
-const StyledTextField = styled(TextField)`
-  width: 100%;
-  flex-grow: 1;
-`;
