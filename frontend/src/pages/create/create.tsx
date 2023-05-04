@@ -10,7 +10,7 @@ import { useDokumenter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { ApiContextState } from './api-context/api-context';
 import { DocumentViewerContextState } from './document-viewer-context';
-import { TypeInput } from './type-input';
+import { TypeInput, TypeSelect } from './type-input';
 
 export const CreatePage = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -53,6 +53,7 @@ const CreatePageLoader = ({ isLoading, isInitialized }: LoaderProps) => {
     <DocumentViewerContextState>
       <LeftColumn>
         <Dokumenter />
+        <TypeSelect />
         <TypeInput />
       </LeftColumn>
       <RightColumn>
