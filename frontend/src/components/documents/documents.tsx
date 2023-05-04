@@ -136,7 +136,7 @@ const Content = ({ dokumenter, isLoading }: ContentProps) => {
   }
 
   if (dokumenter.length === 0) {
-    <BodyShort>Ingen journalposter</BodyShort>;
+    return <BodyShort>Ingen journalposter</BodyShort>;
   }
 
   return <DocumentTable dokumenter={dokumenter} />;
@@ -148,7 +148,6 @@ const StyledList = styled.ul`
   margin: 0;
   flex-grow: 1;
   overflow-y: auto;
-  max-height: 350px;
 `;
 
 const StyledButton = styled(Button)`

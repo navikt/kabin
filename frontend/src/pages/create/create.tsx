@@ -101,7 +101,7 @@ const Column = styled.div`
 const LeftColumn = styled(Column)`
   grid-area: left;
   width: fit-content;
-  width: 1100px;
+  width: 1150px;
   overflow-y: auto;
   overflow-x: auto;
   padding-left: 16px;

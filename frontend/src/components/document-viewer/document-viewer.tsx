@@ -3,9 +3,9 @@ import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CardFullHeight } from '@app/components/card/card';
+import { getDocumentUrl } from '@app/components/documents/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
-import { KABIN_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { DocumentTitle } from './document-title';
 
 const DEFAULT_NAME = '<Mangler navn>';
@@ -31,7 +31,7 @@ const Content = ({ dokument }: { dokument: IViewedDocument | null }) => {
     );
   }
 
-  const url = `${KABIN_API_BASE_PATH}/journalposter/${dokument.journalpostId}/dokumenter/${dokument.dokumentInfoId}/pdf`;
+  const url = getDocumentUrl(dokument.journalpostId, dokument.dokumentInfoId);
 
   return (
     <>
@@ -54,6 +54,7 @@ const PDF = ({ url, tittel }: PDFProps) => (
       role="document"
       type="application/pdf"
       name={tittel ?? DEFAULT_NAME}
+      id="document-viewer"
     />
   </>
 );
