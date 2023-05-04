@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React, { createContext, useCallback, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { FORMAT } from '@app/domain/date-formats';
 import { compareMuligheter } from '@app/domain/mulighet';
 import { skipToken } from '@app/types/common';
@@ -79,6 +79,8 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
     INITIAL_KLAGE
   );
   const [anke, updateAnke, ankeErrors, setAnkeErrors] = useApiContext<IAnkeStateUpdate, IAnkeState>(INITIAL_ANKE);
+
+  useEffect(() => setType(Type.NONE), [fnr]);
 
   const setJournalpost: IApiContext['setJournalpost'] = useCallback(
     (newJournalpost) => {
