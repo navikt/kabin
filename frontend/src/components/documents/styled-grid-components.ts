@@ -8,6 +8,7 @@ export enum GridArea {
   AVSENDER_MOTTAKER = 'avsenderMottaker',
   SAKS_ID = 'saksId',
   TYPE = 'type',
+  VIEW = 'view',
   SELECT = 'select',
 }
 
@@ -18,14 +19,20 @@ const gridTemplateAreas = [
   GridArea.AVSENDER_MOTTAKER,
   GridArea.SAKS_ID,
   GridArea.TYPE,
+  GridArea.VIEW,
   GridArea.SELECT,
 ];
 
-export const StyledGrid = styled.div`
+export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   display: grid;
-  grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 55px;
+  grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
   grid-template-areas: '${gridTemplateAreas.join(' ')}';
   grid-gap: 16px;
+  background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-100)' : 'transparent')};
+
+  :hover {
+    background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-200)' : 'transparent')};
+  }
 `;
 
 interface GridAreaProps {

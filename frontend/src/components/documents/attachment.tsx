@@ -1,8 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { IArkivertDocument, IVedlegg } from '@app/types/dokument';
 import { DocumentTitle } from './document-title';
+import { useViewDocument } from './use-view-document';
+import { ViewDocumentButton } from './view-document-button';
 
 interface Props {
   dokument: IArkivertDocument;
@@ -10,45 +11,49 @@ interface Props {
 }
 
 export const Attachment = ({ vedlegg, dokument }: Props) => {
-  const { setJournalpost } = useContext(ApiContext);
-  const { journalpostId } = dokument;
-  const { dokumentInfoId, tittel = 'Ukjent dokumentnavn' } = vedlegg;
-
-  const selectVedlegg = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-
-      if (dokument.harTilgangTilArkivvariant && !dokument.alreadyUsed) {
-        setJournalpost(dokument);
-
-        return;
-      }
-
-      setJournalpost(null);
-    },
-    [dokument, setJournalpost]
-  );
+  const { journalpostId, harTilgangTilArkivvariant } = dokument;
+  const { dokumentInfoId, tittel } = vedlegg;
+  const [viewDokument, isViewed] = useViewDocument({
+    dokumentInfoId,
+    journalpostId,
+    tittel,
+    harTilgangTilArkivvariant,
+  });
 
   return (
     <StyledAttachmentListItem
-      onClick={selectVedlegg}
+      onMouseDown={viewDokument}
       data-testid="document-vedlegg-list-item"
       data-documentname={vedlegg.tittel}
+      $isViewed={isViewed}
     >
       <DocumentTitle
         journalpostId={journalpostId}
         dokumentInfoId={dokumentInfoId}
-        tittel={tittel ?? ''}
-        harTilgangTilArkivvariant={vedlegg.harTilgangTilArkivvariant}
+        tittel={tittel ?? 'Ukjent dokumentnavn'}
+      />
+      <ViewDocumentButton
+        dokumentInfoId={dokumentInfoId}
+        journalpostId={journalpostId}
+        harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+        tittel={tittel}
       />
     </StyledAttachmentListItem>
   );
 };
 
-const StyledAttachmentListItem = styled.li`
-  display: flex;
+const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
+  display: grid;
   position: relative;
   padding-left: 12px;
+  grid-template-columns: 1fr 30px 55px;
+  grid-template-areas: 'title view select';
+  gap: 16px;
+  background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-100)' : 'transparent')};
+
+  :hover {
+    background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-200)' : 'transparent')};
+  }
 
   &::before {
     content: '';
