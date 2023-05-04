@@ -14,28 +14,20 @@ export const EditMottattVedtaksinstans = () => {
     return null;
   }
 
-  return (
-    <RenderEditMottattNAV
-      value={payload.overstyringer.mottattVedtaksinstans}
-      toDate={journalpost.registrert}
-      fromDate={null}
-    />
-  );
+  return <RenderEditMottattNAV value={payload.overstyringer.mottattVedtaksinstans} toDate={journalpost.registrert} />;
 };
 
 interface Props {
   value: string | null;
   toDate: string | null;
-  fromDate: string | null;
 }
 
-const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
+const RenderEditMottattNAV = ({ value, toDate }: Props) => {
   const { type, updatePayload } = useContext(ApiContext);
   const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
 
   const parsedValue = useMemo(() => (value === null ? undefined : parseISO(value)), [value]);
   const parsedToDate = useMemo(() => (toDate === null ? undefined : parseISO(toDate)), [toDate]);
-  const parsedFromDate = useMemo(() => (fromDate === null ? undefined : parseISO(fromDate)), [fromDate]);
 
   const onChange = useCallback(
     (mottattVedtaksinstans: string | null) => {
@@ -56,7 +48,6 @@ const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
         value={parsedValue}
         size="small"
         toDate={parsedToDate}
-        fromDate={parsedFromDate}
         id={ValidationFieldNames.MOTTATT_VEDTAKSINSTANS}
         error={error}
       />
