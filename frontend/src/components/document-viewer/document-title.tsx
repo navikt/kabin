@@ -1,31 +1,19 @@
-import { ExternalLinkIcon, PencilIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { usePrevious } from '@app/hooks/use-previous';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
-import { EditTitle } from './edit-document-title';
 
 interface Props {
   url: string;
 }
 
 export const DocumentTitle = ({ url }: Props) => {
-  const [editMode, setEditMode] = useState(false);
   const { dokument } = useContext(DocumentViewerContext);
-  const previous = usePrevious(dokument);
-
-  useEffect(() => {
-    if (dokument !== previous) {
-      setEditMode(false);
-    }
-  }, [dokument, previous]);
 
   if (dokument === null) {
     return null;
   }
-
-  const toggleEditMode = () => setEditMode(!editMode);
 
   return (
     <StyledDocumentTitle>
@@ -38,36 +26,10 @@ export const DocumentTitle = ({ url }: Props) => {
         target="_blank"
         rel="noreferrer"
       />
-      <ViewTitle show={!editMode} toggleEditMode={toggleEditMode} />
-      <EditTitle show={editMode} toggleEditMode={toggleEditMode} />
-    </StyledDocumentTitle>
-  );
-};
-
-interface TitleProps {
-  show: boolean;
-  toggleEditMode: () => void;
-}
-
-const ViewTitle = ({ show, toggleEditMode }: TitleProps) => {
-  const { dokument } = useContext(DocumentViewerContext);
-
-  if (!show) {
-    return null;
-  }
-
-  return (
-    <>
       <StyledHeading size="small" level="1">
         {dokument?.tittel ?? ''}
       </StyledHeading>
-      <Button
-        variant="tertiary"
-        icon={<PencilIcon title="Endre dokumenttittel" />}
-        size="small"
-        onClick={toggleEditMode}
-      />
-    </>
+    </StyledDocumentTitle>
   );
 };
 
