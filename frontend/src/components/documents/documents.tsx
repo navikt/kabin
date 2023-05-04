@@ -3,7 +3,7 @@ import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
-import { Card } from '@app/components/card/card';
+import { CardMedium } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -41,7 +41,7 @@ export const Dokumenter = () => {
   }
 
   return (
-    <Card>
+    <CardMedium>
       <Header>
         <Heading size="small" level="1">
           Velg journalpost
@@ -61,7 +61,7 @@ export const Dokumenter = () => {
       <ValidationErrorMessage error={error} id={ValidationFieldNames.JOURNALPOST_ID} />
 
       <Content dokumenter={dokumenter?.dokumenter} isLoading={isLoading} />
-    </Card>
+    </CardMedium>
   );
 };
 
@@ -161,4 +161,5 @@ const StyledButton = styled(Button)`
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
+  min-height: 32px;
 `;

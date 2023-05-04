@@ -2,7 +2,7 @@ import { DocPencilIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Card } from '@app/components/card/card';
+import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';
 import {
@@ -38,18 +38,18 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
 
   if (type === Type.NONE || payload.mulighet === null) {
     return (
-      <Card title={title}>
+      <CardLarge title={title}>
         <Placeholder>
           <DocPencilIcon aria-hidden />
         </Placeholder>
-      </Card>
+      </CardLarge>
     );
   }
 
   const { overstyringer, mulighet } = payload;
 
   return (
-    <Card title={title}>
+    <CardLarge title={title}>
       <Content>
         <TopRow>
           <EditMottattVedtaksinstans />
@@ -100,7 +100,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
         <Avsender />
         <Klageoverstyringer />
       </Content>
-    </Card>
+    </CardLarge>
   );
 };
 

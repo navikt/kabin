@@ -1,7 +1,7 @@
 import { ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Loader, Table } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Card } from '@app/components/card/card';
+import { CardSmall } from '@app/components/card/card';
 import {
   CardHeader,
   StyledButton,
@@ -43,7 +43,7 @@ export const Ankemuligheter = () => {
   }
 
   return (
-    <Card>
+    <CardSmall>
       <CardHeader>
         <Heading level="1" size="small">
           Velg vedtaket anken gjelder
@@ -65,7 +65,7 @@ export const Ankemuligheter = () => {
       <Warning mottattDate={journalpost?.registrert} vedtakDate={payload.mulighet?.vedtakDate} />
 
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
-    </Card>
+    </CardSmall>
   );
 };
 
