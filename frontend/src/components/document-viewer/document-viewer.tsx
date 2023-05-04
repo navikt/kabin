@@ -2,7 +2,7 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Card } from '@app/components/card/card';
+import { CardFullHeight } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
 import { KABIN_API_BASE_PATH } from '@app/simple-api-state/use-api';
@@ -14,11 +14,11 @@ export const DocumentViewer = () => {
   const { dokument } = useContext(DocumentViewerContext);
 
   return (
-    <Card fullHeight>
+    <CardFullHeight>
       <Container>
         <Content dokument={dokument} />
       </Container>
-    </Card>
+    </CardFullHeight>
   );
 };
 

@@ -1,7 +1,7 @@
 import { ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Loader, Table } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Card } from '@app/components/card/card';
+import { CardSmall } from '@app/components/card/card';
 import {
   CardHeader,
   StyledButton,
@@ -45,7 +45,7 @@ export const Klagemuligheter = () => {
   }
 
   return (
-    <Card>
+    <CardSmall>
       <CardHeader>
         <Heading level="1" size="small">
           Velg vedtaket klagen gjelder
@@ -65,7 +65,7 @@ export const Klagemuligheter = () => {
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
       <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
-    </Card>
+    </CardSmall>
   );
 };
 

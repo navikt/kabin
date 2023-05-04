@@ -4,11 +4,11 @@ import styled from 'styled-components';
 export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  min-height: 32px;
 `;
 
 export const TableContainer = styled.div<{ $showShadow: boolean }>`
   overflow-y: auto;
-  max-height: 200px;
 
   ::after {
     position: absolute;
