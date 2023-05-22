@@ -77,7 +77,12 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
 
   const mulighet = hasAnkemulighet ? updateMulighet : state.mulighet;
 
-  const { klager, fullmektig, saksbehandlerIdent: saksbehandlerId, ...rest } = update.overstyringer ?? {};
+  const {
+    klager,
+    fullmektig,
+    saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
+    ...rest
+  } = update.overstyringer ?? {};
 
   return {
     mulighet,
@@ -86,7 +91,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
       ...rest,
       klager: getPart(ankemulighetIsDifferent, mulighet?.klager, klager, state.overstyringer.klager),
       fullmektig: getPart(ankemulighetIsDifferent, mulighet?.fullmektig, fullmektig, state.overstyringer.fullmektig),
-      saksbehandlerIdent: ankemulighetIsDifferent ? null : saksbehandlerId ?? null,
+      saksbehandlerIdent: ankemulighetIsDifferent ? null : saksbehandlerIdent,
     },
   };
 };
@@ -115,7 +120,7 @@ export const getUpdatedKlageState = (
     klager,
     fullmektig,
     hjemmelIdList,
-    saksbehandlerIdent: saksbehandlerId,
+    saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
     ...rest
   } = update.overstyringer ?? {};
 
@@ -127,7 +132,7 @@ export const getUpdatedKlageState = (
       klager: getPart(klagemulighetIsDifferent, null, klager, state.overstyringer.klager),
       fullmektig: getPart(klagemulighetIsDifferent, null, fullmektig, state.overstyringer.fullmektig),
       hjemmelIdList: hjemmelIdList?.filter(isNotUndefined) ?? state.overstyringer.hjemmelIdList,
-      saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerId ?? null,
+      saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
     },
   };
 };
