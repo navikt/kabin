@@ -11,6 +11,7 @@ export const FIELD_NAMES: Record<ValidationFieldNames, string> = {
   [ValidationFieldNames.BEHANDLING_ID]: 'Vedtak',
   [ValidationFieldNames.JOURNALPOST_ID]: 'Journalpost',
   [ValidationFieldNames.FULLMEKTIG]: 'Fullmektig',
+  [ValidationFieldNames.SAKSBEHANDLER]: 'Saksbehandler',
 };
 
 export const useFieldName = (field: ValidationFieldNames) => FIELD_NAMES[field] ?? field;

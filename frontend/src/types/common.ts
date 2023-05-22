@@ -38,3 +38,8 @@ export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
 }
+
+export interface ISaksbehandler {
+  navIdent: string;
+  navn: string;
+}

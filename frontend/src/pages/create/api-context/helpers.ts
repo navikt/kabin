@@ -66,7 +66,6 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
   const update = typeof newState === 'function' ? newState(state) : newState;
 
   const updateMulighet = update.mulighet;
-
   const hasAnkemulighet = typeof updateMulighet !== 'undefined';
   const ankemulighetIsDifferent = hasAnkemulighet && !muligheterAreEqual(updateMulighet, state.mulighet);
 
@@ -78,7 +77,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
 
   const mulighet = hasAnkemulighet ? updateMulighet : state.mulighet;
 
-  const { klager, fullmektig, ...rest } = update.overstyringer ?? {};
+  const { klager, fullmektig, saksbehandlerIdent: saksbehandlerId, ...rest } = update.overstyringer ?? {};
 
   return {
     mulighet,
@@ -87,6 +86,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
       ...rest,
       klager: getPart(ankemulighetIsDifferent, mulighet?.klager, klager, state.overstyringer.klager),
       fullmektig: getPart(ankemulighetIsDifferent, mulighet?.fullmektig, fullmektig, state.overstyringer.fullmektig),
+      saksbehandlerIdent: ankemulighetIsDifferent ? null : saksbehandlerId ?? null,
     },
   };
 };
@@ -101,13 +101,23 @@ export const getUpdatedKlageState = (
   const hasKlagemulighet = typeof updateMulighet !== 'undefined';
   const klagemulighetIsDifferent = hasKlagemulighet && !muligheterAreEqual(updateMulighet, state.mulighet);
 
+  const updateYtelse = update.overstyringer?.ytelseId;
+  const hasYtelse = typeof updateYtelse !== 'undefined';
+  const ytelseIsDifferent = hasYtelse && updateYtelse !== state.overstyringer.ytelseId;
+
   cleanObject(update.overstyringer);
 
   if (hasKlagemulighet) {
     cleanObject(updateMulighet);
   }
 
-  const { klager, fullmektig, hjemmelIdList, ...rest } = update.overstyringer ?? {};
+  const {
+    klager,
+    fullmektig,
+    hjemmelIdList,
+    saksbehandlerIdent: saksbehandlerId,
+    ...rest
+  } = update.overstyringer ?? {};
 
   return {
     mulighet: hasKlagemulighet ? updateMulighet ?? null : state.mulighet,
@@ -117,6 +127,7 @@ export const getUpdatedKlageState = (
       klager: getPart(klagemulighetIsDifferent, null, klager, state.overstyringer.klager),
       fullmektig: getPart(klagemulighetIsDifferent, null, fullmektig, state.overstyringer.fullmektig),
       hjemmelIdList: hjemmelIdList?.filter(isNotUndefined) ?? state.overstyringer.hjemmelIdList,
+      saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerId ?? null,
     },
   };
 };

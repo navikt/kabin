@@ -5,6 +5,7 @@ import {
   ParagraphIcon,
   PersonCheckmarkIcon,
   PersonGroupIcon,
+  PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
 import styled, { css } from 'styled-components';
 
@@ -35,6 +36,11 @@ export const StyledFullmektigIcon = styled(FullmektigIcon)`
 
 export const AvsenderIcon = EnvelopeClosedIcon;
 export const StyledAvsenderIcon = styled(AvsenderIcon)`
+  ${iconCss}
+`;
+
+const SaksbehandlerIcon = PersonHeadsetIcon;
+export const StyledSaksbehandlerIcon = styled(SaksbehandlerIcon)`
   ${iconCss}
 `;
 

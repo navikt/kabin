@@ -1,5 +1,5 @@
 import { ISignatureResponse, IUserData } from '@app/types/bruker';
-import { IPart, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
@@ -106,3 +106,20 @@ export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof 
       ? skipToken
       : calculateFristdatoState({ path: '' }, { fromDate: params.fromDate, fristInWeeks: params.fristInWeeks })
   );
+
+interface ISaksbehandlereResponse {
+  saksbehandlere: ISaksbehandler[];
+}
+
+export interface ISaksbehandlerParams extends Record<string, unknown> {
+  ytelseId: string;
+  fnr: string;
+}
+
+const saksbehandlereState = getStateFactory<ISaksbehandlereResponse, void>(
+  `${INNSTILLINGER_BASE_PATH}/search/saksbehandlere`,
+  { method: 'POST' }
+);
+
+export const useSaksbehandlere = (params: ISaksbehandlerParams | typeof skipToken) =>
+  useSimpleApiState(params === skipToken ? skipToken : saksbehandlereState({ path: '' }, params));

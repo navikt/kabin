@@ -6,7 +6,7 @@ import { Type } from '@app/pages/create/api-context/types';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Part } from './part';
-import { FieldNames, GridArea } from './types';
+import { FieldNames } from './types';
 
 export const Avsender = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
@@ -24,7 +24,6 @@ export const Avsender = () => {
 
   return (
     <Part
-      gridArea={GridArea.AVSENDER}
       partField={FieldNames.AVSENDER}
       part={overstyringer.avsender}
       label="Avsender"

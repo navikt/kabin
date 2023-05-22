@@ -1,15 +1,12 @@
-import { ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon, ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
-import { getSakspartName } from '@app/domain/name';
+import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
 import { ENVIRONMENT } from '@app/environment';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
-import { IAvsenderMottaker, IPart } from '@app/types/common';
 import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
@@ -57,9 +54,12 @@ export const Sak = ({ sak }: SakProps) => {
         {sak === null ? (
           'Ingen'
         ) : (
-          <CopyToClipboard copyText={sak.fagsakId} popoverText="Kopiert" size="xsmall" iconPosition="right">
-            {sak.fagsakId}
-          </CopyToClipboard>
+          <StyledCopyButton
+            copyText={sak.fagsakId}
+            size="small"
+            activeIcon={<CheckmarkIcon aria-hidden />}
+            text={sak.fagsakId}
+          />
         )}
       </InfoItem>
     </StyledSak>
@@ -73,7 +73,7 @@ const StyledSak = styled.div`
 
 interface PartProps {
   title: string;
-  part: IPart | IAvsenderMottaker | null;
+  part: { id: string; name?: string | null } | null;
 }
 
 export const Part = ({ part, title }: PartProps) => {
@@ -88,8 +88,8 @@ export const Part = ({ part, title }: PartProps) => {
   return (
     <InfoItem label={title}>
       <StyledPart>
-        <span>{getSakspartName(part) ?? 'Navn mangler'}</span>
-        <CopyPartIdButton part={part} />
+        <span>{part.name ?? 'Navn mangler'}</span>
+        <CopyPartIdButton id={part.id} />
       </StyledPart>
     </InfoItem>
   );

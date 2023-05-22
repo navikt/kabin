@@ -23,7 +23,6 @@ export const PartWrite = ({
   part,
   partField,
   label,
-  gridArea,
   exitEditMode,
   icon,
   error: validationError,
@@ -74,7 +73,7 @@ export const PartWrite = ({
   };
 
   return (
-    <StyledContainer $gridArea={gridArea} $state={part === null ? States.UNSET : States.SET}>
+    <StyledContainer $state={part === null ? States.UNSET : States.SET}>
       {icon}
       <PartContent>
         <StyledPartSearch>

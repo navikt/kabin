@@ -20,7 +20,14 @@ const useAnkeApiPayload = (): CreateAnkeApiPayload | null => {
     return null;
   }
 
-  const { mottattKlageinstans, fristInWeeks, klager, fullmektig, avsender: avsenderMottaker } = payload.overstyringer;
+  const {
+    mottattKlageinstans,
+    fristInWeeks,
+    klager,
+    fullmektig,
+    avsender: avsenderMottaker,
+    saksbehandlerIdent,
+  } = payload.overstyringer;
 
   return {
     behandlingId: payload.mulighet === null ? null : payload.mulighet.behandlingId,
@@ -30,6 +37,7 @@ const useAnkeApiPayload = (): CreateAnkeApiPayload | null => {
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId: journalpost.journalpostId,
+    saksbehandlerIdent,
   };
 };
 

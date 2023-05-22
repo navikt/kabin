@@ -13,6 +13,7 @@ import {
   StyledSakenGjelderIcon,
 } from '@app/components/overstyringer/icons';
 import { Klageoverstyringer } from '@app/components/overstyringer/klageoverstyringer';
+import { Tildeling } from '@app/components/overstyringer/tildeling';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -23,7 +24,7 @@ import { EditFrist } from './edit-frist';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
 import { PartRead } from './part-read/part-read';
-import { FieldNames, GridArea } from './types';
+import { FieldNames } from './types';
 
 interface Props {
   title: string;
@@ -50,22 +51,22 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
 
   return (
     <CardLarge title={title}>
-      <Content>
+      <Header>
         <TopRow>
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
           <EditFrist />
         </TopRow>
-        <StyledHeading size="small">Parter</StyledHeading>
+      </Header>
+      <Label size="small">Parter</Label>
+      <Content>
         <PartRead
-          gridArea={GridArea.SAKEN_GJELDER}
           partField={FieldNames.SAKEN_GJELDER}
           part={mulighet.sakenGjelder}
           label="Saken gjelder"
           icon={<StyledSakenGjelderIcon aria-hidden />}
         />
         <Part
-          gridArea={GridArea.KLAGER}
           partField={FieldNames.KLAGER}
           part={overstyringer.klager}
           label={klagerLabel}
@@ -81,7 +82,6 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           ]}
         />
         <Part
-          gridArea={GridArea.FULLMEKTIG}
           partField={FieldNames.FULLMEKTIG}
           part={overstyringer.fullmektig}
           label="Fullmektig"
@@ -97,33 +97,27 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
             },
           ]}
         />
-        <Avsender />
+        {type === Type.ANKE ? <Tildeling /> : <Avsender />}
         <Klageoverstyringer />
+        {type === Type.KLAGE ? <Tildeling /> : null}
       </Content>
     </CardLarge>
   );
 };
 
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const TopRow = styled.div`
   display: grid;
   column-gap: 8px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-area: toprow;
 `;
 
 const Content = styled.div`
   display: grid;
-  grid-template-areas:
-    'toprow toprow'
-    'title title'
-    '${GridArea.SAKEN_GJELDER} ${GridArea.KLAGER}'
-    '${GridArea.FULLMEKTIG} ${GridArea.AVSENDER}'
-    'ytelse hjemmel';
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto auto;
   gap: 8px;
-`;
-
-const StyledHeading = styled(Label)`
-  grid-area: title;
 `;

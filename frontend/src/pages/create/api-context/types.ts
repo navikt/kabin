@@ -18,6 +18,7 @@ interface IKlageOverstyringer {
   avsender: IPart | null;
   ytelseId: string | null;
   hjemmelIdList: string[];
+  saksbehandlerIdent: string | null;
 }
 
 export interface IKlageState extends IKlageStateUpdate {
@@ -31,6 +32,7 @@ interface IAnkeOverstyringer {
   klager: IPart | null;
   mottattKlageinstans: string | null; // LocalDate
   avsender: IPart | null;
+  saksbehandlerIdent: string | null;
 }
 
 export interface IAnkeState extends IAnkeStateUpdate {

@@ -27,6 +27,7 @@ const useKlageApiPayload = (): CreateKlageApiPayload | null => {
     klager,
     fullmektig,
     avsender: avsenderMottaker,
+    saksbehandlerIdent,
   } = payload.overstyringer;
 
   return {
@@ -40,6 +41,7 @@ const useKlageApiPayload = (): CreateKlageApiPayload | null => {
     journalpostId: journalpost.journalpostId,
     hjemmelIdList: payload.overstyringer.hjemmelIdList,
     ytelseId: payload.overstyringer.ytelseId,
+    saksbehandlerIdent,
   };
 };
 

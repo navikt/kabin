@@ -19,6 +19,7 @@ export const KlageDetails = ({
   fagsakId,
   fagsystemId,
   sakenGjelder,
+  tildeltSaksbehandler,
 }: IKlagestatus) => (
   <>
     <Journalpost title="Valgt journalpost" journalpost={journalpost} />
@@ -29,6 +30,12 @@ export const KlageDetails = ({
       <DateInfoItem title="Frist" date={frist} />
       <Part title="Klager" part={klager} />
       <Part title="Fullmektig" part={fullmektig} />
+      <Part
+        title="Tildelt saksbehandler"
+        part={
+          tildeltSaksbehandler === null ? null : { id: tildeltSaksbehandler.navIdent, name: tildeltSaksbehandler.navn }
+        }
+      />
     </StyledCard>
 
     <Mulighet

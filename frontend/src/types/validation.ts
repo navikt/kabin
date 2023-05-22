@@ -29,4 +29,5 @@ export enum ValidationFieldNames {
   HJEMMEL_ID_LIST = 'hjemmelIdList',
   BEHANDLING_ID = 'behandlingId',
   JOURNALPOST_ID = 'journalpostId',
+  SAKSBEHANDLER = 'saksbehandlerId',
 }
