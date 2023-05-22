@@ -105,6 +105,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
         hideLabel
         autoFocus
         onKeyDown={onKeyDown}
+        onMouseDown={(e) => e.stopPropagation()}
       />
       <Button
         variant="tertiary"
@@ -114,6 +115,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
           e.stopPropagation();
           isChanged ? onSaveClick() : exitEditMode();
         }}
+        onMouseDown={(e) => e.stopPropagation()}
         loading={isLoading}
       />
       <Button
@@ -124,6 +126,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
           e.stopPropagation();
           exitEditMode();
         }}
+        onMouseDown={(e) => e.stopPropagation()}
       />
     </>
   );

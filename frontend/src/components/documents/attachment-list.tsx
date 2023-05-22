@@ -5,10 +5,11 @@ import { Attachment } from './attachment';
 
 interface Props {
   dokument: IArkivertDocument;
+  isOpen: boolean;
 }
 
-export const AttachmentList = ({ dokument }: Props) => {
-  if (dokument.vedlegg.length === 0) {
+export const AttachmentList = ({ dokument, isOpen }: Props) => {
+  if (!isOpen || dokument.vedlegg.length === 0) {
     return null;
   }
 
@@ -32,7 +33,7 @@ const StyledAttachmentList = styled.ul`
   position: relative;
   padding: 0;
   margin: 0;
-  margin-left: 8px;
+  margin-left: 16px;
   list-style-type: none;
 
   &::before {
@@ -40,9 +41,9 @@ const StyledAttachmentList = styled.ul`
     display: block;
     width: 0;
     position: absolute;
-    left: 0;
+    left: -0.5px;
     top: 0;
-    bottom: 17px;
+    bottom: 15px;
     border-left: 1px solid #c6c2bf;
   }
 `;

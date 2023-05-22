@@ -45,10 +45,10 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
 const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   display: grid;
   position: relative;
-  padding-left: 12px;
+  padding-left: 36px;
   grid-template-columns: 1fr 30px 55px;
   grid-template-areas: 'title view select';
-  gap: 16px;
+  gap: 8px;
   background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-100)' : 'transparent')};
 
   :hover {
@@ -58,7 +58,7 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   &::before {
     content: '';
     display: block;
-    width: 12px;
+    width: 18px;
     position: absolute;
     left: 0;
     top: 50%;
