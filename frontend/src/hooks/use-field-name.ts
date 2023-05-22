@@ -6,7 +6,7 @@ export const FIELD_NAMES: Record<ValidationFieldNames, string> = {
   [ValidationFieldNames.FRIST]: 'Frist',
   [ValidationFieldNames.AVSENDER]: 'Avsender',
   [ValidationFieldNames.KLAGER]: 'Klager',
-  [ValidationFieldNames.HJEMMEL_ID_LIST]: 'Hjemler',
+  [ValidationFieldNames.HJEMMEL_ID_LIST]: 'Hjemmel',
   [ValidationFieldNames.YTELSE_ID]: 'Ytelse',
   [ValidationFieldNames.BEHANDLING_ID]: 'Vedtak',
   [ValidationFieldNames.JOURNALPOST_ID]: 'Journalpost',
