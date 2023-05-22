@@ -2,6 +2,7 @@ import { Button, Search, Tag } from '@navikt/ds-react';
 import styled from 'styled-components';
 
 export enum GridArea {
+  EXPAND = 'expand',
   TITLE = 'title',
   TEMA = 'tema',
   DATE = 'date',
@@ -27,7 +28,7 @@ export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   display: grid;
   grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
   grid-template-areas: '${gridTemplateAreas.join(' ')}';
-  grid-gap: 16px;
+  grid-gap: 8px;
   background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-100)' : 'transparent')};
 
   :hover {

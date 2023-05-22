@@ -1,4 +1,6 @@
-import React, { useContext, useMemo } from 'react';
+import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import React, { useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useViewDocument } from '@app/components/documents/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/view-document-button';
@@ -34,6 +36,8 @@ export const Dokument = ({ dokument }: Props) => {
     harTilgangTilArkivvariant,
   });
 
+  const [isExpanded, setIsExpanded] = useState(true);
+
   return (
     <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant}>
       <StyledGrid
@@ -45,7 +49,14 @@ export const Dokument = ({ dokument }: Props) => {
         $showViewed={isViewed && !isSelected}
         onMouseDown={viewDocument}
       >
-        <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
+        <TitleContainer>
+          <StyledExpandButton
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+            hasVedlegg={dokument.vedlegg.length !== 0}
+          />
+          <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
+        </TitleContainer>
         <GridTag variant="alt3" size="medium" title={temaName} $gridArea={GridArea.TEMA}>
           <Ellipsis>{temaName}</Ellipsis>
         </GridTag>
@@ -68,7 +79,7 @@ export const Dokument = ({ dokument }: Props) => {
           dokument={dokument}
         />
       </StyledGrid>
-      <AttachmentList dokument={dokument} />
+      <AttachmentList dokument={dokument} isOpen={isExpanded} />
     </DocumentListItem>
   );
 };
@@ -139,4 +150,43 @@ const Ellipsis = styled.div`
 const StyledDate = styled.time`
   display: flex;
   align-items: center;
+`;
+
+interface ExpandButtonProps {
+  isExpanded: boolean;
+  setIsExpanded: (expanded: boolean) => void;
+  hasVedlegg: boolean;
+  className?: string;
+}
+
+const ExpandButton = ({ isExpanded, setIsExpanded, hasVedlegg, className }: ExpandButtonProps) => {
+  if (!hasVedlegg) {
+    return null;
+  }
+
+  return (
+    <Button
+      size="small"
+      variant="tertiary-neutral"
+      icon={isExpanded ? <ChevronDownIcon aria-hidden /> : <ChevronRightIcon aria-hidden />}
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsExpanded(!isExpanded);
+      }}
+      onMouseDown={(e) => e.stopPropagation()}
+      className={className}
+    />
+  );
+};
+
+const StyledExpandButton = styled(ExpandButton)`
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+
+const TitleContainer = styled.div`
+  grid-area: ${GridArea.TITLE};
+  position: relative;
+  padding-left: 32px;
 `;

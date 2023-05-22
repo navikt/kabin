@@ -37,6 +37,7 @@ export const DocumentTitle = ({ dokumentInfoId, journalpostId, tittel }: Props) 
           icon={<PencilIcon aria-hidden />}
           title="Endre"
           onClick={enterEditMode}
+          onMouseDown={(e) => e.stopPropagation()}
         />
       </StyledTitle>
     );
@@ -63,7 +64,6 @@ const StyledTitle = styled.div`
   flex-grow: 1;
   overflow: hidden;
   column-gap: 8px;
-  padding-left: var(--a-spacing-2);
   height: 32px;
 `;
 
