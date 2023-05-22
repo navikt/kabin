@@ -118,7 +118,7 @@ const Content = styled.div`
     'title title'
     '${GridArea.SAKEN_GJELDER} ${GridArea.KLAGER}'
     '${GridArea.FULLMEKTIG} ${GridArea.AVSENDER}'
-    'ytelse hjemler';
+    'ytelse hjemmel';
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto auto auto;
   gap: 8px;

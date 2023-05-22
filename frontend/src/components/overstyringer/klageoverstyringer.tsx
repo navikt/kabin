@@ -1,7 +1,6 @@
 import { Alert, Label, Select } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
@@ -19,15 +18,15 @@ export const Klageoverstyringer = () => {
   return (
     <>
       <Ytelse />
-      <Innsendingshjemler />
+      <Innsendingshjemmel />
     </>
   );
 };
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-const NoneOption = ({ value }: { value: string | null }) =>
-  value === null ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
+const NoneOption = ({ value }: { value: string | null | undefined }) =>
+  value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
 
 const Ytelse = () => {
   const { payload, updatePayload, type } = useContext(ApiContext);
@@ -64,7 +63,7 @@ const YtelseSelect = styled(Select)`
   grid-area: ytelse;
 `;
 
-const Innsendingshjemler = () => {
+const Innsendingshjemmel = () => {
   const { data = [] } = useLatestYtelser();
   const { updatePayload, payload, type } = useContext(ApiContext);
   const error = useValidationError(ValidationFieldNames.HJEMMEL_ID_LIST);
@@ -79,7 +78,11 @@ const Innsendingshjemler = () => {
     return (
       data
         .find(({ id }) => id === ytelseId)
-        ?.innsendingshjemler.map(({ id, beskrivelse }) => ({ value: id, label: beskrivelse })) ?? []
+        ?.innsendingshjemler.map(({ id, beskrivelse }) => (
+          <option key={id} value={id}>
+            {beskrivelse}
+          </option>
+        )) ?? []
     );
   }, [data, type, ytelseId]);
 
@@ -87,39 +90,44 @@ const Innsendingshjemler = () => {
     return null;
   }
 
-  if (ytelseId !== null && options.length === 0) {
+  if (options.length === 0) {
+    const message = ytelseId === null ? 'Velg ytelse.' : 'Valgt ytelse har ingen hjemler.';
+
     return (
       <NoOptionsContainer>
-        <Label size="small">Hjemler</Label>
+        <Label size="small">Hjemmel</Label>
         <Alert variant="info" size="small" inline>
-          Valgt ytelse har ingen hjemler.
+          {message}
         </Alert>
       </NoOptionsContainer>
     );
   }
 
+  const hjemmel = payload?.overstyringer.hjemmelIdList[0];
+
   return (
-    <StyledInnsendingshjemler
-      options={options}
-      selected={payload?.overstyringer.hjemmelIdList ?? []}
-      onChange={(hjemmelIdList) => updatePayload({ overstyringer: { hjemmelIdList } })}
-      disabled={ytelseId === null}
-      label="Hjemler"
-      direction="up"
-      fullWidth
+    <StyledInnsendingshjemmel
+      label="Hjemmel"
+      size="small"
+      value={hjemmel ?? NONE_SELECTED}
+      onChange={(e) => updatePayload({ overstyringer: { hjemmelIdList: [e.target.value] } })}
       error={error}
       id={ValidationFieldNames.HJEMMEL_ID_LIST}
-    />
+      disabled={ytelseId === null}
+    >
+      <NoneOption value={hjemmel} />
+      {options}
+    </StyledInnsendingshjemmel>
   );
 };
 
-const StyledInnsendingshjemler = styled(FilterDropdown)`
-  grid-area: hjemler;
+const StyledInnsendingshjemmel = styled(Select)`
+  grid-area: hjemmel;
 `;
 
 const NoOptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  grid-area: hjemler;
+  grid-area: hjemmel;
 `;
