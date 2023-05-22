@@ -58,6 +58,7 @@ const INITIAL_KLAGE: IKlageState = {
     fullmektig: null,
     klager: null,
     avsender: null,
+    saksbehandlerIdent: null,
   },
 };
 
@@ -69,6 +70,7 @@ const INITIAL_ANKE: IAnkeState = {
     klager: null,
     mottattKlageinstans: null,
     avsender: null,
+    saksbehandlerIdent: null,
   },
 };
 

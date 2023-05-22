@@ -18,6 +18,7 @@ export const AnkeDetails = ({
   fagsakId,
   fagsystemId,
   sakenGjelder,
+  tildeltSaksbehandler,
 }: IAnkestatus) => (
   <>
     <Journalpost title="Journalført anke" journalpost={journalpost} />
@@ -27,10 +28,16 @@ export const AnkeDetails = ({
       <DateInfoItem title="Frist" date={frist} />
       <Part title="Ankende part" part={klager} />
       <Part title="Fullmektig" part={fullmektig} />
+      <Part
+        title="Tildelt saksbehandler"
+        part={
+          tildeltSaksbehandler === null ? null : { id: tildeltSaksbehandler.navIdent, name: tildeltSaksbehandler.navn }
+        }
+      />
     </StyledCard>
 
     <Mulighet
-      title="Valgt klage"
+      title="Valgt klagevedtak"
       fagsakId={fagsakId}
       fagsystemId={fagsystemId}
       sakenGjelder={sakenGjelder}

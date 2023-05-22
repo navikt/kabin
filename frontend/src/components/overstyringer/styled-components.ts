@@ -1,6 +1,5 @@
 import { BodyShort } from '@navikt/ds-react';
 import styled from 'styled-components';
-import { GridArea } from './types';
 
 export enum States {
   SET = 'SET',
@@ -21,7 +20,6 @@ export const getState = <T>(value: T | null, error?: string): States => {
 };
 
 interface ContainerProps {
-  $gridArea: GridArea;
   $state: States;
 }
 
@@ -38,7 +36,6 @@ const BORDER_COLORS: Record<States, string> = {
 };
 
 export const StyledContainer = styled.div<ContainerProps>`
-  grid-area: ${({ $gridArea }) => $gridArea};
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -47,7 +44,7 @@ export const StyledContainer = styled.div<ContainerProps>`
   border: 1px solid ${({ $state }) => (BORDER_COLORS[$state] ? BORDER_COLORS[$state] : 'var(--a-gray-400)')};
   padding: 16px;
   border-radius: 4px;
-  min-height: 180px;
+  min-height: 165px;
 `;
 
 export const StyledPartName = styled(BodyShort)`

@@ -8,6 +8,7 @@ interface CreateBasePayload {
   journalpostId: string | null;
   klager: IPartId | null;
   mottattKlageinstans: string | null; // LocalDate
+  saksbehandlerIdent: string | null;
 }
 
 export type CreateAnkeApiPayload = CreateBasePayload;

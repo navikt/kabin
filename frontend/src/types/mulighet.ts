@@ -1,4 +1,4 @@
-import { IPart } from '@app/types/common';
+import { IPart, ISaksbehandler } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 import { UtfallEnum } from './kodeverk';
 
@@ -20,4 +20,5 @@ export interface IAnkeMulighet extends IBasemulighet {
   ytelseId: Ytelse;
   klager: IPart;
   fullmektig: IPart | null;
+  previousSaksbehandler: ISaksbehandler | null;
 }

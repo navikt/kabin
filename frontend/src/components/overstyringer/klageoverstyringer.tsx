@@ -45,7 +45,7 @@ const Ytelse = () => {
   ));
 
   return (
-    <YtelseSelect
+    <Select
       error={error}
       label="Ytelse"
       size="small"
@@ -55,13 +55,9 @@ const Ytelse = () => {
     >
       <NoneOption value={payload.overstyringer.ytelseId} />
       {options}
-    </YtelseSelect>
+    </Select>
   );
 };
-
-const YtelseSelect = styled(Select)`
-  grid-area: ytelse;
-`;
 
 const Innsendingshjemmel = () => {
   const { data = [] } = useLatestYtelser();
@@ -106,7 +102,7 @@ const Innsendingshjemmel = () => {
   const hjemmel = payload?.overstyringer.hjemmelIdList[0];
 
   return (
-    <StyledInnsendingshjemmel
+    <Select
       label="Hjemmel"
       size="small"
       value={hjemmel ?? NONE_SELECTED}
@@ -117,17 +113,12 @@ const Innsendingshjemmel = () => {
     >
       <NoneOption value={hjemmel} />
       {options}
-    </StyledInnsendingshjemmel>
+    </Select>
   );
 };
-
-const StyledInnsendingshjemmel = styled(Select)`
-  grid-area: hjemmel;
-`;
 
 const NoOptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  grid-area: hjemmel;
 `;

@@ -16,14 +16,13 @@ export interface PartReadProps extends ActionsProps {
 export const PartRead = ({
   label,
   part,
-  gridArea,
   icon,
   children,
   partField,
   error,
   ...rest
 }: PartReadProps & EnterEditModeCallback) => (
-  <StyledContainer $gridArea={gridArea} $state={getState(part, error)} id={partField}>
+  <StyledContainer $state={getState(part, error)} id={partField}>
     {icon}
     <PartContent>
       <PartTextContent>
@@ -34,7 +33,7 @@ export const PartRead = ({
         <ValidationErrorMessage error={error} />
       </PartTextContent>
 
-      <Actions {...rest} part={part} partField={partField} label={label} gridArea={gridArea} icon={icon} />
+      <Actions {...rest} part={part} partField={partField} label={label} icon={icon} />
     </PartContent>
   </StyledContainer>
 );
@@ -55,11 +54,11 @@ const Content = ({ part, children }: Pick<PartReadProps, 'part' | 'children'>) =
 
   return (
     <>
-      <CopyPartIdButton part={part} />
       <StyledPartName size="small">
         <Icon type={part.type} />
         {getSakspartName(part, null)}
       </StyledPartName>
+      <CopyPartIdButton id={part.id} />
     </>
   );
 };

@@ -76,7 +76,7 @@ const StyledMediumCard = styled(StyledCard)`
 `;
 
 const StyledLargeCard = styled(StyledCard)`
-  height: 620px;
+  min-height: 560px;
 `;
 
 const StyledFullHeightCard = styled(StyledCard)`

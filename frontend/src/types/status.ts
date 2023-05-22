@@ -1,4 +1,4 @@
-import { IPart, ITilknyttetDokument, SaksTypeEnum } from '@app/types/common';
+import { IPart, ISaksbehandler, ITilknyttetDokument, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from './dokument';
 import { UtfallEnum } from './kodeverk';
 
@@ -15,6 +15,7 @@ interface IBaseStatus {
   vedtakDate: string;
   ytelseId: string;
   utfallId: UtfallEnum;
+  tildeltSaksbehandler: ISaksbehandler | null;
 }
 
 export interface IAnkestatus extends IBaseStatus {
