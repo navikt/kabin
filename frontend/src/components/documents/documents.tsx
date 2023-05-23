@@ -15,7 +15,7 @@ import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ColumnHeaders } from './column-headers';
-import { Dokument } from './document';
+import { Dokument } from './document/document';
 import { useFilteredDocuments } from './filter-helpers';
 
 export const Dokumenter = () => {
