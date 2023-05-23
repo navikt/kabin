@@ -99,7 +99,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
         />
         {type === Type.ANKE ? <Tildeling /> : <Avsender />}
         <Klageoverstyringer />
-        {type === Type.KLAGE ? <Tildeling /> : null}
+        {type === Type.KLAGE ? <Tildeling /> : <Avsender />}
       </Content>
     </CardLarge>
   );
