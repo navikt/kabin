@@ -1,5 +1,3 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
 import React, { useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useViewDocument } from '@app/components/documents/use-view-document';
@@ -8,13 +6,13 @@ import { Journalposttype } from '@app/components/journalposttype/journalposttype
 import { isoDateToPretty } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
-import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { AttachmentList } from './attachment-list';
-import { formatAvsenderMottaker } from './avsender-mottaker';
-import { DocumentTitle } from './document-title';
-import { SelectDocumentButton } from './select-document-button';
-import { GridArea, GridTag, StyledField, StyledGrid } from './styled-grid-components';
+import { IArkivertDocument } from '@app/types/dokument';
+import { AttachmentList } from '../attachment-list';
+import { DocumentTitle } from '../document-title';
+import { SelectDocumentButton } from '../select-document-button';
+import { GridArea, GridTag, StyledField, StyledGrid } from '../styled-grid-components';
+import { AvsenderMottakerNotatforer } from './avsender-mottaker-notatforer';
+import { StyledExpandButton } from './expand-button';
 
 interface Props {
   dokument: IArkivertDocument;
@@ -38,8 +36,28 @@ export const Dokument = ({ dokument }: Props) => {
 
   const [isExpanded, setIsExpanded] = useState(true);
 
+  const title = useMemo(() => {
+    if (!harTilgangTilArkivvariant) {
+      return 'Du har ikke tilgang til å se dokumentet.';
+    }
+
+    if (isViewed && isSelected) {
+      return 'Dokumentet er åpnet og valgt.';
+    }
+
+    if (isViewed) {
+      return 'Dokumentet er åpnet.';
+    }
+
+    if (isSelected) {
+      return 'Dokumentet er valgt. Trykk for å åpne.';
+    }
+
+    return 'Åpne dokumentet.';
+  }, [harTilgangTilArkivvariant, isSelected, isViewed]);
+
   return (
-    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant}>
+    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant} title={title}>
       <StyledGrid
         as="article"
         data-testid="document"
@@ -84,46 +102,6 @@ export const Dokument = ({ dokument }: Props) => {
   );
 };
 
-type AvsenderMottakerProps = Pick<
-  IArkivertDocument,
-  'journalposttype' | 'avsenderMottaker' | 'journalfortAvNavn' | 'journalfoerendeEnhet'
->;
-
-const AvsenderMottakerNotatforer = ({
-  journalposttype,
-  avsenderMottaker,
-  journalfortAvNavn,
-  journalfoerendeEnhet,
-}: AvsenderMottakerProps) => {
-  const { data: enheter } = useKlageenheter();
-  const enhetNavn = useMemo(
-    () => enheter?.find((enhet) => enhet.id === journalfoerendeEnhet)?.navn,
-    [enheter, journalfoerendeEnhet]
-  );
-
-  const [text, title] = useMemo<[string, string | undefined]>(() => {
-    if (journalposttype === JournalposttypeEnum.NOTAT) {
-      if (journalfortAvNavn === null) {
-        if (typeof enhetNavn === 'string') {
-          return [enhetNavn, undefined];
-        }
-
-        return ['Ukjent', undefined];
-      }
-
-      return [journalfortAvNavn, enhetNavn];
-    }
-
-    return [formatAvsenderMottaker(avsenderMottaker), undefined];
-  }, [avsenderMottaker, enhetNavn, journalfortAvNavn, journalposttype]);
-
-  return (
-    <StyledField $gridArea={GridArea.AVSENDER_MOTTAKER} title={title}>
-      {text}
-    </StyledField>
-  );
-};
-
 const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }>`
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   border-radius: 4px;
@@ -150,39 +128,6 @@ const Ellipsis = styled.div`
 const StyledDate = styled.time`
   display: flex;
   align-items: center;
-`;
-
-interface ExpandButtonProps {
-  isExpanded: boolean;
-  setIsExpanded: (expanded: boolean) => void;
-  hasVedlegg: boolean;
-  className?: string;
-}
-
-const ExpandButton = ({ isExpanded, setIsExpanded, hasVedlegg, className }: ExpandButtonProps) => {
-  if (!hasVedlegg) {
-    return null;
-  }
-
-  return (
-    <Button
-      size="small"
-      variant="tertiary-neutral"
-      icon={isExpanded ? <ChevronDownIcon aria-hidden /> : <ChevronRightIcon aria-hidden />}
-      onClick={(e) => {
-        e.stopPropagation();
-        setIsExpanded(!isExpanded);
-      }}
-      onMouseDown={(e) => e.stopPropagation()}
-      className={className}
-    />
-  );
-};
-
-const StyledExpandButton = styled(ExpandButton)`
-  position: absolute;
-  left: 0;
-  top: 0;
 `;
 
 const TitleContainer = styled.div`

@@ -14,11 +14,15 @@ interface Props {
 export const ViewDocumentButton = (props: Props) => {
   const [viewDocument, isViewed] = useViewDocument(props);
 
+  if (!props.harTilgangTilArkivvariant) {
+    return null;
+  }
+
   return (
     <StyledButton
       size="small"
       variant="tertiary-neutral"
-      title={isViewed ? 'Åpnet' : 'Åpne dokument'}
+      title={isViewed ? 'Åpnet' : 'Åpne dokumentet'}
       onMouseDown={viewDocument}
       aria-pressed={isViewed}
       aria-controls="document-viewer"
