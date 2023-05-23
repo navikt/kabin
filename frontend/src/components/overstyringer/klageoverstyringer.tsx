@@ -45,17 +45,18 @@ const Ytelse = () => {
   ));
 
   return (
-    <Select
+    <StyledSelect
       error={error}
       label="Ytelse"
       size="small"
       onChange={({ target }) => updatePayload({ overstyringer: { ytelseId: target.value, hjemmelIdList: [] } })}
       value={payload.overstyringer.ytelseId ?? NONE_SELECTED}
       id={ValidationFieldNames.YTELSE_ID}
+      $gridColumn={1}
     >
       <NoneOption value={payload.overstyringer.ytelseId} />
       {options}
-    </Select>
+    </StyledSelect>
   );
 };
 
@@ -90,19 +91,19 @@ const Innsendingshjemmel = () => {
     const message = ytelseId === null ? 'Velg ytelse.' : 'Valgt ytelse har ingen hjemler.';
 
     return (
-      <NoOptionsContainer>
+      <NoHjemmelOptionsContainer>
         <Label size="small">Hjemmel</Label>
         <Alert variant="info" size="small" inline>
           {message}
         </Alert>
-      </NoOptionsContainer>
+      </NoHjemmelOptionsContainer>
     );
   }
 
   const hjemmel = payload?.overstyringer.hjemmelIdList[0];
 
   return (
-    <Select
+    <StyledSelect
       label="Hjemmel"
       size="small"
       value={hjemmel ?? NONE_SELECTED}
@@ -110,15 +111,25 @@ const Innsendingshjemmel = () => {
       error={error}
       id={ValidationFieldNames.HJEMMEL_ID_LIST}
       disabled={ytelseId === null}
+      $gridColumn={2}
     >
       <NoneOption value={hjemmel} />
       {options}
-    </Select>
+    </StyledSelect>
   );
 };
 
-const NoOptionsContainer = styled.div`
+const NoHjemmelOptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+  grid-column: 2;
+`;
+
+interface SelectProps {
+  $gridColumn: number;
+}
+
+const StyledSelect = styled(Select)<SelectProps>`
+  grid-column: ${({ $gridColumn }) => $gridColumn};
 `;
