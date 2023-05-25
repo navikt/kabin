@@ -51,13 +51,7 @@ export const Sak = ({ sak }: SakProps) => {
     <StyledSak>
       <InfoItem label="Fagsystem">{sak === null ? 'Ingen' : fagsystemName}</InfoItem>
       <InfoItem label="Saks-ID">
-        {sak === null ? (
-          'Ingen'
-        ) : (
-          <StyledCopyButton copyText={sak.fagsakId} size="small" popoverText="Kopiert" iconPosition="right">
-            {sak.fagsakId}
-          </StyledCopyButton>
-        )}
+        {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.fagsakId} text={sak.fagsakId} size="small" />}
       </InfoItem>
     </StyledSak>
   );
