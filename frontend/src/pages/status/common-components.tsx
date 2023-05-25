@@ -1,4 +1,4 @@
-import { CheckmarkIcon, ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -54,12 +54,9 @@ export const Sak = ({ sak }: SakProps) => {
         {sak === null ? (
           'Ingen'
         ) : (
-          <StyledCopyButton
-            copyText={sak.fagsakId}
-            size="small"
-            activeIcon={<CheckmarkIcon aria-hidden />}
-            text={sak.fagsakId}
-          />
+          <StyledCopyButton copyText={sak.fagsakId} size="small" popoverText="Kopiert" iconPosition="right">
+            {sak.fagsakId}
+          </StyledCopyButton>
         )}
       </InfoItem>
     </StyledSak>

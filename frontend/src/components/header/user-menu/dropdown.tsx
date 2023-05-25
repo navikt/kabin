@@ -1,6 +1,5 @@
 import { CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { CopyButton } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { CopyToClipboard, Dropdown } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -13,9 +12,18 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
           <LeaveIcon aria-hidden /> Logg ut
         </Dropdown.Menu.List.Item>
-        <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
-          <VersionIcon />
-          Kabin-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
+        <Dropdown.Menu.List.Item
+          as={StyledCopyButton}
+          title="Klikk for å kopiere versjonsnummeret"
+          text={version}
+          popoverText="Kopiert"
+          copyText={version}
+          iconPosition="right"
+        >
+          <VersionContainer>
+            <VersionIcon />
+            Kabin-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
+          </VersionContainer>
         </Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>
@@ -33,7 +41,8 @@ const Menu = styled(Dropdown.Menu)`
 `;
 
 const VersionNumber = styled.code`
-  width: 80px;
+  margin-left: 4px;
+  max-width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
@@ -59,7 +68,7 @@ const StyledLogoutLink = styled(StyledLink)`
   color: #c30000;
 `;
 
-const StyledCopyButton = styled(CopyButton)`
+const StyledCopyButton = styled(CopyToClipboard)`
   ${linkStyle}
   white-space: nowrap;
 `;
@@ -75,3 +84,8 @@ const getShortVersion = (version: string): string => {
 
   return version.substring(0, 7) + '...';
 };
+
+const VersionContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
