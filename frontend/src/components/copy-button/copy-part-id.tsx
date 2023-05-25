@@ -1,5 +1,4 @@
-import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { CopyButton } from '@navikt/ds-react';
+import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled from 'styled-components';
 import { formatId } from '@app/functions/format-id';
@@ -13,11 +12,14 @@ export const CopyPartIdButton = ({ id }: Props) => {
     return null;
   }
 
-  return <StyledCopyButton text={formatId(id)} copyText={id} size="small" activeIcon={<CheckmarkIcon aria-hidden />} />;
+  return (
+    <StyledCopyButton copyText={id} size="small" title="Kopier" popoverText="Kopiert" iconPosition="right">
+      {formatId(id)}
+    </StyledCopyButton>
+  );
 };
 
-export const StyledCopyButton = styled(CopyButton)`
+export const StyledCopyButton = styled(CopyToClipboard)`
   border: 1px solid var(--a-blue-400);
   white-space: nowrap;
-  align-self: flex-start;
 `;
