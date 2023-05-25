@@ -1,5 +1,6 @@
 import { CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { CopyToClipboard, Dropdown } from '@navikt/ds-react-internal';
+import { CopyButton } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -16,9 +17,7 @@ export const UserDropdown = (): JSX.Element | null => {
           as={StyledCopyButton}
           title="Klikk for å kopiere versjonsnummeret"
           text={version}
-          popoverText="Kopiert"
           copyText={version}
-          iconPosition="right"
         >
           <VersionContainer>
             <VersionIcon />
@@ -68,7 +67,7 @@ const StyledLogoutLink = styled(StyledLink)`
   color: #c30000;
 `;
 
-const StyledCopyButton = styled(CopyToClipboard)`
+const StyledCopyButton = styled(CopyButton)`
   ${linkStyle}
   white-space: nowrap;
 `;
