@@ -16,10 +16,8 @@ export const Footer = () => {
   const toggleConfirm = () => setShowConfirm(!showConfirm);
   const closeConfirm = () => setShowConfirm(false);
 
-  const FooterStyle = typeof error === 'undefined' ? NormalFooter : ErrorFooter;
-
   return (
-    <FooterStyle>
+    <StyledFooter $hasError={typeof error !== 'undefined'}>
       <Button
         onClick={toggleConfirm}
         size="small"
@@ -33,11 +31,15 @@ export const Footer = () => {
       <Confirm show={showConfirm} setError={setError} closeConfirm={closeConfirm} />
 
       <ValidationSummaryPopup error={error} />
-    </FooterStyle>
+    </StyledFooter>
   );
 };
 
-const StyledFooter = styled.div`
+interface IStyleProps {
+  $hasError: boolean;
+}
+
+const StyledFooter = styled.div<IStyleProps>`
   position: relative;
   display: flex;
   bottom: 0;
@@ -51,14 +53,6 @@ const StyledFooter = styled.div`
   align-items: center;
   align-content: center;
   z-index: 1;
-`;
-
-const NormalFooter = styled(StyledFooter)`
-  border-top: 1px solid #368da8;
-  background-color: #e0f5fb;
-`;
-
-const ErrorFooter = styled(StyledFooter)`
-  border-top: 1px solid #d47b00;
-  background-color: #ffe9cc;
+  border-top: 1px solid ${({ $hasError }) => ($hasError ? '#d47b00' : '#368da8')};
+  background-color: ${({ $hasError }) => ($hasError ? '#ffe9cc' : '#e0f5fb')};
 `;
