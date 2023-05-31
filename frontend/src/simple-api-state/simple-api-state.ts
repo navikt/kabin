@@ -2,29 +2,7 @@ import { useEffect, useState } from 'react';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { loggedOutToast } from '@app/components/toast/toast-content/logged-out';
 import { skipToken } from '@app/types/common';
-
-interface State<T> {
-  data: T | undefined;
-  isLoading: boolean;
-  isUninitialized: boolean;
-  isError: boolean;
-  error: Error | undefined;
-  isSuccess: boolean;
-  updateData: UpdateData<T>;
-}
-
-interface InternalOptions {
-  prefetch: boolean;
-  cacheTime: number;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-}
-
-export type RequestBody = Record<string, unknown> | string | undefined;
-
-export type Options = Partial<InternalOptions> | undefined;
-
-type Listener<T> = (state: State<T>) => void;
-type UpdateData<T> = (updater: (data: T | undefined) => T | undefined) => void;
+import { InternalOptions, Listener, NoRetryError, Options, RequestBody, State, UpdateData } from './types';
 
 export class SimpleApiState<T> {
   private data: T | undefined = undefined;
@@ -36,6 +14,7 @@ export class SimpleApiState<T> {
   private listeners: Listener<T>[] = [];
   private options: InternalOptions = { prefetch: false, cacheTime: 60000, method: 'GET' };
   private req: RequestInit;
+  private retryTimer: NodeJS.Timeout | undefined;
 
   constructor(private url: string, options?: Options, body: RequestBody = undefined) {
     this.options = Object.assign(this.options, options);
@@ -58,7 +37,7 @@ export class SimpleApiState<T> {
     return req;
   };
 
-  private fetchData = async () => {
+  private fetchData = async (tryCount = 1) => {
     this.isUninitialized = false;
     this.isLoading = true;
     this.onChange();
@@ -69,18 +48,19 @@ export class SimpleApiState<T> {
       if (!response.ok) {
         if (response.status === 401) {
           loggedOutToast();
+        } else if (response.status === 404) {
+          this.isError = true;
+          this.error = new NoRetryError(`${response.status} ${response.statusText}`);
         } else {
           apiErrorToast(response, this.url);
+          this.isError = true;
+          this.error = new Error(`${response.status} ${response.statusText}`);
         }
 
-        const error = new Error(`${response.status} ${response.statusText}`);
-        this.isError = true;
-        this.error = error;
-        throw error;
+        throw this.error;
       }
 
       this.data = (await response.json()) as T;
-
       this.isSuccess = true;
     } catch (e) {
       this.data = undefined;
@@ -92,8 +72,10 @@ export class SimpleApiState<T> {
         this.error = new Error('Unknown error');
       }
 
-      // Retry after 1 minute.
-      setTimeout(this.fetchData, 60000);
+      // Retry
+      if (this.listeners.length !== 0 && !(e instanceof NoRetryError)) {
+        this.retryTimer = setTimeout(() => this.fetchData(tryCount + 1), tryCount * 3000);
+      }
     }
 
     this.isLoading = false;
@@ -124,7 +106,7 @@ export class SimpleApiState<T> {
       listener(this.getState());
     }
 
-    if (!this.isLoading && !this.isError && typeof this.data === 'undefined') {
+    if (!this.isLoading && typeof this.data === 'undefined') {
       this.fetchData();
     }
   };
@@ -137,6 +119,8 @@ export class SimpleApiState<T> {
     this.listeners = this.listeners.filter((l) => l !== listener);
 
     if (this.listeners.length === 0) {
+      clearTimeout(this.retryTimer);
+
       if (this.options.cacheTime > 0) {
         this.dataTimeout = setTimeout(this.clear, this.options.cacheTime);
       }

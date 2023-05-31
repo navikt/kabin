@@ -1,5 +1,6 @@
 import { stringify } from 'qs';
-import { Options, RequestBody, SimpleApiState } from './simple-api-state';
+import { SimpleApiState } from './simple-api-state';
+import { Options, RequestBody } from './types';
 
 interface PathParams<Q> {
   query?: Q;
