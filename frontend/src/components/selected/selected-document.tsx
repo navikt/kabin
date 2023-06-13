@@ -38,7 +38,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
     <Card>
       <Header>
         <Heading size="small" level="1">
-          Valgt anke
+          Valgt journalpost
         </Heading>
         <Button
           size="small"
