@@ -2,7 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
-import { isoDateTimeToPrettyDate } from '@app/domain/date';
+import { isoDateToPretty } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
 import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
@@ -46,7 +46,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
   return (
     <StyledTableRow selected={isSelected} onClick={selectAnke} $isInvalid={isInvalid} $isSelected={isSelected}>
       <Table.DataCell>{ytelseName}</Table.DataCell>
-      <Table.DataCell>{isoDateTimeToPrettyDate(mulighet.vedtakDate) ?? ''}</Table.DataCell>
+      <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
       <Table.DataCell>{getSakspartName(mulighet.sakenGjelder)}</Table.DataCell>
       <Table.DataCell>{getSakspartName(mulighet.klager)}</Table.DataCell>
       <Table.DataCell>{utfallName}</Table.DataCell>
