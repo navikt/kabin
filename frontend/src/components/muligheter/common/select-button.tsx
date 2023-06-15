@@ -9,7 +9,7 @@ interface Props {
   isInvalid: boolean;
 }
 
-export const SelectMulighet = ({ isSelected, select: selectAnke, isInvalid }: Props) => {
+export const SelectMulighet = ({ isSelected, select, isInvalid }: Props) => {
   const buttonText = isSelected || isInvalid ? '' : 'Velg';
 
   return (
@@ -18,7 +18,7 @@ export const SelectMulighet = ({ isSelected, select: selectAnke, isInvalid }: Pr
       variant="tertiary"
       icon={getIcon(isSelected, isInvalid)}
       title={getTitle(isSelected, isInvalid)}
-      onClick={selectAnke}
+      onClick={select}
       disabled={isInvalid}
       data-testid="select-ankemulighet"
     >
