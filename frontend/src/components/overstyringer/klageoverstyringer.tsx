@@ -1,11 +1,13 @@
 import { Alert, Label, Select } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
+import { usePrevious } from '@app/hooks/use-previous';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { useLatestYtelser, useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { skipToken } from '@app/types/common';
+import { IYtelserLatest } from '@app/types/kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Klageoverstyringer = () => {
@@ -31,8 +33,29 @@ const NoneOption = ({ value }: { value: string | null | undefined }) =>
 const Ytelse = () => {
   const { payload, updatePayload, type } = useContext(ApiContext);
   const tema = (type === Type.KLAGE ? payload?.mulighet?.temaId : null) ?? skipToken;
-  const { data = [] } = useTemaYtelser(tema);
+  const { data = [], isLoading, isUninitialized } = useTemaYtelser(tema);
+
+  const prevData = usePrevious(data);
+
   const error = useValidationError(ValidationFieldNames.YTELSE_ID);
+
+  useEffect(() => {
+    const [first] = data;
+
+    if (
+      type !== Type.KLAGE ||
+      isUninitialized ||
+      isLoading ||
+      data.length !== 1 ||
+      first === undefined ||
+      first.id === payload.overstyringer.ytelseId ||
+      areEqual(prevData, data)
+    ) {
+      return;
+    }
+
+    updatePayload({ overstyringer: { ytelseId: first.id, hjemmelIdList: [] } });
+  }, [data, isLoading, isUninitialized, payload, prevData, type, updatePayload]);
 
   if (type !== Type.KLAGE) {
     return null;
@@ -133,3 +156,15 @@ interface SelectProps {
 const StyledSelect = styled(Select)<SelectProps>`
   grid-column: ${({ $gridColumn }) => $gridColumn};
 `;
+
+const areEqual = (prev: IYtelserLatest[] | undefined, current: IYtelserLatest[]) => {
+  if (prev === undefined) {
+    return false;
+  }
+
+  if (prev.length !== current.length) {
+    return false;
+  }
+
+  return prev.every(({ id }) => current.some((c) => c.id === id));
+};
