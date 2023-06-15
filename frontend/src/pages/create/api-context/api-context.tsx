@@ -19,6 +19,8 @@ import {
   IApiContext,
   IKlageState,
   IKlageStateUpdate,
+  INITIAL_ANKE,
+  INITIAL_KLAGE,
   Payload,
   Type,
   UpdateFn,
@@ -45,33 +47,6 @@ export const ApiContextState = ({ fnr, children }: Props) => {
   const context = useContextData(fnr);
 
   return <ApiContext.Provider value={context}>{children}</ApiContext.Provider>;
-};
-
-const INITIAL_KLAGE: IKlageState = {
-  mulighet: null,
-  overstyringer: {
-    mottattVedtaksinstans: null,
-    mottattKlageinstans: null,
-    hjemmelIdList: [],
-    ytelseId: null,
-    fristInWeeks: 12,
-    fullmektig: null,
-    klager: null,
-    avsender: null,
-    saksbehandlerIdent: null,
-  },
-};
-
-const INITIAL_ANKE: IAnkeState = {
-  mulighet: null,
-  overstyringer: {
-    fristInWeeks: 12,
-    fullmektig: null,
-    klager: null,
-    mottattKlageinstans: null,
-    avsender: null,
-    saksbehandlerIdent: null,
-  },
 };
 
 const useContextData = (fnr: IApiContext['fnr']): IApiContext => {

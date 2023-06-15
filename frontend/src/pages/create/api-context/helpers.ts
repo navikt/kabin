@@ -4,7 +4,16 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import { IAnkeState, IAnkeStateUpdate, IKlageState, IKlageStateUpdate, Payload, Type } from './types';
+import {
+  IAnkeState,
+  IAnkeStateUpdate,
+  IKlageState,
+  IKlageStateUpdate,
+  INITIAL_ANKE,
+  INITIAL_KLAGE,
+  Payload,
+  Type,
+} from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -86,13 +95,20 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
 
   return {
     mulighet,
-    overstyringer: {
-      ...state.overstyringer,
-      ...rest,
-      klager: getPart(ankemulighetIsDifferent, mulighet?.klager, klager, state.overstyringer.klager),
-      fullmektig: getPart(ankemulighetIsDifferent, mulighet?.fullmektig, fullmektig, state.overstyringer.fullmektig),
-      saksbehandlerIdent: ankemulighetIsDifferent ? null : saksbehandlerIdent,
-    },
+    overstyringer: ankemulighetIsDifferent
+      ? {
+          ...INITIAL_ANKE.overstyringer,
+          ...update.overstyringer,
+          klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
+          fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
+        }
+      : {
+          ...state.overstyringer,
+          ...rest,
+          klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
+          fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
+          saksbehandlerIdent,
+        },
   };
 };
 
@@ -126,28 +142,22 @@ export const getUpdatedKlageState = (
 
   return {
     mulighet: hasKlagemulighet ? updateMulighet ?? null : state.mulighet,
-    overstyringer: {
-      ...state.overstyringer,
-      ...rest,
-      klager: getPart(klagemulighetIsDifferent, null, klager, state.overstyringer.klager),
-      fullmektig: getPart(klagemulighetIsDifferent, null, fullmektig, state.overstyringer.fullmektig),
-      hjemmelIdList: hjemmelIdList?.filter(isNotUndefined) ?? state.overstyringer.hjemmelIdList,
-      saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
-    },
+    overstyringer: klagemulighetIsDifferent
+      ? {
+          ...INITIAL_KLAGE.overstyringer,
+          ...update.overstyringer,
+          klager: klager === undefined ? null : klager, // If no klager is provided in the update, use none.
+          fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
+        }
+      : {
+          ...state.overstyringer,
+          ...rest,
+          klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
+          fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
+          hjemmelIdList: hjemmelIdList?.filter(isNotUndefined) ?? state.overstyringer.hjemmelIdList,
+          saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
+        },
   };
-};
-
-const getPart = (
-  different: boolean,
-  mulighetPart: IPart | null | undefined = null,
-  newPart: IPart | null | undefined,
-  previousPart: IPart | null
-): IPart | null => {
-  if (typeof newPart !== 'undefined') {
-    return newPart;
-  }
-
-  return different ? mulighetPart : previousPart;
 };
 
 const muligheterAreEqual = (a: IKlagemulighet | IAnkeMulighet | null, b: IKlagemulighet | IAnkeMulighet | null) => {

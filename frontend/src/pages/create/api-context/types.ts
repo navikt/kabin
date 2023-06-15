@@ -82,3 +82,30 @@ interface IAnkeContext extends IBaseContext<IAnkeStateUpdate, IAnkeState> {
 }
 
 export type IApiContext = INoneContext | IKlageContext | IAnkeContext;
+
+export const INITIAL_KLAGE: IKlageState = {
+  mulighet: null,
+  overstyringer: {
+    mottattVedtaksinstans: null,
+    mottattKlageinstans: null,
+    hjemmelIdList: [],
+    ytelseId: null,
+    fristInWeeks: 12,
+    fullmektig: null,
+    klager: null,
+    avsender: null,
+    saksbehandlerIdent: null,
+  },
+};
+
+export const INITIAL_ANKE: IAnkeState = {
+  mulighet: null,
+  overstyringer: {
+    fristInWeeks: 12,
+    fullmektig: null,
+    klager: null,
+    mottattKlageinstans: null,
+    avsender: null,
+    saksbehandlerIdent: null,
+  },
+};
