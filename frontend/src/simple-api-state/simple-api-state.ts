@@ -162,7 +162,7 @@ const INITIAL_STATE = {
 };
 
 export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken): State<T> => {
-  const [state, setState] = useState<State<T>>(INITIAL_STATE);
+  const [state, setState] = useState<State<T>>(store === skipToken ? INITIAL_STATE : store.getState());
 
   useEffect(() => {
     if (store === skipToken) {
