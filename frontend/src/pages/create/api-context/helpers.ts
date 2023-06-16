@@ -4,16 +4,7 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import {
-  IAnkeState,
-  IAnkeStateUpdate,
-  IKlageState,
-  IKlageStateUpdate,
-  INITIAL_ANKE,
-  INITIAL_KLAGE,
-  Payload,
-  Type,
-} from './types';
+import { IAnkeState, IAnkeStateUpdate, IKlageState, IKlageStateUpdate, Payload, Type } from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -97,7 +88,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
     mulighet,
     overstyringer: ankemulighetIsDifferent
       ? {
-          ...INITIAL_ANKE.overstyringer,
+          ...state.overstyringer,
           ...update.overstyringer,
           klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
           fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
@@ -144,10 +135,12 @@ export const getUpdatedKlageState = (
     mulighet: hasKlagemulighet ? updateMulighet ?? null : state.mulighet,
     overstyringer: klagemulighetIsDifferent
       ? {
-          ...INITIAL_KLAGE.overstyringer,
+          ...state.overstyringer,
           ...update.overstyringer,
           klager: klager === undefined ? null : klager, // If no klager is provided in the update, use none.
           fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
+          ytelseId: null,
+          hjemmelIdList: [],
         }
       : {
           ...state.overstyringer,
