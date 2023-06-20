@@ -28,7 +28,7 @@ interface IdParams {
 
 const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
   `${KABIN_API_BASE_PATH}/arkivertedokumenter?antall=50000`,
-  { method: 'POST' }
+  { method: 'POST', cacheTime: 0 }
 );
 
 export const useDokumenter = (idnummer: string | typeof skipToken) =>
@@ -36,7 +36,7 @@ export const useDokumenter = (idnummer: string | typeof skipToken) =>
 
 const getAnkemuligheterState = getStateFactory<IAnkeMulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
-  { method: 'POST' }
+  { method: 'POST', cacheTime: 0 }
 );
 
 export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
@@ -44,7 +44,7 @@ export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
 
 const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/klagemuligheter?antall=50000`,
-  { method: 'POST' }
+  { method: 'POST', cacheTime: 0 }
 );
 
 export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
@@ -97,7 +97,7 @@ interface CalculateFristdatoParams {
 
 const calculateFristdatoState = getStateFactory<string, CalculateFristdatoParams>(
   `${KABIN_API_BASE_PATH}/calculatefrist`,
-  { method: 'POST' }
+  { method: 'POST', cacheTime: 300_000 }
 );
 
 export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken) =>

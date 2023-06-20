@@ -1,13 +1,9 @@
-import { ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Loader, Table } from '@navikt/ds-react';
+import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { CardSmall } from '@app/components/card/card';
-import {
-  CardHeader,
-  StyledButton,
-  StyledTableHeader,
-  TableContainer,
-} from '@app/components/muligheter/common/styled-components';
+import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -23,7 +19,7 @@ import { Ankemulighet } from './ankemulighet';
 export const Ankemuligheter = () => {
   const { type, payload, updatePayload, fnr, journalpost } = useContext(ApiContext);
 
-  const { data: ankemuligheter, isLoading } = useAnkemuligheter(fnr);
+  const { data: ankemuligheter, isLoading, refetch } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
@@ -42,12 +38,37 @@ export const Ankemuligheter = () => {
     return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
   }
 
+  const onRefresh = async () => {
+    const updated = await refetch();
+
+    if (updated === undefined) {
+      return;
+    }
+
+    const { mulighet } = payload;
+
+    if (mulighet === null) {
+      return;
+    }
+
+    updatePayload({ mulighet: updated.find((a) => a.behandlingId === mulighet.behandlingId) ?? null });
+  };
+
   return (
     <CardSmall>
-      <CardHeader>
+      <Header>
         <Heading level="1" size="small">
           Velg vedtaket anken gjelder
         </Heading>
+
+        <Button
+          size="xsmall"
+          variant="tertiary"
+          onClick={onRefresh}
+          loading={isLoading}
+          icon={<ArrowsCirclepathIcon aria-hidden />}
+          title="Oppdater"
+        />
 
         {payload.mulighet === null ? null : (
           <StyledButton
@@ -58,7 +79,7 @@ export const Ankemuligheter = () => {
             icon={<ChevronUpIcon aria-hidden />}
           />
         )}
-      </CardHeader>
+      </Header>
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
@@ -68,6 +89,20 @@ export const Ankemuligheter = () => {
     </CardSmall>
   );
 };
+
+const Header = styled.div`
+  display: grid;
+  grid-template-columns: min-content min-content 1fr;
+  grid-gap: 4px;
+  white-space: nowrap;
+`;
+
+const StyledButton = styled(Button)`
+  flex-grow: 0;
+  width: fit-content;
+  align-self: flex-end;
+  justify-self: right;
+`;
 
 interface ContentProps {
   ankemuligheter: IAnkeMulighet[] | undefined;

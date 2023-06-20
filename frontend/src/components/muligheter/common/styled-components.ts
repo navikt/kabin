@@ -1,11 +1,5 @@
-import { Button, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react';
 import styled from 'styled-components';
-
-export const CardHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  min-height: 32px;
-`;
 
 export const TableContainer = styled.div<{ $showShadow: boolean }>`
   overflow-y: auto;
@@ -28,13 +22,6 @@ export const StyledTableHeader = styled(Table.Header)`
   background: #fff;
   box-shadow: 0 5px 5px -5px #000;
   z-index: 1;
-`;
-
-export const StyledButton = styled(Button)`
-  justify-self: flex-end;
-  flex-grow: 0;
-  width: fit-content;
-  align-self: flex-end;
 `;
 
 export const StyledButtonCell = styled(Table.DataCell)`
