@@ -7,6 +7,7 @@ export interface State<T> {
   isSuccess: boolean;
   updateData: UpdateData<T>;
   refetch: () => Promise<T | undefined>;
+  clear: () => void;
 }
 
 export interface InternalOptions {
