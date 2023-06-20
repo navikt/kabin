@@ -6,6 +6,7 @@ export interface State<T> {
   error: Error | undefined;
   isSuccess: boolean;
   updateData: UpdateData<T>;
+  refetch: () => Promise<T | undefined>;
 }
 
 export interface InternalOptions {
