@@ -99,6 +99,7 @@ export class SimpleApiState<T> {
     error: this.error,
     updateData: this.updateData,
     refetch: this.fetchData,
+    clear: this.clear,
   });
 
   public listen = (listener: Listener<T>): void => {
@@ -157,6 +158,7 @@ const SKIP_STATE = {
 
     return undefined;
   },
+  clear: () => console.warn('Tried to clear data on a skipped state'),
 };
 
 const INITIAL_STATE = {
@@ -172,6 +174,7 @@ const INITIAL_STATE = {
 
     return undefined;
   },
+  clear: () => console.warn('Tried to clear data on an uninitialized state'),
 };
 
 export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken): State<T> => {
