@@ -37,7 +37,7 @@ export class SimpleApiState<T> {
     return req;
   };
 
-  private fetchData = async (tryCount = 1) => {
+  private fetchData = async (tryCount = 1): Promise<T | undefined> => {
     this.isUninitialized = false;
     this.isLoading = true;
     this.onChange();
@@ -80,6 +80,8 @@ export class SimpleApiState<T> {
 
     this.isLoading = false;
     this.onChange();
+
+    return this.data;
   };
 
   private onChange = (): void => {
@@ -96,6 +98,7 @@ export class SimpleApiState<T> {
     isSuccess: this.isSuccess,
     error: this.error,
     updateData: this.updateData,
+    refetch: this.fetchData,
   });
 
   public listen = (listener: Listener<T>): void => {
@@ -149,6 +152,11 @@ const SKIP_STATE = {
   isSuccess: false,
   error: undefined,
   updateData: () => console.warn('Tried to update data on a skipped state'),
+  refetch: async () => {
+    console.warn('Tried to refetch data on a skipped state');
+
+    return undefined;
+  },
 };
 
 const INITIAL_STATE = {
@@ -159,6 +167,11 @@ const INITIAL_STATE = {
   isSuccess: false,
   error: undefined,
   updateData: () => console.warn('Tried to update data on an uninitialized state'),
+  refetch: async () => {
+    console.warn('Tried to refetch data on an uninitialized state');
+
+    return undefined;
+  },
 };
 
 export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken): State<T> => {
