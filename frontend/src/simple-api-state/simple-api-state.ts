@@ -125,9 +125,11 @@ export class SimpleApiState<T> {
     if (this.listeners.length === 0) {
       clearTimeout(this.retryTimer);
 
-      if (this.options.cacheTime > 0) {
-        this.dataTimeout = setTimeout(this.clear, this.options.cacheTime);
+      if (this.options.cacheTime === -1) {
+        return;
       }
+
+      this.dataTimeout = setTimeout(this.clear, this.options.cacheTime);
     }
   };
 
@@ -137,7 +139,6 @@ export class SimpleApiState<T> {
   };
 
   private clear = (): void => {
-    console.info('Clearing cached data for', this.url);
     this.data = undefined;
     this.error = undefined;
     this.isError = false;

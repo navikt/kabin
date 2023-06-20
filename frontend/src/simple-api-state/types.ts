@@ -11,7 +11,18 @@ export interface State<T> {
 }
 
 export interface InternalOptions {
+  /**
+   * If set to `true`, data will be fetched immediately.
+   * If set to `false`, data will be fetched when the first listener is added.
+   * @defaultValue `false`
+   */
   prefetch: boolean;
+  /**
+   * Time in milliseconds to cache data.
+   * If set to `0`, data will not be cached.
+   * If set to `-1`, data will be cached forever.
+   * @defaultValue `60_000` (1 minutes)
+   */
   cacheTime: number;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 }

@@ -1,9 +1,9 @@
-import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
+import { ArrowsCirclepathIcon, ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
 import { CardMedium } from '@app/components/card/card';
+import { DocumentTable } from '@app/components/documents/document-table';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -14,19 +14,16 @@ import { DocumentViewerContext } from '@app/pages/create/document-viewer-context
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
-import { ColumnHeaders } from './column-headers';
-import { Dokument } from './document/document';
-import { useFilteredDocuments } from './filter-helpers';
 
 export const Dokumenter = () => {
   const { type, fnr, journalpost, setJournalpost } = useContext(ApiContext);
-  const { data: dokumenter, isLoading } = useDokumenter(fnr);
-  const { viewDokument } = useContext(DocumentViewerContext);
+  const { data: dokumenter, isLoading, refetch } = useDokumenter(fnr);
+  const { dokument, viewDokument } = useContext(DocumentViewerContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const error = useValidationError(ValidationFieldNames.JOURNALPOST_ID);
 
   useEffect(() => {
-    if (typeof dokumenter === 'undefined') {
+    if (dokumenter === undefined) {
       setIsExpanded(true);
       viewDokument(null);
 
@@ -40,6 +37,44 @@ export const Dokumenter = () => {
     return <SelectedDocument onClick={() => setIsExpanded(true)} />;
   }
 
+  const onRefresh = async () => {
+    const updated = await refetch();
+
+    if (updated === undefined) {
+      return;
+    }
+
+    const hadDokument = dokument !== null;
+    const hadJournalpost = journalpost !== null;
+
+    if (!hadDokument && !hadJournalpost) {
+      return;
+    }
+
+    let newDokument: IArkivertDocument | null = null;
+    let newJournalpost: IArkivertDocument | null = null;
+
+    for (const d of updated.dokumenter) {
+      if (hadDokument && newDokument === null && d.dokumentInfoId === dokument.dokumentInfoId) {
+        // If the viewed document is in the list of documents, update it.
+        newDokument = d;
+      }
+
+      if (hadJournalpost && newJournalpost === null && d.dokumentInfoId === journalpost.dokumentInfoId) {
+        // If the selected journalpost is in the list of documents, update it.
+        newJournalpost = d;
+      }
+
+      if ((!hadDokument || newDokument !== null) && (!hadJournalpost || newJournalpost !== null)) {
+        // If both the viewed document and the selected journalpost are found, stop searching.
+        break;
+      }
+    }
+
+    viewDokument(newDokument);
+    setJournalpost(newJournalpost);
+  };
+
   return (
     <CardMedium>
       <Header>
@@ -47,9 +82,18 @@ export const Dokumenter = () => {
           Velg journalpost
         </Heading>
 
+        <Button
+          size="xsmall"
+          variant="tertiary"
+          onClick={onRefresh}
+          loading={isLoading}
+          icon={<ArrowsCirclepathIcon aria-hidden />}
+          title="Oppdater"
+        />
+
         {journalpost === null ? null : (
           <StyledButton
-            size="small"
+            size="xsmall"
             variant="tertiary-neutral"
             onClick={() => setIsExpanded(false)}
             icon={<ChevronUpIcon aria-hidden />}
@@ -62,54 +106,6 @@ export const Dokumenter = () => {
 
       <Content dokumenter={dokumenter?.dokumenter} isLoading={isLoading} />
     </CardMedium>
-  );
-};
-
-interface DocumentTableProps {
-  dokumenter: IArkivertDocument[];
-}
-
-const DocumentTable = ({ dokumenter }: DocumentTableProps) => {
-  const [search, setSearch] = useState<string>('');
-  const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
-  const [selectedSaksIds, setSelectedSaksIds] = useState<string[]>([]);
-  const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(undefined);
-
-  const filteredDokumenter = useFilteredDocuments(
-    dokumenter,
-    selectedAvsenderMottakere,
-    selectedDateRange,
-    selectedSaksIds,
-    selectedTemaer,
-    selectedTypes,
-    search
-  );
-
-  return (
-    <>
-      <ColumnHeaders
-        search={search}
-        setSearch={setSearch}
-        selectedTemaer={selectedTemaer}
-        setSelectedTemaer={setSelectedTemaer}
-        selectedTypes={selectedTypes}
-        setSelectedTypes={setSelectedTypes}
-        selectedAvsenderMottakere={selectedAvsenderMottakere}
-        setSelectedAvsenderMottakere={setSelectedAvsenderMottakere}
-        selectedSaksIds={selectedSaksIds}
-        setSelectedSaksIds={setSelectedSaksIds}
-        selectedDateRange={selectedDateRange}
-        setSelectedDateRange={setSelectedDateRange}
-        documents={dokumenter}
-      />
-      <StyledList>
-        {filteredDokumenter.map((d) => (
-          <Dokument key={`${d.journalpostId}-${d.dokumentInfoId}`} dokument={d} />
-        ))}
-      </StyledList>
-    </>
   );
 };
 
@@ -142,23 +138,16 @@ const Content = ({ dokumenter, isLoading }: ContentProps) => {
   return <DocumentTable dokumenter={dokumenter} />;
 };
 
-const StyledList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  overflow-y: auto;
-`;
-
 const StyledButton = styled(Button)`
-  justify-self: flex-end;
   flex-grow: 0;
   width: fit-content;
   align-self: flex-end;
+  justify-self: right;
 `;
 
 const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  min-height: 32px;
+  display: grid;
+  grid-template-columns: min-content min-content 1fr;
+  grid-gap: 4px;
+  white-space: nowrap;
 `;
