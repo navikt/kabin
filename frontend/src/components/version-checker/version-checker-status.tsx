@@ -39,7 +39,7 @@ const Version = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setShow(false), 20 * 1000);
+    setTimeout(() => setShow(false), 20_000);
   }, [setShow]);
 
   if (!show) {

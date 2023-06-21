@@ -12,7 +12,7 @@ export class SimpleApiState<T> {
   private isSuccess = false;
   private error: Error | undefined = undefined;
   private listeners: Listener<T>[] = [];
-  private options: InternalOptions = { prefetch: false, cacheTime: 60000, method: 'GET' };
+  private options: InternalOptions = { prefetch: false, cacheTime: 60_000, method: 'GET' };
   private req: RequestInit;
   private retryTimer: NodeJS.Timeout | undefined;
 
@@ -74,7 +74,7 @@ export class SimpleApiState<T> {
 
       // Retry
       if (this.listeners.length !== 0 && !(e instanceof NoRetryError)) {
-        this.retryTimer = setTimeout(() => this.fetchData(tryCount + 1), tryCount * 3000);
+        this.retryTimer = setTimeout(() => this.fetchData(tryCount + 1), tryCount * 3_000);
       }
     }
 
