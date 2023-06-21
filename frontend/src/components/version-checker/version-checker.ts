@@ -28,7 +28,7 @@ export class VersionChecker {
           setTimeout(this.getEventSource.bind(this), this.delay);
         }
 
-        this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10000);
+        this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
       }
     });
 
