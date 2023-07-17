@@ -1,9 +1,8 @@
-import { IPart, ISaksbehandler, ITilknyttetDokument, SaksTypeEnum } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from './dokument';
 import { UtfallEnum } from './kodeverk';
 
 interface IBaseStatus {
-  behandlingId: string;
   fagsakId: string;
   fagsystemId: string;
   frist: string; // LocalDate
@@ -20,7 +19,6 @@ interface IBaseStatus {
 
 export interface IAnkestatus extends IBaseStatus {
   typeId: SaksTypeEnum.ANKE;
-  tilknyttedeDokumenter: ITilknyttetDokument[];
 }
 
 export interface IKlagestatus extends IBaseStatus {
