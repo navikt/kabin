@@ -29,11 +29,6 @@ export interface IPartId {
   id: string;
 }
 
-export interface ITilknyttetDokument {
-  journalpostId: string;
-  dokumentInfoId: string;
-}
-
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
