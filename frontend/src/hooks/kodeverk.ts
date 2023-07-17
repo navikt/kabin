@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
   useFagsystemer,
+  useHjemlerMap,
   useSimpleYtelser,
   useTema,
   useUtfall,
@@ -68,4 +69,14 @@ export const useFagsystemName = (fagsystemId?: string | null): string => {
 
     return data.find(({ id }) => id === fagsystemId)?.beskrivelse ?? fagsystemId ?? '';
   }, [data, fagsystemId]);
+};
+
+export const useHjemmelName = (hjemmelId: string): string => {
+  const { data = {} } = useHjemlerMap();
+
+  if (typeof data === 'undefined') {
+    return '';
+  }
+
+  return data[hjemmelId] ?? hjemmelId;
 };

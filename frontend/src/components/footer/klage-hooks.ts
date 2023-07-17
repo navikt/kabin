@@ -25,7 +25,7 @@ const getKlageApiPayload = (payload: IKlageState, journalpostId: string): Create
   } = payload.overstyringer;
 
   return {
-    behandlingId: payload.mulighet === null ? null : payload.mulighet.behandlingId,
+    id: payload.mulighet === null ? null : payload.mulighet.behandlingId,
     mottattKlageinstans,
     mottattVedtaksinstans,
     fristInWeeks,
@@ -33,8 +33,8 @@ const getKlageApiPayload = (payload: IKlageState, journalpostId: string): Create
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId,
-    hjemmelIdList: payload.overstyringer.hjemmelIdList,
     ytelseId: payload.overstyringer.ytelseId,
+    hjemmelId: payload.overstyringer.hjemmelId,
     saksbehandlerIdent,
   };
 };
@@ -58,7 +58,7 @@ export const useCreateKlage = (
       const res = await createKlage(createKlagePayload);
 
       if (res.ok) {
-        updateData((data) => data?.filter((d) => d.behandlingId !== createKlagePayload.behandlingId));
+        updateData((data) => data?.filter((d) => d.behandlingId !== createKlagePayload.id));
 
         setError(undefined);
 

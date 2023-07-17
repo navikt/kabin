@@ -9,16 +9,19 @@ export enum Type {
   KLAGE = 'KLAGE',
 }
 
-interface IKlageOverstyringer {
+interface ICommonOverstyringer {
   fristInWeeks: number; // Number of weeks
   fullmektig: IPart | null;
   klager: IPart | null;
-  mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   avsender: IPart | null;
   ytelseId: string | null;
-  hjemmelIdList: string[];
+  hjemmelId: string | null;
   saksbehandlerIdent: string | null;
+}
+
+interface IKlageOverstyringer extends ICommonOverstyringer {
+  mottattVedtaksinstans: string | null; // LocalDate
 }
 
 export interface IKlageState extends IKlageStateUpdate {
@@ -26,14 +29,7 @@ export interface IKlageState extends IKlageStateUpdate {
   overstyringer: IKlageOverstyringer;
 }
 
-interface IAnkeOverstyringer {
-  fristInWeeks: number; // Number of weeks
-  fullmektig: IPart | null;
-  klager: IPart | null;
-  mottattKlageinstans: string | null; // LocalDate
-  avsender: IPart | null;
-  saksbehandlerIdent: string | null;
-}
+type IAnkeOverstyringer = ICommonOverstyringer;
 
 export interface IAnkeState extends IAnkeStateUpdate {
   mulighet: IAnkeMulighet | null;
@@ -88,7 +84,7 @@ export const INITIAL_KLAGE: IKlageState = {
   overstyringer: {
     mottattVedtaksinstans: null,
     mottattKlageinstans: null,
-    hjemmelIdList: [],
+    hjemmelId: null,
     ytelseId: null,
     fristInWeeks: 12,
     fullmektig: null,
@@ -106,6 +102,8 @@ export const INITIAL_ANKE: IAnkeState = {
     klager: null,
     mottattKlageinstans: null,
     avsender: null,
+    ytelseId: null,
+    hjemmelId: null,
     saksbehandlerIdent: null,
   },
 };

@@ -12,8 +12,9 @@ import {
   StyledKlagerIcon,
   StyledSakenGjelderIcon,
 } from '@app/components/overstyringer/icons';
-import { Klageoverstyringer } from '@app/components/overstyringer/klageoverstyringer';
+import { Innsendingshjemmel } from '@app/components/overstyringer/innsendingshjemmel';
 import { Tildeling } from '@app/components/overstyringer/tildeling';
+import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -98,7 +99,8 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           ]}
         />
         <Avsender />
-        <Klageoverstyringer />
+        <Ytelse />
+        <Innsendingshjemmel />
         <Tildeling />
       </Content>
     </CardLarge>
