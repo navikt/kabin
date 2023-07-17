@@ -28,7 +28,7 @@ interface IdParams {
 
 const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
   `${KABIN_API_BASE_PATH}/arkivertedokumenter?antall=50000`,
-  { method: 'POST', cacheTime: 0 }
+  { method: 'POST', cacheTime: 0 },
 );
 
 export const useDokumenter = (idnummer: string | typeof skipToken) =>
@@ -36,7 +36,7 @@ export const useDokumenter = (idnummer: string | typeof skipToken) =>
 
 const getAnkemuligheterState = getStateFactory<IAnkeMulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
-  { method: 'POST', cacheTime: 0 }
+  { method: 'POST', cacheTime: 0 },
 );
 
 export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
@@ -44,7 +44,7 @@ export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
 
 const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/klagemuligheter?antall=50000`,
-  { method: 'POST', cacheTime: 0 }
+  { method: 'POST', cacheTime: 0 },
 );
 
 export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
@@ -97,14 +97,14 @@ interface CalculateFristdatoParams {
 
 const calculateFristdatoState = getStateFactory<string, CalculateFristdatoParams>(
   `${KABIN_API_BASE_PATH}/calculatefrist`,
-  { method: 'POST', cacheTime: 300_000 }
+  { method: 'POST', cacheTime: 300_000 },
 );
 
 export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken) =>
   useSimpleApiState(
     params === skipToken
       ? skipToken
-      : calculateFristdatoState({ path: '' }, { fromDate: params.fromDate, fristInWeeks: params.fristInWeeks })
+      : calculateFristdatoState({ path: '' }, { fromDate: params.fromDate, fristInWeeks: params.fristInWeeks }),
   );
 
 interface ISaksbehandlereResponse {
@@ -118,7 +118,7 @@ export interface ISaksbehandlerParams extends Record<string, unknown> {
 
 const saksbehandlereState = getStateFactory<ISaksbehandlereResponse, void>(
   `${INNSTILLINGER_BASE_PATH}/search/saksbehandlere`,
-  { method: 'POST' }
+  { method: 'POST' },
 );
 
 export const useSaksbehandlere = (params: ISaksbehandlerParams | typeof skipToken) =>

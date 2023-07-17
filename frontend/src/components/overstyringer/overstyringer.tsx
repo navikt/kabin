@@ -1,7 +1,7 @@
 import { DocPencilIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';

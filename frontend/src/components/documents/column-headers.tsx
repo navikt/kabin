@@ -2,7 +2,7 @@ import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useTema } from '@app/simple-api-state/use-kodeverk';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
@@ -53,7 +53,7 @@ export const ColumnHeaders = ({
 
   const temaOptions = useMemo(
     () => (allTemaer === undefined ? EMPTY_LIST : allTemaer.map((t) => ({ value: t.id, label: t.beskrivelse }))),
-    [allTemaer]
+    [allTemaer],
   );
 
   const avsenderMottakerOptions = useAvsenderMottakerNoteurOptions(documents);
@@ -80,7 +80,7 @@ export const ColumnHeaders = ({
       selectedSaksIds.length,
       selectedTemaer.length,
       selectedTypes.length,
-    ]
+    ],
   );
 
   return (

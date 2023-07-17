@@ -25,7 +25,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
 
   const isInvalid = useMemo(
     () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
-    [journalpost, mulighet.vedtakDate]
+    [journalpost, mulighet.vedtakDate],
   );
 
   const selectAnke = useCallback(
@@ -40,7 +40,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
         updatePayload({ mulighet });
       }
     },
-    [isInvalid, mulighet, payload?.mulighet, type, updatePayload]
+    [isInvalid, mulighet, payload?.mulighet, type, updatePayload],
   );
 
   return (

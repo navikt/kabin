@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IArkivertDocument, IVedlegg } from '@app/types/dokument';
 import { DocumentTitle } from './document-title';
 import { useViewDocument } from './use-view-document';
@@ -51,7 +51,7 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   gap: 8px;
   background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-100)' : 'transparent')};
 
-  :hover {
+  &:hover {
     background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-200)' : 'transparent')};
   }
 

@@ -36,7 +36,7 @@ const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAn
 };
 
 export const useCreateAnke = (
-  setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void
+  setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void,
 ) => {
   const { type, fnr, setErrors, payload, journalpost } = useContext(ApiContext);
 

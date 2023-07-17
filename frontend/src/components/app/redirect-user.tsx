@@ -1,7 +1,7 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useUser } from '@app/simple-api-state/use-api';
 import { Role } from '@app/types/bruker';
 

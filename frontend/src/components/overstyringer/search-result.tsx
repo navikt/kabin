@@ -1,7 +1,7 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Loader, Tag, TagProps, Tooltip } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
 import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';

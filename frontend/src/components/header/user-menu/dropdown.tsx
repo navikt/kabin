@@ -1,8 +1,7 @@
 import { CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { CopyButton } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { CopyButton, Dropdown } from '@navikt/ds-react';
 import React from 'react';
-import styled, { css } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 export const UserDropdown = (): JSX.Element | null => {
   const version = process.env.VERSION ?? 'UKJENT';

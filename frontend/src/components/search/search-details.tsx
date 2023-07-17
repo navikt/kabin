@@ -1,6 +1,6 @@
 import { Loader, Tag, TagProps } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { getSakspartNameAndId } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { IPart, skipToken } from '@app/types/common';

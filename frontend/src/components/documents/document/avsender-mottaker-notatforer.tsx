@@ -18,7 +18,7 @@ export const AvsenderMottakerNotatforer = ({
   const { data: enheter } = useKlageenheter();
   const enhetNavn = useMemo(
     () => enheter?.find((enhet) => enhet.id === journalfoerendeEnhet)?.navn,
-    [enheter, journalfoerendeEnhet]
+    [enheter, journalfoerendeEnhet],
   );
 
   const [text, title] = useMemo<[string, string | undefined]>(() => {

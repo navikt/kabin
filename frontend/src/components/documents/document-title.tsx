@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { EditTitle } from './edit-document-title';
 
@@ -17,7 +17,7 @@ export const DocumentTitle = ({ dokumentInfoId, journalpostId, tittel }: Props) 
 
   const isActive = useMemo(
     () => dokument !== null && dokument.dokumentInfoId === dokumentInfoId && dokument.journalpostId === journalpostId,
-    [dokumentInfoId, journalpostId, dokument]
+    [dokumentInfoId, journalpostId, dokument],
   );
 
   const enterEditMode = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {

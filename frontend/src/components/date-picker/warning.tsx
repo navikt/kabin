@@ -1,7 +1,7 @@
 import { Alert } from '@navikt/ds-react';
 import { isAfter } from 'date-fns';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface WarningProps {
   date: Date | undefined;

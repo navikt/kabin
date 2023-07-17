@@ -72,7 +72,7 @@ const useSaksbehandler = (): ISaksbehandler | null => {
 
   return (
     data?.saksbehandlere.find(
-      (saksbehandler) => saksbehandler.navIdent === payload?.overstyringer.saksbehandlerIdent
+      (saksbehandler) => saksbehandler.navIdent === payload?.overstyringer.saksbehandlerIdent,
     ) ?? null
   );
 };

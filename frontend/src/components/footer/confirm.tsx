@@ -1,7 +1,7 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';

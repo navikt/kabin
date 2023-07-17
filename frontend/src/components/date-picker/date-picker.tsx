@@ -1,4 +1,4 @@
-import { DateInputProps, UNSAFE_DatePicker } from '@navikt/ds-react';
+import { DateInputProps, DatePicker } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import React, { useCallback, useEffect, useState } from 'react';
 import { prettyDateToISO } from '@app/domain/date';
@@ -56,7 +56,7 @@ export const Datepicker = ({
         onChange(isoFormatted);
       }
     },
-    [input, onChange]
+    [input, onChange],
   );
 
   const [month, setMonth] = useState(value);
@@ -77,7 +77,7 @@ export const Datepicker = ({
   }, [centuryThreshold, fromDate, input, onChange, toDate]);
 
   return (
-    <UNSAFE_DatePicker
+    <DatePicker
       mode="single"
       data-testid={id}
       fromDate={fromDate}
@@ -92,7 +92,7 @@ export const Datepicker = ({
       onOpenToggle={() => setMonth(value)}
       className={className}
     >
-      <UNSAFE_DatePicker.Input
+      <DatePicker.Input
         id={id}
         error={error}
         label={label}
@@ -103,6 +103,6 @@ export const Datepicker = ({
         size={size}
       />
       <Warning date={value} threshhold={warningThreshhold} />
-    </UNSAFE_DatePicker>
+    </DatePicker>
   );
 };

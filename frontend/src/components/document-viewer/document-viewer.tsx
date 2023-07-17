@@ -1,7 +1,7 @@
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { CardFullHeight } from '@app/components/card/card';
 import { getDocumentUrl } from '@app/components/documents/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';

@@ -1,9 +1,9 @@
 import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, DatePickerProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
+import { BodyShort, Button, DatePicker, DatePickerProps } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
@@ -53,7 +53,7 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
               icon={<XMarkIcon aria-hidden />}
             />
           </StyledHeader>
-          <Datepicker.Standalone {...datepickerProps} selected={selected} mode="range" onSelect={onChange} />
+          <DatePicker.Standalone {...datepickerProps} selected={selected} mode="range" onSelect={onChange} />
         </DatepickerContainer>
       ) : null}
     </Container>

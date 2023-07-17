@@ -1,23 +1,23 @@
-import { Header } from '@navikt/ds-react-internal';
+import { InternalHeader } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
 import { User } from './user-menu/user';
 
 export const NavHeader = () => (
-  <Header>
-    <Header.Title as={NavLink} to="/">
+  <InternalHeader>
+    <InternalHeader.Title as={NavLink} to="/">
       Kabin
-    </Header.Title>
+    </InternalHeader.Title>
     <MainArea>
       <VersionCheckerStatus />
     </MainArea>
     <User />
-  </Header>
+  </InternalHeader>
 );
 
-const MainArea = styled(Header.Title)`
+const MainArea = styled(InternalHeader.Title)`
   flex-grow: 1;
   justify-content: center;
 `;

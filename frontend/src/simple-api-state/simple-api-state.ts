@@ -16,7 +16,11 @@ export class SimpleApiState<T> {
   private req: RequestInit;
   private retryTimer: NodeJS.Timeout | undefined;
 
-  constructor(private url: string, options?: Options, body: RequestBody = undefined) {
+  constructor(
+    private url: string,
+    options?: Options,
+    body: RequestBody = undefined,
+  ) {
     this.options = Object.assign(this.options, options);
     this.req = this.getRequest(this.options, body);
 

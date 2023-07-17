@@ -49,7 +49,7 @@ const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
 
       updatePayload({ overstyringer: { mottattKlageinstans } });
     },
-    [type, updatePayload]
+    [type, updatePayload],
   );
 
   return (

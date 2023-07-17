@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IArkivertDocument } from '@app/types/dokument';
 import { Attachment } from './attachment';
 

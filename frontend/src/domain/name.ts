@@ -3,7 +3,7 @@ import { IAvsenderMottaker, IPart, PartType } from '@app/types/common';
 
 export const getSakspartName = (
   sakspart: IPart | IAvsenderMottaker | null,
-  defaultValue: string | null = '-'
+  defaultValue: string | null = '-',
 ): string | null => (sakspart === null ? defaultValue : sakspart.name);
 
 const getSakspartId = (sakspart: IPart | null): string | null => {

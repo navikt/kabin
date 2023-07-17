@@ -1,6 +1,6 @@
 import { BodyShort, Label, Loader, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
@@ -21,12 +21,12 @@ export const EditFrist = () => {
         updatePayload({ overstyringer: { fristInWeeks: parsed } });
       }
     },
-    [type, updatePayload]
+    [type, updatePayload],
   );
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     ({ target }) => parseAndSet(target.value),
-    [parseAndSet]
+    [parseAndSet],
   );
 
   if (type === Type.NONE) {

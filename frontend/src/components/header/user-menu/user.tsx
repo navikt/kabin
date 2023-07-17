@@ -1,6 +1,6 @@
-import { Dropdown, Header } from '@navikt/ds-react-internal';
+import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useSignature, useUser } from '@app/simple-api-state/use-api';
 import { UserDropdown } from './dropdown';
 
@@ -17,7 +17,7 @@ export const User = () => {
 
   return (
     <Dropdown>
-      <Header.UserButton
+      <InternalHeader.UserButton
         as={StyledToggle}
         data-testid="user-menu-button"
         name={userName}

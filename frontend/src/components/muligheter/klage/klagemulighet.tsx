@@ -29,7 +29,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
         updatePayload({ mulighet });
       }
     },
-    [mulighet, payload?.mulighet, type, updatePayload]
+    [mulighet, payload?.mulighet, type, updatePayload],
   );
 
   return (

@@ -1,7 +1,7 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { IApiValidationResponse } from '@app/types/validation';
