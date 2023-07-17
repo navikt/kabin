@@ -12,6 +12,7 @@ const tema = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/tema`);
 const vedtaksenheter = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/vedtaksenheter`);
 const klageenheter = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/klageenheter`);
 const fagsystemer = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/fagsystemer`);
+const hjemlerMap = new SimpleApiState<Record<string, string>>(`${API_PREFIX}/hjemlermap`);
 
 export const useSimpleYtelser = () => useSimpleApiState(ytelserSimple);
 export const useLatestYtelser = () => useSimpleApiState(ytelseLatest);
@@ -20,6 +21,7 @@ export const useTema = () => useSimpleApiState(tema);
 export const useVedtaksenheter = () => useSimpleApiState(vedtaksenheter);
 export const useKlageenheter = () => useSimpleApiState(klageenheter);
 export const useFagsystemer = () => useSimpleApiState(fagsystemer);
+export const useHjemlerMap = () => useSimpleApiState(hjemlerMap);
 
 const temaYtelser = getStateFactory<IYtelserLatest[], string>(API_PREFIX);
 

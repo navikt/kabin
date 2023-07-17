@@ -91,6 +91,8 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
           ...update.overstyringer,
           klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
           fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
+          ytelseId: mulighet?.ytelseId ?? null,
+          hjemmelId: mulighet?.hjemmelId ?? null,
         }
       : {
           ...state.overstyringer,
@@ -125,7 +127,7 @@ export const getUpdatedKlageState = (
   const {
     klager,
     fullmektig,
-    hjemmelIdList,
+    hjemmelId,
     saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
     ...rest
   } = update.overstyringer ?? {};
@@ -139,14 +141,14 @@ export const getUpdatedKlageState = (
           klager: klager === undefined ? null : klager, // If no klager is provided in the update, use none.
           fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
           ytelseId: null,
-          hjemmelIdList: [],
+          hjemmelId: null,
         }
       : {
           ...state.overstyringer,
           ...rest,
           klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
           fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
-          hjemmelIdList: hjemmelIdList?.filter(isNotUndefined) ?? state.overstyringer.hjemmelIdList,
+          hjemmelId: hjemmelId ?? state.overstyringer.hjemmelId,
           saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
         },
   };

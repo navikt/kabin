@@ -14,6 +14,10 @@ import { IApiValidationResponse } from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAnkeApiPayload => {
+  if (payload.mulighet === null) {
+    throw new Error('Mulighet er ikke satt.');
+  }
+
   const {
     mottattKlageinstans,
     fristInWeeks,
@@ -23,15 +27,20 @@ const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAn
     saksbehandlerIdent,
   } = payload.overstyringer;
 
+  const { id, sourceId } = payload.mulighet;
+
   return {
-    behandlingId: payload.mulighet === null ? null : payload.mulighet.behandlingId,
+    id,
     mottattKlageinstans,
     fristInWeeks,
     klager: partToPartId(klager),
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId,
+    ytelseId: payload.overstyringer.ytelseId,
+    hjemmelId: payload.overstyringer.hjemmelId,
     saksbehandlerIdent,
+    sourceId,
   };
 };
 
@@ -48,13 +57,13 @@ export const useCreateAnke = (
       return;
     }
 
-    const createAnkePayload = getAnkeApiPayload(payload, journalpost.journalpostId);
-
     try {
+      const createAnkePayload = getAnkeApiPayload(payload, journalpost.journalpostId);
+
       const res = await createAnke(createAnkePayload);
 
       if (res.ok) {
-        updateAnkemuligheter((data) => data?.filter((d) => d.behandlingId !== createAnkePayload.behandlingId));
+        updateAnkemuligheter((data) => data?.filter((d) => d.id !== createAnkePayload.id));
 
         setError(undefined);
 

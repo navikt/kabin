@@ -5,7 +5,7 @@ import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/com
 import { isoDateToPretty } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
 import { isDateAfter } from '@app/functions/date';
-import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IAnkeMulighet } from '@app/types/mulighet';
@@ -18,10 +18,11 @@ export const Ankemulighet = ({ mulighet }: Props) => {
   const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
 
   const utfallName = useUtfallName(mulighet.utfallId);
+  const temaName = useFullTemaNameFromId(mulighet.temaId);
   const ytelseName = useYtelseName(mulighet.ytelseId);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
-  const isSelected = type === Type.ANKE && payload.mulighet?.behandlingId === mulighet.behandlingId;
+  const isSelected = type === Type.ANKE && payload.mulighet?.id === mulighet.id;
 
   const isInvalid = useMemo(
     () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
@@ -45,6 +46,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
 
   return (
     <StyledTableRow selected={isSelected} onClick={selectAnke} $isInvalid={isInvalid} $isSelected={isSelected}>
+      <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{ytelseName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
       <Table.DataCell>{getSakspartName(mulighet.sakenGjelder)}</Table.DataCell>

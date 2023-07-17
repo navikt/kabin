@@ -51,7 +51,7 @@ export const Ankemuligheter = () => {
       return;
     }
 
-    updatePayload({ mulighet: updated.find((a) => a.behandlingId === mulighet.behandlingId) ?? null });
+    updatePayload({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
   };
 
   return (
@@ -135,6 +135,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
       <Table zebraStripes size="small">
         <StyledTableHeader>
           <Table.Row>
+            <Table.HeaderCell>Tema</Table.HeaderCell>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
             <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
             <Table.HeaderCell>Saken gjelder</Table.HeaderCell>
@@ -148,7 +149,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
         </StyledTableHeader>
         <Table.Body>
           {ankemuligheter.map((ankemulighet) => (
-            <Ankemulighet key={ankemulighet.behandlingId} mulighet={ankemulighet} />
+            <Ankemulighet key={ankemulighet.id} mulighet={ankemulighet} />
           ))}
         </Table.Body>
       </Table>

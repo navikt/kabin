@@ -50,15 +50,7 @@ export const Tildeling = () => {
 const useSaksbehandlereParams = (): ISaksbehandlerParams | typeof skipToken => {
   const { payload, type } = useContext(ApiContext);
 
-  if (type === Type.NONE || payload.mulighet === null) {
-    return skipToken;
-  }
-
-  if (type === Type.ANKE) {
-    return { ytelseId: payload.mulighet.ytelseId, fnr: payload.mulighet.sakenGjelder.id };
-  }
-
-  if (payload.overstyringer.ytelseId === null) {
+  if (type === Type.NONE || payload.mulighet === null || payload.overstyringer.ytelseId === null) {
     return skipToken;
   }
 
