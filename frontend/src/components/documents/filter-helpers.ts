@@ -81,9 +81,9 @@ export const useAvsenderMottakerNoteurOptions = (documents: IArkivertDocument[])
 
           return acc;
         },
-        []
+        [],
       ),
-    [documents, klageenheter, vedtaksenheter]
+    [documents, klageenheter, vedtaksenheter],
   );
 };
 
@@ -118,7 +118,7 @@ export const useFilteredDocuments = (
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
-  search: string
+  search: string,
 ): IArkivertDocument[] => {
   const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
 
@@ -141,13 +141,13 @@ export const useFilteredDocuments = (
           (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
           (selectedAvsenderMottakere.length === 0 ||
             selectedAvsenderMottakere.includes(
-              avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN
+              avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
             )) &&
           (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
           (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
-          (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
+          (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
       ),
-    [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]
+    [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes],
   );
 };
 

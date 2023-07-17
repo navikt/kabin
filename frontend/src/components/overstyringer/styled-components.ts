@@ -1,5 +1,5 @@
 import { BodyShort } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export enum States {
   SET = 'SET',

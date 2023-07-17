@@ -36,7 +36,7 @@ export const useViewDocument = ({
         viewDokument({ dokumentInfoId, journalpostId, tittel: tittel ?? 'Ukjent dokumentnavn' });
       }
     },
-    [harTilgangTilArkivvariant, isViewed, viewDokument, dokumentInfoId, journalpostId, tittel]
+    [harTilgangTilArkivvariant, isViewed, viewDokument, dokumentInfoId, journalpostId, tittel],
   );
 
   return [view, isViewed];

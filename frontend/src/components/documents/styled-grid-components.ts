@@ -1,5 +1,5 @@
 import { Button, Search, Tag } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export enum GridArea {
   EXPAND = 'expand',
@@ -31,7 +31,7 @@ export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   grid-gap: 8px;
   background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-100)' : 'transparent')};
 
-  :hover {
+  &:hover {
     background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-200)' : 'transparent')};
   }
 `;

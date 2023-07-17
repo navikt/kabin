@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useViewDocument } from '@app/components/documents/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/view-document-button';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
@@ -107,11 +107,11 @@ const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }
   border-radius: 4px;
   background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-surface-selected)' : 'var(--a-white)')};
 
-  :nth-child(odd) {
+  &:nth-child(odd) {
     background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-surface-selected)' : 'var(--a-surface-subtle)')};
   }
 
-  :hover {
+  &:hover {
     background-color: var(--a-surface-action-subtle-hover);
   }
 `;

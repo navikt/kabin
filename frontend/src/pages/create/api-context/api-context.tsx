@@ -53,7 +53,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
   const [type, setType] = useState<Type>(Type.NONE);
   const [journalpost, setInternalJournalpost] = useState<IApiContext['journalpost']>(null);
   const [klage, updateKlage, klageErrors, setKlageErrors] = useApiContext<IKlageStateUpdate, IKlageState>(
-    INITIAL_KLAGE
+    INITIAL_KLAGE,
   );
   const [anke, updateAnke, ankeErrors, setAnkeErrors] = useApiContext<IAnkeStateUpdate, IAnkeState>(INITIAL_ANKE);
 
@@ -77,11 +77,11 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
       const now = format(new Date(), FORMAT);
 
       updateKlage((k) =>
-        getStateWithOverstyringer(k, { mottattVedtaksinstans: mottattNav, mottattKlageinstans: now, avsender })
+        getStateWithOverstyringer(k, { mottattVedtaksinstans: mottattNav, mottattKlageinstans: now, avsender }),
       );
       updateAnke((a) => getStateWithOverstyringer(a, { mottattKlageinstans: mottattNav, avsender }));
     },
-    [ankeErrors, journalpost, klageErrors, setAnkeErrors, setKlageErrors, updateAnke, updateKlage]
+    [ankeErrors, journalpost, klageErrors, setAnkeErrors, setKlageErrors, updateAnke, updateKlage],
   );
 
   const base: Pick<IApiContext, 'setType' | 'fnr' | 'journalpost' | 'setJournalpost'> = {
@@ -121,11 +121,11 @@ type UseApiContextValue<P, S> = [
   S,
   UpdateFn<P, S>,
   IValidationSection[] | null,
-  (errors: IValidationSection[] | null | UpdateErrorsFn) => void
+  (errors: IValidationSection[] | null | UpdateErrorsFn) => void,
 ];
 
 const useApiContext = <P extends IKlageStateUpdate | IAnkeStateUpdate, S extends IKlageState | IAnkeState>(
-  initialState: S
+  initialState: S,
 ): UseApiContextValue<P, S> => {
   const [payload, setPayload] = useState<S>(initialState);
   const [errors, setErrors] = useState<IValidationSection[] | null>(null);
@@ -141,7 +141,7 @@ const useApiContext = <P extends IKlageStateUpdate | IAnkeStateUpdate, S extends
       }
       setPayload({ ...payload, ...update });
     },
-    [errors, payload]
+    [errors, payload],
   );
 
   return [payload, updatePayload, errors, setErrors];

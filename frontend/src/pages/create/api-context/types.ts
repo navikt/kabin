@@ -56,7 +56,7 @@ export type UpdateFn<P, S> = (p: Payload<P, S>) => void;
 
 interface IBaseContext<
   P extends IKlageStateUpdate | IAnkeStateUpdate | null,
-  S extends IKlageState | IAnkeState | null
+  S extends IKlageState | IAnkeState | null,
 > {
   type: Type;
   setType: React.Dispatch<React.SetStateAction<Type>>;

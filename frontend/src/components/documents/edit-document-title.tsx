@@ -56,12 +56,12 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
                         ...doc,
                         tittel: doc.dokumentInfoId === dokumentInfoId ? newTitle : doc.tittel,
                         vedlegg: doc.vedlegg.map((v) =>
-                          v.dokumentInfoId === dokumentInfoId ? { ...v, tittel: newTitle } : v
+                          v.dokumentInfoId === dokumentInfoId ? { ...v, tittel: newTitle } : v,
                         ),
                       }
-                    : doc
+                    : doc,
                 ),
-              }
+              },
         );
       } else {
         const json = (await res.json()) as unknown;
@@ -92,7 +92,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
         exitEditMode();
       }
     },
-    [isChanged, onSaveClick, exitEditMode]
+    [isChanged, onSaveClick, exitEditMode],
   );
 
   return (

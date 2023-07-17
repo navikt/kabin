@@ -31,7 +31,7 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
         setJournalpost(null);
       }
     },
-    [alreadyUsed, dokument, harTilgangTilArkivvariant, setJournalpost]
+    [alreadyUsed, dokument, harTilgangTilArkivvariant, setJournalpost],
   );
 
   return (

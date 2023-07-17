@@ -7,7 +7,7 @@ import {
   PersonGroupIcon,
   PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
-import styled, { css } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 const ICON_SIZE = 24;
 

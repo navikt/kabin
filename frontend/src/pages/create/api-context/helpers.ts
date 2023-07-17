@@ -1,5 +1,4 @@
 import { avsenderIsPart } from '@app/domain/converters';
-import { isNotUndefined } from '@app/functions/is-not';
 import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
@@ -15,7 +14,7 @@ export const NOOP = () => {
 
 export const getStateWithOverstyringer = <T extends IKlageState | IAnkeState>(
   state: T,
-  overstyringerChanges: Partial<T['overstyringer']>
+  overstyringerChanges: Partial<T['overstyringer']>,
 ) => ({
   ...state,
   overstyringer: {
@@ -33,7 +32,7 @@ const removeSaksdataErrors = (errors: IValidationSection[] | null, fields: Valid
               section: SectionNames.SAKSDATA,
               properties: error.properties.filter((p) => !fields.includes(p.field)),
             }
-          : error
+          : error,
       );
 
 export const removeErrorsOnMulighetChange = (errors: IValidationSection[] | null) =>
@@ -105,7 +104,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
 
 export const getUpdatedKlageState = (
   state: IKlageState,
-  newState: Payload<IKlageStateUpdate, IKlageState>
+  newState: Payload<IKlageStateUpdate, IKlageState>,
 ): IKlageState => {
   const update = typeof newState === 'function' ? newState(state) : newState;
 

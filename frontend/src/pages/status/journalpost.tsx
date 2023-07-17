@@ -1,6 +1,6 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { StyledCard } from '@app/pages/status/styled-components';

@@ -1,10 +1,10 @@
 import { Table } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const TableContainer = styled.div<{ $showShadow: boolean }>`
   overflow-y: auto;
 
-  ::after {
+  &::after {
     position: absolute;
     bottom: 0;
     left: 0;

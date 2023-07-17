@@ -37,7 +37,7 @@ const RenderEditMottattNAV = ({ value, toDate }: Props) => {
 
       updatePayload({ overstyringer: { mottattVedtaksinstans } });
     },
-    [type, updatePayload]
+    [type, updatePayload],
   );
 
   return (

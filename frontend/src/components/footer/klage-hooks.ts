@@ -40,7 +40,7 @@ const getKlageApiPayload = (payload: IKlageState, journalpostId: string): Create
 };
 
 export const useCreateKlage = (
-  setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void
+  setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void,
 ) => {
   const { type, fnr, setErrors, journalpost, payload } = useContext(ApiContext);
 
