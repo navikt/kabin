@@ -4,7 +4,7 @@ import { isDateAfter } from '@app/functions/date';
 
 interface Props {
   registrert?: string;
-  vedtakDate?: string;
+  vedtakDate?: string | null;
 }
 
 export const Warning = ({ registrert, vedtakDate }: Props) => {

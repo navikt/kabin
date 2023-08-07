@@ -28,14 +28,14 @@ export const StyledButtonCell = styled(Table.DataCell)`
   text-align: center;
 `;
 
-export const StyledTableRow = styled(Table.Row)<{ $isInvalid: boolean; $isSelected: boolean }>`
-  cursor: ${({ $isInvalid }) => ($isInvalid ? 'default' : 'pointer')};
-  background-color: ${({ $isInvalid, $isSelected }) =>
-    $isInvalid && $isSelected ? 'var(--a-surface-danger-subtle)' : 'none'};
+export const StyledTableRow = styled(Table.Row)<{ $isValid: boolean; $isSelected: boolean }>`
+  cursor: ${({ $isValid }) => ($isValid ? 'pointer' : 'default')};
+  background-color: ${({ $isValid, $isSelected }) =>
+    !$isValid && $isSelected ? 'var(--a-surface-danger-subtle)' : 'none'};
   border-radius: 4px;
 
   &&&:hover {
-    background-color: ${({ $isInvalid, $isSelected }) =>
-      $isInvalid && $isSelected ? 'var(--a-surface-danger-subtle-hover)' : 'none'};
+    background-color: ${({ $isValid, $isSelected }) =>
+      !$isValid && $isSelected ? 'var(--a-surface-danger-subtle-hover)' : 'none'};
   }
 `;

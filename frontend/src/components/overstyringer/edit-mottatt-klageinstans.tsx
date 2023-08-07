@@ -11,7 +11,7 @@ import { ValidationFieldNames } from '@app/types/validation';
 export const EditMottattKlageinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
 
-  const [fromDate, toDate, currentDate] = useMemo<[string, string, string | null] | [null, null, null]>(() => {
+  const [fromDate, toDate, currentDate] = useMemo<[string | null, string, string | null] | [null, null, null]>(() => {
     if (type === Type.NONE || journalpost === null || payload.mulighet === null) {
       return [null, null, null];
     }

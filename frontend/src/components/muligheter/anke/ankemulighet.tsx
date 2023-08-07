@@ -24,16 +24,23 @@ export const Ankemulighet = ({ mulighet }: Props) => {
 
   const isSelected = type === Type.ANKE && payload.mulighet?.id === mulighet.id;
 
-  const isInvalid = useMemo(
-    () => journalpost === null || isDateAfter(mulighet.vedtakDate, journalpost.registrert),
-    [journalpost, mulighet.vedtakDate],
-  );
+  const isValid = useMemo(() => {
+    if (journalpost === null) {
+      return false;
+    }
+
+    if (mulighet.vedtakDate === null) {
+      return true;
+    }
+
+    return !isDateAfter(mulighet.vedtakDate, journalpost.registrert);
+  }, [journalpost, mulighet.vedtakDate]);
 
   const selectAnke = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (isInvalid) {
+      if (!isValid) {
         return;
       }
 
@@ -41,14 +48,14 @@ export const Ankemulighet = ({ mulighet }: Props) => {
         updatePayload({ mulighet });
       }
     },
-    [isInvalid, mulighet, payload?.mulighet, type, updatePayload],
+    [isValid, mulighet, payload?.mulighet, type, updatePayload],
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectAnke} $isInvalid={isInvalid} $isSelected={isSelected}>
+    <StyledTableRow selected={isSelected} onClick={selectAnke} $isValid={isValid} $isSelected={isSelected}>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{ytelseName}</Table.DataCell>
-      <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
+      <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
       <Table.DataCell>{getSakspartName(mulighet.sakenGjelder)}</Table.DataCell>
       <Table.DataCell>{getSakspartName(mulighet.klager)}</Table.DataCell>
       <Table.DataCell>{utfallName}</Table.DataCell>
@@ -56,7 +63,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectAnke} isInvalid={isInvalid} />
+        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} />
       </StyledButtonCell>
     </StyledTableRow>
   );
