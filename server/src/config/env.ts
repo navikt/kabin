@@ -28,7 +28,7 @@ export const DOMAIN: string = getEnvironmentVersion(
   `http://localhost:${serverConfig.port}`,
   `http://localhost:${serverConfig.port}`,
   'https://kabin.intern.dev.nav.no',
-  'https://kabin.intern.nav.no'
+  'https://kabin.intern.nav.no',
 );
 
 export const NAIS_NAMESPACE = requiredEnvString('NAIS_NAMESPACE', 'none');
