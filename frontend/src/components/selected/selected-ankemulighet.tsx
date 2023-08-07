@@ -58,9 +58,13 @@ const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
         </Column>
         <Column>
           <StyledLabel size="small">Dato</StyledLabel>
-          <Detail as="time" dateTime={vedtakDate}>
-            {isoDateTimeToPrettyDate(vedtakDate) ?? vedtakDate}
-          </Detail>
+          {vedtakDate === null ? (
+            'Ukjent'
+          ) : (
+            <Detail as="time" dateTime={vedtakDate}>
+              {isoDateTimeToPrettyDate(vedtakDate) ?? vedtakDate}
+            </Detail>
+          )}
         </Column>
         <Column>
           <StyledLabel size="small">Saken gjelder</StyledLabel>

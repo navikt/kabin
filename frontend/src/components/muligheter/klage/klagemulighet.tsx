@@ -33,7 +33,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectKlage} $isInvalid={false} $isSelected={isSelected}>
+    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected}>
       <Table.DataCell>{mulighet.behandlingId}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
@@ -41,7 +41,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectKlage} isInvalid={false} />
+        <SelectMulighet isSelected={isSelected} select={selectKlage} isValid />
       </StyledButtonCell>
     </StyledTableRow>
   );

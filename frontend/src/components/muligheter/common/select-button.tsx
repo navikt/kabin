@@ -6,20 +6,20 @@ import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/co
 interface Props {
   isSelected: boolean;
   select: (e: React.MouseEvent) => void;
-  isInvalid: boolean;
+  isValid: boolean;
 }
 
-export const SelectMulighet = ({ isSelected, select, isInvalid }: Props) => {
-  const buttonText = isSelected || isInvalid ? '' : 'Velg';
+export const SelectMulighet = ({ isSelected, select, isValid }: Props) => {
+  const [icon, buttonText, title] = useButtonProps(isSelected, isValid);
 
   return (
     <Button
       size="small"
       variant="tertiary"
-      icon={getIcon(isSelected, isInvalid)}
-      title={getTitle(isSelected, isInvalid)}
+      icon={icon}
+      title={title}
       onClick={select}
-      disabled={isInvalid}
+      disabled={!isValid}
       data-testid="select-ankemulighet"
     >
       {buttonText}
@@ -27,26 +27,21 @@ export const SelectMulighet = ({ isSelected, select, isInvalid }: Props) => {
   );
 };
 
-const getTitle = (isSelected: boolean, isInvalid: boolean) => {
-  if (isInvalid) {
-    return 'Vedtaksdato kan ikke være etter dato for valgt journalpost';
-  }
-
+const useButtonProps = (
+  isSelected: boolean,
+  isValid: boolean,
+): [React.ReactNode, undefined, string] | [null, string, undefined] => {
   if (isSelected) {
-    return 'Valgt';
+    return [<CheckmarkCircleFillIconColored key="icon" />, undefined, 'Valgt'];
   }
 
-  return '';
-};
-
-const getIcon = (isSelected: boolean, isInvalid: boolean) => {
-  if (isSelected) {
-    return <CheckmarkCircleFillIconColored />;
+  if (isValid) {
+    return [null, 'Velg', undefined];
   }
 
-  if (isInvalid) {
-    return <CircleSlashIcon />;
-  }
-
-  return undefined;
+  return [
+    <CircleSlashIcon key="icon" aria-hidden />,
+    undefined,
+    'Vedtaksdato kan ikke være etter dato for valgt journalpost',
+  ];
 };

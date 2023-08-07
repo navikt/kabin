@@ -7,13 +7,13 @@ interface IBasemulighet {
   fagsystemId: string;
   sakenGjelder: IPart;
   utfallId: UtfallEnum;
-  vedtakDate: string;
   temaId: string;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
   behandlingId: string;
   klageBehandlendeEnhet: string;
+  vedtakDate: string;
 }
 
 export interface IAnkeMulighet extends IBasemulighet {
@@ -24,4 +24,5 @@ export interface IAnkeMulighet extends IBasemulighet {
   fullmektig: IPart | null;
   previousSaksbehandler: ISaksbehandler | null;
   sourceId: string;
+  vedtakDate: string | null;
 }
