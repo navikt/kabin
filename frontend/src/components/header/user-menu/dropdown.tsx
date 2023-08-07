@@ -15,14 +15,10 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item
           as={StyledCopyButton}
           title="Klikk for å kopiere versjonsnummeret"
-          text={version}
           copyText={version}
-        >
-          <VersionContainer>
-            <VersionIcon />
-            Kabin-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
-          </VersionContainer>
-        </Dropdown.Menu.List.Item>
+          icon={<CogRotationIcon aria-hidden />}
+          text={`Kabal-versjon: ${getShortVersion(version)}`}
+        >{`Kabal-versjon: ${getShortVersion(version)}`}</Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>
   );
@@ -36,13 +32,6 @@ const Menu = styled(Dropdown.Menu)`
   & .navds-body-short {
     font-size: 16px;
   }
-`;
-
-const VersionNumber = styled.code`
-  margin-left: 4px;
-  max-width: 80px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const linkStyle = css`
@@ -69,10 +58,15 @@ const StyledLogoutLink = styled(StyledLink)`
 const StyledCopyButton = styled(CopyButton)`
   ${linkStyle}
   white-space: nowrap;
-`;
 
-const VersionIcon = styled(CogRotationIcon)`
-  margin-right: 8px;
+  .navds-copybutton__icon {
+    margin-left: 0;
+    width: 16px;
+  }
+
+  .navds-copybutton__content {
+    gap: 8px;
+  }
 `;
 
 const getShortVersion = (version: string): string => {
@@ -82,8 +76,3 @@ const getShortVersion = (version: string): string => {
 
   return version.substring(0, 7) + '...';
 };
-
-const VersionContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
