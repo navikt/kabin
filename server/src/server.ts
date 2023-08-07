@@ -53,7 +53,7 @@ server.use(
       'X-Requested-With',
     ],
     origin: isDeployedToProd ? DOMAIN : [DOMAIN, /https?:\/\/localhost:\d{4,}/],
-  })
+  }),
 );
 
 server.get('/isAlive', (req, res) => res.status(200).send('Alive'));
