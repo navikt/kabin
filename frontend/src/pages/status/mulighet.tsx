@@ -13,7 +13,7 @@ interface Props {
   sakenGjelder: IPart;
   title: string;
   utfallId: UtfallEnum;
-  vedtakDate: string;
+  vedtakDate: string | null;
   ytelseId: string;
 }
 
@@ -26,7 +26,7 @@ export const Mulighet = ({ title, sakenGjelder, ytelseId, utfallId, vedtakDate, 
       <Part title="Saken gjelder" part={sakenGjelder} />
 
       <InfoItem label="Vedtaksdato">
-        {isoDateToPretty(vedtakDate) ?? isoDateTimeToPretty(vedtakDate) ?? vedtakDate}
+        {vedtakDate === null ? 'Ukjent' : isoDateToPretty(vedtakDate) ?? isoDateTimeToPretty(vedtakDate) ?? vedtakDate}
       </InfoItem>
 
       <InfoItem label="Ytelse">
