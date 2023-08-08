@@ -11,7 +11,6 @@ interface IBaseStatus {
   klager: IPart;
   mottattKlageinstans: string; // LocalDate
   sakenGjelder: IPart;
-  vedtakDate: string;
   ytelseId: string;
   utfallId: UtfallEnum;
   tildeltSaksbehandler: ISaksbehandler | null;
@@ -19,9 +18,11 @@ interface IBaseStatus {
 
 export interface IAnkestatus extends IBaseStatus {
   typeId: SaksTypeEnum.ANKE;
+  vedtakDate: string | null;
 }
 
 export interface IKlagestatus extends IBaseStatus {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
+  vedtakDate: string;
 }
