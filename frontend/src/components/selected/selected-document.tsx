@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
-import { isoDateToPretty } from '@app/domain/date';
+import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
@@ -30,7 +30,7 @@ interface RenderProps extends Props {
 }
 
 const RenderDokument = ({ dokument, onClick }: RenderProps) => {
-  const { tittel, temaId, registrert, avsenderMottaker, journalposttype, sak, vedlegg } = dokument;
+  const { tittel, temaId, datoOpprettet, avsenderMottaker, journalposttype, sak, vedlegg } = dokument;
 
   const temaName = useFullTemaNameFromId(temaId);
 
@@ -65,8 +65,8 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
         </Column>
         <Column>
           <StyledLabel size="small">Dato</StyledLabel>
-          <Detail as="time" dateTime={registrert}>
-            {isoDateToPretty(registrert) ?? ''}
+          <Detail as="time" dateTime={datoOpprettet}>
+            {isoDateTimeToPrettyDate(datoOpprettet) ?? ''}
           </Detail>
         </Column>
         <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />

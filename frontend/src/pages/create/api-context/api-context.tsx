@@ -73,7 +73,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
       setAnkeErrors(removeErrorsOnJournalpostChange(ankeErrors));
 
       const avsender = getUpdateAvsender(update);
-      const mottattNav = update?.registrert ?? null;
+      const mottattNav = update?.datoOpprettet.substring(0, FORMAT.length) ?? null;
       const now = format(new Date(), FORMAT);
 
       updateKlage((k) =>

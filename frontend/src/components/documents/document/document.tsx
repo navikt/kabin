@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { useViewDocument } from '@app/components/documents/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/view-document-button';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
-import { isoDateToPretty } from '@app/domain/date';
+import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { IArkivertDocument } from '@app/types/dokument';
@@ -20,8 +20,16 @@ interface Props {
 
 export const Dokument = ({ dokument }: Props) => {
   const { journalpost } = useContext(ApiContext);
-  const { dokumentInfoId, journalpostId, tittel, registrert, temaId, sak, journalposttype, harTilgangTilArkivvariant } =
-    dokument;
+  const {
+    dokumentInfoId,
+    journalpostId,
+    tittel,
+    datoOpprettet,
+    temaId,
+    sak,
+    journalposttype,
+    harTilgangTilArkivvariant,
+  } = dokument;
 
   const temaName = useFullTemaNameFromId(temaId);
 
@@ -78,7 +86,7 @@ export const Dokument = ({ dokument }: Props) => {
         <GridTag variant="alt3" size="medium" title={temaName} $gridArea={GridArea.TEMA}>
           <Ellipsis>{temaName}</Ellipsis>
         </GridTag>
-        <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
+        <StyledDate dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet)}</StyledDate>
         <AvsenderMottakerNotatforer {...dokument} />
         <StyledField $gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</StyledField>
         <StyledField $gridArea={GridArea.TYPE}>

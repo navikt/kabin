@@ -131,7 +131,7 @@ export const useFilteredDocuments = (
           temaId,
           journalposttype,
           avsenderMottaker,
-          registrert,
+          datoOpprettet,
           sak,
           vedlegg,
           journalfortAvNavn,
@@ -144,7 +144,7 @@ export const useFilteredDocuments = (
               avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
             )) &&
           (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
-          (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
+          (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
           (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
       ),
     [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes],

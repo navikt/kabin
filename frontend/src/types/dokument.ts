@@ -109,8 +109,8 @@ export interface IArkivertDocument {
   /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
   tittel: string | null;
   temaId: string | null;
-  /** Samme som datoOpprettet, men uten tidspunkt. */
-  registrert: string;
+  /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder. */
+  datoOpprettet: string;
   /** Om bruker har tilgang til å se dokumentet. */
   harTilgangTilArkivvariant: boolean;
   vedlegg: IVedlegg[];
@@ -129,8 +129,6 @@ export interface IArkivertDocument {
   journalfortAvNavn: string | null;
   /** Personen eller systembrukeren i NAV som har opprettet journalposten. Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. For inngående dokumenter kan innholdet være f.eks. en servicebruker eller et batchnavn. */
   opprettetAvNavn: string | null;
-  /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder. */
-  datoOpprettet: string;
   relevanteDatoer: IRelerendeDato[];
   /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til NAV. Vil kun være satt for utgående forsendelser. */
   antallRetur: number | null;
