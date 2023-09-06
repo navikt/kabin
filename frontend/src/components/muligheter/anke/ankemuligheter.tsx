@@ -83,7 +83,7 @@ export const Ankemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning registrert={journalpost?.registrert} vedtakDate={payload.mulighet?.vedtakDate} />
+      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={payload.mulighet?.vedtakDate} />
 
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </CardSmall>

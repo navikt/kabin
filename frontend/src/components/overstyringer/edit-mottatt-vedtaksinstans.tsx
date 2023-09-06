@@ -14,7 +14,9 @@ export const EditMottattVedtaksinstans = () => {
     return null;
   }
 
-  return <RenderEditMottattNAV value={payload.overstyringer.mottattVedtaksinstans} toDate={journalpost.registrert} />;
+  return (
+    <RenderEditMottattNAV value={payload.overstyringer.mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />
+  );
 };
 
 interface Props {

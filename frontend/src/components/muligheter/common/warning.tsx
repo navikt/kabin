@@ -3,16 +3,16 @@ import React from 'react';
 import { isDateAfter } from '@app/functions/date';
 
 interface Props {
-  registrert?: string;
+  datoOpprettet?: string;
   vedtakDate?: string | null;
 }
 
-export const Warning = ({ registrert, vedtakDate }: Props) => {
-  if (typeof registrert !== 'string' || typeof vedtakDate !== 'string') {
+export const Warning = ({ datoOpprettet, vedtakDate }: Props) => {
+  if (typeof datoOpprettet !== 'string' || typeof vedtakDate !== 'string') {
     return null;
   }
 
-  const isInvalid = isDateAfter(vedtakDate, registrert);
+  const isInvalid = isDateAfter(vedtakDate, datoOpprettet);
 
   if (!isInvalid) {
     return null;

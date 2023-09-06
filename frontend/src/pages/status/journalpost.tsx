@@ -1,7 +1,8 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { isoDateToPretty } from '@app/domain/date';
+import { isoDateTimeToPrettyDate } from '@app/domain/date';
+import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
@@ -13,7 +14,7 @@ interface JournalpostProps {
 }
 
 export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
-  const { temaId, tittel, registrert, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
+  const { temaId, tittel, datoOpprettet, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
 
   const temaName = useFullTemaNameFromId(temaId);
 
@@ -28,7 +29,9 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
       </InfoItem>
 
       <InfoItem label="Dato">
-        <Time dateTime={registrert}>{isoDateToPretty(registrert) ?? registrert}</Time>
+        <Time dateTime={datoOpprettet}>
+          {isoDateTimeToPrettyDate(datoOpprettet) ?? datoOpprettet.substring(0, FORMAT.length)}
+        </Time>
       </InfoItem>
 
       <Part title="Avsender/mottaker" part={avsenderMottaker} />

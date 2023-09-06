@@ -33,7 +33,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
       return true;
     }
 
-    return !isDateAfter(mulighet.vedtakDate, journalpost.registrert);
+    return !isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet);
   }, [journalpost, mulighet.vedtakDate]);
 
   const selectAnke = useCallback(

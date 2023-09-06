@@ -18,9 +18,17 @@ export const EditMottattKlageinstans = () => {
 
     switch (type) {
       case Type.KLAGE:
-        return [journalpost.registrert, format(new Date(), FORMAT), payload.overstyringer.mottattKlageinstans];
+        return [
+          journalpost.datoOpprettet.substring(0, FORMAT.length),
+          format(new Date(), FORMAT),
+          payload.overstyringer.mottattKlageinstans,
+        ];
       case Type.ANKE:
-        return [payload.mulighet.vedtakDate, journalpost.registrert, payload.overstyringer.mottattKlageinstans];
+        return [
+          payload.mulighet.vedtakDate,
+          journalpost.datoOpprettet.substring(0, FORMAT.length),
+          payload.overstyringer.mottattKlageinstans,
+        ];
     }
   }, [journalpost, payload?.mulighet, payload?.overstyringer.mottattKlageinstans, type]);
 
