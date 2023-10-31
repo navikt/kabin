@@ -1,16 +1,30 @@
-import { parseISO } from 'date-fns';
-import React, { useCallback, useContext, useMemo } from 'react';
-import { Datepicker } from '@app/components/date-picker/date-picker';
-import { FORMAT } from '@app/domain/date-formats';
-import { FIELD_NAMES } from '@app/hooks/use-field-name';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { IAnkeState, IKlageState, Type } from '@app/pages/create/api-context/types';
-import { IArkivertDocument } from '@app/types/dokument';
-const renderEditMottattNAV = (selectedDate: Date | undefined, fromDate: Date | undefined, toDate: Date | undefined) => {
-  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+import { parseISO } from "date-fns";
+import React, { useCallback, useContext, useMemo } from "react";
+import { Datepicker } from "@app/components/date-picker/date-picker";
+import { FORMAT } from "@app/domain/date-formats";
+import { FIELD_NAMES } from "@app/hooks/use-field-name";
+import { useValidationError } from "@app/hooks/use-validation-error";
+import { ApiContext } from "@app/pages/create/api-context/api-context";
+import {
+  IAnkeState,
+  IKlageState,
+  Type,
+} from "@app/pages/create/api-context/types";
+import { IArkivertDocument } from "@app/types/dokument";
+const renderEditMottattNAV = (
+  selectedDate: Date | undefined,
+  fromDate: Date | undefined,
+  toDate: Date | undefined,
+) => {
+  return (
+    <RenderEditMottattNAV
+      value={selectedDate}
+      fromDate={fromDate}
+      toDate={toDate}
+    />
+  );
 };
-import { ValidationFieldNames } from '@app/types/validation';
+import { ValidationFieldNames } from "@app/types/validation";
 
 export const EditMottattKlageinstans = () => {
   const { type, payload, journalpost } = useContext(ApiContext);
@@ -21,7 +35,13 @@ export const EditMottattKlageinstans = () => {
     case Type.ANKE:
       return <Anke payload={payload} journalpost={journalpost} />;
     case Type.NONE:
-      return <RenderEditMottattNAV value={undefined} fromDate={undefined} toDate={undefined} />;
+      return (
+        <RenderEditMottattNAV
+          value={undefined}
+          fromDate={undefined}
+          toDate={undefined}
+        />
+      );
   }
 };
 
@@ -33,7 +53,10 @@ interface KlageProps {
 const Klage = ({ payload, journalpost }: KlageProps) => {
   const selectedDate = getSelectedDate(payload);
 
-  const fromDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const fromDate =
+    journalpost === null
+      ? undefined
+      : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   const toDate = useMemo(() => {
     const now = new Date();
@@ -58,13 +81,18 @@ const Anke = ({ payload, journalpost }: AnkeProps) => {
       ? undefined
       : parseISO(payload.mulighet.vedtakDate);
 
-  const toDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const toDate =
+    journalpost === null
+      ? undefined
+      : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   return renderEditMottattNAV(selectedDate, fromDate, toDate);
 };
 
 const getSelectedDate = (payload: IKlageState | IAnkeState) =>
-  payload.overstyringer.mottattKlageinstans === null ? undefined : parseISO(payload.overstyringer.mottattKlageinstans);
+  payload.overstyringer.mottattKlageinstans === null
+    ? undefined
+    : parseISO(payload.overstyringer.mottattKlageinstans);
 
 interface Props {
   value: Date | undefined;
