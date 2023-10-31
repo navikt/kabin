@@ -142,6 +142,7 @@ export const getUpdatedKlageState = (
           fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
           ytelseId: null,
           hjemmelId: null,
+          mottattKlageinstans: updateMulighet === null ? null : updateMulighet.vedtakDate,
         }
       : {
           ...state.overstyringer,
