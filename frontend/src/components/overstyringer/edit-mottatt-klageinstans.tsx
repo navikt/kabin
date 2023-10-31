@@ -1,29 +1,23 @@
-import { parseISO } from "date-fns";
-import React, { useCallback, useContext, useMemo } from "react";
-import { Datepicker } from "@app/components/date-picker/date-picker";
-import { FORMAT } from "@app/domain/date-formats";
-import { FIELD_NAMES } from "@app/hooks/use-field-name";
-import { useValidationError } from "@app/hooks/use-validation-error";
-import { ApiContext } from "@app/pages/create/api-context/api-context";
+import { parseISO } from 'date-fns';
+import React, { useCallback, useContext, useMemo } from 'react';
+import { Datepicker } from '@app/components/date-picker/date-picker';
+import { FORMAT } from '@app/domain/date-formats';
+import { FIELD_NAMES } from '@app/hooks/use-field-name';
+import { useValidationError } from '@app/hooks/use-validation-error';
+import { ApiContext } from '@app/pages/create/api-context/api-context';
 import {
   IAnkeState,
   IKlageState,
   Type,
-} from "@app/pages/create/api-context/types";
-import { IArkivertDocument } from "@app/types/dokument";
-const renderEditMottattNAV = (
-  selectedDate: Date | undefined,
-  fromDate: Date | undefined,
-  toDate: Date | undefined,
-) => {
-  return (
+} from '@app/pages/create/api-context/types';
+import { IArkivertDocument } from '@app/types/dokument';
+
+const renderEditMottattNAV = (selectedDate: Date | undefined, fromDate: Date | undefined, toDate: Date | undefined) =>
     <RenderEditMottattNAV
       value={selectedDate}
       fromDate={fromDate}
       toDate={toDate}
-    />
-  );
-};
+    />;
 import { ValidationFieldNames } from "@app/types/validation";
 
 export const EditMottattKlageinstans = () => {
