@@ -7,6 +7,9 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { IAnkeState, IKlageState, Type } from '@app/pages/create/api-context/types';
 import { IArkivertDocument } from '@app/types/dokument';
+const renderEditMottattNAV = (selectedDate: Date | undefined, fromDate: Date | undefined, toDate: Date | undefined) => {
+  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+};
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattKlageinstans = () => {
@@ -39,7 +42,7 @@ const Klage = ({ payload, journalpost }: KlageProps) => {
     return now;
   }, []);
 
-  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+  return renderEditMottattNAV(selectedDate, fromDate, toDate);
 };
 
 interface AnkeProps {
@@ -57,7 +60,7 @@ const Anke = ({ payload, journalpost }: AnkeProps) => {
 
   const toDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
-  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+  return renderEditMottattNAV(selectedDate, fromDate, toDate);
 };
 
 const getSelectedDate = (payload: IKlageState | IAnkeState) =>
