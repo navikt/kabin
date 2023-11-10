@@ -43,3 +43,7 @@ spec:
   {{/each}}
   envFrom:
     - secret: slack-url
+  liveness:
+    path: /isAlive
+  readiness:
+    path: /isReady
