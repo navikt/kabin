@@ -25,4 +25,21 @@ export interface IAnkeMulighet extends IBasemulighet {
   previousSaksbehandler: ISaksbehandler | null;
   sourceId: string;
   vedtakDate: string | null;
+  typeId: TypeId;
+  sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
+}
+
+interface ExistingAnkebehandling {
+  /** UUID */
+  id: string;
+  /** LocalDateTime */
+  created: string;
+  /** LocalDateTime */
+  completed: string | null;
+}
+
+export enum TypeId {
+  KLAGE = '1',
+  ANKE = '2',
+  ANKE_I_TR = '3',
 }
