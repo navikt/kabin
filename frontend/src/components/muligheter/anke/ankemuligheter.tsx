@@ -135,15 +135,14 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
       <Table zebraStripes size="small">
         <StyledTableHeader>
           <Table.Row>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
             <Table.HeaderCell>Tema</Table.HeaderCell>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
             <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-            <Table.HeaderCell>Saken gjelder</Table.HeaderCell>
-            <Table.HeaderCell>Klager</Table.HeaderCell>
             <Table.HeaderCell>Utfall</Table.HeaderCell>
-            <Table.HeaderCell>Fullmektig</Table.HeaderCell>
-            <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
             <Table.HeaderCell>Fagsystem</Table.HeaderCell>
+            <Table.HeaderCell />
             <Table.HeaderCell />
           </Table.Row>
         </StyledTableHeader>
