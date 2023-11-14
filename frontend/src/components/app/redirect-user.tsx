@@ -11,7 +11,7 @@ export const RedirectUser = () => {
   if (isLoading || typeof data === 'undefined') {
     return (
       <StyledMain>
-        <Loader size="3xlarge"></Loader>
+        <Loader size="3xlarge" />
       </StyledMain>
     );
   }

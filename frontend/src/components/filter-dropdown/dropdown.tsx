@@ -58,7 +58,7 @@ export const Dropdown = <T extends string>({
         onReset={reset}
         optionsCount={options.length}
         closeDropdown={closeDropdown}
-        showFjernAlle={true}
+        showFjernAlle
       />
       <FilterList options={filteredOptions} selected={selected} onChange={onChange} focused={focusedOption} />
     </StyledDropdown>

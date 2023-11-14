@@ -27,7 +27,7 @@ export const PersonSearch = ({
       onChange={onRawChange}
       label="Søk på ID-nummer"
       placeholder="Søk på ID-nummer"
-      hideLabel={true}
+      hideLabel
       error={error}
       onKeyDown={onKeyDown}
       onFocus={(e) => e.target.select()}
