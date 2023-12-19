@@ -4,22 +4,8 @@ import {
   useHjemlerMap,
   useSimpleYtelser,
   useTema,
-  useUtfall,
   useVedtaksenheter,
 } from '@app/simple-api-state/use-kodeverk';
-import { UtfallEnum } from '@app/types/kodeverk';
-
-export const useUtfallName = (utfallId: UtfallEnum | null): string => {
-  const { data } = useUtfall();
-
-  return useMemo(() => {
-    if (utfallId === null || typeof data === 'undefined') {
-      return '';
-    }
-
-    return data.find(({ id }) => id === utfallId)?.navn ?? utfallId;
-  }, [data, utfallId]);
-};
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
   const { data, isLoading } = useTema();

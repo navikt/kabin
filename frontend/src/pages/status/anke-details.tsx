@@ -10,7 +10,6 @@ export const AnkeDetails = ({
   frist,
   mottattKlageinstans,
   vedtakDate,
-  utfallId,
   ytelseId,
   fullmektig,
   journalpost,
@@ -41,7 +40,6 @@ export const AnkeDetails = ({
       fagsakId={fagsakId}
       fagsystemId={fagsystemId}
       sakenGjelder={sakenGjelder}
-      utfallId={utfallId}
       vedtakDate={vedtakDate}
       ytelseId={ytelseId}
     />

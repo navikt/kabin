@@ -5,7 +5,7 @@ import { SelectMulighet } from '@app/components/muligheter/common/select-button'
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useYtelseName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IAnkeMulighet, TypeId } from '@app/types/mulighet';
@@ -17,7 +17,6 @@ interface Props {
 export const Ankemulighet = ({ mulighet }: Props) => {
   const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
 
-  const utfallName = useUtfallName(mulighet.utfallId);
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const ytelseName = useYtelseName(mulighet.ytelseId);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
@@ -83,11 +82,6 @@ export const Ankemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{ytelseName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
-      <Table.DataCell>
-        <NowrapTag variant="info" size="small">
-          {utfallName}
-        </NowrapTag>
-      </Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <Table.DataCell>
         {usedCount === 0 ? null : (

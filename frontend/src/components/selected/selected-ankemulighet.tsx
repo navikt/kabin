@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
-import { useFagsystemName, useUtfallName, useYtelseName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useYtelseName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IAnkeMulighet } from '@app/types/mulighet';
@@ -29,9 +29,8 @@ interface RenderProps extends Props {
 }
 
 const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { ytelseId, vedtakDate, sakenGjelder, klager, utfallId, fullmektig, fagsakId, fagsystemId } = mulighet;
+  const { ytelseId, vedtakDate, sakenGjelder, klager, fullmektig, fagsakId, fagsystemId } = mulighet;
 
-  const utfallName = useUtfallName(utfallId);
   const ytelseName = useYtelseName(ytelseId);
   const fagsystemName = useFagsystemName(fagsystemId);
 
@@ -73,12 +72,6 @@ const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
         <Column>
           <StyledLabel size="small">Klager</StyledLabel>
           <Detail>{getSakspartName(klager)}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Utfall</StyledLabel>
-          <Tag size="small" variant="alt1">
-            {utfallName}
-          </Tag>
         </Column>
         <Column>
           <StyledLabel size="small">Fullmektig</StyledLabel>

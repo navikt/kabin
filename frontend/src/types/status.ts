@@ -1,6 +1,5 @@
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from './dokument';
-import { UtfallEnum } from './kodeverk';
 
 interface IBaseStatus {
   fagsakId: string;
@@ -12,7 +11,6 @@ interface IBaseStatus {
   mottattKlageinstans: string; // LocalDate
   sakenGjelder: IPart;
   ytelseId: string;
-  utfallId: UtfallEnum;
   tildeltSaksbehandler: ISaksbehandler | null;
 }
 
