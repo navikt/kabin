@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
-import { useFagsystemName, useFullTemaNameFromId, useUtfallName, useVedtaksenhetName } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
@@ -28,9 +28,8 @@ interface RenderProps extends Props {
 }
 
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { behandlingId, temaId, utfallId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+  const { behandlingId, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
 
-  const utfallName = useUtfallName(utfallId);
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(fagsystemId);
@@ -65,12 +64,6 @@ const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
           <Detail as="time" dateTime={vedtakDate}>
             {isoDateToPretty(vedtakDate) ?? vedtakDate}
           </Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Utfall</StyledLabel>
-          <Tag size="small" variant="alt1">
-            {utfallName}
-          </Tag>
         </Column>
         <Column>
           <StyledLabel size="small">Behandlende enhet</StyledLabel>

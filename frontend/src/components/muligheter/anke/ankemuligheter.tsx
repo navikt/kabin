@@ -140,7 +140,6 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
             <Table.HeaderCell>Tema</Table.HeaderCell>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
             <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-            <Table.HeaderCell>Utfall</Table.HeaderCell>
             <Table.HeaderCell>Fagsystem</Table.HeaderCell>
             <Table.HeaderCell />
             <Table.HeaderCell />

@@ -1,12 +1,10 @@
 import { IPart, ISaksbehandler } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
-import { UtfallEnum } from './kodeverk';
 
 interface IBasemulighet {
   fagsakId: string;
   fagsystemId: string;
   sakenGjelder: IPart;
-  utfallId: UtfallEnum;
   temaId: string;
 }
 

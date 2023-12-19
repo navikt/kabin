@@ -1,5 +1,5 @@
 import { skipToken } from '@app/types/common';
-import { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest, UtfallEnum } from '@app/types/kodeverk';
+import { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
 
@@ -7,7 +7,6 @@ const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 
 const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelseLatest = new SimpleApiState<IYtelserLatest[]>(`${API_PREFIX}/ytelser/latest`);
-const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
 const tema = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/tema`);
 const vedtaksenheter = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/vedtaksenheter`);
 const klageenheter = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/klageenheter`);
@@ -16,7 +15,6 @@ const hjemlerMap = new SimpleApiState<Record<string, string>>(`${API_PREFIX}/hje
 
 export const useSimpleYtelser = () => useSimpleApiState(ytelserSimple);
 export const useLatestYtelser = () => useSimpleApiState(ytelseLatest);
-export const useUtfall = () => useSimpleApiState(utfall);
 export const useTema = () => useSimpleApiState(tema);
 export const useVedtaksenheter = () => useSimpleApiState(vedtaksenheter);
 export const useKlageenheter = () => useSimpleApiState(klageenheter);
