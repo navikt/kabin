@@ -3,9 +3,10 @@ import { Button, ButtonProps, Loader, Tag, TagProps, Tooltip } from '@navikt/ds-
 import React from 'react';
 import { styled } from 'styled-components';
 import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';
-import { IPart, PartType } from '@app/types/common';
+import { IPart, IdType } from '@app/types/common';
 
 interface Props {
   label: string;
@@ -28,7 +29,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (typeof data !== 'undefined') {
     return (
-      <Render variant="alt3" onConfirm={() => setPart(data)} onDismiss={dismiss}>
+      <Render variant="alt3" onConfirm={() => setPart(data)} onDismiss={dismiss} statusList={data.statusList}>
         <Icon part={data} /> {getSakspartName(data)}
       </Render>
     );
@@ -59,12 +60,13 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
 interface RenderProps {
   variant: TagProps['variant'];
+  statusList?: IPart['statusList'];
   children: React.ReactNode;
   onConfirm?: () => void;
   onDismiss?: () => void;
 }
 
-const Render = ({ children, variant, onConfirm, onDismiss }: RenderProps) => {
+const Render = ({ children, variant, statusList, onConfirm, onDismiss }: RenderProps) => {
   const accept =
     onConfirm === undefined ? null : (
       <CustomButton
@@ -92,6 +94,7 @@ const Render = ({ children, variant, onConfirm, onDismiss }: RenderProps) => {
       <StyledTag variant={variant} size="medium">
         {children}
       </StyledTag>
+      {statusList === undefined ? null : <PartStatusList statusList={statusList} />}
       <Buttons>
         {accept}
         {dismiss}
@@ -142,7 +145,7 @@ interface IconProps {
 }
 
 const Icon = ({ part }: IconProps) => {
-  if (part !== null && part.type === PartType.ORGNR) {
+  if (part !== null && part.type === IdType.ORGNR) {
     return <CompanyIcon aria-hidden />;
   }
 

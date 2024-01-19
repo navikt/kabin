@@ -1,6 +1,6 @@
 import React from 'react';
 import { IKlagestatus } from '@app/types/status';
-import { Part } from './common-components';
+import { NavEmployee, Part } from './common-components';
 import { DateInfoItem } from './date';
 import { Journalpost } from './journalpost';
 import { Mulighet } from './mulighet';
@@ -29,12 +29,7 @@ export const KlageDetails = ({
       <DateInfoItem title="Frist" date={frist} />
       <Part title="Klager" part={klager} />
       <Part title="Fullmektig" part={fullmektig} />
-      <Part
-        title="Tildelt saksbehandler"
-        part={
-          tildeltSaksbehandler === null ? null : { id: tildeltSaksbehandler.navIdent, name: tildeltSaksbehandler.navn }
-        }
-      />
+      <NavEmployee title="Tildelt saksbehandler" employee={tildeltSaksbehandler} />
     </StyledCard>
 
     <Mulighet

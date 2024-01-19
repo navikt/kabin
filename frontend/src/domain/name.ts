@@ -1,5 +1,5 @@
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { IAvsenderMottaker, IPart, PartType } from '@app/types/common';
+import { IAvsenderMottaker, IPart, IdType } from '@app/types/common';
 
 export const getSakspartName = (
   sakspart: IPart | IAvsenderMottaker | null,
@@ -11,11 +11,11 @@ const getSakspartId = (sakspart: IPart | null): string | null => {
     return null;
   }
 
-  if (sakspart.type === PartType.FNR) {
+  if (sakspart.type === IdType.FNR) {
     return formatFoedselsnummer(sakspart.id);
   }
 
-  if (sakspart.type === PartType.ORGNR) {
+  if (sakspart.type === IdType.ORGNR) {
     return formatOrgNum(sakspart.id);
   }
 
