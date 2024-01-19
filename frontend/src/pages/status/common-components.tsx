@@ -4,9 +4,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ENVIRONMENT } from '@app/environment';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
+import { IPart, ISaksbehandler } from '@app/types/common';
 import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
@@ -64,7 +66,7 @@ const StyledSak = styled.div`
 
 interface PartProps {
   title: string;
-  part: { id: string; name?: string | null } | null;
+  part: IPart | null;
 }
 
 export const Part = ({ part, title }: PartProps) => {
@@ -81,10 +83,31 @@ export const Part = ({ part, title }: PartProps) => {
       <StyledPart>
         <span>{part.name ?? 'Navn mangler'}</span>
         <CopyPartIdButton id={part.id} />
+        <PartStatusList statusList={part.statusList} />
       </StyledPart>
     </InfoItem>
   );
 };
+
+interface NavEmployeeProps {
+  title: string;
+  employee: ISaksbehandler | null;
+}
+
+export const NavEmployee = ({ title, employee }: NavEmployeeProps) => (
+  <InfoItem label={title}>
+    {employee === null ? (
+      <BodyShort>Ingen</BodyShort>
+    ) : (
+      <StyledPart>
+        <span>
+          {employee.navn} ({employee.navIdent})
+        </span>
+        <CopyPartIdButton id={employee.navIdent} />
+      </StyledPart>
+    )}
+  </InfoItem>
+);
 
 interface StatusHeadingProps {
   headingText: string;

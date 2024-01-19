@@ -2,6 +2,7 @@ import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { Icon } from '@app/components/overstyringer/part-read/icon';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { getSakspartName } from '@app/domain/name';
 import { PartContent, PartTextContent, StyledContainer, StyledPartName, getState } from '../styled-components';
@@ -59,6 +60,7 @@ const Content = ({ part, children }: Pick<PartReadProps, 'part' | 'children'>) =
         {getSakspartName(part, null)}
       </StyledPartName>
       <CopyPartIdButton id={part.id} />
+      <PartStatusList statusList={part.statusList} />
     </>
   );
 };
