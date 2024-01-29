@@ -9,7 +9,7 @@ interface CreateBasePayload {
   klager: IPartId | null;
   mottattKlageinstans: string | null; // LocalDate
   ytelseId: string | null;
-  hjemmelId: string | null;
+  hjemmelIdList: string[];
   saksbehandlerIdent: string | null;
 }
 

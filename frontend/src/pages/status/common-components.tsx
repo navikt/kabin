@@ -83,8 +83,8 @@ export const Part = ({ part, title }: PartProps) => {
       <StyledPart>
         <span>{part.name ?? 'Navn mangler'}</span>
         <CopyPartIdButton id={part.id} />
-        <PartStatusList statusList={part.statusList} />
       </StyledPart>
+      <PartStatusList statusList={part.statusList} />
     </InfoItem>
   );
 };

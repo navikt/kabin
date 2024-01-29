@@ -9,7 +9,7 @@ import { ToggleButton } from './toggle-button';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   fullWidth?: boolean;
-  children?: string;
+  children: React.ReactNode;
   testId?: string;
   align?: PopupProps['align'];
   direction?: PopupProps['direction'];
@@ -53,7 +53,7 @@ export const FilterDropdown = <T extends string>({
   return (
     <StyledFilterDropdown ref={ref} data-testid={testId} className={className} title={title}>
       {typeof label === 'string' ? (
-        <Label htmlFor={buttonId} size="small">
+        <Label htmlFor={buttonId} size="medium">
           {label}
         </Label>
       ) : null}
@@ -66,7 +66,7 @@ export const FilterDropdown = <T extends string>({
           disabled={disabled}
           data-testid="toggle-button"
         >
-          {getSelectedLength(children, selected.length, options.length)}
+          {typeof children === 'string' ? getSelectedLength(label, selected.length, options.length) : children}
         </ToggleButton>
         <Popup isOpen={isOpen} align={align} direction={direction} fullWidth={fullWidth}>
           <Dropdown
@@ -90,7 +90,7 @@ const Container = styled.div`
 const StyledFilterDropdown = styled.section`
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-2);
+  gap: 12px;
 `;
 
 interface PopupProps {
