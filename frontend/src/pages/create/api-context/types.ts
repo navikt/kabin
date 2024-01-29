@@ -16,7 +16,7 @@ interface ICommonOverstyringer {
   mottattKlageinstans: string | null; // LocalDate
   avsender: IPart | null;
   ytelseId: string | null;
-  hjemmelId: string | null;
+  hjemmelIdList: string[];
   saksbehandlerIdent: string | null;
 }
 
@@ -84,7 +84,7 @@ export const INITIAL_KLAGE: IKlageState = {
   overstyringer: {
     mottattVedtaksinstans: null,
     mottattKlageinstans: null,
-    hjemmelId: null,
+    hjemmelIdList: [],
     ytelseId: null,
     fristInWeeks: 12,
     fullmektig: null,
@@ -103,7 +103,7 @@ export const INITIAL_ANKE: IAnkeState = {
     mottattKlageinstans: null,
     avsender: null,
     ytelseId: null,
-    hjemmelId: null,
+    hjemmelIdList: [],
     saksbehandlerIdent: null,
   },
 };

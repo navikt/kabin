@@ -92,7 +92,7 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
           klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
           fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
           ytelseId: mulighet?.ytelseId ?? null,
-          hjemmelId: mulighet?.hjemmelId ?? null,
+          hjemmelIdList: mulighet?.hjemmelIdList ?? [],
         }
       : {
           ...state.overstyringer,
@@ -127,7 +127,7 @@ export const getUpdatedKlageState = (
   const {
     klager,
     fullmektig,
-    hjemmelId,
+    hjemmelIdList,
     saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
     ...rest
   } = update.overstyringer ?? {};
@@ -141,7 +141,7 @@ export const getUpdatedKlageState = (
           klager: klager === undefined ? null : klager, // If no klager is provided in the update, use none.
           fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
           ytelseId: null,
-          hjemmelId: null,
+          hjemmelIdList: [],
           mottattKlageinstans: updateMulighet === null ? null : updateMulighet.vedtakDate,
         }
       : {
@@ -149,7 +149,7 @@ export const getUpdatedKlageState = (
           ...rest,
           klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
           fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
-          hjemmelId: hjemmelId ?? state.overstyringer.hjemmelId,
+          hjemmelIdList: hjemmelIdList ?? state.overstyringer.hjemmelIdList,
           saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
         },
   };

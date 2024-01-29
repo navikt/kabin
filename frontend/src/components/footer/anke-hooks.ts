@@ -38,7 +38,7 @@ const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAn
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId,
     ytelseId: payload.overstyringer.ytelseId,
-    hjemmelId: payload.overstyringer.hjemmelId,
+    hjemmelIdList: payload.overstyringer.hjemmelIdList,
     saksbehandlerIdent,
     sourceId,
   };

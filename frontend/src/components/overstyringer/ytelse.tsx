@@ -40,7 +40,7 @@ export const Ytelse = () => {
       return;
     }
 
-    updatePayload({ overstyringer: { ytelseId: first.id, hjemmelId: null } });
+    updatePayload({ overstyringer: { ytelseId: first.id, hjemmelIdList: [] } });
   }, [data, isLoading, isUninitialized, payload, prevData, type, updatePayload]);
 
   if (type === Type.NONE) {
@@ -69,7 +69,7 @@ export const Ytelse = () => {
       error={error}
       label="Ytelse"
       size="small"
-      onChange={({ target }) => updatePayload({ overstyringer: { ytelseId: target.value, hjemmelId: null } })}
+      onChange={({ target }) => updatePayload({ overstyringer: { ytelseId: target.value, hjemmelIdList: [] } })}
       value={payload.overstyringer.ytelseId ?? NONE_SELECTED}
       id={ValidationFieldNames.YTELSE_ID}
       $gridColumn={1}

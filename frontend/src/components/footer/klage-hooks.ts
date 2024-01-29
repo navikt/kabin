@@ -34,7 +34,7 @@ const getKlageApiPayload = (payload: IKlageState, journalpostId: string): Create
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId,
     ytelseId: payload.overstyringer.ytelseId,
-    hjemmelId: payload.overstyringer.hjemmelId,
+    hjemmelIdList: payload.overstyringer.hjemmelIdList,
     saksbehandlerIdent,
   };
 };

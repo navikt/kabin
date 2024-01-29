@@ -17,7 +17,7 @@ export interface IKlagemulighet extends IBasemulighet {
 export interface IAnkeMulighet extends IBasemulighet {
   id: string;
   ytelseId: Ytelse | null;
-  hjemmelId: string | null;
+  hjemmelIdList: string[];
   klager: IPart;
   fullmektig: IPart | null;
   previousSaksbehandler: ISaksbehandler | null;
