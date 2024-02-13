@@ -50,14 +50,15 @@ module.exports = (_env, { mode }) => ({
     host: '0.0.0.0',
     port: 8063,
     historyApiFallback: true,
-    proxy: {
-      '/api': {
+    proxy: [
+       {
+        context: ['/api'],
         target: 'https://kabin.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,
         withCredentials: true,
       },
-    },
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({
