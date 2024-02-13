@@ -1,7 +1,10 @@
 import '@navikt/ds-css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { initializeObservability } from '@app/observability';
 import { App } from './components/app/app';
+
+initializeObservability();
 
 const container = document.getElementById('app');
 

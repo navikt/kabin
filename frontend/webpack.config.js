@@ -58,6 +58,11 @@ module.exports = (_env, { mode }) => ({
         changeOrigin: true,
         withCredentials: true,
       },
+      {
+        target: 'https://telemetry.ekstern.dev.nav.no',
+        context: ['/collect'],
+        changeOrigin: true,
+      }
     ],
   },
   plugins: [
