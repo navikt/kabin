@@ -1,8 +1,11 @@
 import cors from 'cors';
 import express from 'express';
+import { queryParamsToHeaders, setProxyVersionHeader } from '@app/headers';
+import { httpLoggingMiddleware } from '@app/http-logger';
+import { ensureTraceparentHandler } from '@app/request-id';
 import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
 import { init } from './init';
-import { getLogger, httpLoggingMiddleware } from './logger';
+import { getLogger } from './logger';
 import { processErrors } from './process-errors';
 import { metricsMiddleware } from './prometheus/middleware';
 import { EmojiIcons, sendToSlack } from './slack';
@@ -19,6 +22,10 @@ if (isDeployed) {
 
 const server = express();
 
+server.use(queryParamsToHeaders);
+server.use(setProxyVersionHeader);
+server.use(ensureTraceparentHandler);
+
 // Add the prometheus middleware to all routes
 server.use(metricsMiddleware);
 
@@ -26,6 +33,7 @@ server.use(httpLoggingMiddleware);
 
 server.set('trust proxy', true);
 server.disable('x-powered-by');
+server.set('query parser', 'simple');
 
 server.use(
   cors({
