@@ -1,27 +1,19 @@
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { useSignature, useUser } from '@app/simple-api-state/use-api';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { UserDropdown } from './dropdown';
 
 export const User = () => {
-  const { data: signature, isLoading: signatureIsLoading } = useSignature();
-  const { data: bruker, isLoading: brukerIsLoading } = useUser();
-
-  const userName =
-    signatureIsLoading || typeof signature === 'undefined'
-      ? 'Laster...'
-      : signature.customLongName ?? signature.longName;
-
-  const enhet = brukerIsLoading || typeof bruker === 'undefined' ? 'Laster...' : bruker.ansattEnhet.navn;
+  const { user } = useContext(StaticDataContext);
 
   return (
     <Dropdown>
       <InternalHeader.UserButton
         as={StyledToggle}
         data-testid="user-menu-button"
-        name={userName}
-        description={`Enhet: ${enhet}`}
+        name={user.navn}
+        description={`Enhet: ${user.ansattEnhet.navn}`}
       />
       <UserDropdown />
     </Dropdown>

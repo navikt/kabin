@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { loggedOutToast } from '@app/components/toast/toast-content/logged-out';
+import { getHeaders } from '@app/headers';
 import { skipToken } from '@app/types/common';
 import { InternalOptions, Listener, NoRetryError, Options, RequestBody, State, UpdateData } from './types';
 
@@ -30,7 +31,7 @@ export class SimpleApiState<T> {
   }
 
   private getRequest = ({ method }: InternalOptions, body: RequestBody): RequestInit => {
-    const req: RequestInit = { method, headers: { Accept: 'application/json' } };
+    const req: RequestInit = { method, headers: { ...getHeaders(), Accept: 'application/json' } };
 
     if (method === 'POST' || method === 'PUT') {
       req.cache = 'no-cache';
