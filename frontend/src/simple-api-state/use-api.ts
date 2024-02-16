@@ -1,19 +1,12 @@
-import { ISignatureResponse, IUserData } from '@app/types/bruker';
 import { IPart, ISaksbehandler, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
-import { SimpleApiState, useSimpleApiState } from './simple-api-state';
+import { useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
 
-const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
+export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 export const KABIN_API_BASE_PATH = '/api/kabin-api';
-
-const userState = new SimpleApiState<IUserData>(`${INNSTILLINGER_BASE_PATH}/me/brukerdata`);
-export const useUser = () => useSimpleApiState(userState);
-
-const signatureState = new SimpleApiState<ISignatureResponse>(`${INNSTILLINGER_BASE_PATH}/me/signature`);
-export const useSignature = () => useSimpleApiState(signatureState);
 
 interface IDokumenterResponse {
   dokumenter: IArkivertDocument[];

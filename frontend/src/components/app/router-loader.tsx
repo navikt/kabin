@@ -2,16 +2,9 @@ import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 
-interface Props {
-  text: string;
-}
-
-export const AppLoader = ({ text }: Props) => (
+export const RouterLoader = () => (
   <LoaderWrapper>
-    <Content>
-      <Loader size="2xlarge" variant="neutral" transparent title={text} />
-      <span>{text}</span>
-    </Content>
+    <Loader size="2xlarge" variant="interaction" transparent title="Laster siden..." />
   </LoaderWrapper>
 );
 
@@ -22,10 +15,4 @@ const LoaderWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #fafafa;
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `;

@@ -11,18 +11,8 @@ export enum Role {
 
 export interface IUserData {
   navIdent: string;
+  navn: string;
   enheter: IEnhet[];
   ansattEnhet: IEnhet;
   roller: Role[];
-}
-
-interface ICustomUserInfo {
-  customLongName: string | null;
-  customShortName: string | null;
-  customJobTitle: string | null;
-}
-
-export interface ISignatureResponse extends ICustomUserInfo {
-  longName: string;
-  generatedShortName: string;
 }

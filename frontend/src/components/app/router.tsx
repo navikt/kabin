@@ -5,8 +5,8 @@ import { CreatePage } from '@app/pages/create/create';
 import { AnkeStatusPage } from '@app/pages/status/anke-status';
 import { KlageStatusPage } from '@app/pages/status/klage-status';
 import { SaksTypeEnum } from '@app/types/common';
-import { RouterLoader } from './loader';
 import { RedirectUser } from './redirect-user';
+import { RouterLoader } from './router-loader';
 
 export const Router = () => (
   <Suspense fallback={<RouterLoader />}>
