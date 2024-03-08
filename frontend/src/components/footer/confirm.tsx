@@ -55,7 +55,7 @@ export const Confirm = ({ show, setError, closeConfirm }: Props) => {
           icon={<CheckmarkIcon aria-hidden />}
           loading={loading}
           onClick={onClick}
-          disabled={payload === null}
+          disabled={payload === null || loading}
         >
           Bekreft
         </Button>
