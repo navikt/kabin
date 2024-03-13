@@ -7,7 +7,7 @@ interface PathParams<Q> {
   path?: string;
 }
 
-export const getStateFactory = <T, Q>(basePath: string, options?: Options) => {
+export const getStateFactory = <T, Q = never>(basePath: string, options?: Options) => {
   const STATES: Map<string, SimpleApiState<T>> = new Map();
 
   return ({ path = '', query }: PathParams<Q>, body: RequestBody = undefined) => {

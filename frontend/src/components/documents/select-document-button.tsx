@@ -1,4 +1,4 @@
-import { CircleSlashIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { CircleSlashIcon } from '@navikt/aksel-icons';
 import React, { useCallback, useContext } from 'react';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
@@ -23,30 +23,24 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
         return;
       }
 
-      if (harTilgangTilArkivvariant) {
-        if (!alreadyUsed) {
-          setJournalpost(dokument);
-        }
-      } else {
-        setJournalpost(null);
-      }
+      setJournalpost(harTilgangTilArkivvariant ? dokument : null);
     },
-    [alreadyUsed, dokument, harTilgangTilArkivvariant, setJournalpost],
+    [dokument, harTilgangTilArkivvariant, setJournalpost],
   );
 
   return (
     <GridButton
-      disabled={!harTilgangTilArkivvariant || alreadyUsed}
+      disabled={!harTilgangTilArkivvariant}
       size="small"
       variant="tertiary"
-      icon={getIcon(harTilgangTilArkivvariant, alreadyUsed, isSelected)}
+      icon={getIcon(harTilgangTilArkivvariant, isSelected)}
       onMouseDown={selectJournalpost}
       aria-pressed={isSelected}
       data-testid="select-document"
       $gridArea={GridArea.SELECT}
       title={getTitle(harTilgangTilArkivvariant, alreadyUsed)}
     >
-      {getText(harTilgangTilArkivvariant, alreadyUsed, isSelected)}
+      {getText(harTilgangTilArkivvariant, isSelected)}
     </GridButton>
   );
 };
@@ -61,21 +55,17 @@ const getTitle = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean) => {
   }
 };
 
-const getText = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean, isSelected: boolean) => {
-  if (!harTilgangTilArkivvariant || alreadyUsed || isSelected) {
-    return '';
+const getText = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
+  if (!harTilgangTilArkivvariant || isSelected) {
+    return null;
   }
 
   return 'Velg';
 };
 
-const getIcon = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean, isSelected: boolean) => {
+const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
   if (!harTilgangTilArkivvariant) {
     return <CircleSlashIcon />;
-  }
-
-  if (alreadyUsed) {
-    return <ExclamationmarkTriangleIcon />;
   }
 
   if (isSelected) {
