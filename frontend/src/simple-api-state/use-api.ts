@@ -1,3 +1,4 @@
+import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { IPart, ISaksbehandler, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
@@ -116,3 +117,10 @@ const saksbehandlereState = getStateFactory<ISaksbehandlereResponse, void>(
 
 export const useSaksbehandlere = (params: ISaksbehandlerParams | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : saksbehandlereState({ path: '' }, params));
+
+const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE_PATH}/willcreatenewjournalpost`, {
+  method: 'POST',
+});
+
+export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
+  useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, JSON.stringify(params)));

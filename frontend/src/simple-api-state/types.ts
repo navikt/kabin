@@ -39,3 +39,9 @@ export class NoRetryError extends Error {
     super(message);
   }
 }
+
+export interface WillCreateNewJournalpostInput {
+  journalpostId: string;
+  fagsakId: string;
+  fagsystemId: string;
+}
