@@ -6,7 +6,7 @@ import { isApiError } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { AppContext } from '@app/pages/create/app-context/app-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 
@@ -19,7 +19,7 @@ interface Props {
 
 export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }: Props) => {
   const { viewDokument } = useContext(DocumentViewerContext);
-  const { fnr, setJournalpost } = useContext(ApiContext);
+  const { fnr, setJournalpost } = useContext(AppContext);
 
   const { updateData: updateDokumenter } = useDokumenter(fnr);
 

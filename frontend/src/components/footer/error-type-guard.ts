@@ -34,5 +34,5 @@ export const isValidationResponse = (response: unknown): response is IValidation
   Array.isArray(response['sections']) &&
   response['sections'].every(isValidationSection);
 
-const isValidationSection = (section: unknown): section is IValidationSection =>
+export const isValidationSection = (section: unknown): section is IValidationSection =>
   isObject(section) && typeof section['section'] === 'string' && Array.isArray(section['properties']);

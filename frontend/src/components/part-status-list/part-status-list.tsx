@@ -11,15 +11,16 @@ interface Props extends Pick<IPart, 'statusList'> {
    * The variant of the tag. If undefined, the variant will be automatically set.
    */
   variant?: TagProps['variant'];
+  className?: string;
 }
 
-export const PartStatusList = ({ statusList = [], variant }: Props) => {
+export const PartStatusList = ({ statusList = [], variant, className }: Props) => {
   if (statusList.length === 0) {
     return null;
   }
 
   return (
-    <Container>
+    <Container className={className}>
       {statusList.map((s) => (
         <PartStatus partStatus={s} size="small" variant={variant} key={s.status} />
       ))}
@@ -69,6 +70,7 @@ const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.FORTROLIG]: 'Fortrolig',
   [PartStatusEnum.STRENGT_FORTROLIG]: 'Strengt fortrolig',
   [PartStatusEnum.RESERVERT_I_KRR]: 'Reservert i KRR',
+  [PartStatusEnum.DELT_ANSVAR]: 'Delt ansvar',
 };
 
 const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
@@ -80,4 +82,5 @@ const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
   [PartStatusEnum.FORTROLIG]: 'info',
   [PartStatusEnum.STRENGT_FORTROLIG]: 'alt1',
   [PartStatusEnum.RESERVERT_I_KRR]: 'warning',
+  [PartStatusEnum.DELT_ANSVAR]: 'info',
 };

@@ -4,17 +4,17 @@ import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useHjemmelName } from '@app/hooks/kodeverk';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Innsendingshjemmel = () => {
   const { data = [] } = useLatestYtelser();
-  const { updatePayload, payload, type } = useContext(ApiContext);
+  const { updateState, state, type } = useContext(AppContext);
   const error = useValidationError(ValidationFieldNames.HJEMMEL_ID_LIST);
 
-  const ytelseId = payload?.overstyringer.ytelseId;
+  const ytelseId = state?.overstyringer.ytelseId;
 
   const options = useMemo(() => {
     if (type === Type.NONE || ytelseId === null) {
@@ -32,14 +32,14 @@ export const Innsendingshjemmel = () => {
     return null;
   }
 
-  if (type === Type.ANKE && payload.mulighet !== null && payload.mulighet.hjemmelIdList !== null) {
+  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.hjemmelIdList !== null) {
     return (
       <ReadOnlyContainer>
         <Heading level="1" size="xsmall" spacing>
           Hjemler
         </Heading>
         <HjemlerContainer>
-          {payload.mulighet.hjemmelIdList.map((id) => (
+          {state.mulighet.hjemmelIdList.map((id) => (
             <HjemmelTag hjemmelId={id} key={id} size="medium" />
           ))}
         </HjemlerContainer>
@@ -64,14 +64,14 @@ export const Innsendingshjemmel = () => {
     <StyledFilterDropdown
       label="Hjemler"
       options={options}
-      selected={payload.overstyringer.hjemmelIdList}
-      onChange={(hjemmelIdList) => updatePayload({ overstyringer: { hjemmelIdList } })}
+      selected={state.overstyringer.hjemmelIdList}
+      onChange={(hjemmelIdList) => updateState({ overstyringer: { hjemmelIdList } })}
       error={error}
       id={ValidationFieldNames.HJEMMEL_ID_LIST}
       disabled={ytelseId === null}
     >
       <HjemlerContainer>
-        {payload.overstyringer.hjemmelIdList.map((id) => (
+        {state.overstyringer.hjemmelIdList.map((id) => (
           <HjemmelTag hjemmelId={id} key={id} size="small" />
         ))}
       </HjemlerContainer>

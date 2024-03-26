@@ -7,15 +7,16 @@ import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
+import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
-import { ApiContext } from './api-context/api-context';
-import { isType } from './api-context/helpers';
-import { Type } from './api-context/types';
+import { AppContext } from './app-context/app-context';
+import { isType } from './app-context/helpers';
+import { Type } from './app-context/types';
 
 export const TypeSelect = () => {
-  const { type, setType, journalpost } = useContext(ApiContext);
+  const { type, setType, journalpost } = useContext(AppContext);
 
   const onChange = useCallback((v: string) => setType((e) => (isType(v) ? v : e)), [setType]);
 
@@ -40,7 +41,7 @@ export const TypeSelect = () => {
 };
 
 export const TypeInput = () => {
-  const { type } = useContext(ApiContext);
+  const { type } = useContext(AppContext);
 
   if (type === Type.ANKE) {
     return (
@@ -48,6 +49,7 @@ export const TypeInput = () => {
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
         <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
+        <SvarbrevInput />
       </>
     );
   }
@@ -111,13 +113,13 @@ const WillCreateNewJournalpostInfo = () => {
 };
 
 const useJournalpostAndMulighet = () => {
-  const { journalpost, payload } = useContext(ApiContext);
+  const { journalpost, state } = useContext(AppContext);
 
-  if (journalpost === null || payload === null || payload.mulighet === null) {
+  if (journalpost === null || state === null || state.mulighet === null) {
     return null;
   }
 
-  return { journalpost, mulighet: payload.mulighet };
+  return { journalpost, mulighet: state.mulighet };
 };
 
 const Row = styled.div`

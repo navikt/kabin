@@ -1,7 +1,7 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import React, { useCallback, useContext } from 'react';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IArkivertDocument } from '@app/types/dokument';
 import { GridArea, GridButton } from './styled-grid-components';
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, alreadyUsed, dokument }: Props) => {
-  const { setJournalpost } = useContext(ApiContext);
+  const { setJournalpost } = useContext(AppContext);
 
   const selectJournalpost = useCallback(
     (e: React.MouseEvent) => {

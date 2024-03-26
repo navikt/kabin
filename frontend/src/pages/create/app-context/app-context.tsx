@@ -2,35 +2,36 @@ import { format } from 'date-fns';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { FORMAT } from '@app/domain/date-formats';
 import { compareMuligheter } from '@app/domain/mulighet';
+import { getUpdatedAnkeState } from '@app/pages/create/app-context/anke';
+import { getUpdatedKlageState } from '@app/pages/create/app-context/klage';
 import { skipToken } from '@app/types/common';
-import { IValidationSection } from '@app/types/validation';
+import { IValidationSection, SectionNames } from '@app/types/validation';
 import {
   NOOP,
   getStateWithOverstyringer,
   getUpdateAvsender,
-  getUpdatedAnkeState,
-  getUpdatedKlageState,
   removeErrorsOnJournalpostChange,
   removeErrorsOnMulighetChange,
 } from './helpers';
 import {
   IAnkeState,
   IAnkeStateUpdate,
-  IApiContext,
+  IAppContext,
   IKlageState,
   IKlageStateUpdate,
   INITIAL_ANKE,
   INITIAL_KLAGE,
-  Payload,
+  State,
   Type,
+  UpdateErrorsFn,
   UpdateFn,
 } from './types';
 
-export const ApiContext = createContext<IApiContext>({
+export const AppContext = createContext<IAppContext>({
   type: Type.NONE,
   setType: NOOP,
-  payload: null,
-  updatePayload: NOOP,
+  state: null,
+  updateState: NOOP,
   errors: null,
   setErrors: NOOP,
   fnr: skipToken,
@@ -39,19 +40,19 @@ export const ApiContext = createContext<IApiContext>({
 });
 
 interface Props {
-  fnr: IApiContext['fnr'];
+  fnr: IAppContext['fnr'];
   children: React.ReactNode;
 }
 
-export const ApiContextState = ({ fnr, children }: Props) => {
+export const AppContextState = ({ fnr, children }: Props) => {
   const context = useContextData(fnr);
 
-  return <ApiContext.Provider value={context}>{children}</ApiContext.Provider>;
+  return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 };
 
-const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
+const useContextData = (fnr: IAppContext['fnr']): IAppContext => {
   const [type, setType] = useState<Type>(Type.NONE);
-  const [journalpost, setInternalJournalpost] = useState<IApiContext['journalpost']>(null);
+  const [journalpost, setInternalJournalpost] = useState<IAppContext['journalpost']>(null);
   const [klage, updateKlage, klageErrors, setKlageErrors] = useApiContext<IKlageStateUpdate, IKlageState>(
     INITIAL_KLAGE,
   );
@@ -59,7 +60,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
 
   useEffect(() => setType(Type.NONE), [fnr]);
 
-  const setJournalpost: IApiContext['setJournalpost'] = useCallback(
+  const setJournalpost: IAppContext['setJournalpost'] = useCallback(
     (newJournalpost) => {
       const update = typeof newJournalpost === 'function' ? newJournalpost(journalpost) : newJournalpost;
 
@@ -84,7 +85,7 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
     [ankeErrors, journalpost, klageErrors, setAnkeErrors, setKlageErrors, updateAnke, updateKlage],
   );
 
-  const base: Pick<IApiContext, 'setType' | 'fnr' | 'journalpost' | 'setJournalpost'> = {
+  const base: Pick<IAppContext, 'setType' | 'fnr' | 'journalpost' | 'setJournalpost'> = {
     setType,
     fnr,
     journalpost,
@@ -93,13 +94,13 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
 
   switch (type) {
     case Type.NONE:
-      return { ...base, type, payload: null, updatePayload: NOOP, errors: null, setErrors: NOOP };
+      return { ...base, type, state: null, updateState: NOOP, errors: null, setErrors: NOOP };
     case Type.KLAGE:
       return {
         ...base,
         type,
-        payload: klage,
-        updatePayload: (newPayload) => updateKlage(getUpdatedKlageState(klage, newPayload)),
+        state: klage,
+        updateState: (newState) => updateKlage(getUpdatedKlageState(klage, newState)),
         errors: klageErrors,
         setErrors: setKlageErrors,
       };
@@ -107,15 +108,13 @@ const useContextData = (fnr: IApiContext['fnr']): IApiContext => {
       return {
         ...base,
         type,
-        payload: anke,
-        updatePayload: (newPayload) => updateAnke(getUpdatedAnkeState(anke, newPayload)),
+        state: anke,
+        updateState: (newState) => updateAnke(getUpdatedAnkeState(anke, newState)),
         errors: ankeErrors,
         setErrors: setAnkeErrors,
       };
   }
 };
-
-type UpdateErrorsFn = (errors: IValidationSection[] | null) => IValidationSection[] | null;
 
 type UseApiContextValue<P, S> = [
   S,
@@ -127,22 +126,49 @@ type UseApiContextValue<P, S> = [
 const useApiContext = <P extends IKlageStateUpdate | IAnkeStateUpdate, S extends IKlageState | IAnkeState>(
   initialState: S,
 ): UseApiContextValue<P, S> => {
-  const [payload, setPayload] = useState<S>(initialState);
+  const [state, setState] = useState<S>(initialState);
   const [errors, setErrors] = useState<IValidationSection[] | null>(null);
 
-  const updatePayload = useCallback(
-    (newPayload: Payload<P, S>) => {
-      const update = typeof newPayload === 'function' ? newPayload(payload) : newPayload;
+  const updateState = useCallback(
+    (newState: State<P, S>) => {
+      const update = typeof newState === 'function' ? newState(state) : newState;
 
       if (typeof update.mulighet !== 'undefined') {
-        if (!compareMuligheter(update.mulighet, payload.mulighet)) {
+        if (!compareMuligheter(update.mulighet, state.mulighet)) {
           setErrors(removeErrorsOnMulighetChange(errors));
         }
       }
-      setPayload({ ...payload, ...update });
+
+      if (isAnkeUpdate(update) && isAnkeState(state)) {
+        if (update.sendSvarbrev === false || update.svarbrev?.enhetId !== state.svarbrev.enhetId) {
+          setErrors(errors === null ? null : errors.filter((e) => e.section !== SectionNames.SVARBREV));
+        }
+
+        const updateOverstyringer = update.overstyringer;
+
+        if (updateOverstyringer !== undefined) {
+          const updateFullmektig = updateOverstyringer.fullmektig;
+
+          if (updateFullmektig !== undefined && updateFullmektig !== state.overstyringer.fullmektig) {
+            const fullmektigFritekst = updateFullmektig?.name ?? null;
+
+            if (update.svarbrev !== undefined) {
+              update.svarbrev.fullmektigFritekst = fullmektigFritekst;
+            } else {
+              update.svarbrev = { ...state.svarbrev, fullmektigFritekst };
+            }
+          }
+        }
+      }
+
+      setState({ ...state, ...update });
     },
-    [errors, payload],
+    [errors, state],
   );
 
-  return [payload, updatePayload, errors, setErrors];
+  return [state, updateState, errors, setErrors];
 };
+
+const isAnkeState = (state: IAppContext['state']): state is IAnkeState => state !== null && 'sendSvarbrev' in state;
+const isAnkeUpdate = (update: IKlageStateUpdate | IAnkeStateUpdate): update is IAnkeStateUpdate =>
+  'svarbrev' in update || 'sendSvarbrev' in update;

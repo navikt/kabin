@@ -4,31 +4,31 @@ import { Datepicker } from '@app/components/date-picker/date-picker';
 import { FORMAT } from '@app/domain/date-formats';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { IAnkeState, IKlageState, Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { IAnkeState, IKlageState, Type } from '@app/pages/create/app-context/types';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattKlageinstans = () => {
-  const { type, payload, journalpost } = useContext(ApiContext);
+  const { type, state, journalpost } = useContext(AppContext);
 
   switch (type) {
     case Type.KLAGE:
-      return <Klage payload={payload} journalpost={journalpost} />;
+      return <Klage state={state} journalpost={journalpost} />;
     case Type.ANKE:
-      return <Anke payload={payload} journalpost={journalpost} />;
+      return <Anke state={state} journalpost={journalpost} />;
     case Type.NONE:
       return <RenderEditMottattNAV value={undefined} fromDate={undefined} toDate={undefined} />;
   }
 };
 
 interface KlageProps {
-  payload: IKlageState;
+  state: IKlageState;
   journalpost: IArkivertDocument | null;
 }
 
-const Klage = ({ payload, journalpost }: KlageProps) => {
-  const selectedDate = getSelectedDate(payload);
+const Klage = ({ state, journalpost }: KlageProps) => {
+  const selectedDate = getSelectedDate(state);
 
   const fromDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
@@ -43,25 +43,23 @@ const Klage = ({ payload, journalpost }: KlageProps) => {
 };
 
 interface AnkeProps {
-  payload: IAnkeState;
+  state: IAnkeState;
   journalpost: IArkivertDocument | null;
 }
 
-const Anke = ({ payload, journalpost }: AnkeProps) => {
-  const selectedDate = getSelectedDate(payload);
+const Anke = ({ state, journalpost }: AnkeProps) => {
+  const selectedDate = getSelectedDate(state);
 
   const fromDate =
-    payload.mulighet === null || payload.mulighet.vedtakDate === null
-      ? undefined
-      : parseISO(payload.mulighet.vedtakDate);
+    state.mulighet === null || state.mulighet.vedtakDate === null ? undefined : parseISO(state.mulighet.vedtakDate);
 
   const toDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
-const getSelectedDate = (payload: IKlageState | IAnkeState) =>
-  payload.overstyringer.mottattKlageinstans === null ? undefined : parseISO(payload.overstyringer.mottattKlageinstans);
+const getSelectedDate = (state: IKlageState | IAnkeState) =>
+  state.overstyringer.mottattKlageinstans === null ? undefined : parseISO(state.overstyringer.mottattKlageinstans);
 
 interface Props {
   value: Date | undefined;
@@ -70,7 +68,7 @@ interface Props {
 }
 
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
-  const { type, updatePayload } = useContext(ApiContext);
+  const { type, updateState } = useContext(AppContext);
   const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
 
   const onChange = useCallback(
@@ -78,9 +76,9 @@ const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
       if (type === Type.NONE) {
         return;
       }
-      updatePayload({ overstyringer: { mottattKlageinstans } });
+      updateState({ overstyringer: { mottattKlageinstans } });
     },
-    [type, updatePayload],
+    [type, updateState],
   );
 
   return (

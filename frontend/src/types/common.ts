@@ -1,9 +1,53 @@
 export const skipToken = Symbol('skipToken');
 
+export enum Utsendingskanal {
+  SENTRAL_UTSKRIFT = 'SENTRAL_UTSKRIFT',
+  SDP = 'SDP',
+  NAV_NO = 'NAV_NO',
+  LOKAL_UTSKRIFT = 'LOKAL_UTSKRIFT',
+  INGEN_DISTRIBUSJON = 'INGEN_DISTRIBUSJON',
+  TRYGDERETTEN = 'TRYGDERETTEN',
+  DPVT = 'DPVT',
+}
+
+export const UTSENDINGSKANAL: Record<Utsendingskanal, string> = {
+  [Utsendingskanal.SENTRAL_UTSKRIFT]: 'Sentral utskrift',
+  [Utsendingskanal.SDP]: 'Digital Postkasse Innbygger',
+  [Utsendingskanal.NAV_NO]: 'Nav.no',
+  [Utsendingskanal.LOKAL_UTSKRIFT]: 'Lokal utskrift',
+  [Utsendingskanal.INGEN_DISTRIBUSJON]: 'Ingen distribusjon',
+  [Utsendingskanal.TRYGDERETTEN]: 'Trygderetten',
+  [Utsendingskanal.DPVT]: 'Taushetsbelagt digital post til virksomhet',
+};
+
+interface BaseAddress {
+  adresselinje2: string | null;
+  adresselinje3: string | null;
+}
+
+interface NorwegianAddress extends BaseAddress {
+  adresselinje1: string | null;
+  postnummer: string;
+  landkode: 'NO';
+}
+
+interface ForeignAddress extends BaseAddress {
+  adresselinje1: string;
+  postnummer: string | null;
+  landkode: string;
+}
+
+export type IAddress = NorwegianAddress | ForeignAddress;
+
+export const isNorwegianAddress = (address: IAddress): address is NorwegianAddress => address.landkode === 'NO';
+
 interface IPartBase {
   id: string;
   name: string | null;
   available: boolean;
+  language: string;
+  address: IAddress | null;
+  utsendingskanal: Utsendingskanal;
 }
 
 export enum IdType {
@@ -20,6 +64,7 @@ export enum PartStatusEnum {
   FORTROLIG = 'FORTROLIG',
   STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
   RESERVERT_I_KRR = 'RESERVERT_I_KRR',
+  DELT_ANSVAR = 'DELT_ANSVAR',
 }
 
 export type IPersonStatus =
@@ -52,10 +97,15 @@ export type IPersonStatus =
       date: null;
     };
 
-export interface IOrganizationStatus {
-  status: PartStatusEnum.DELETED;
-  date: string;
-}
+export type IOrganizationStatus =
+  | {
+      status: PartStatusEnum.DELETED;
+      date: string;
+    }
+  | {
+      status: PartStatusEnum.DELT_ANSVAR;
+      date: null;
+    };
 
 interface IPersonPart extends IPartBase {
   type: IdType.FNR;
@@ -80,6 +130,8 @@ export interface IAvsenderMottaker extends IPartBase {
 }
 
 export type IPart = IPersonPart | IOrganizationPart | IAvsenderMottaker;
+
+export type ISimplePart = Omit<IPart, 'address' | 'utsendingskanal' | 'language'>;
 
 export const PART_TYPES = Object.values(IdType);
 

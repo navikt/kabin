@@ -6,8 +6,8 @@ import { Card } from '@app/components/card/card';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
 import { useFagsystemName, useYtelseName } from '@app/hooks/kodeverk';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { IAnkeMulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -15,13 +15,13 @@ interface Props {
 }
 
 export const SelectedAnkemulighet = ({ onClick }: Props) => {
-  const { type, payload } = useContext(ApiContext);
+  const { type, state } = useContext(AppContext);
 
-  if (type !== Type.ANKE || payload.mulighet === null) {
+  if (type !== Type.ANKE || state.mulighet === null) {
     return null;
   }
 
-  return <RenderAnkemulighet mulighet={payload.mulighet} onClick={onClick} />;
+  return <RenderAnkemulighet mulighet={state.mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

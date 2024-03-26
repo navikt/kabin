@@ -3,20 +3,18 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattVedtaksinstans = () => {
-  const { type, payload, journalpost } = useContext(ApiContext);
+  const { type, state, journalpost } = useContext(AppContext);
 
   if (type !== Type.KLAGE || journalpost === null) {
     return null;
   }
 
-  return (
-    <RenderEditMottattNAV value={payload.overstyringer.mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />
-  );
+  return <RenderEditMottattNAV value={state.overstyringer.mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />;
 };
 
 interface Props {
@@ -25,7 +23,7 @@ interface Props {
 }
 
 const RenderEditMottattNAV = ({ value, toDate }: Props) => {
-  const { type, updatePayload } = useContext(ApiContext);
+  const { type, updateState } = useContext(AppContext);
   const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
 
   const parsedValue = useMemo(() => (value === null ? undefined : parseISO(value)), [value]);
@@ -37,9 +35,9 @@ const RenderEditMottattNAV = ({ value, toDate }: Props) => {
         return;
       }
 
-      updatePayload({ overstyringer: { mottattVedtaksinstans } });
+      updateState({ overstyringer: { mottattVedtaksinstans } });
     },
-    [type, updatePayload],
+    [type, updateState],
   );
 
   return (

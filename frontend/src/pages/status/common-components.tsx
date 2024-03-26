@@ -8,7 +8,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { ENVIRONMENT } from '@app/environment';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
-import { IPart, ISaksbehandler } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
@@ -53,7 +53,7 @@ export const Sak = ({ sak }: SakProps) => {
     <StyledSak>
       <InfoItem label="Fagsystem">{sak === null ? 'Ingen' : fagsystemName}</InfoItem>
       <InfoItem label="Saks-ID">
-        {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.fagsakId} text={sak.fagsakId} size="small" />}
+        {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.fagsakId} text={sak.fagsakId} size="xsmall" />}
       </InfoItem>
     </StyledSak>
   );
@@ -82,7 +82,7 @@ export const Part = ({ part, title }: PartProps) => {
     <InfoItem label={title}>
       <StyledPart>
         <span>{part.name ?? 'Navn mangler'}</span>
-        <CopyPartIdButton id={part.id} />
+        <CopyPartIdButton id={part.id} size="xsmall" />
       </StyledPart>
       <PartStatusList statusList={part.statusList} />
     </InfoItem>
@@ -103,7 +103,7 @@ export const NavEmployee = ({ title, employee }: NavEmployeeProps) => (
         <span>
           {employee.navn} ({employee.navIdent})
         </span>
-        <CopyPartIdButton id={employee.navIdent} />
+        <CopyPartIdButton id={employee.navIdent} size="xsmall" />
       </StyledPart>
     )}
   </InfoItem>
@@ -112,9 +112,11 @@ export const NavEmployee = ({ title, employee }: NavEmployeeProps) => (
 interface StatusHeadingProps {
   headingText: string;
   alertText: string;
+  type: SaksTypeEnum;
+  behandlingId: string | undefined;
 }
 
-export const StatusHeading = ({ headingText, alertText }: StatusHeadingProps) => (
+export const StatusHeading = ({ headingText, alertText, type, behandlingId }: StatusHeadingProps) => (
   <>
     <StyledAlert variant="success" $gridArea="title">
       <Heading level="1" size="medium">
@@ -127,18 +129,31 @@ export const StatusHeading = ({ headingText, alertText }: StatusHeadingProps) =>
         {alertText}
       </Alert>
       <Buttons>
-        <Button as={NavLink} to="/" variant="tertiary" icon={<HouseIcon aria-hidden />}>
+        <Button as={NavLink} to="/" variant="primary" size="small" icon={<HouseIcon aria-hidden />}>
           Tilbake til forsiden
         </Button>
         <Button
           as={NavLink}
           to={`${KABAL_URL}/sok`}
-          variant="tertiary"
+          variant="secondary"
+          size="small"
           target="_blank"
           icon={<ExternalLinkIcon title="Ekstern lenke" />}
         >
-          Åpne Kabal
+          Åpne Kabal søk
         </Button>
+        {behandlingId === undefined ? null : (
+          <Button
+            as={NavLink}
+            to={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
+            variant="secondary"
+            size="small"
+            target="_blank"
+            icon={<ExternalLinkIcon title="Ekstern lenke" />}
+          >
+            Åpne behandling i Kabal
+          </Button>
+        )}
       </Buttons>
     </InfoPanel>
   </>
@@ -150,12 +165,15 @@ const StyledAlert = styled(Alert)<{ $gridArea: string }>`
 
 const InfoPanel = styled.div`
   display: flex;
+  flex-direction: column;
   grid-area: info;
-  align-items: center;
+  align-items: flex-start;
   column-gap: 8px;
 `;
 
 const Buttons = styled.div`
   display: flex;
   align-items: center;
+  column-gap: 8px;
+  padding-top: 16px;
 `;

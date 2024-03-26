@@ -14,7 +14,7 @@ interface AnkeStatusProps {
 export const AnkeStatusPage = ({ type }: AnkeStatusProps) => {
   const { id } = useParams();
   const { data, isLoading } = useAnkeStatus(id === undefined ? skipToken : { id, type });
-  const Container = isLoading || typeof data === 'undefined' ? LoadingContainer : DataContainer;
+  const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
     <PageWrapper>
@@ -22,8 +22,10 @@ export const AnkeStatusPage = ({ type }: AnkeStatusProps) => {
         <StatusHeading
           alertText="Anken er nå registrert og klar for saksbehandling i Kabal"
           headingText="Anke opprettet"
+          type={type}
+          behandlingId={id}
         />
-        <AnkeDetailsLoader loading={isLoading} data={data} />
+        <AnkeDetailsLoader loading={isLoading} data={data} id={id} />
       </Container>
     </PageWrapper>
   );
@@ -31,13 +33,14 @@ export const AnkeStatusPage = ({ type }: AnkeStatusProps) => {
 
 interface AnkeDetailsLoaderProps {
   data: IAnkestatus | undefined;
+  id: string | undefined;
   loading: boolean;
 }
 
-const AnkeDetailsLoader = ({ loading, data }: AnkeDetailsLoaderProps) => {
-  if (loading || typeof data === 'undefined') {
+const AnkeDetailsLoader = ({ loading, data, id }: AnkeDetailsLoaderProps) => {
+  if (loading || data === undefined || id === undefined) {
     return <StyledLoader size="3xlarge" title="Laster..." />;
   }
 
-  return <AnkeDetails {...data} />;
+  return <AnkeDetails anke={data} id={id} />;
 };

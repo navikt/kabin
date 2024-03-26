@@ -8,15 +8,15 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedKlagemulighet } from '@app/components/selected/selected-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Klagemulighet } from './klagemulighet';
 
 export const Klagemuligheter = () => {
-  const { type, payload, updatePayload, fnr } = useContext(ApiContext);
+  const { type, state, updateState, fnr } = useContext(AppContext);
 
   const { data: klagemuligheter, isLoading, refetch } = useKlagemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -26,17 +26,17 @@ export const Klagemuligheter = () => {
     if (typeof klagemuligheter === 'undefined' && type === Type.KLAGE) {
       setIsExpanded(true);
 
-      if (payload.mulighet !== null) {
-        updatePayload({ mulighet: null });
+      if (state.mulighet !== null) {
+        updateState({ mulighet: null });
       }
     }
-  }, [klagemuligheter, isLoading, type, updatePayload, payload?.mulighet]);
+  }, [klagemuligheter, isLoading, type, updateState, state?.mulighet]);
 
   if (type !== Type.KLAGE) {
     return null;
   }
 
-  if (!isExpanded && payload.mulighet !== null) {
+  if (!isExpanded && state.mulighet !== null) {
     return <SelectedKlagemulighet onClick={() => setIsExpanded(true)} />;
   }
 
@@ -47,13 +47,13 @@ export const Klagemuligheter = () => {
       return;
     }
 
-    const { mulighet } = payload;
+    const { mulighet } = state;
 
     if (mulighet === null) {
       return;
     }
 
-    updatePayload({ mulighet: updated.find((a) => a.behandlingId === mulighet.behandlingId) ?? null });
+    updateState({ mulighet: updated.find((a) => a.behandlingId === mulighet.behandlingId) ?? null });
   };
 
   return (
@@ -72,7 +72,7 @@ export const Klagemuligheter = () => {
           title="Oppdater"
         />
 
-        {payload.mulighet === null ? null : (
+        {state.mulighet === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"

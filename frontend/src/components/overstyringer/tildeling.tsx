@@ -13,14 +13,14 @@ import {
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { ISaksbehandlerParams, useSaksbehandlere } from '@app/simple-api-state/use-api';
 import { ISaksbehandler, skipToken } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Tildeling = () => {
-  const { payload } = useContext(ApiContext);
+  const { state } = useContext(AppContext);
   const label = useFieldName(ValidationFieldNames.SAKSBEHANDLER);
 
   const error = useValidationError(ValidationFieldNames.SAKSBEHANDLER);
@@ -28,7 +28,7 @@ export const Tildeling = () => {
   return (
     <StyledContainer
       id={ValidationFieldNames.SAKSBEHANDLER}
-      $state={getState(payload?.overstyringer.saksbehandlerIdent, error)}
+      $state={getState(state?.overstyringer.saksbehandlerIdent, error)}
     >
       <StyledSaksbehandlerIcon aria-hidden />
       <PartContent>
@@ -48,24 +48,23 @@ export const Tildeling = () => {
 };
 
 const useSaksbehandlereParams = (): ISaksbehandlerParams | typeof skipToken => {
-  const { payload, type } = useContext(ApiContext);
+  const { state, type } = useContext(AppContext);
 
-  if (type === Type.NONE || payload.mulighet === null || payload.overstyringer.ytelseId === null) {
+  if (type === Type.NONE || state.mulighet === null || state.overstyringer.ytelseId === null) {
     return skipToken;
   }
 
-  return { ytelseId: payload.overstyringer.ytelseId, fnr: payload.mulighet.sakenGjelder.id };
+  return { ytelseId: state.overstyringer.ytelseId, fnr: state.mulighet.sakenGjelder.id };
 };
 
 const useSaksbehandler = (): ISaksbehandler | null => {
   const params = useSaksbehandlereParams();
   const { data } = useSaksbehandlere(params);
-  const { payload } = useContext(ApiContext);
+  const { state } = useContext(AppContext);
 
   return (
-    data?.saksbehandlere.find(
-      (saksbehandler) => saksbehandler.navIdent === payload?.overstyringer.saksbehandlerIdent,
-    ) ?? null
+    data?.saksbehandlere.find((saksbehandler) => saksbehandler.navIdent === state?.overstyringer.saksbehandlerIdent) ??
+    null
   );
 };
 
@@ -75,7 +74,7 @@ const Content = () => {
   const saksbehandler = useSaksbehandler();
   const params = useSaksbehandlereParams();
   const { data } = useSaksbehandlere(params);
-  const { payload, updatePayload, type } = useContext(ApiContext);
+  const { state, updateState, type } = useContext(AppContext);
 
   if (type === Type.NONE) {
     return null;
@@ -97,9 +96,9 @@ const Content = () => {
         size="small"
         label="Saksbehandler"
         hideLabel
-        value={payload?.overstyringer.saksbehandlerIdent ?? NONE}
+        value={state?.overstyringer.saksbehandlerIdent ?? NONE}
         onChange={(e) =>
-          updatePayload({ overstyringer: { saksbehandlerIdent: e.target.value === NONE ? null : e.target.value } })
+          updateState({ overstyringer: { saksbehandlerIdent: e.target.value === NONE ? null : e.target.value } })
         }
       >
         <option value={NONE}>Ingen</option>
@@ -115,20 +114,20 @@ const Content = () => {
 };
 
 const Actions = () => {
-  const { payload, type } = useContext(ApiContext);
+  const { state, type } = useContext(AppContext);
 
-  if (type === Type.NONE || payload.mulighet === null) {
+  if (type === Type.NONE || state.mulighet === null) {
     return null;
   }
 
   return (
     <PartActionsContainer>
       <SetButton label="Fjern" title="Fjern" icon={<TrashIcon aria-hidden />} saksbehandlerIdent={null} />
-      {type === Type.ANKE && payload.mulighet.previousSaksbehandler !== null ? (
+      {type === Type.ANKE && state.mulighet.previousSaksbehandler !== null ? (
         <SetButton
           label="Fra klagen"
-          title={payload.mulighet.previousSaksbehandler.navn}
-          saksbehandlerIdent={payload.mulighet.previousSaksbehandler.navIdent}
+          title={state.mulighet.previousSaksbehandler.navn}
+          saksbehandlerIdent={state.mulighet.previousSaksbehandler.navIdent}
         />
       ) : null}
     </PartActionsContainer>
@@ -143,14 +142,14 @@ interface SetButtonProps {
 }
 
 const SetButton = ({ label, title, icon, saksbehandlerIdent }: SetButtonProps) => {
-  const { payload, updatePayload, type } = useContext(ApiContext);
+  const { state, updateState, type } = useContext(AppContext);
   const params = useSaksbehandlereParams();
   const { data, isLoading } = useSaksbehandlere(params);
 
   if (
     type === Type.NONE ||
     isLoading ||
-    payload.overstyringer.saksbehandlerIdent === saksbehandlerIdent ||
+    state.overstyringer.saksbehandlerIdent === saksbehandlerIdent ||
     typeof data === 'undefined'
   ) {
     return null;
@@ -169,7 +168,7 @@ const SetButton = ({ label, title, icon, saksbehandlerIdent }: SetButtonProps) =
       variant="secondary"
       title={title}
       icon={icon}
-      onClick={() => updatePayload({ overstyringer: { saksbehandlerIdent } })}
+      onClick={() => updateState({ overstyringer: { saksbehandlerIdent } })}
     >
       {label}
     </Button>

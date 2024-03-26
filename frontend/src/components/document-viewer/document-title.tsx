@@ -3,7 +3,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { AppContext } from '@app/pages/create/app-context/app-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const DocumentTitle = ({ url }: Props) => {
-  const { journalpost } = useContext(ApiContext);
+  const { journalpost } = useContext(AppContext);
   const { dokument } = useContext(DocumentViewerContext);
 
   if (dokument === null) {

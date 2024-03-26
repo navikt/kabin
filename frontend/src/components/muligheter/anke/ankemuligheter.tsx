@@ -8,8 +8,8 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { IAnkeMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -17,24 +17,24 @@ import { Warning } from '../common/warning';
 import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
-  const { type, payload, updatePayload, fnr, journalpost } = useContext(ApiContext);
+  const { type, state, updateState, fnr, journalpost } = useContext(AppContext);
 
   const { data: ankemuligheter, isLoading, refetch } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
   useEffect(() => {
-    if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && payload.mulighet !== null) {
+    if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && state.mulighet !== null) {
       setIsExpanded(true);
-      updatePayload({ mulighet: null });
+      updateState({ mulighet: null });
     }
-  }, [ankemuligheter, isLoading, payload?.mulighet, type, updatePayload]);
+  }, [ankemuligheter, isLoading, state?.mulighet, type, updateState]);
 
   if (type !== Type.ANKE) {
     return null;
   }
 
-  if (!isExpanded && payload.mulighet !== null) {
+  if (!isExpanded && state.mulighet !== null) {
     return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
   }
 
@@ -45,13 +45,13 @@ export const Ankemuligheter = () => {
       return;
     }
 
-    const { mulighet } = payload;
+    const { mulighet } = state;
 
     if (mulighet === null) {
       return;
     }
 
-    updatePayload({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
+    updateState({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
   };
 
   return (
@@ -70,7 +70,7 @@ export const Ankemuligheter = () => {
           title="Oppdater"
         />
 
-        {payload.mulighet === null ? null : (
+        {state.mulighet === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"
@@ -83,7 +83,7 @@ export const Ankemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={payload.mulighet?.vedtakDate} />
+      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={state.mulighet?.vedtakDate} />
 
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </CardSmall>
@@ -132,7 +132,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
 
   return (
     <TableContainer $showShadow={ankemuligheter.length >= 3}>
-      <Table zebraStripes size="small">
+      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET}>
         <StyledTableHeader>
           <Table.Row>
             <Table.HeaderCell>Type</Table.HeaderCell>
