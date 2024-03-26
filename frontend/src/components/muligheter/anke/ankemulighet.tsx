@@ -6,8 +6,8 @@ import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/com
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useFullTemaNameFromId, useYtelseName } from '@app/hooks/kodeverk';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { IAnkeMulighet, TypeId } from '@app/types/mulighet';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const Ankemulighet = ({ mulighet }: Props) => {
-  const { type, updatePayload, payload, journalpost } = useContext(ApiContext);
+  const { type, updateState, state, journalpost } = useContext(AppContext);
 
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const ytelseName = useYtelseName(mulighet.ytelseId);
@@ -44,7 +44,7 @@ export const Ankemulighet = ({ mulighet }: Props) => {
     }
   }, [mulighet.typeId]);
 
-  const isSelected = type === Type.ANKE && payload.mulighet?.id === mulighet.id;
+  const isSelected = type === Type.ANKE && state.mulighet?.id === mulighet.id;
 
   const isValid = useMemo(() => {
     if (journalpost === null) {
@@ -66,11 +66,11 @@ export const Ankemulighet = ({ mulighet }: Props) => {
         return;
       }
 
-      if (type === Type.ANKE && payload.mulighet !== mulighet) {
-        updatePayload({ mulighet });
+      if (type === Type.ANKE && state.mulighet !== mulighet) {
+        updateState({ mulighet });
       }
     },
-    [isValid, mulighet, payload?.mulighet, type, updatePayload],
+    [isValid, mulighet, state?.mulighet, type, updateState],
   );
 
   const usedCount = mulighet.sourceOfExistingAnkebehandling.length;

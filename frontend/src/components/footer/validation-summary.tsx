@@ -65,7 +65,7 @@ const StyledSection = styled.section`
   margin-top: 10px;
 `;
 
-const StyledHeader = styled.h3`
+export const StyledHeader = styled.h3`
   margin-top: 0;
   font-size: 16px;
 `;

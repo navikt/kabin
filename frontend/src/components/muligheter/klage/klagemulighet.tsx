@@ -4,8 +4,8 @@ import { SelectMulighet } from '@app/components/muligheter/common/select-button'
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -13,23 +13,23 @@ interface Props {
 }
 
 export const Klagemulighet = ({ mulighet }: Props) => {
-  const { type, updatePayload, payload } = useContext(ApiContext);
+  const { type, updateState, state } = useContext(AppContext);
 
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
-  const isSelected = type === Type.KLAGE && payload.mulighet?.behandlingId === mulighet.behandlingId;
+  const isSelected = type === Type.KLAGE && state.mulighet?.behandlingId === mulighet.behandlingId;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (type === Type.KLAGE && payload.mulighet !== mulighet) {
-        updatePayload({ mulighet });
+      if (type === Type.KLAGE && state.mulighet !== mulighet) {
+        updateState({ mulighet });
       }
     },
-    [mulighet, payload?.mulighet, type, updatePayload],
+    [mulighet, state?.mulighet, type, updateState],
   );
 
   return (

@@ -1,5 +1,5 @@
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
-import { IPart, ISaksbehandler, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
@@ -7,6 +7,7 @@ import { useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
 
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
+export const KABAL_API_BASE_PATH = '/api/kabal-api';
 export const KABIN_API_BASE_PATH = '/api/kabin-api';
 
 interface IDokumenterResponse {
@@ -44,11 +45,27 @@ const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
 export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
   useSimpleApiState(idnummer === skipToken ? skipToken : getKlagemuligheterState({ path: '' }, { idnummer }));
 
+export interface SearchPartWithAddressParams {
+  identifikator: string;
+  sakenGjelderId: string;
+  ytelseId: string;
+}
+
+const getSearchPartWithAddressState = getStateFactory<IPart, SearchPartWithAddressParams>(
+  `${KABAL_API_BASE_PATH}/searchpartwithutsendingskanal`,
+  {
+    method: 'POST',
+  },
+);
+
+export const useSearchPartWithAddress = (params: SearchPartWithAddressParams | typeof skipToken) =>
+  useSimpleApiState(params === skipToken ? skipToken : getSearchPartWithAddressState({}, { ...params }));
+
 interface SearchPartParams {
   identifikator: string;
 }
 
-const getSearchState = getStateFactory<IPart, SearchPartParams>(`${KABIN_API_BASE_PATH}/searchpart`, {
+const getSearchState = getStateFactory<ISimplePart, SearchPartParams>(`${KABAL_API_BASE_PATH}/searchpart`, {
   method: 'POST',
 });
 

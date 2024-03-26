@@ -14,7 +14,7 @@ interface KlageStatusProps {
 export const KlageStatusPage = ({ type }: KlageStatusProps) => {
   const { id } = useParams();
   const { data, isLoading } = useKlageStatus(id === undefined ? skipToken : { id, type });
-  const Container = isLoading || typeof data === 'undefined' ? LoadingContainer : DataContainer;
+  const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
     <PageWrapper>
@@ -22,6 +22,8 @@ export const KlageStatusPage = ({ type }: KlageStatusProps) => {
         <StatusHeading
           alertText="Klagen er nå registrert og klar for saksbehandling i Kabal"
           headingText="Klage opprettet"
+          type={type}
+          behandlingId={id}
         />
         <KlageDetailsLoader loading={isLoading} data={data} />
       </Container>
@@ -35,7 +37,7 @@ interface KlageDetailsLoaderProps {
 }
 
 const KlageDetailsLoader = ({ loading, data }: KlageDetailsLoaderProps) => {
-  if (loading || typeof data === 'undefined') {
+  if (loading || data === undefined) {
     return <StyledLoader size="3xlarge" title="Laster..." />;
   }
 

@@ -5,7 +5,7 @@ import { ViewDocumentButton } from '@app/components/documents/view-document-butt
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
+import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IArkivertDocument } from '@app/types/dokument';
 import { AttachmentList } from '../attachment-list';
 import { DocumentTitle } from '../document-title';
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const Dokument = ({ dokument }: Props) => {
-  const { journalpost } = useContext(ApiContext);
+  const { journalpost } = useContext(AppContext);
   const {
     dokumentInfoId,
     journalpostId,

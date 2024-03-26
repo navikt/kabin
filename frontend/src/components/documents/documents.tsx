@@ -8,15 +8,15 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Dokumenter = () => {
-  const { type, fnr, journalpost, setJournalpost } = useContext(ApiContext);
+  const { type, fnr, journalpost, setJournalpost } = useContext(AppContext);
   const { data: dokumenter, isLoading, refetch } = useDokumenter(fnr);
   const { dokument, viewDokument } = useContext(DocumentViewerContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);

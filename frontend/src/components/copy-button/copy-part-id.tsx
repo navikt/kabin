@@ -1,18 +1,19 @@
-import { CopyButton } from '@navikt/ds-react';
+import { CopyButton, CopyButtonProps } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { formatId } from '@app/functions/format-id';
 
 interface Props {
   id: string | null;
+  size?: CopyButtonProps['size'];
 }
 
-export const CopyPartIdButton = ({ id }: Props) => {
+export const CopyPartIdButton = ({ id, size = 'small' }: Props) => {
   if (id === null) {
     return null;
   }
 
-  return <StyledCopyButton copyText={id} size="small" title="Kopier" text={formatId(id)} />;
+  return <StyledCopyButton copyText={id} size={size} title="Kopier" text={formatId(id)} />;
 };
 
 export const StyledCopyButton = styled(CopyButton)`

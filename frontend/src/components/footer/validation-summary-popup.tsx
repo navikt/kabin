@@ -1,29 +1,26 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { IApiErrorReponse, isValidationResponse } from '@app/components/footer/error-type-guard';
-import { IApiValidationResponse } from '@app/types/validation';
-import { ValidationSummary } from './validation-summary';
+import { IApiErrorReponse, isApiError, isValidationSection } from '@app/components/footer/error-type-guard';
+import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
+import { StyledHeader, ValidationSummary } from './validation-summary';
 
 interface Props {
-  error: IApiValidationResponse | IApiErrorReponse | Error | undefined;
+  error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error | undefined;
 }
 
 export const ValidationSummaryPopup = ({ error }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const hasError = error !== undefined;
+  const [isOpen, setIsOpen] = useState(hasError);
 
   useEffect(() => {
-    if (!isValidationResponse(error)) {
-      return;
-    }
-
-    if (error.sections.length !== 0) {
+    if (hasError) {
       setIsOpen(true);
     }
-  }, [error]);
+  }, [hasError]);
 
-  if (!isValidationResponse(error) || error.sections.length === 0) {
+  if (!hasError) {
     return null;
   }
 
@@ -46,11 +43,39 @@ export const ValidationSummaryPopup = ({ error }: Props) => {
           <StyledIconButton onClick={toggleOpen}>
             <Icon />
           </StyledIconButton>
-          <ValidationSummary sections={error.sections} />
+          <RenderError error={error} />
         </StyledPopup>
       )}
     </>
   );
+};
+
+const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error }) => {
+  if (error instanceof Error) {
+    return (
+      <Alert variant="warning">
+        <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
+        <BodyShort>{error.message}</BodyShort>
+      </Alert>
+    );
+  }
+
+  if (isApiError(error)) {
+    return (
+      <Alert variant="warning">
+        <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
+        <BodyShort>
+          {error.status} - {error.detail}
+        </BodyShort>
+      </Alert>
+    );
+  }
+
+  if (isValidationSection(error)) {
+    return <ValidationSummary sections={[error]} />;
+  }
+
+  return <ValidationSummary sections={error.sections} />;
 };
 
 const StyledAlertStripeText = styled.div`

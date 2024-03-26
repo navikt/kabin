@@ -5,8 +5,8 @@ import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -14,13 +14,13 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { type, payload } = useContext(ApiContext);
+  const { type, state } = useContext(AppContext);
 
-  if (type !== Type.KLAGE || payload.mulighet === null) {
+  if (type !== Type.KLAGE || state.mulighet === null) {
     return null;
   }
 
-  return <RenderKlagemulighet mulighet={payload.mulighet} onClick={onClick} />;
+  return <RenderKlagemulighet mulighet={state.mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

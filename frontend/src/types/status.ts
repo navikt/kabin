@@ -1,3 +1,4 @@
+import { Recipient } from '@app/pages/create/app-context/types';
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from './dokument';
 
@@ -14,9 +15,16 @@ interface IBaseStatus {
   tildeltSaksbehandler: ISaksbehandler | null;
 }
 
+export interface SvarbrevStatus {
+  dokumentUnderArbeidId: string;
+  title: string;
+  receivers: Recipient[];
+}
+
 export interface IAnkestatus extends IBaseStatus {
   typeId: SaksTypeEnum.ANKE;
   vedtakDate: string | null;
+  svarbrev: SvarbrevStatus | null;
 }
 
 export interface IKlagestatus extends IBaseStatus {

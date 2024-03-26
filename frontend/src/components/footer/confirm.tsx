@@ -3,21 +3,21 @@ import { Alert, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
-import { IApiValidationResponse } from '@app/types/validation';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
+import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
 import { useCreateAnke } from './anke-hooks';
 import { useCreateKlage } from './klage-hooks';
 
 interface Props {
   show: boolean;
   closeConfirm: () => void;
-  setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void;
+  setError: (error: IApiValidationResponse | IApiErrorReponse | IValidationSection | Error | undefined) => void;
 }
 
 export const Confirm = ({ show, setError, closeConfirm }: Props) => {
   const [loading, setLoading] = useState(false);
-  const { type, payload, setErrors } = useContext(ApiContext);
+  const { type, state, setErrors } = useContext(AppContext);
   const createAnkeCallback = useCreateAnke(setError);
   const createKlageCallback = useCreateKlage(setError);
 
@@ -25,7 +25,7 @@ export const Confirm = ({ show, setError, closeConfirm }: Props) => {
     return null;
   }
 
-  const text = getText(type);
+  const text = getText(type, type === Type.ANKE && state.sendSvarbrev);
 
   const onClick = async () => {
     setLoading(true);
@@ -55,7 +55,7 @@ export const Confirm = ({ show, setError, closeConfirm }: Props) => {
           icon={<CheckmarkIcon aria-hidden />}
           loading={loading}
           onClick={onClick}
-          disabled={payload === null || loading}
+          disabled={state === null || loading}
         >
           Bekreft
         </Button>
@@ -85,10 +85,15 @@ const Buttons = styled.div`
   justify-content: space-between;
 `;
 
-const getText = (type: Type.KLAGE | Type.ANKE) => {
+const getText = (type: Type.KLAGE | Type.ANKE, sendSvarbrev: boolean = false) => {
   switch (type) {
-    case Type.ANKE:
+    case Type.ANKE: {
+      if (sendSvarbrev) {
+        return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av anken.';
+      }
+
       return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av anken.';
+    }
     case Type.KLAGE:
       return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
   }

@@ -3,14 +3,16 @@ import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { IApiValidationResponse } from '@app/types/validation';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
 import { Confirm } from './confirm';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
+type FooterErrors = IApiValidationResponse | IValidationSection | IApiErrorReponse | Error;
+
 export const Footer = () => {
-  const [error, setError] = useState<IApiValidationResponse | IApiErrorReponse | Error | undefined>();
-  const { payload } = useContext(ApiContext);
+  const [error, setError] = useState<FooterErrors | undefined>();
+  const { state } = useContext(AppContext);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
@@ -23,7 +25,7 @@ export const Footer = () => {
         size="small"
         icon={<CheckmarkIcon aria-hidden />}
         variant="primary"
-        disabled={payload === null}
+        disabled={state === null}
       >
         Fullfør
       </Button>

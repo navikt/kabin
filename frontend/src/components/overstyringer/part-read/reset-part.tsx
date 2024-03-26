@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { avsenderIsPart } from '@app/domain/converters';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { IPart } from '@app/types/common';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ResetPartButton = ({ part, partField }: Props) => {
-  const { type } = useContext(ApiContext);
+  const { type } = useContext(AppContext);
   const defaultPart = useDefaultPart(partField);
 
   if (type === Type.NONE || defaultPart === null) {
@@ -31,7 +31,7 @@ export const ResetPartButton = ({ part, partField }: Props) => {
 };
 
 const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
-  const { type, payload, journalpost } = useContext(ApiContext);
+  const { type, state, journalpost } = useContext(AppContext);
 
   if (fieldId === FieldNames.AVSENDER) {
     if (journalpost !== null && journalpost.avsenderMottaker !== null) {
@@ -43,14 +43,14 @@ const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
 
   switch (type) {
     case Type.ANKE: {
-      return payload.mulighet?.[fieldId] ?? null;
+      return state.mulighet?.[fieldId] ?? null;
     }
     case Type.KLAGE: {
       if (fieldId !== FieldNames.SAKEN_GJELDER) {
         return null;
       }
 
-      return payload.mulighet?.[fieldId] ?? null;
+      return state.mulighet?.[fieldId] ?? null;
     }
     case Type.NONE:
       return null;
