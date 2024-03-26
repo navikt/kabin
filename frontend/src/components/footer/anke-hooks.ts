@@ -28,6 +28,7 @@ const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAn
   } = payload.overstyringer;
 
   const { id, sourceId } = payload.mulighet;
+  const { svarbrev } = payload;
 
   return {
     id,
@@ -41,6 +42,19 @@ const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAn
     hjemmelIdList: payload.overstyringer.hjemmelIdList,
     saksbehandlerIdent,
     sourceId,
+    svarbrevInput:
+      svarbrev === null
+        ? null
+        : {
+            title: svarbrev.title,
+            enhetId: svarbrev.enhetId,
+            fullmektigFritekst: svarbrev.fullmektigFritekst,
+            receivers: svarbrev.receivers.map((r) => ({
+              id: r.part.id,
+              handling: r.handling,
+              overriddenAddress: r.overriddenAddress,
+            })),
+          },
   };
 };
 

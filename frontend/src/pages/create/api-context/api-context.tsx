@@ -2,14 +2,14 @@ import { format } from 'date-fns';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { FORMAT } from '@app/domain/date-formats';
 import { compareMuligheter } from '@app/domain/mulighet';
+import { getUpdatedAnkeState } from '@app/pages/create/api-context/anke';
+import { getUpdatedKlageState } from '@app/pages/create/api-context/klage';
 import { skipToken } from '@app/types/common';
 import { IValidationSection } from '@app/types/validation';
 import {
   NOOP,
   getStateWithOverstyringer,
   getUpdateAvsender,
-  getUpdatedAnkeState,
-  getUpdatedKlageState,
   removeErrorsOnJournalpostChange,
   removeErrorsOnMulighetChange,
 } from './helpers';

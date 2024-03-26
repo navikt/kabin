@@ -7,6 +7,7 @@ import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
+import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
@@ -48,6 +49,7 @@ export const TypeInput = () => {
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
         <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
+        <SvarbrevInput />
       </>
     );
   }

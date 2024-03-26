@@ -1,4 +1,5 @@
-import { IPart, skipToken } from '@app/types/common';
+import { IAddress, IPart, skipToken } from '@app/types/common';
+import { HandlingEnum } from '@app/types/create';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection } from '@app/types/validation';
@@ -31,9 +32,23 @@ export interface IKlageState extends IKlageStateUpdate {
 
 type IAnkeOverstyringer = ICommonOverstyringer;
 
+export interface Recipient {
+  part: IPart;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
+}
+
+export interface Svarbrev {
+  title: string;
+  receivers: Recipient[];
+  enhetId: string;
+  fullmektigFritekst: string | null;
+}
+
 export interface IAnkeState extends IAnkeStateUpdate {
   mulighet: IAnkeMulighet | null;
   overstyringer: IAnkeOverstyringer;
+  svarbrev: Svarbrev | null;
 }
 
 export interface IKlageStateUpdate {
@@ -44,6 +59,7 @@ export interface IKlageStateUpdate {
 export interface IAnkeStateUpdate {
   mulighet?: IAnkeMulighet | null;
   overstyringer?: Partial<IAnkeOverstyringer>;
+  svarbrev?: Partial<Svarbrev> | null;
 }
 
 type PayloadFn<P, S> = (p: S) => P;
@@ -106,4 +122,5 @@ export const INITIAL_ANKE: IAnkeState = {
     hjemmelIdList: [],
     saksbehandlerIdent: null,
   },
+  svarbrev: null,
 };

@@ -57,14 +57,14 @@ module.exports = (_env, { mode }) => ({
         secure: false,
         changeOrigin: true,
         withCredentials: true,
-      },
+      }
     ]
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(mode),
     }),
-    new webpack.EnvironmentPlugin({'VERSION': 'dev'}),
+    new webpack.EnvironmentPlugin({ 'VERSION': 'dev' }),
     new ForkTsCheckerWebpackPlugin(),
   ]
 });

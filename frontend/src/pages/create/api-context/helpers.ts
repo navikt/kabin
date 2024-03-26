@@ -3,7 +3,7 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import { IAnkeState, IAnkeStateUpdate, IKlageState, IKlageStateUpdate, Payload, Type } from './types';
+import { IAnkeState, IKlageState, Type } from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -61,101 +61,10 @@ export const getUpdateAvsender = (update: IArkivertDocument | null): IPart | nul
   return null;
 };
 
-export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeStateUpdate, IAnkeState>): IAnkeState => {
-  const update = typeof newState === 'function' ? newState(state) : newState;
-
-  const updateMulighet = update.mulighet;
-  const hasAnkemulighet = typeof updateMulighet !== 'undefined';
-  const ankemulighetIsDifferent = hasAnkemulighet && !muligheterAreEqual(updateMulighet, state.mulighet);
-
-  cleanObject(update.overstyringer);
-
-  if (hasAnkemulighet) {
-    cleanObject(updateMulighet);
-  }
-
-  const mulighet = hasAnkemulighet ? updateMulighet : state.mulighet;
-
-  const {
-    klager,
-    fullmektig,
-    saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
-    ...rest
-  } = update.overstyringer ?? {};
-
-  return {
-    mulighet,
-    overstyringer: ankemulighetIsDifferent
-      ? {
-          ...state.overstyringer,
-          ...update.overstyringer,
-          klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
-          fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
-          ytelseId: mulighet?.ytelseId ?? null,
-          hjemmelIdList: mulighet?.hjemmelIdList ?? [],
-        }
-      : {
-          ...state.overstyringer,
-          ...rest,
-          klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
-          fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
-          saksbehandlerIdent,
-        },
-  };
-};
-
-export const getUpdatedKlageState = (
-  state: IKlageState,
-  newState: Payload<IKlageStateUpdate, IKlageState>,
-): IKlageState => {
-  const update = typeof newState === 'function' ? newState(state) : newState;
-
-  const updateMulighet = update.mulighet;
-  const hasKlagemulighet = typeof updateMulighet !== 'undefined';
-  const klagemulighetIsDifferent = hasKlagemulighet && !muligheterAreEqual(updateMulighet, state.mulighet);
-
-  const updateYtelse = update.overstyringer?.ytelseId;
-  const hasYtelse = typeof updateYtelse !== 'undefined';
-  const ytelseIsDifferent = hasYtelse && updateYtelse !== state.overstyringer.ytelseId;
-
-  cleanObject(update.overstyringer);
-
-  if (hasKlagemulighet) {
-    cleanObject(updateMulighet);
-  }
-
-  const {
-    klager,
-    fullmektig,
-    hjemmelIdList,
-    saksbehandlerIdent = state.overstyringer.saksbehandlerIdent,
-    ...rest
-  } = update.overstyringer ?? {};
-
-  return {
-    mulighet: hasKlagemulighet ? updateMulighet ?? null : state.mulighet,
-    overstyringer: klagemulighetIsDifferent
-      ? {
-          ...state.overstyringer,
-          ...update.overstyringer,
-          klager: klager === undefined ? null : klager, // If no klager is provided in the update, use none.
-          fullmektig: fullmektig === undefined ? null : fullmektig, // If no fullmektig is provided in the update, use none.
-          ytelseId: null,
-          hjemmelIdList: [],
-          mottattKlageinstans: updateMulighet === null ? null : updateMulighet.vedtakDate,
-        }
-      : {
-          ...state.overstyringer,
-          ...rest,
-          klager: klager === undefined ? state.overstyringer.klager : klager, // If no klager is provided in the update, use the previous one.
-          fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
-          hjemmelIdList: hjemmelIdList ?? state.overstyringer.hjemmelIdList,
-          saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
-        },
-  };
-};
-
-const muligheterAreEqual = (a: IKlagemulighet | IAnkeMulighet | null, b: IKlagemulighet | IAnkeMulighet | null) => {
+export const muligheterAreEqual = (
+  a: IKlagemulighet | IAnkeMulighet | null,
+  b: IKlagemulighet | IAnkeMulighet | null,
+) => {
   if (a === b) {
     return true;
   }
@@ -169,7 +78,7 @@ const muligheterAreEqual = (a: IKlagemulighet | IAnkeMulighet | null, b: IKlagem
 
 const isObject = (o: object | undefined | null): o is Record<string, unknown> => o !== null && typeof o === 'object';
 
-const cleanObject = <T extends object | undefined | null>(obj: T): T => {
+export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
   if (!isObject(obj)) {
     return obj;
   }
