@@ -4,9 +4,9 @@ import React, { useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
-import { useSearchPart } from '@app/simple-api-state/use-api';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
+import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
 import { IPart, skipToken } from '@app/types/common';
 import { SearchResult } from './search-result';
 import { PartContent, States, StyledContainer } from './styled-components';
@@ -27,20 +27,33 @@ export const PartWrite = ({
   icon,
   error: validationError,
 }: PartWriteProps & InternalProps) => {
-  const { type, updatePayload } = useContext(ApiContext);
+  const { type, updateState } = useContext(AppContext);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
+  const { state } = useContext(AppContext);
 
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
-  const { data, isLoading } = useSearchPart(isValid ? search : skipToken);
+  const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
+    if (!isValid || state === null || state.mulighet === null || state.overstyringer.ytelseId === null) {
+      return skipToken;
+    }
+
+    return {
+      identifikator: search,
+      sakenGjelderId: state.mulighet.sakenGjelder.id,
+      ytelseId: state.overstyringer.ytelseId,
+    };
+  }, [isValid, state, search]);
+
+  const { data, isLoading } = useSearchPartWithAddress(searchParams);
 
   if (type === Type.NONE) {
     return null;
   }
 
-  const setPart = (newPart: IPart | null) => updatePayload({ overstyringer: { [partField]: newPart } });
+  const setPart = (newPart: IPart | null) => updateState({ overstyringer: { [partField]: newPart } });
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 

@@ -1,22 +1,22 @@
 import React, { useContext } from 'react';
 import { FullmektigIcon, KlagerIcon, SakenGjelderIcon, StyledAvsenderIcon } from '@app/components/overstyringer/icons';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Part } from './part';
 import { FieldNames } from './types';
 
 export const Avsender = () => {
-  const { type, payload, journalpost } = useContext(ApiContext);
+  const { type, state, journalpost } = useContext(AppContext);
   const error = useValidationError(ValidationFieldNames.AVSENDER);
 
-  if (type === Type.NONE || payload.mulighet === null) {
+  if (type === Type.NONE || state.mulighet === null) {
     return null;
   }
 
-  const { overstyringer, mulighet } = payload;
+  const { overstyringer, mulighet } = state;
 
   if (journalpost === null || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
     return null;

@@ -1,5 +1,6 @@
 export enum SectionNames {
   SAKSDATA = 'saksdata',
+  SVARBREV = 'svarbrev',
 }
 
 export interface IValidationError {
@@ -30,4 +31,7 @@ export enum ValidationFieldNames {
   BEHANDLING_ID = 'behandlingId',
   JOURNALPOST_ID = 'journalpostId',
   SAKSBEHANDLER = 'saksbehandlerId',
+  // Frontend specific
+  MULIGHET = 'mulighet',
+  ENHET = 'enhet',
 }

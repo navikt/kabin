@@ -18,8 +18,8 @@ import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 import { EditFrist } from './edit-frist';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
@@ -33,12 +33,12 @@ interface Props {
 }
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
-  const { type, payload } = useContext(ApiContext);
+  const { type, state } = useContext(AppContext);
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  if (type === Type.NONE || payload.mulighet === null) {
+  if (type === Type.NONE || state.mulighet === null) {
     return (
       <CardLarge title={title}>
         <Placeholder>
@@ -48,7 +48,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
     );
   }
 
-  const { overstyringer, mulighet } = payload;
+  const { overstyringer, mulighet } = state;
 
   return (
     <CardLarge title={title}>
@@ -92,7 +92,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           options={[
             {
               label: 'Avsender',
-              defaultPart: payload === null ? null : avsenderMottakerToPart(payload.overstyringer.avsender),
+              defaultPart: state === null ? null : avsenderMottakerToPart(state.overstyringer.avsender),
               title: 'Avsender',
               icon: <AvsenderIcon aria-hidden />,
             },

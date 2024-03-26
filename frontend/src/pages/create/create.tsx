@@ -8,7 +8,7 @@ import { usePersonSearch } from '@app/components/search/hook';
 import { PersonSearch } from '@app/components/search/search';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
-import { ApiContextState } from './api-context/api-context';
+import { AppContextState } from './app-context/app-context';
 import { DocumentViewerContextState } from './document-viewer-context';
 import { TypeInput, TypeSelect } from './type-input';
 
@@ -24,13 +24,13 @@ export const CreatePage = () => {
 
   return (
     <PageWrapper>
-      <ApiContextState fnr={search}>
+      <AppContextState fnr={search}>
         <StyledMain $isIinitialized={isInitialized}>
           <PersonSearch isInitialized={isInitialized} {...personSearch} />
           <CreatePageLoader isInitialized={isInitialized} isLoading={isLoading} />
         </StyledMain>
         <Footer />
-      </ApiContextState>
+      </AppContextState>
     </PageWrapper>
   );
 };

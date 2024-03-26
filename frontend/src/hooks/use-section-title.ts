@@ -1,22 +1,25 @@
 import { useContext } from 'react';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { SectionNames } from '@app/types/validation';
 
 const ANKE_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SAKSDATA]: 'Tilpasninger for anken',
+  [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
 const KLAGE_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SAKSDATA]: 'Tilpasninger for klagen',
+  [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
 const DEFAULT_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SAKSDATA]: 'Tilpasninger',
+  [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
 const useSections = () => {
-  const { type } = useContext(ApiContext);
+  const { type } = useContext(AppContext);
 
   switch (type) {
     case Type.KLAGE:

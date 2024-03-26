@@ -3,14 +3,14 @@ import React, { useCallback, useContext } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { Type } from '@app/pages/create/api-context/types';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import { Type } from '@app/pages/create/app-context/types';
 import { useCalculateFristdato } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditFrist = () => {
-  const { type, payload, updatePayload } = useContext(ApiContext);
+  const { type, state, updateState } = useContext(AppContext);
   const error = useValidationError(ValidationFieldNames.FRIST);
 
   const parseAndSet = useCallback(
@@ -18,10 +18,10 @@ export const EditFrist = () => {
       const parsed = Number.parseInt(value, 10);
 
       if (!Number.isNaN(parsed) && parsed >= 0 && type !== Type.NONE) {
-        updatePayload({ overstyringer: { fristInWeeks: parsed } });
+        updateState({ overstyringer: { fristInWeeks: parsed } });
       }
     },
-    [type, updatePayload],
+    [type, updateState],
   );
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -41,7 +41,7 @@ export const EditFrist = () => {
         size="small"
         min={0}
         id={ValidationFieldNames.FRIST}
-        value={payload.overstyringer.fristInWeeks ?? 12}
+        value={state.overstyringer.fristInWeeks ?? 12}
         onChange={onInputChange}
         error={error}
       />
@@ -51,14 +51,12 @@ export const EditFrist = () => {
 };
 
 const Fristdato = () => {
-  const { type, payload } = useContext(ApiContext);
+  const { type, state } = useContext(AppContext);
 
   const params =
-    type === Type.NONE ||
-    payload.overstyringer.mottattKlageinstans === null ||
-    payload.overstyringer.fristInWeeks === null
+    type === Type.NONE || state.overstyringer.mottattKlageinstans === null || state.overstyringer.fristInWeeks === null
       ? skipToken
-      : { fromDate: payload.overstyringer.mottattKlageinstans, fristInWeeks: payload.overstyringer.fristInWeeks };
+      : { fromDate: state.overstyringer.mottattKlageinstans, fristInWeeks: state.overstyringer.fristInWeeks };
 
   const { data: fristdato, isLoading } = useCalculateFristdato(params);
 

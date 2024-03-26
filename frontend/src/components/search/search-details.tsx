@@ -3,11 +3,11 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { getSakspartNameAndId } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import { IPart, skipToken } from '@app/types/common';
+import { ISimplePart, skipToken } from '@app/types/common';
 
 interface Props {
   searchString: string | typeof skipToken;
-  person: IPart | null;
+  person: ISimplePart | null;
   isLoading: boolean;
   isValid: boolean;
   isInitialized: boolean;
