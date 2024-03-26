@@ -47,6 +47,7 @@ spec:
     outbound:
       rules:
         - application: kabin-api
+        - application: kabal-api
         - application: kabal-innstillinger
         - application: klage-kodeverk-api
       external:

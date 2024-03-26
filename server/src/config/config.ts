@@ -8,7 +8,7 @@ export const slack = {
   messagePrefix: `${requiredEnvString('NAIS_APP_NAME', 'kabin-frontend').toUpperCase()} frontend NodeJS -`,
 };
 
-export const API_CLIENT_IDS = ['kabin-api', 'kabal-innstillinger', 'klage-kodeverk-api'];
+export const API_CLIENT_IDS = ['kabin-api', 'kabal-api', 'kabal-innstillinger', 'klage-kodeverk-api'];
 
 const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
 const serverDirectoryPath = cwd;
