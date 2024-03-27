@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { CustomRecipients } from '@app/components/svarbrev/custom-recipients';
 import { SingleRecipient } from '@app/components/svarbrev/single-recipient';
 import { SuggestedRecipients } from '@app/components/svarbrev/suggested-recipients';
-import { PartRecipient } from '@app/components/svarbrev/use-suggested-part-recipients';
+import { PartRecipient } from '@app/components/svarbrev/types';
 import { Recipient } from '@app/pages/create/api-context/types';
 
 interface Props {
@@ -88,7 +87,7 @@ export const Receipients = ({ recipients, suggestedRecipients, setRecipients }: 
   const onlyOneRecipient = suggestedRecipients.length === 1 && customRecipients.length === 0 && recipient !== undefined;
 
   return (
-    <Container>
+    <>
       {onlyOneRecipient ? (
         <SingleRecipient recipient={recipient} changeRecipient={changeRecipient} />
       ) : (
@@ -98,7 +97,6 @@ export const Receipients = ({ recipients, suggestedRecipients, setRecipients }: 
           addRecipients={addRecipients}
           removeRecipients={removeMottakere}
           changeRecipient={changeRecipient}
-          sendErrors={[]}
         />
       )}
 
@@ -107,15 +105,7 @@ export const Receipients = ({ recipients, suggestedRecipients, setRecipients }: 
         addRecipients={addRecipients}
         removeRecipients={removeMottakere}
         changeRecipient={changeRecipient}
-        sendErrors={[]}
       />
-    </Container>
+    </>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
-  position: relative;
-`;

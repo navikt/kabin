@@ -30,7 +30,7 @@ export interface IKlageState extends IKlageStateUpdate {
   overstyringer: IKlageOverstyringer;
 }
 
-type IAnkeOverstyringer = ICommonOverstyringer;
+export type IAnkeOverstyringer = ICommonOverstyringer;
 
 export interface Recipient {
   part: IPart;
@@ -41,6 +41,13 @@ export interface Recipient {
 export interface Svarbrev {
   title: string;
   receivers: Recipient[];
+  enhetId: string | null;
+  fullmektigFritekst: string | null;
+}
+
+export interface ValidSvarbrev {
+  title: string;
+  receivers: Recipient[];
   enhetId: string;
   fullmektigFritekst: string | null;
 }
@@ -48,7 +55,8 @@ export interface Svarbrev {
 export interface IAnkeState extends IAnkeStateUpdate {
   mulighet: IAnkeMulighet | null;
   overstyringer: IAnkeOverstyringer;
-  svarbrev: Svarbrev | null;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
 }
 
 export interface IKlageStateUpdate {
@@ -59,7 +67,8 @@ export interface IKlageStateUpdate {
 export interface IAnkeStateUpdate {
   mulighet?: IAnkeMulighet | null;
   overstyringer?: Partial<IAnkeOverstyringer>;
-  svarbrev?: Partial<Svarbrev> | null;
+  sendSvarbrev?: boolean;
+  svarbrev?: Partial<Svarbrev>;
 }
 
 type PayloadFn<P, S> = (p: S) => P;
@@ -110,6 +119,8 @@ export const INITIAL_KLAGE: IKlageState = {
   },
 };
 
+const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
+
 export const INITIAL_ANKE: IAnkeState = {
   mulighet: null,
   overstyringer: {
@@ -122,5 +133,11 @@ export const INITIAL_ANKE: IAnkeState = {
     hjemmelIdList: [],
     saksbehandlerIdent: null,
   },
-  svarbrev: null,
+  sendSvarbrev: true,
+  svarbrev: {
+    enhetId: null,
+    fullmektigFritekst: null,
+    receivers: [],
+    title: DEFAULT_SVARBREV_NAME,
+  },
 };

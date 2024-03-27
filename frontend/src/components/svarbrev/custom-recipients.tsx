@@ -1,5 +1,5 @@
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, Label, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
@@ -11,23 +11,15 @@ import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svar
 import { Recipient } from '@app/pages/create/api-context/types';
 import { IdType } from '@app/types/common';
 import { HandlingEnum } from '@app/types/create';
-// import { IErrorProperty } from './is-send-error';
 
 interface Props {
   mottakerList: Recipient[];
   addRecipients: (recipients: Recipient[]) => void;
   removeRecipients: (ids: string[]) => void;
   changeRecipient: (recipient: Recipient) => void;
-  sendErrors: {}[];
 }
 
-export const CustomRecipients = ({
-  mottakerList,
-  addRecipients,
-  removeRecipients,
-  changeRecipient,
-  sendErrors,
-}: Props) => (
+export const CustomRecipients = ({ mottakerList, addRecipients, removeRecipients, changeRecipient }: Props) => (
   <section>
     <Label size="small" htmlFor="extra-recipients">
       Ekstra mottakere
@@ -38,12 +30,7 @@ export const CustomRecipients = ({
       onChange={(part) => addRecipients([{ part, handling: HandlingEnum.AUTO, overriddenAddress: null }])}
       buttonText="Legg til mottaker"
     />
-    <Recipients
-      recipientList={mottakerList}
-      removeRecipients={removeRecipients}
-      changeRecipient={changeRecipient}
-      sendErrors={sendErrors}
-    />
+    <Recipients recipientList={mottakerList} removeRecipients={removeRecipients} changeRecipient={changeRecipient} />
   </section>
 );
 
@@ -51,10 +38,9 @@ interface RecipientsProps {
   recipientList: Recipient[];
   removeRecipients: (ids: string[]) => void;
   changeRecipient: (recipient: Recipient) => void;
-  sendErrors: {}[];
 }
 
-const Recipients = ({ recipientList, removeRecipients, changeRecipient, sendErrors }: RecipientsProps) => {
+const Recipients = ({ recipientList, removeRecipients, changeRecipient }: RecipientsProps) => {
   if (recipientList.length === 0) {
     return null;
   }
@@ -62,8 +48,6 @@ const Recipients = ({ recipientList, removeRecipients, changeRecipient, sendErro
   return (
     <StyledRecipientList>
       {recipientList.map(({ part, handling, overriddenAddress }) => {
-        // const error = sendErrors.find((e) => e.field === part.id)?.reason ?? null;
-        const error = null; // TODO: Fix this
         const isPerson = part.type === IdType.FNR;
 
         return (
@@ -85,14 +69,9 @@ const Recipients = ({ recipientList, removeRecipients, changeRecipient, sendErro
                   </Tooltip>
                   <StyledName>
                     <span>{part.name}</span>
-                    <CopyPartIdButton id={part.id} />
+                    <CopyPartIdButton id={part.id} size="xsmall" />
                   </StyledName>
                   <PartStatusList statusList={part.statusList} />
-                  {error === null ? null : (
-                    <Tag variant="error" size="xsmall">
-                      {error}
-                    </Tag>
-                  )}
                 </StyledRecipientInnerContent>
               </StyledBrevmottaker>
             </StyledRecipientContent>

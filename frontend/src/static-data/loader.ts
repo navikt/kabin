@@ -1,6 +1,6 @@
 import { getHeaders } from '@app/headers';
 
-export const loadStaticData = async <T>(url: string, name: string, attempt: number = 0): Promise<T> => {
+export const loadStaticData = async <T>(url: string, label: string, attempt: number = 0): Promise<T> => {
   const res = await fetch(url, {
     method: 'GET',
     headers: getHeaders(),
@@ -12,15 +12,15 @@ export const loadStaticData = async <T>(url: string, name: string, attempt: numb
   }
 
   if (res.status >= 500) {
-    console.error(`Kunne ikke hente ${name}`, res.status, res.statusText);
+    console.error(`Kunne ikke hente ${label}`, res.status, res.statusText);
 
     if (attempt >= 3) {
-      throw new Error(`Kunne ikke hente ${name}`);
+      throw new Error(`Kunne ikke hente ${label}`);
     }
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        loadStaticData<T>(url, name, attempt + 1)
+        loadStaticData<T>(url, label, attempt + 1)
           .then(resolve)
           .catch(reject);
       }, 1000);
@@ -28,7 +28,7 @@ export const loadStaticData = async <T>(url: string, name: string, attempt: numb
   }
 
   if (!res.ok) {
-    throw new Error(`Kunne ikke hente ${name}`);
+    throw new Error(`Kunne ikke hente ${label}`);
   }
 
   return await res.json();

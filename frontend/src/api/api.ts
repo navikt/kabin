@@ -1,6 +1,7 @@
 import { request } from '@app/api/request';
 import { KABIN_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { CreateAnkeApiPayload, CreateKlageApiPayload } from '@app/types/create';
+import { PreviewPdfPayload } from '@app/types/preview';
 
 export const editTitle = async (tittel: string, journalpostId: string, dokumentInfoId: string) =>
   request(`${KABIN_API_BASE_PATH}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/tittel`, {
@@ -21,4 +22,12 @@ export const createKlage = async (klage: CreateKlageApiPayload) =>
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(klage),
+  });
+
+export const createSvarbrevPDF = async (data: PreviewPdfPayload, signal?: AbortSignal) =>
+  request(`${KABIN_API_BASE_PATH}/svarbrev-preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+    signal,
   });

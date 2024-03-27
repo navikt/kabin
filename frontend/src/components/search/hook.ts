@@ -1,14 +1,14 @@
 import { idnr } from '@navikt/fnrvalidator';
 import { useEffect, useState } from 'react';
 import { useSearchPart } from '@app/simple-api-state/use-api';
-import { IPart, skipToken } from '@app/types/common';
+import { ISimplePart, skipToken } from '@app/types/common';
 
 export interface IPersonSearch {
   rawSearch: string;
   search: string | typeof skipToken;
   onRawChange: (raw: string) => void;
   onKeyDown: React.KeyboardEventHandler<HTMLInputElement>;
-  person: IPart | null;
+  person: ISimplePart | null;
   isLoading: boolean;
   isValid: boolean;
   error: string | undefined;

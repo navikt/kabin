@@ -6,7 +6,7 @@ import { ValidationErrorMessage } from '@app/components/validation-error-message
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
 import { Type } from '@app/pages/create/api-context/types';
-import { useSearchPart } from '@app/simple-api-state/use-api';
+import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
 import { IPart, skipToken } from '@app/types/common';
 import { SearchResult } from './search-result';
 import { PartContent, States, StyledContainer } from './styled-components';
@@ -31,10 +31,23 @@ export const PartWrite = ({
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
+  const { payload } = useContext(ApiContext);
 
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
-  const { data, isLoading } = useSearchPart(isValid ? search : skipToken);
+  const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
+    if (!isValid || payload === null || payload.mulighet === null || payload.overstyringer.ytelseId === null) {
+      return skipToken;
+    }
+
+    return {
+      identifikator: search,
+      sakenGjelderId: payload.mulighet.sakenGjelder.id,
+      ytelseId: payload.overstyringer.ytelseId,
+    };
+  }, [isValid, payload, search]);
+
+  const { data, isLoading } = useSearchPartWithAddress(searchParams);
 
   if (type === Type.NONE) {
     return null;

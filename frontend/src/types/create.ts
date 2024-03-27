@@ -6,7 +6,7 @@ export enum HandlingEnum {
   CENTRAL_PRINT = 'CENTRAL_PRINT',
 }
 
-interface Recipient {
+export interface ApiRecipient {
   id: string;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;
@@ -14,7 +14,7 @@ interface Recipient {
 
 interface SvarbrevInput {
   title: string;
-  receivers: Recipient[];
+  receivers: ApiRecipient[];
   enhetId: string;
   fullmektigFritekst: string | null;
 }
@@ -34,6 +34,7 @@ interface CreateBasePayload {
 
 export interface CreateAnkeApiPayload extends CreateBasePayload {
   sourceId: string;
+  sakenGjelder: IPartId;
   svarbrevInput: SvarbrevInput | null;
 }
 

@@ -6,57 +6,60 @@ import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
 import { ApiContext } from '@app/pages/create/api-context/api-context';
-import { IAnkeState, Type } from '@app/pages/create/api-context/types';
+import { getValidSvarbrev } from '@app/pages/create/api-context/helpers';
+import { IAnkeOverstyringer, Recipient, Type, ValidSvarbrev } from '@app/pages/create/api-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
-import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
+import { ApiRecipient, CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
+import { IAnkeMulighet } from '@app/types/mulighet';
 import { IApiValidationResponse } from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
-const getAnkeApiPayload = (payload: IAnkeState, journalpostId: string): CreateAnkeApiPayload => {
-  if (payload.mulighet === null) {
-    throw new Error('Mulighet er ikke satt.');
-  }
-
+export const getAnkeApiPayload = (
+  mulighet: IAnkeMulighet,
+  overstyringer: IAnkeOverstyringer,
+  svarbrev: ValidSvarbrev,
+  journalpostId: string,
+): CreateAnkeApiPayload => {
+  const { id, sourceId, sakenGjelder } = mulighet;
   const {
     mottattKlageinstans,
     fristInWeeks,
     klager,
     fullmektig,
-    avsender: avsenderMottaker,
+    avsender,
     saksbehandlerIdent,
-  } = payload.overstyringer;
-
-  const { id, sourceId } = payload.mulighet;
-  const { svarbrev } = payload;
+    ytelseId,
+    hjemmelIdList,
+  } = overstyringer;
+  const { title, enhetId, fullmektigFritekst, receivers } = svarbrev;
 
   return {
     id,
     mottattKlageinstans,
     fristInWeeks,
+    sakenGjelder: {
+      id: sakenGjelder.id,
+      type: sakenGjelder.type,
+    },
     klager: partToPartId(klager),
     fullmektig: partToPartId(fullmektig),
-    avsender: avsenderMottakerToPartId(avsenderMottaker),
+    avsender: avsenderMottakerToPartId(avsender),
     journalpostId,
-    ytelseId: payload.overstyringer.ytelseId,
-    hjemmelIdList: payload.overstyringer.hjemmelIdList,
+    ytelseId,
+    hjemmelIdList,
     saksbehandlerIdent,
     sourceId,
-    svarbrevInput:
-      svarbrev === null
-        ? null
-        : {
-            title: svarbrev.title,
-            enhetId: svarbrev.enhetId,
-            fullmektigFritekst: svarbrev.fullmektigFritekst,
-            receivers: svarbrev.receivers.map((r) => ({
-              id: r.part.id,
-              handling: r.handling,
-              overriddenAddress: r.overriddenAddress,
-            })),
-          },
+    svarbrevInput: {
+      title,
+      enhetId,
+      fullmektigFritekst,
+      receivers: receivers.map(recipientToApiRecipient),
+    },
   };
 };
+
+export const recipientToApiRecipient = ({ part, ...rest }: Recipient): ApiRecipient => ({ id: part.id, ...rest });
 
 export const useCreateAnke = (
   setError: (error: IApiValidationResponse | IApiErrorReponse | Error | undefined) => void,
@@ -72,7 +75,17 @@ export const useCreateAnke = (
     }
 
     try {
-      const createAnkePayload = getAnkeApiPayload(payload, journalpost.journalpostId);
+      const { mulighet, overstyringer, svarbrev } = payload;
+
+      if (mulighet === null) {
+        throw new Error('Mulighet er ikke satt.');
+      }
+
+      if (!getValidSvarbrev(svarbrev)) {
+        throw new Error('EnhetId er ikke satt.');
+      }
+
+      const createAnkePayload = getAnkeApiPayload(mulighet, overstyringer, svarbrev, journalpost.journalpostId);
 
       const res = await createAnke(createAnkePayload);
 

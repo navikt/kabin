@@ -45,6 +45,7 @@ interface IPartBase {
   id: string;
   name: string | null;
   available: boolean;
+  language: string;
   address: IAddress | null;
   utsendingskanal: Utsendingskanal;
 }
@@ -123,6 +124,8 @@ export interface IAvsenderMottaker extends IPartBase {
 }
 
 export type IPart = IPersonPart | IOrganizationPart | IAvsenderMottaker;
+
+export type ISimplePart = Omit<IPart, 'address' | 'utsendingskanal' | 'language'>;
 
 export const PART_TYPES = Object.values(IdType);
 

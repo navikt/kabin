@@ -41,21 +41,14 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: Payload<IAnkeSt
           fullmektig: fullmektig === undefined ? state.overstyringer.fullmektig : fullmektig, // If no fullmektig is provided in the update, use the previous one.
           saksbehandlerIdent,
         },
+    sendSvarbrev: update.sendSvarbrev ?? state.sendSvarbrev,
     svarbrev: getSvarbrev(state.svarbrev, update.svarbrev),
   };
 };
 
-const getSvarbrev = (state: Svarbrev | null, update: Partial<Svarbrev> | null | undefined): Svarbrev | null => {
-  if (update === null) {
-    return null;
-  }
-
+const getSvarbrev = (state: Svarbrev, update: Partial<Svarbrev> | undefined): Svarbrev => {
   if (update === undefined) {
     return state;
-  }
-
-  if (state === null) {
-    return isCompleteSvarBrev(update) ? update : null;
   }
 
   return {
@@ -63,9 +56,3 @@ const getSvarbrev = (state: Svarbrev | null, update: Partial<Svarbrev> | null | 
     ...update,
   };
 };
-
-const isCompleteSvarBrev = (svarbrev: Partial<Svarbrev>): svarbrev is Svarbrev =>
-  svarbrev.fullmektigFritekst !== undefined &&
-  svarbrev.enhetId !== undefined &&
-  svarbrev.receivers !== undefined &&
-  svarbrev.title !== undefined;

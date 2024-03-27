@@ -3,7 +3,7 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import { IAnkeState, IKlageState, Type } from './types';
+import { IAnkeState, IKlageState, Svarbrev, Type, ValidSvarbrev } from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -91,3 +91,6 @@ export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
 
   return obj;
 };
+
+export const getValidSvarbrev = (svarbrev: Svarbrev | null): svarbrev is ValidSvarbrev | null =>
+  svarbrev === null || svarbrev.enhetId !== null;

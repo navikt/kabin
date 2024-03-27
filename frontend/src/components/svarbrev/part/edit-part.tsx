@@ -36,8 +36,8 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
     }
   };
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       if (data === undefined) {
         return;
       }
@@ -48,7 +48,7 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
       return;
     }
 
-    if (event.key === 'Escape') {
+    if (e.key === 'Escape') {
       onClose?.();
     }
   };
@@ -159,9 +159,7 @@ const useSearchPartWithUtsendingslkanal = () => {
         throw new Error('Failed to fetch');
       }
 
-      const json = await res.json();
-
-      setData(json);
+      setData(await res.json());
     } catch (e) {
       if (e instanceof Error) {
         setError(e);
