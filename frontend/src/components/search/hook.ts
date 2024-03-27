@@ -1,22 +1,22 @@
 import { idnr } from '@navikt/fnrvalidator';
 import { useEffect, useState } from 'react';
 import { useSearchPart } from '@app/simple-api-state/use-api';
-import { IPart, skipToken } from '@app/types/common';
+import { ISimplePart, skipToken } from '@app/types/common';
 
 export interface IPersonSearch {
   rawSearch: string;
   search: string | typeof skipToken;
   onRawChange: (raw: string) => void;
   onKeyDown: React.KeyboardEventHandler<HTMLInputElement>;
-  person: IPart | null;
+  person: ISimplePart | null;
   isLoading: boolean;
   isValid: boolean;
   error: string | undefined;
 }
 
 export const usePersonSearch = (): IPersonSearch => {
-  const [rawSearch, setRawSearch] = useState<string>('');
-  const [search, setSearch] = useState<string | typeof skipToken>(skipToken);
+  const [rawSearch, setRawSearch] = useState<string>('25056321171'); // TODO: Remove
+  const [search, setSearch] = useState<string | typeof skipToken>('25056321171'); // TODO: skipToken
   const [isValid, setIsValid] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 

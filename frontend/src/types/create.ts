@@ -1,4 +1,23 @@
-import { IPartId } from './common';
+import { IAddress, IPartId } from './common';
+
+export enum HandlingEnum {
+  AUTO = 'AUTO',
+  LOCAL_PRINT = 'LOCAL_PRINT',
+  CENTRAL_PRINT = 'CENTRAL_PRINT',
+}
+
+export interface ApiRecipient {
+  id: string;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
+}
+
+interface SvarbrevInput {
+  title: string;
+  receivers: ApiRecipient[];
+  enhetId: string;
+  fullmektigFritekst: string | null;
+}
 
 interface CreateBasePayload {
   id: string | null;
@@ -15,6 +34,8 @@ interface CreateBasePayload {
 
 export interface CreateAnkeApiPayload extends CreateBasePayload {
   sourceId: string;
+  sakenGjelder: IPartId;
+  svarbrevInput: SvarbrevInput | null;
 }
 
 export interface CreateKlageApiPayload extends CreateBasePayload {

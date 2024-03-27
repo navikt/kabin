@@ -1,4 +1,5 @@
-import { IPart, skipToken } from '@app/types/common';
+import { IAddress, IPart, skipToken } from '@app/types/common';
+import { HandlingEnum } from '@app/types/create';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection } from '@app/types/validation';
@@ -29,11 +30,33 @@ export interface IKlageState extends IKlageStateUpdate {
   overstyringer: IKlageOverstyringer;
 }
 
-type IAnkeOverstyringer = ICommonOverstyringer;
+export type IAnkeOverstyringer = ICommonOverstyringer;
+
+export interface Recipient {
+  part: IPart;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
+}
+
+export interface Svarbrev {
+  title: string;
+  receivers: Recipient[];
+  enhetId: string | null;
+  fullmektigFritekst: string | null;
+}
+
+export interface ValidSvarbrev {
+  title: string;
+  receivers: Recipient[];
+  enhetId: string;
+  fullmektigFritekst: string | null;
+}
 
 export interface IAnkeState extends IAnkeStateUpdate {
   mulighet: IAnkeMulighet | null;
   overstyringer: IAnkeOverstyringer;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
 }
 
 export interface IKlageStateUpdate {
@@ -44,6 +67,8 @@ export interface IKlageStateUpdate {
 export interface IAnkeStateUpdate {
   mulighet?: IAnkeMulighet | null;
   overstyringer?: Partial<IAnkeOverstyringer>;
+  sendSvarbrev?: boolean;
+  svarbrev?: Partial<Svarbrev>;
 }
 
 type PayloadFn<P, S> = (p: S) => P;
@@ -94,6 +119,8 @@ export const INITIAL_KLAGE: IKlageState = {
   },
 };
 
+const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
+
 export const INITIAL_ANKE: IAnkeState = {
   mulighet: null,
   overstyringer: {
@@ -105,5 +132,12 @@ export const INITIAL_ANKE: IAnkeState = {
     ytelseId: null,
     hjemmelIdList: [],
     saksbehandlerIdent: null,
+  },
+  sendSvarbrev: true,
+  svarbrev: {
+    enhetId: null,
+    fullmektigFritekst: null,
+    receivers: [],
+    title: DEFAULT_SVARBREV_NAME,
   },
 };
