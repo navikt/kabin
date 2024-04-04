@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, Tooltip } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
@@ -22,15 +22,17 @@ export const DocumentTitle = ({ url }: Props) => {
 
   return (
     <StyledDocumentTitle>
-      <Button
-        as="a"
-        variant="tertiary"
-        icon={<ExternalLinkIcon title="Åpne i nytt vindu" />}
-        size="small"
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-      />
+      <Tooltip content="Åpne i nytt vindu" placement="top">
+        <Button
+          as="a"
+          variant="tertiary"
+          icon={<ExternalLinkIcon aria-hidden />}
+          size="small"
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+        />
+      </Tooltip>
       <Heading size="small" level="1">
         {dokument?.tittel ?? ''}
       </Heading>
