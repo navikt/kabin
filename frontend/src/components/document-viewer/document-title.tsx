@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tooltip } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
@@ -12,7 +12,7 @@ interface Props {
 
 export const DocumentTitle = ({ url }: Props) => {
   const { journalpost } = useContext(AppContext);
-  const { dokument } = useContext(DocumentViewerContext);
+  const { dokument, viewDokument } = useContext(DocumentViewerContext);
 
   if (dokument === null) {
     return null;
@@ -37,6 +37,14 @@ export const DocumentTitle = ({ url }: Props) => {
         {dokument?.tittel ?? ''}
       </Heading>
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
+      <Tooltip content="Lukk" placement="top">
+        <RightAlignedButton
+          variant="tertiary"
+          size="small"
+          icon={<XMarkIcon aria-hidden />}
+          onClick={() => viewDokument(null)}
+        />
+      </Tooltip>
     </StyledDocumentTitle>
   );
 };
@@ -47,4 +55,8 @@ const StyledDocumentTitle = styled.div`
   align-items: center;
   gap: 8px;
   width: 100%;
+`;
+
+const RightAlignedButton = styled(Button)`
+  margin-left: auto;
 `;
