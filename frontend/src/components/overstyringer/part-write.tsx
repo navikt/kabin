@@ -36,6 +36,9 @@ export const PartWrite = ({
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
   const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
+    // eslint-disable-next-line no-console
+    console.log('searchParams:', isValid, state, search);
+
     if (!isValid || state === null || state.mulighet === null || state.overstyringer.ytelseId === null) {
       return skipToken;
     }

@@ -33,9 +33,12 @@ export const Preview = (props: Props) => {
 
   return (
     <PdfContainer>
-      {rendered.toReversed().map((loader) => (
-        <RenderPdf key={loader.key} loader={loader} />
-      ))}
+      {rendered.toReversed().map((loader) => {
+        // eslint-disable-next-line no-console
+        console.log('Loader:', loader);
+
+        return <RenderPdf key={loader.key} loader={loader} />;
+      })}
     </PdfContainer>
   );
 };
