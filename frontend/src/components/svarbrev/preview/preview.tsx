@@ -4,7 +4,7 @@ import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { PDF_ASPECT_RATIO } from '@app/components/toast/constants';
-import { partToPartId } from '@app/domain/converters';
+import { nullablePartToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
 import { DEFAULT_SVARBREV_NAME, IAnkeOverstyringer, ValidSvarbrev } from '@app/pages/create/app-context/types';
 import { IAnkeMulighet } from '@app/types/mulighet';
@@ -67,7 +67,7 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
           id: mulighet.sakenGjelder.id,
           type: mulighet.sakenGjelder.type,
         },
-        klager: partToPartId(overstyringer.klager),
+        klager: nullablePartToPartId(overstyringer.klager),
         fristInWeeks: overstyringer.fristInWeeks,
         svarbrevInput: {
           enhetId: svarbrev.enhetId,

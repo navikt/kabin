@@ -1,4 +1,4 @@
-import { Heading, Select, Tag } from '@navikt/ds-react';
+import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
 import React, { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useYtelseName } from '@app/hooks/kodeverk';
@@ -9,6 +9,7 @@ import { Type } from '@app/pages/create/app-context/types';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { skipToken } from '@app/types/common';
 import { IYtelserLatest } from '@app/types/kodeverk';
+import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
 const NONE_SELECTED = 'NONE_SELECTED';
@@ -47,13 +48,19 @@ export const Ytelse = () => {
     return null;
   }
 
-  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.ytelseId !== null) {
+  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.sourceId === SourceId.KABAL) {
     return (
       <ReadOnlyContainer>
         <Heading level="1" size="xsmall" spacing>
           Ytelse
         </Heading>
-        <YtelseTag ytelseId={state.mulighet.ytelseId} />
+        {state.mulighet.ytelseId === null ? (
+          <Alert variant="error" size="small" inline>
+            Teknisk feil: Ytelse mangler. Kontakt Team Klage.
+          </Alert>
+        ) : (
+          <YtelseTag ytelseId={state.mulighet.ytelseId} />
+        )}
       </ReadOnlyContainer>
     );
   }

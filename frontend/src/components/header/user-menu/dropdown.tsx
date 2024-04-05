@@ -17,8 +17,8 @@ export const UserDropdown = (): JSX.Element | null => {
           title="Klikk for å kopiere versjonsnummeret"
           copyText={version}
           icon={<CogRotationIcon aria-hidden />}
-          text={`Kabal-versjon: ${getShortVersion(version)}`}
-        >{`Kabal-versjon: ${getShortVersion(version)}`}</Dropdown.Menu.List.Item>
+          text={`Kabin-versjon: ${getShortVersion(version)}`}
+        >{`Kabin-versjon: ${getShortVersion(version)}`}</Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>
   );

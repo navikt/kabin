@@ -5,7 +5,7 @@ import { DocumentViewer } from '@app/components/document-viewer/document-viewer'
 import { Dokumenter } from '@app/components/documents/documents';
 import { Footer } from '@app/components/footer/footer';
 import { usePersonSearch } from '@app/components/search/hook';
-import { PersonSearch } from '@app/components/search/search';
+import { PersonSearch, SearchArea } from '@app/components/search/search';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { AppContextState } from './app-context/app-context';
@@ -26,7 +26,9 @@ export const CreatePage = () => {
     <PageWrapper>
       <AppContextState fnr={search}>
         <StyledMain $isIinitialized={isInitialized}>
-          <PersonSearch isInitialized={isInitialized} {...personSearch} />
+          <SearchArea $isInitialized={isInitialized}>
+            <PersonSearch isInitialized={isInitialized} {...personSearch} />
+          </SearchArea>
           <CreatePageLoader isInitialized={isInitialized} isLoading={isLoading} />
         </StyledMain>
         <Footer />

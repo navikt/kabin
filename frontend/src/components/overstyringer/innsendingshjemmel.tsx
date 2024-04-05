@@ -7,6 +7,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
+import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Innsendingshjemmel = () => {
@@ -32,16 +33,20 @@ export const Innsendingshjemmel = () => {
     return null;
   }
 
-  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.hjemmelIdList !== null) {
+  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.sourceId === SourceId.KABAL) {
     return (
       <ReadOnlyContainer>
         <Heading level="1" size="xsmall" spacing>
           Hjemler
         </Heading>
         <HjemlerContainer>
-          {state.mulighet.hjemmelIdList.map((id) => (
-            <HjemmelTag hjemmelId={id} key={id} size="medium" />
-          ))}
+          {state.mulighet.hjemmelIdList.length === 0 ? (
+            <Alert variant="error" size="small" inline>
+              Teknisk feil: Hjemler mangler. Kontakt Team Klage.
+            </Alert>
+          ) : (
+            state.mulighet.hjemmelIdList.map((id) => <HjemmelTag hjemmelId={id} key={id} size="medium" />)
+          )}
         </HjemlerContainer>
       </ReadOnlyContainer>
     );

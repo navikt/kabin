@@ -1,27 +1,31 @@
 import { IPart, ISaksbehandler } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 
+export enum SourceId {
+  KABAL = '23',
+  INFOTRYGD = '7',
+}
+
 interface IBasemulighet {
+  id: string;
   fagsakId: string;
   fagsystemId: string;
   sakenGjelder: IPart;
   temaId: string;
+  sourceId: SourceId;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
-  behandlingId: string;
   klageBehandlendeEnhet: string;
   vedtakDate: string;
 }
 
 export interface IAnkeMulighet extends IBasemulighet {
-  id: string;
   ytelseId: Ytelse | null;
   hjemmelIdList: string[];
   klager: IPart;
   fullmektig: IPart | null;
   previousSaksbehandler: ISaksbehandler | null;
-  sourceId: string;
   vedtakDate: string | null;
   typeId: TypeId;
   sourceOfExistingAnkebehandling: ExistingAnkebehandling[];

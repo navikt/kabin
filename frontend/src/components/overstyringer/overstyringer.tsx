@@ -1,4 +1,4 @@
-import { DocPencilIcon } from '@navikt/aksel-icons';
+import { DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
@@ -59,50 +59,63 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
           <EditFrist />
         </TopRow>
       </Header>
-      <Label size="small">Parter</Label>
       <Content>
-        <PartRead
-          partField={FieldNames.SAKEN_GJELDER}
-          part={mulighet.sakenGjelder}
-          label="Saken gjelder"
-          icon={<StyledSakenGjelderIcon aria-hidden />}
-        />
-        <Part
-          partField={FieldNames.KLAGER}
-          part={overstyringer.klager}
-          label={klagerLabel}
-          icon={<StyledKlagerIcon aria-hidden />}
-          error={klagerError}
-          options={[
-            {
-              label: 'Saken gjelder',
-              defaultPart: mulighet.sakenGjelder,
-              title: 'Saken gjelder',
-              icon: <SakenGjelderIcon aria-hidden />,
-            },
-          ]}
-        />
-        <Part
-          partField={FieldNames.FULLMEKTIG}
-          part={overstyringer.fullmektig}
-          label="Fullmektig"
-          icon={<StyledFullmektigIcon aria-hidden />}
-          required={false}
-          error={fullmektigError}
-          options={[
-            {
-              label: 'Avsender',
-              defaultPart: state === null ? null : avsenderMottakerToPart(state.overstyringer.avsender),
-              title: 'Avsender',
-              icon: <AvsenderIcon aria-hidden />,
-            },
-          ]}
-        />
-        <Avsender />
         <Ytelse />
+
         <Innsendingshjemmel />
-        <Tildeling />
       </Content>
+      {overstyringer.ytelseId === null ? (
+        <Placeholder>
+          <PersonGroupIcon aria-hidden />
+        </Placeholder>
+      ) : (
+        <>
+          <Label size="small">Parter</Label>
+          <Content>
+            <PartRead
+              partField={FieldNames.SAKEN_GJELDER}
+              part={mulighet.sakenGjelder}
+              label="Saken gjelder"
+              icon={<StyledSakenGjelderIcon aria-hidden />}
+            />
+            <Part
+              partField={FieldNames.KLAGER}
+              part={overstyringer.klager}
+              label={klagerLabel}
+              icon={<StyledKlagerIcon aria-hidden />}
+              error={klagerError}
+              options={[
+                {
+                  label: 'Saken gjelder',
+                  defaultPart: mulighet.sakenGjelder,
+                  title: 'Saken gjelder',
+                  icon: <SakenGjelderIcon aria-hidden />,
+                },
+              ]}
+            />
+            <Part
+              partField={FieldNames.FULLMEKTIG}
+              part={overstyringer.fullmektig}
+              label="Fullmektig"
+              icon={<StyledFullmektigIcon aria-hidden />}
+              required={false}
+              error={fullmektigError}
+              options={[
+                {
+                  label: 'Avsender',
+                  defaultPart: avsenderMottakerToPart(overstyringer.avsender),
+                  title: 'Avsender',
+                  icon: <AvsenderIcon aria-hidden />,
+                },
+              ]}
+            />
+
+            <Avsender />
+
+            <Tildeling />
+          </Content>
+        </>
+      )}
     </CardLarge>
   );
 };

@@ -50,7 +50,7 @@ export const Tildeling = () => {
 const useSaksbehandlereParams = (): ISaksbehandlerParams | typeof skipToken => {
   const { state, type } = useContext(AppContext);
 
-  if (type === Type.NONE || state.mulighet === null || state.overstyringer.ytelseId === null) {
+  if (type === Type.NONE || state.overstyringer.ytelseId === null || state.mulighet === null) {
     return skipToken;
   }
 
@@ -77,15 +77,25 @@ const Content = () => {
   const { state, updateState, type } = useContext(AppContext);
 
   if (type === Type.NONE) {
-    return null;
-  }
-
-  if (params === skipToken) {
-    const message = type === Type.ANKE ? 'Velg mulighet.' : 'Velg ytelse.';
-
     return (
       <Alert size="small" variant="info" inline>
-        {message}
+        Velg type først.
+      </Alert>
+    );
+  }
+
+  if (state.overstyringer.ytelseId === null) {
+    return (
+      <Alert size="small" variant="info" inline>
+        Velg ytelse først.
+      </Alert>
+    );
+  }
+
+  if (state.mulighet === null) {
+    return (
+      <Alert size="small" variant="info" inline>
+        Velg mulighet først.
       </Alert>
     );
   }
