@@ -53,7 +53,7 @@ export const Klagemuligheter = () => {
       return;
     }
 
-    updateState({ mulighet: updated.find((a) => a.behandlingId === mulighet.behandlingId) ?? null });
+    updateState({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
   };
 
   return (
@@ -146,7 +146,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
         </StyledTableHeader>
         <Table.Body>
           {klagemuligheter.map((klagemulighet) => (
-            <Klagemulighet key={klagemulighet.behandlingId} mulighet={klagemulighet} />
+            <Klagemulighet key={klagemulighet.id} mulighet={klagemulighet} />
           ))}
         </Table.Body>
       </Table>

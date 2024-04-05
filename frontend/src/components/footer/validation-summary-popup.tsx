@@ -55,7 +55,7 @@ const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSec
     return (
       <Alert variant="warning">
         <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
-        <BodyShort>{error.message}</BodyShort>
+        <BodyShort style={{ wordBreak: 'break-word' }}>{error.message}</BodyShort>
       </Alert>
     );
   }
@@ -64,7 +64,7 @@ const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSec
     return (
       <Alert variant="warning">
         <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
-        <BodyShort>
+        <BodyShort style={{ wordBreak: 'break-word' }}>
           {error.status} - {error.detail}
         </BodyShort>
       </Alert>

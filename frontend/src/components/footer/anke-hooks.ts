@@ -1,10 +1,11 @@
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createAnke } from '@app/api/api';
+import { mulighetToVedtak } from '@app/components/footer/helpers';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
-import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
+import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { getValidSvarbrev } from '@app/pages/create/app-context/helpers';
@@ -23,40 +24,36 @@ import { IApiValidationResponse, IValidationSection, SectionNames, ValidationFie
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (
-  mulighet: IAnkeMulighet,
+  mulighet: IAnkeMulighet | null,
   overstyringer: IAnkeOverstyringer,
   svarbrev: ValidSvarbrev,
   journalpostId: string,
 ): CreateAnkeApiPayload => {
-  const { id, sourceId, sakenGjelder } = mulighet;
   const {
+    ytelseId,
     mottattKlageinstans,
     fristInWeeks,
     klager,
     fullmektig,
     avsender,
     saksbehandlerIdent,
-    ytelseId,
     hjemmelIdList,
   } = overstyringer;
   const { title, enhetId, fullmektigFritekst, receivers } = svarbrev;
 
+  const vedtak = mulighetToVedtak(mulighet);
+
   return {
-    id,
+    vedtak,
     mottattKlageinstans,
     fristInWeeks,
-    sakenGjelder: {
-      id: sakenGjelder.id,
-      type: sakenGjelder.type,
-    },
-    klager: partToPartId(klager),
-    fullmektig: partToPartId(fullmektig),
+    klager: nullablePartToPartId(klager),
+    fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsender),
     journalpostId,
     ytelseId,
     hjemmelIdList,
     saksbehandlerIdent,
-    sourceId,
     svarbrevInput: {
       title: defaultString(title, DEFAULT_SVARBREV_NAME),
       enhetId,
@@ -81,49 +78,31 @@ export const useCreateAnke = (
       return;
     }
 
-    try {
-      const { mulighet, overstyringer, svarbrev } = state;
+    const { mulighet, overstyringer, svarbrev } = state;
 
-      if (mulighet === null) {
-        const saksdataSection: IValidationSection = {
-          properties: [
-            {
-              reason: 'Mulighet er ikke satt.',
-              field: ValidationFieldNames.MULIGHET,
-            },
-          ],
-          section: SectionNames.SAKSDATA,
-        };
-
-        setErrors((e) => (e === null ? [saksdataSection] : [...e, saksdataSection]));
-        setError(new Error('Mulighet er ikke satt.'));
-
-        return;
-      }
-
-      if (!getValidSvarbrev(svarbrev)) {
-        const svarbrevSection: IValidationSection = {
+    if (!getValidSvarbrev(svarbrev)) {
+      setErrors([
+        {
+          section: SectionNames.SVARBREV,
           properties: [
             {
               reason: 'Enhet for svarbrev er ikke satt.',
               field: ValidationFieldNames.ENHET,
             },
           ],
-          section: SectionNames.SVARBREV,
-        };
+        },
+      ]);
 
-        setErrors((e) => (e === null ? [svarbrevSection] : [...e, svarbrevSection]));
-        setError(new Error('Enhet for svarbrev er ikke satt.'));
+      return;
+    }
 
-        return;
-      }
+    const createAnkePayload = getAnkeApiPayload(mulighet, overstyringer, svarbrev, journalpost.journalpostId);
 
-      const createAnkePayload = getAnkeApiPayload(mulighet, overstyringer, svarbrev, journalpost.journalpostId);
-
+    try {
       const res = await createAnke(createAnkePayload);
 
       if (res.ok) {
-        updateAnkemuligheter((data) => data?.filter((d) => d.id !== createAnkePayload.id));
+        updateAnkemuligheter((data) => data?.filter((d) => d.id !== createAnkePayload.vedtak?.id));
 
         setError(undefined);
 

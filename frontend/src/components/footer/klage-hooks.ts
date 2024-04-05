@@ -2,10 +2,11 @@ import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createKlage } from '@app/api/api';
 import { IApiErrorReponse, isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
+import { mulighetToVedtak } from '@app/components/footer/helpers';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
-import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
+import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IKlageState, Type } from '@app/pages/create/app-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
@@ -13,7 +14,7 @@ import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse } from '@app/types/validation';
 
-const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKlageApiPayload => {
+const getKlageApiPayload = ({ mulighet, overstyringer }: IKlageState, journalpostId: string): CreateKlageApiPayload => {
   const {
     mottattKlageinstans,
     mottattVedtaksinstans,
@@ -22,19 +23,21 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
     fullmektig,
     avsender: avsenderMottaker,
     saksbehandlerIdent,
-  } = state.overstyringer;
+  } = overstyringer;
+
+  const vedtak = mulighetToVedtak(mulighet);
 
   return {
-    id: state.mulighet === null ? null : state.mulighet.behandlingId,
+    vedtak,
     mottattKlageinstans,
     mottattVedtaksinstans,
     fristInWeeks,
-    klager: partToPartId(klager),
-    fullmektig: partToPartId(fullmektig),
+    klager: nullablePartToPartId(klager),
+    fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
     journalpostId,
-    ytelseId: state.overstyringer.ytelseId,
-    hjemmelIdList: state.overstyringer.hjemmelIdList,
+    ytelseId: overstyringer.ytelseId,
+    hjemmelIdList: overstyringer.hjemmelIdList,
     saksbehandlerIdent,
   };
 };
@@ -58,7 +61,7 @@ export const useCreateKlage = (
       const res = await createKlage(createKlagePayload);
 
       if (res.ok) {
-        updateData((data) => data?.filter((d) => d.behandlingId !== createKlagePayload.id));
+        updateData((data) => data?.filter((d) => d.id !== createKlagePayload.vedtak?.id));
 
         setError(undefined);
 

@@ -18,7 +18,6 @@ import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
   const { type, state, updateState, fnr, journalpost } = useContext(AppContext);
-
   const { data: ankemuligheter, isLoading, refetch } = useAnkemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);

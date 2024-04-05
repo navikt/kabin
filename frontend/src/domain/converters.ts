@@ -1,10 +1,14 @@
 import { IAvsenderMottaker, IPart, IPartId, PART_TYPES } from '@app/types/common';
 
-export const partToPartId = (part: IPart | null): IPartId | null => {
+export const nullablePartToPartId = (part: IPart | null): IPartId | null => {
   if (part === null) {
     return null;
   }
 
+  return partToPartId(part);
+};
+
+export const partToPartId = (part: IPart): IPartId => {
   const { id, type } = part;
 
   return { id, type };
@@ -15,7 +19,7 @@ export const avsenderMottakerToPartId = (avsenderMottaker: IAvsenderMottaker | n
     return null;
   }
 
-  return avsenderIsPart(avsenderMottaker) ? partToPartId(avsenderMottaker) : null;
+  return avsenderIsPart(avsenderMottaker) ? nullablePartToPartId(avsenderMottaker) : null;
 };
 
 export const avsenderMottakerToPart = (avsenderMottaker: IAvsenderMottaker | null): IPart | null => {

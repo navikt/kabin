@@ -28,7 +28,7 @@ interface RenderProps extends Props {
 }
 
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { behandlingId, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+  const { id, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
 
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
@@ -51,7 +51,7 @@ const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
       <Klagemulighet>
         <Column>
           <StyledLabel size="small">Saks-Id</StyledLabel>
-          <Detail>{behandlingId}</Detail>
+          <Detail>{id}</Detail>
         </Column>
         <Column>
           <StyledLabel size="small">Tema</StyledLabel>

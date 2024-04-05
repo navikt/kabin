@@ -5,10 +5,9 @@ import { IPersonSearch } from './hook';
 import { SearchDetails } from './search-details';
 
 interface Props extends IPersonSearch {
-  // onChange: (search: string | typeof skipToken) => void;
   isInitialized: boolean;
+  label?: string;
 }
-// const { search, rawSearch, error, person, isLoading, isValid, onRawChange, onKeyDown } = usePersonSearch(onChange);
 
 export const PersonSearch = ({
   isInitialized,
@@ -20,19 +19,20 @@ export const PersonSearch = ({
   error,
   onRawChange,
   onKeyDown,
+  label = 'Søk på ID-nummer',
 }: Props) => (
-  <SearchArea $isInitialized={isInitialized}>
+  <>
     <StyledSearch
       value={rawSearch}
       onChange={onRawChange}
-      label="Søk på ID-nummer"
-      placeholder="Søk på ID-nummer"
+      label={label}
+      placeholder={label}
       hideLabel
       error={error}
       onKeyDown={onKeyDown}
       onFocus={(e) => e.target.select()}
       variant="simple"
-      size={isInitialized ? 'small' : 'medium'}
+      size="small"
       autoFocus
       autoComplete="off"
       autoCorrect="off"
@@ -46,10 +46,10 @@ export const PersonSearch = ({
       isValid={isValid}
       isInitialized={isInitialized}
     />
-  </SearchArea>
+  </>
 );
 
-const SearchArea = styled.div<{ $isInitialized: boolean }>`
+export const SearchArea = styled.div<{ $isInitialized: boolean }>`
   grid-area: search;
   display: flex;
   flex-direction: row;

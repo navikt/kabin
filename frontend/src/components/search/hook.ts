@@ -1,5 +1,6 @@
 import { idnr } from '@navikt/fnrvalidator';
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSearchPart } from '@app/simple-api-state/use-api';
 import { ISimplePart, skipToken } from '@app/types/common';
 
@@ -15,12 +16,21 @@ export interface IPersonSearch {
 }
 
 export const usePersonSearch = (): IPersonSearch => {
-  const [rawSearch, setRawSearch] = useState<string>('');
-  const [search, setSearch] = useState<string | typeof skipToken>('');
+  const fnr = useStateSearch();
+  const [rawSearch, setRawSearch] = useState<string>(fnr);
+  const [search, setSearch] = useState<string | typeof skipToken>(fnr);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const { data: person = null, isLoading } = useSearchPart(isValid ? search : skipToken);
+  const { data: person = null, isLoading, isSuccess } = useSearchPart(isValid ? search : skipToken);
+
+  useEffect(() => {
+    if (isSuccess && pathname !== '/opprett') {
+      navigate(`/opprett`, { state: { search } });
+    }
+  }, [isSuccess, pathname, navigate, search]);
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
@@ -71,4 +81,27 @@ export const usePersonSearch = (): IPersonSearch => {
     isValid,
     error,
   };
+};
+
+interface SearchState {
+  search: string;
+}
+
+const isSearchState = (state: unknown): state is SearchState =>
+  state !== null && typeof state === 'object' && 'search' in state;
+
+const useStateSearch = () => {
+  const l = useLocation();
+
+  if (!isSearchState(l.state)) {
+    return '';
+  }
+
+  const { search } = l.state;
+
+  if (typeof search !== 'string' || search.length === 0) {
+    return '';
+  }
+
+  return search;
 };

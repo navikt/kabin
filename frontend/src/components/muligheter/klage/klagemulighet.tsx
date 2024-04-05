@@ -19,7 +19,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
-  const isSelected = type === Type.KLAGE && state.mulighet?.behandlingId === mulighet.behandlingId;
+  const isSelected = type === Type.KLAGE && state.mulighet?.id === mulighet.id;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
@@ -35,7 +35,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
   return (
     <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected}>
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
-      <Table.DataCell>{mulighet.behandlingId}</Table.DataCell>
+      <Table.DataCell>{mulighet.id}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
       <Table.DataCell>{vedtaksenhetName}</Table.DataCell>

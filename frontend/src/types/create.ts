@@ -22,8 +22,14 @@ interface SvarbrevInput extends SvarbrevPreviewInput {
   receivers: ApiRecipient[];
 }
 
+export interface CaseVedtak {
+  id: string;
+  sourceId: string;
+  sakenGjelder: IPartId;
+}
+
 interface CreateBasePayload {
-  id: string | null;
+  vedtak: CaseVedtak | null;
   avsender: IPartId | null;
   fristInWeeks: number | null; // Number of weeks
   fullmektig: IPartId | null;
@@ -36,8 +42,6 @@ interface CreateBasePayload {
 }
 
 export interface CreateAnkeApiPayload extends CreateBasePayload {
-  sourceId: string;
-  sakenGjelder: IPartId;
   svarbrevInput: SvarbrevInput | null;
 }
 
