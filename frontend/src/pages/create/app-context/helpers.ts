@@ -92,5 +92,4 @@ export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
   return obj;
 };
 
-export const getValidSvarbrev = (svarbrev: Svarbrev | null): svarbrev is ValidSvarbrev | null =>
-  svarbrev === null || svarbrev.enhetId !== null;
+export const isSvarbrevValid = (svarbrev: Svarbrev): svarbrev is ValidSvarbrev => svarbrev.enhetId !== null;

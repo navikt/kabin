@@ -8,7 +8,7 @@ import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
-import { getValidSvarbrev } from '@app/pages/create/app-context/helpers';
+import { isSvarbrevValid } from '@app/pages/create/app-context/helpers';
 import {
   DEFAULT_SVARBREV_NAME,
   IAnkeOverstyringer,
@@ -17,7 +17,7 @@ import {
   ValidSvarbrev,
 } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
+import { IPart, skipToken } from '@app/types/common';
 import { ApiRecipient, CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
 import { IAnkeMulighet } from '@app/types/mulighet';
 import { IApiValidationResponse, IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
@@ -26,7 +26,7 @@ import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type
 const getAnkeApiPayload = (
   mulighet: IAnkeMulighet | null,
   overstyringer: IAnkeOverstyringer,
-  svarbrev: ValidSvarbrev,
+  svarbrev: ValidSvarbrev | null,
   journalpostId: string,
 ): CreateAnkeApiPayload => {
   const {
@@ -39,7 +39,6 @@ const getAnkeApiPayload = (
     saksbehandlerIdent,
     hjemmelIdList,
   } = overstyringer;
-  const { title, enhetId, fullmektigFritekst, receivers } = svarbrev;
 
   const vedtak = mulighetToVedtak(mulighet);
 
@@ -54,12 +53,25 @@ const getAnkeApiPayload = (
     ytelseId,
     hjemmelIdList,
     saksbehandlerIdent,
-    svarbrevInput: {
-      title: defaultString(title, DEFAULT_SVARBREV_NAME),
-      enhetId,
-      fullmektigFritekst: defaultString(fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
-      receivers: receivers.map(recipientToApiRecipient),
-    },
+    svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),
+  };
+};
+
+const getSvarbrevInput = (
+  svarbrev: ValidSvarbrev | null,
+  fullmektig: IPart | null,
+): CreateAnkeApiPayload['svarbrevInput'] => {
+  if (svarbrev === null) {
+    return null;
+  }
+
+  const { title, receivers, enhetId, fullmektigFritekst } = svarbrev;
+
+  return {
+    title: defaultString(title, DEFAULT_SVARBREV_NAME),
+    enhetId,
+    fullmektigFritekst: defaultString(fullmektigFritekst, fullmektig?.name ?? null),
+    receivers: receivers.map(recipientToApiRecipient),
   };
 };
 
@@ -78,9 +90,11 @@ export const useCreateAnke = (
       return;
     }
 
-    const { mulighet, overstyringer, svarbrev } = state;
+    const { mulighet, overstyringer, svarbrev, sendSvarbrev } = state;
 
-    if (!getValidSvarbrev(svarbrev)) {
+    const isValidSvarbrev = isSvarbrevValid(svarbrev);
+
+    if (sendSvarbrev && !isValidSvarbrev) {
       setErrors([
         {
           section: SectionNames.SVARBREV,
@@ -96,7 +110,12 @@ export const useCreateAnke = (
       return;
     }
 
-    const createAnkePayload = getAnkeApiPayload(mulighet, overstyringer, svarbrev, journalpost.journalpostId);
+    const createAnkePayload = getAnkeApiPayload(
+      mulighet,
+      overstyringer,
+      sendSvarbrev && isValidSvarbrev ? svarbrev : null,
+      journalpost.journalpostId,
+    );
 
     try {
       const res = await createAnke(createAnkePayload);
@@ -129,5 +148,5 @@ export const useCreateAnke = (
         setError(e);
       }
     }
-  }, [state, journalpost, navigate, setError, setErrors, type, updateAnkemuligheter]);
+  }, [journalpost, type, state, setErrors, updateAnkemuligheter, setError, navigate]);
 };
