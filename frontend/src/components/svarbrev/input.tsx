@@ -7,7 +7,7 @@ import { Receipients } from '@app/components/svarbrev/recipients';
 import { PartRecipient } from '@app/components/svarbrev/types';
 import { defaultString } from '@app/functions/empty-string';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { getValidSvarbrev } from '@app/pages/create/app-context/helpers';
+import { isSvarbrevValid } from '@app/pages/create/app-context/helpers';
 import { DEFAULT_SVARBREV_NAME, IAnkeOverstyringer, IAnkeState, Svarbrev } from '@app/pages/create/app-context/types';
 import { useInnsendingsenheter } from '@app/simple-api-state/use-kodeverk';
 import { IAnkeMulighet } from '@app/types/mulighet';
@@ -98,7 +98,7 @@ export const InternalSvarbrevInput = ({
         </Content>
       </Card>
       <Card title="Forhåndsvisning av svarbrev">
-        {svarbrev !== null && getValidSvarbrev(svarbrev) ? (
+        {isSvarbrevValid(svarbrev) ? (
           <Preview
             mulighet={mulighet}
             overstyringer={overstyringer}

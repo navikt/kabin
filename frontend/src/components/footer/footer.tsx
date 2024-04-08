@@ -19,7 +19,7 @@ export const Footer = () => {
   const closeConfirm = () => setShowConfirm(false);
 
   return (
-    <StyledFooter $hasError={typeof error !== 'undefined'}>
+    <StyledFooter $hasError={error !== undefined}>
       <Button
         onClick={toggleConfirm}
         size="small"
