@@ -1,11 +1,11 @@
 import { isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
-import { isNotNull } from '@app/functions/is-not';
-import { stringToRegExp } from '@app/functions/string-to-regex';
+import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
+import { splitQuery } from '@app/components/fuzzy-search/split-query';
 import { useKlageenheter, useVedtaksenheter } from '@app/simple-api-state/use-kodeverk';
-import { AvsenderMottakerType, skipToken } from '@app/types/common';
-import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import { AvsenderMottakerType } from '@app/types/common';
+import { IArkivertDocument, IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
 
 interface IOption<T> {
   value: T;
@@ -111,6 +111,15 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
     return acc;
   }, []);
 
+interface ScoredVedlegg extends IVedlegg {
+  score: number;
+}
+
+interface ScoredArkivertDocument extends IArkivertDocument {
+  score: number;
+  vedlegg: ScoredVedlegg[];
+}
+
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
@@ -119,37 +128,52 @@ export const useFilteredDocuments = (
   selectedTemaer: string[],
   selectedTypes: string[],
   search: string,
-): IArkivertDocument[] => {
-  const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
+): IArkivertDocument[] =>
+  useMemo(() => {
+    const filtered = documents.filter(
+      ({ temaId, journalposttype, avsenderMottaker, datoOpprettet, sak, journalfortAvNavn, journalfoerendeEnhet }) =>
+        (selectedTemaer.length === 0 || (temaId !== null && selectedTemaer.includes(temaId))) &&
+        (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
+        (selectedAvsenderMottakere.length === 0 ||
+          selectedAvsenderMottakere.includes(
+            avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
+          )) &&
+        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
+        (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)),
+    );
 
-  return useMemo(
-    () =>
-      documents.filter(
-        ({
-          tittel,
-          journalpostId,
-          temaId,
-          journalposttype,
-          avsenderMottaker,
-          datoOpprettet,
-          sak,
-          vedlegg,
-          journalfortAvNavn,
-          journalfoerendeEnhet,
-        }) =>
-          (selectedTemaer.length === 0 || (temaId !== null && selectedTemaer.includes(temaId))) &&
-          (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-          (selectedAvsenderMottakere.length === 0 ||
-            selectedAvsenderMottakere.includes(
-              avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
-            )) &&
-          (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
-          (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
-          (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
-      ),
-    [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes],
-  );
-};
+    if (search.length === 0) {
+      return filtered;
+    }
+
+    const scored: ScoredArkivertDocument[] = [];
+
+    for (const doc of filtered) {
+      const vedlegg: ScoredVedlegg[] = [];
+      let highestVedleggScore = 0;
+      const journalpostScore = fuzzySearch(splitQuery(search), (doc.tittel ?? '') + doc.journalpostId);
+
+      for (const v of doc.vedlegg) {
+        const vedleggScore = fuzzySearch(splitQuery(search), v.tittel ?? '');
+
+        if (vedleggScore > highestVedleggScore) {
+          highestVedleggScore = vedleggScore;
+        }
+
+        if (journalpostScore > 0 || vedleggScore > 0) {
+          vedlegg.push({ ...v, score: vedleggScore });
+        }
+      }
+
+      const score = Math.max(journalpostScore, highestVedleggScore);
+
+      if (score > 0) {
+        scored.push({ ...doc, score, vedlegg: vedlegg.toSorted((a, b) => b.score - a.score) });
+      }
+    }
+
+    return scored.toSorted((a, b) => b.score - a.score);
+  }, [documents, search, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]);
 
 const checkDateInterval = (date: string, { from, to }: DateRange) => {
   if (from !== undefined && to !== undefined) {
@@ -157,17 +181,4 @@ const checkDateInterval = (date: string, { from, to }: DateRange) => {
   }
 
   return true;
-};
-
-interface FilterDocument {
-  tittel: string | null;
-  journalpostId: string;
-  vedlegg: { tittel: string | null }[];
-}
-
-const filterDocumentsBySearch = (regex: RegExp, { tittel, journalpostId, vedlegg }: FilterDocument) => {
-  const vedleggTitler = vedlegg.map((v) => v.tittel).join(' ');
-  const searchIn = [tittel, journalpostId, vedleggTitler].filter(isNotNull).join(' ');
-
-  return regex.test(searchIn);
 };
