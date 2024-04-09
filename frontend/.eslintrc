@@ -69,10 +69,6 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-shadow": [
       "error",
-      {
-        "builtinGlobals": true,
-        "hoist": "all"
-      }
     ],
     "@typescript-eslint/no-unsafe-assignment": "error",
     "@typescript-eslint/no-unused-vars": [
