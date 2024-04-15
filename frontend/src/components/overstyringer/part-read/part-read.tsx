@@ -1,4 +1,5 @@
-import { Heading } from '@navikt/ds-react';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { Heading, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { Icon } from '@app/components/overstyringer/part-read/icon';
@@ -12,6 +13,7 @@ import { EnterEditModeCallback } from './types';
 export interface PartReadProps extends ActionsProps {
   children?: React.ReactNode;
   error?: string;
+  warning?: string;
 }
 
 export const PartRead = ({
@@ -21,6 +23,7 @@ export const PartRead = ({
   children,
   partField,
   error,
+  warning,
   ...rest
 }: PartReadProps & EnterEditModeCallback) => (
   <StyledContainer $state={getState(part, error)} id={partField}>
@@ -30,7 +33,9 @@ export const PartRead = ({
         <Heading level="3" size="xsmall">
           {label}
         </Heading>
-        <Content part={part}>{children}</Content>
+        <Content part={part} warning={warning}>
+          {children}
+        </Content>
         <ValidationErrorMessage error={error} />
       </PartTextContent>
 
@@ -39,8 +44,8 @@ export const PartRead = ({
   </StyledContainer>
 );
 
-const Content = ({ part, children }: Pick<PartReadProps, 'part' | 'children'>) => {
-  if (typeof children !== 'undefined') {
+const Content = ({ part, warning, children }: Pick<PartReadProps, 'part' | 'warning' | 'children'>) => {
+  if (children !== undefined) {
     return <>{children}</>;
   }
 
@@ -58,9 +63,16 @@ const Content = ({ part, children }: Pick<PartReadProps, 'part' | 'children'>) =
       <StyledPartName size="small">
         <Icon type={part.type} />
         {getSakspartName(part, null)}
+        {warning === undefined ? null : <Warning text={warning} />}
       </StyledPartName>
       <CopyPartIdButton id={part.id} />
       <PartStatusList statusList={part.statusList} />
     </>
   );
 };
+
+const Warning = ({ text }: { text: string }) => (
+  <Tooltip content={text} delay={0}>
+    <ExclamationmarkTriangleFillIcon aria-hidden color="var(--a-icon-warning)" />
+  </Tooltip>
+);

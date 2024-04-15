@@ -22,13 +22,17 @@ export const Avsender = () => {
     return null;
   }
 
+  const { avsenderMottaker } = journalpost;
+  const { avsender } = overstyringer;
+
   return (
     <Part
       partField={FieldNames.AVSENDER}
-      part={overstyringer.avsender}
+      part={avsender}
       label="Avsender"
       icon={<StyledAvsenderIcon aria-hidden />}
       error={error}
+      warning={avsender?.id === avsenderMottaker?.id ? undefined : 'Avsender er endret. Ny journalpost blir opprettet.'}
       options={[
         {
           label: 'Saken gjelder',
