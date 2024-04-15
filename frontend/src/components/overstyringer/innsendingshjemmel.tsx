@@ -1,4 +1,4 @@
-import { Alert, Heading, Label, Tag, TagProps } from '@navikt/ds-react';
+import { Alert, Label, Tag, TagProps } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
@@ -7,7 +7,6 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Innsendingshjemmel = () => {
@@ -33,33 +32,12 @@ export const Innsendingshjemmel = () => {
     return null;
   }
 
-  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.sourceId === SourceId.KABAL) {
-    return (
-      <ReadOnlyContainer>
-        <Heading level="1" size="xsmall" spacing>
-          Hjemler
-        </Heading>
-        <HjemlerContainer>
-          {state.mulighet.hjemmelIdList.length === 0 ? (
-            <Alert variant="error" size="small" inline>
-              Teknisk feil: Hjemler mangler. Kontakt Team Klage.
-            </Alert>
-          ) : (
-            state.mulighet.hjemmelIdList.map((id) => <HjemmelTag hjemmelId={id} key={id} size="medium" />)
-          )}
-        </HjemlerContainer>
-      </ReadOnlyContainer>
-    );
-  }
-
   if (options.length === 0) {
-    const message = ytelseId === null ? 'Velg ytelse.' : 'Valgt ytelse har ingen hjemler.';
-
     return (
       <NoHjemmelOptionsContainer>
         <Label size="small">Hjemler</Label>
         <Alert variant="info" size="small" inline>
-          {message}
+          {ytelseId === null ? 'Velg ytelse.' : 'Valgt ytelse har ingen hjemler.'}
         </Alert>
       </NoHjemmelOptionsContainer>
     );
@@ -110,7 +88,3 @@ const HjemmelTag = ({ hjemmelId, size }: { hjemmelId: string; size?: TagProps['s
     </Tag>
   );
 };
-
-const ReadOnlyContainer = styled.section`
-  grid-column: 2;
-`;
