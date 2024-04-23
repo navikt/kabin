@@ -3,7 +3,16 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import { IAnkeState, IKlageState, Svarbrev, Type, ValidSvarbrev } from './types';
+import {
+  IAnkeState,
+  IAnkeStateUpdate,
+  IAppContext,
+  IKlageState,
+  IKlageStateUpdate,
+  Svarbrev,
+  Type,
+  ValidSvarbrev,
+} from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -23,17 +32,22 @@ export const getStateWithOverstyringer = <T extends IKlageState | IAnkeState>(
   },
 });
 
-const removeSaksdataErrors = (errors: IValidationSection[] | null, fields: ValidationFieldNames[]) =>
-  errors === null
-    ? errors
-    : errors.map((error) =>
-        error.section === SectionNames.SAKSDATA
-          ? {
-              section: SectionNames.SAKSDATA,
-              properties: error.properties.filter((p) => !fields.includes(p.field)),
-            }
-          : error,
-      );
+const removeSaksdataErrors = (errors: IValidationSection[] | null, fields: ValidationFieldNames[]) => {
+  if (errors === null) {
+    return errors;
+  }
+
+  return errors.map((error) => {
+    if (error.section !== SectionNames.SAKSDATA) {
+      return error;
+    }
+
+    return {
+      section: SectionNames.SAKSDATA,
+      properties: error.properties.filter((p) => !fields.includes(p.field)),
+    };
+  });
+};
 
 export const removeErrorsOnMulighetChange = (errors: IValidationSection[] | null) =>
   removeSaksdataErrors(errors, [ValidationFieldNames.FULLMEKTIG, ValidationFieldNames.KLAGER]);
@@ -93,3 +107,9 @@ export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
 };
 
 export const isSvarbrevValid = (svarbrev: Svarbrev): svarbrev is ValidSvarbrev => svarbrev.enhetId !== null;
+
+export const isSvarbrevState = (state: IAppContext['state']): state is IAnkeState =>
+  state !== null && 'sendSvarbrev' in state && 'svarbrev' in state;
+
+export const isSvarbrevUpdate = (update: IKlageStateUpdate | IAnkeStateUpdate): update is IAnkeStateUpdate =>
+  'svarbrev' in update || 'sendSvarbrev' in update;
