@@ -3,8 +3,8 @@ import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@ap
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
-import { useSimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
+import { useSimpleApiState } from './use-simple-api-state';
 
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 export const KABAL_API_BASE_PATH = '/api/kabal-api';

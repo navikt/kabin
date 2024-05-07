@@ -10,7 +10,7 @@ import {
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
   const { data, isLoading } = useTema();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return 'Laster...';
   }
 
@@ -21,11 +21,23 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
   return 'Mangler';
 };
 
+export const useTemaName = (temaId?: string | null): [string | undefined, boolean] => {
+  const { data, isLoading } = useTema();
+
+  return useMemo(() => {
+    if (isLoading || data === undefined) {
+      return [undefined, true];
+    }
+
+    return [data.find(({ id }) => id === temaId)?.navn, false];
+  }, [data, isLoading, temaId]);
+};
+
 export const useYtelseName = (ytelseId?: string | null): string => {
   const { data } = useSimpleYtelser();
 
   return useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (data === undefined) {
       return '';
     }
 
@@ -37,7 +49,7 @@ export const useVedtaksenhetName = (vedtaksenhetId?: string | null): string => {
   const { data } = useVedtaksenheter();
 
   return useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (data === undefined) {
       return '';
     }
 
@@ -49,7 +61,7 @@ export const useFagsystemName = (fagsystemId?: string | null): string => {
   const { data } = useFagsystemer();
 
   return useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (data === undefined) {
       return '';
     }
 
@@ -60,7 +72,7 @@ export const useFagsystemName = (fagsystemId?: string | null): string => {
 export const useHjemmelName = (hjemmelId: string): string => {
   const { data = {} } = useHjemlerMap();
 
-  if (typeof data === 'undefined') {
+  if (data === undefined) {
     return '';
   }
 

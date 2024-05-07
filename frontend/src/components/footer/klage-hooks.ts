@@ -14,7 +14,9 @@ import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse } from '@app/types/validation';
 
-const getKlageApiPayload = ({ mulighet, overstyringer }: IKlageState, journalpostId: string): CreateKlageApiPayload => {
+const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKlageApiPayload => {
+  const { mulighet, overstyringer } = state;
+
   const {
     mottattKlageinstans,
     mottattVedtaksinstans,

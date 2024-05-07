@@ -3,7 +3,7 @@ import { Loader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CardFullHeight } from '@app/components/card/card';
-import { getDocumentUrl } from '@app/components/documents/use-view-document';
+import { getDocumentUrl } from '@app/components/documents/document/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { DocumentViewerContext, IViewedDocument } from '@app/pages/create/document-viewer-context';
 import { DocumentTitle } from './document-title';

@@ -1,5 +1,5 @@
 import { GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { useViewDocument } from './use-view-document';
@@ -19,15 +19,16 @@ export const ViewDocumentButton = (props: Props) => {
   }
 
   return (
-    <StyledButton
-      size="small"
-      variant="tertiary-neutral"
-      title={isViewed ? 'Åpnet' : 'Åpne dokumentet'}
-      onMouseDown={viewDocument}
-      aria-pressed={isViewed}
-      aria-controls="document-viewer"
-      icon={isViewed ? <GlassesFillIcon /> : <GlassesIcon />}
-    />
+    <Tooltip content={isViewed ? 'Åpnet' : 'Åpne dokumentet'} placement="top">
+      <StyledButton
+        size="small"
+        variant="tertiary-neutral"
+        onMouseDown={viewDocument}
+        aria-pressed={isViewed}
+        aria-controls="document-viewer"
+        icon={isViewed ? <GlassesFillIcon /> : <GlassesIcon />}
+      />
+    </Tooltip>
   );
 };
 
