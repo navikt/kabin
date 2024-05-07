@@ -25,6 +25,7 @@ export interface IVedlegg {
   dokumentInfoId: string;
   tittel: string | null;
   harTilgangTilArkivvariant: boolean;
+  logiskeVedlegg: LogiskVedlegg[];
 }
 
 export interface ISak {
@@ -102,6 +103,11 @@ interface IUtsendingsinfo {
   digitalpostSendt: IDigitalpostSendt;
 }
 
+export interface LogiskVedlegg {
+  tittel: string;
+  logiskVedleggId: string;
+}
+
 export interface IArkivertDocument {
   /** Unik identifikator per journalpost. */
   journalpostId: string;
@@ -141,4 +147,5 @@ export interface IArkivertDocument {
   /** Utsendingsinfo tilknyttet journalposten. Beskriver hvor forsendelsen er distribuert, eller hvor varsel er sendt. Settes kun for utgående journalposter. */
   utsendingsinfo: IUtsendingsinfo | null;
   alreadyUsed: boolean;
+  logiskeVedlegg: LogiskVedlegg[];
 }

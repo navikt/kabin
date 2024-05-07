@@ -106,6 +106,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
         autoFocus
         onKeyDown={onKeyDown}
         onMouseDown={(e) => e.stopPropagation()}
+        htmlSize={newTitle.length + 1}
       />
       <Button
         variant="tertiary"

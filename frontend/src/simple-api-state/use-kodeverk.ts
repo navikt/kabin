@@ -1,7 +1,8 @@
 import { skipToken } from '@app/types/common';
 import { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
-import { SimpleApiState, useSimpleApiState } from './simple-api-state';
+import { SimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';
+import { useSimpleApiState } from './use-simple-api-state';
 
 const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 
@@ -23,7 +24,7 @@ export const useInnsendingsenheter = () => useSimpleApiState(innsendingsenheter)
 export const useFagsystemer = () => useSimpleApiState(fagsystemer);
 export const useHjemlerMap = () => useSimpleApiState(hjemlerMap);
 
-const temaYtelser = getStateFactory<IYtelserLatest[], string>(API_PREFIX);
+const temaYtelser = getStateFactory<IKodeverkSimpleValue[], string>(API_PREFIX);
 
 export const useTemaYtelser = (temaId: string | typeof skipToken) => {
   const state = temaId === skipToken ? skipToken : temaYtelser({ path: `/tema/${temaId}/ytelser/latest` });

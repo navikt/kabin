@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { loggedOutToast } from '@app/components/toast/toast-content/logged-out';
 import { getHeaders } from '@app/headers';
-import { skipToken } from '@app/types/common';
 import { InternalOptions, Listener, NoRetryError, Options, RequestBody, State, UpdateData } from './types';
 
 export class SimpleApiState<T> {
@@ -16,14 +14,17 @@ export class SimpleApiState<T> {
   private options: InternalOptions = { prefetch: false, cacheTime: 60_000, method: 'GET' };
   private req: RequestInit;
   private retryTimer: NodeJS.Timeout | undefined;
+  private transformResponse: ((response: T) => T) | undefined;
 
   constructor(
     private url: string,
     options?: Options,
     body: RequestBody = undefined,
+    transformResponse?: (response: T) => T,
   ) {
     this.options = Object.assign(this.options, options);
     this.req = this.getRequest(this.options, body);
+    this.transformResponse = transformResponse;
 
     if (this.options.prefetch) {
       this.fetchData();
@@ -65,7 +66,14 @@ export class SimpleApiState<T> {
         throw this.error;
       }
 
-      this.data = (await response.json()) as T;
+      const data = (await response.json()) as T;
+
+      if (this.transformResponse === undefined) {
+        this.data = data;
+      } else {
+        this.data = this.transformResponse(data);
+      }
+
       this.isSuccess = true;
     } catch (e) {
       this.data = undefined;
@@ -150,51 +158,3 @@ export class SimpleApiState<T> {
     this.onChange();
   };
 }
-
-const SKIP_STATE = {
-  data: undefined,
-  isLoading: false,
-  isUninitialized: false,
-  isError: false,
-  isSuccess: false,
-  error: undefined,
-  updateData: () => console.warn('Tried to update data on a skipped state'),
-  refetch: async () => {
-    console.warn('Tried to refetch data on a skipped state');
-
-    return undefined;
-  },
-  clear: () => console.warn('Tried to clear data on a skipped state'),
-};
-
-const INITIAL_STATE = {
-  data: undefined,
-  isLoading: false,
-  isUninitialized: true,
-  isError: false,
-  isSuccess: false,
-  error: undefined,
-  updateData: () => console.warn('Tried to update data on an uninitialized state'),
-  refetch: async () => {
-    console.warn('Tried to refetch data on an uninitialized state');
-
-    return undefined;
-  },
-  clear: () => console.warn('Tried to clear data on an uninitialized state'),
-};
-
-export const useSimpleApiState = <T>(store: SimpleApiState<T> | typeof skipToken): State<T> => {
-  const [state, setState] = useState<State<T>>(store === skipToken ? INITIAL_STATE : store.getState());
-
-  useEffect(() => {
-    if (store === skipToken) {
-      return;
-    }
-
-    store.listen(setState);
-
-    return () => store.unlisten(setState);
-  }, [store]);
-
-  return store === skipToken ? SKIP_STATE : state;
-};

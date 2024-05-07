@@ -7,7 +7,7 @@ interface PathParams<Q> {
   path?: string;
 }
 
-export const getStateFactory = <T, Q = never>(basePath: string, options?: Options) => {
+export const getStateFactory = <T, Q = never>(basePath: string, options?: Options, transformResponse?: (t: T) => T) => {
   const STATES: Map<string, SimpleApiState<T>> = new Map();
 
   return ({ path = '', query }: PathParams<Q>, body: RequestBody = undefined) => {
@@ -18,7 +18,7 @@ export const getStateFactory = <T, Q = never>(basePath: string, options?: Option
     const existing = STATES.get(stateKey);
 
     if (existing === undefined) {
-      const state = new SimpleApiState<T>(url, options, b);
+      const state = new SimpleApiState<T>(url, options, b, transformResponse);
       STATES.set(stateKey, state);
 
       return state;

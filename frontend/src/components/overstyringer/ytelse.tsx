@@ -8,7 +8,7 @@ import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { skipToken } from '@app/types/common';
-import { IYtelserLatest } from '@app/types/kodeverk';
+import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
@@ -113,7 +113,7 @@ const ReadOnlyContainer = styled.section`
   grid-column: 1;
 `;
 
-const areEqual = (prev: IYtelserLatest[] | undefined, current: IYtelserLatest[]) => {
+const areEqual = (prev: IKodeverkSimpleValue[] | undefined, current: IKodeverkSimpleValue[]) => {
   if (prev === undefined) {
     return false;
   }

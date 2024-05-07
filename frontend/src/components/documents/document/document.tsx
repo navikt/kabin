@@ -1,18 +1,18 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
-import { useViewDocument } from '@app/components/documents/use-view-document';
-import { ViewDocumentButton } from '@app/components/documents/view-document-button';
+import { useViewDocument } from '@app/components/documents/document/use-view-document';
+import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IArkivertDocument } from '@app/types/dokument';
-import { AttachmentList } from '../attachment-list';
-import { DocumentTitle } from '../document-title';
-import { SelectDocumentButton } from '../select-document-button';
 import { GridArea, GridTag, StyledField, StyledGrid } from '../styled-grid-components';
+import { AttachmentList } from './attachment-list';
 import { AvsenderMottakerNotatforer } from './avsender-mottaker-notatforer';
+import { DocumentTitle } from './document-title';
 import { StyledExpandButton } from './expand-button';
+import { SelectDocumentButton } from './select-document-button';
 
 interface Props {
   dokument: IArkivertDocument;
@@ -42,30 +42,12 @@ export const Dokument = ({ dokument }: Props) => {
     harTilgangTilArkivvariant,
   });
 
-  const [isExpanded, setIsExpanded] = useState(true);
-
-  const title = useMemo(() => {
-    if (!harTilgangTilArkivvariant) {
-      return 'Du har ikke tilgang til å se dokumentet.';
-    }
-
-    if (isViewed && isSelected) {
-      return 'Dokumentet er åpnet og valgt.';
-    }
-
-    if (isViewed) {
-      return 'Dokumentet er åpnet.';
-    }
-
-    if (isSelected) {
-      return 'Dokumentet er valgt. Trykk for å åpne.';
-    }
-
-    return 'Åpne dokumentet.';
-  }, [harTilgangTilArkivvariant, isSelected, isViewed]);
+  const hasVedlegg = dokument.vedlegg.length !== 0 || dokument.logiskeVedlegg.length !== 0;
+  const canExpand = hasVedlegg || harTilgangTilArkivvariant;
+  const [isExpanded, setIsExpanded] = useState(hasVedlegg);
 
   return (
-    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant} title={title}>
+    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant}>
       <StyledGrid
         as="article"
         data-testid="document"
@@ -76,14 +58,10 @@ export const Dokument = ({ dokument }: Props) => {
         onMouseDown={viewDocument}
       >
         <TitleContainer>
-          <StyledExpandButton
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-            hasVedlegg={dokument.vedlegg.length !== 0}
-          />
+          {canExpand ? <StyledExpandButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} /> : null}
           <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
         </TitleContainer>
-        <GridTag variant="alt3" size="medium" title={temaName} $gridArea={GridArea.TEMA}>
+        <GridTag variant="alt3" size="small" title={temaName} $gridArea={GridArea.TEMA}>
           <Ellipsis>{temaName}</Ellipsis>
         </GridTag>
         <StyledDate dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet)}</StyledDate>
@@ -105,14 +83,17 @@ export const Dokument = ({ dokument }: Props) => {
           dokument={dokument}
         />
       </StyledGrid>
-      <AttachmentList dokument={dokument} isOpen={isExpanded} />
+      <AttachmentList dokument={dokument} isOpen={isExpanded} temaId={temaId} />
     </DocumentListItem>
   );
 };
 
 const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }>`
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-surface-selected)' : 'var(--a-white)')};
 
   &:nth-child(odd) {
@@ -120,12 +101,11 @@ const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }
   }
 
   &:hover {
-    background-color: var(--a-surface-action-subtle-hover);
+    background-color: var(--a-surface-active);
   }
 `;
 
-const Ellipsis = styled.div`
-  font-size: 16px;
+const Ellipsis = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

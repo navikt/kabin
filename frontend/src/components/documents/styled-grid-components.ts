@@ -26,9 +26,12 @@ const gridTemplateAreas = [
 
 export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   display: grid;
+  grid-template-rows: min-content min-content;
   grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
-  grid-template-areas: '${gridTemplateAreas.join(' ')}';
-  grid-gap: 8px;
+  grid-template-areas:
+    '${gridTemplateAreas.join(' ')}'
+    '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}';
+  column-gap: 8px;
   background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-100)' : 'transparent')};
 
   &:hover {
@@ -60,4 +63,5 @@ export const GridButton = styled(Button)<GridAreaProps>`
 
 export const GridTag = styled(Tag)<GridAreaProps>`
   grid-area: ${({ $gridArea }) => $gridArea};
+  align-self: center;
 `;

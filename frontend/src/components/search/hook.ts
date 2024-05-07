@@ -1,5 +1,5 @@
 import { idnr } from '@navikt/fnrvalidator';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSearchPart } from '@app/simple-api-state/use-api';
 import { ISimplePart, skipToken } from '@app/types/common';
@@ -18,44 +18,22 @@ export interface IPersonSearch {
 export const usePersonSearch = (): IPersonSearch => {
   const fnr = useStateSearch();
   const [rawSearch, setRawSearch] = useState<string>(fnr);
-  const [search, setSearch] = useState<string | typeof skipToken>(fnr);
-  const [isValid, setIsValid] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { data: person = null, isLoading, isSuccess } = useSearchPart(isValid ? search : skipToken);
+  const cleaned = rawSearch.replaceAll(' ', '');
+  const isValid = idnr(cleaned).status === 'valid';
+  const search = isValid ? cleaned : skipToken;
+  const { data: person = null, isLoading, isSuccess } = useSearchPart(search);
 
-  useEffect(() => {
-    if (isSuccess && pathname !== '/opprett') {
-      navigate(`/opprett`, { state: { search } });
-    }
-  }, [isSuccess, pathname, navigate, search]);
+  if (isSuccess && pathname !== '/opprett' && isValid) {
+    navigate(`/opprett`, { state: { search } });
+  }
 
-  const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
-
-  useEffect(() => {
-    if (isValid) {
-      setError(undefined);
-    }
-  }, [isValid]);
-
-  const onRawChange = (raw: string) => {
-    setRawSearch(raw);
-    requestAnimationFrame(() => {
-      const cleaned = raw.replaceAll(' ', '');
-
-      if (search === cleaned) {
-        return;
-      }
-
-      const valid = idnr(cleaned).status === 'valid';
-      const newSearch = valid ? cleaned : skipToken;
-
-      setIsValid(valid);
-      setSearch(newSearch);
-    });
-  };
+  if (isValid && error !== undefined) {
+    setError(undefined);
+  }
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
     if (key === 'Escape') {
@@ -68,13 +46,13 @@ export const usePersonSearch = (): IPersonSearch => {
       return;
     }
 
-    validate();
+    setError(isValid ? undefined : 'Ugyldig ID-nummer');
   };
 
   return {
     rawSearch,
     search,
-    onRawChange,
+    onRawChange: setRawSearch,
     onKeyDown,
     person,
     isLoading,

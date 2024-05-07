@@ -25,6 +25,11 @@ interface IKlageOverstyringer extends ICommonOverstyringer {
   mottattVedtaksinstans: string | null; // LocalDate
 }
 
+export interface IKlageStateUpdate {
+  mulighet?: IKlagemulighet | null;
+  overstyringer?: Partial<IKlageOverstyringer>;
+}
+
 export interface IKlageState extends IKlageStateUpdate {
   mulighet: IKlagemulighet | null;
   overstyringer: IKlageOverstyringer;
@@ -52,23 +57,18 @@ export interface ValidSvarbrev {
   fullmektigFritekst: string | null;
 }
 
-export interface IAnkeState extends IAnkeStateUpdate {
-  mulighet: IAnkeMulighet | null;
-  overstyringer: IAnkeOverstyringer;
-  sendSvarbrev: boolean;
-  svarbrev: Svarbrev;
-}
-
-export interface IKlageStateUpdate {
-  mulighet?: IKlagemulighet | null;
-  overstyringer?: Partial<IKlageOverstyringer>;
-}
-
 export interface IAnkeStateUpdate {
   mulighet?: IAnkeMulighet | null;
   overstyringer?: Partial<IAnkeOverstyringer>;
   sendSvarbrev?: boolean;
   svarbrev?: Partial<Svarbrev>;
+}
+
+export interface IAnkeState extends IAnkeStateUpdate {
+  mulighet: IAnkeMulighet | null;
+  overstyringer: IAnkeOverstyringer;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
 }
 
 type StateFn<P, S> = (p: S) => P;
