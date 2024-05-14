@@ -48,7 +48,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   }
 
   return (
-    <FullTag size="small" variant="neutral">
+    <EditableTag size="small" variant="neutral" title={logiskVedlegg.tittel}>
       <Title $isFocused={isFocused}>{logiskVedlegg.tittel}</Title>
 
       <AbsoluteTitle $isFocused={isFocused} aria-hidden role="presentation">
@@ -94,7 +94,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
           />
         </Tooltip>
       </ButtonContainer>
-    </FullTag>
+    </EditableTag>
   );
 };
 
@@ -133,7 +133,9 @@ const ButtonContainer = styled.div<StyleProps>`
   user-select: none;
 `;
 
-const FullTag = styled(ReadOnlyTag)`
+const EditableTag = styled(ReadOnlyTag)`
+  min-width: 88px;
+
   &:hover {
     ${Title} {
       opacity: 0;

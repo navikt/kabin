@@ -13,7 +13,7 @@ export const ReadOnlyTag = styled(Tag)`
   position: relative;
   padding-left: 8px;
   padding-right: 8px;
-  min-width: 88px;
   text-align: left;
   justify-content: left;
+  max-width: 100%;
 `;
