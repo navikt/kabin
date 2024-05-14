@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const ReadOnlyLogiskVedlegg = ({ logiskVedlegg }: Props) => (
-  <ReadOnlyTag size="small" variant="neutral">
+  <ReadOnlyTag size="small" variant="neutral" title={logiskVedlegg.tittel}>
     <Title>{logiskVedlegg.tittel}</Title>
   </ReadOnlyTag>
 );
