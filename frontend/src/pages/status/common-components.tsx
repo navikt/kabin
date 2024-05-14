@@ -31,6 +31,7 @@ const StyledInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  width: 100%;
 `;
 
 export const Time = ({ dateTime, children }: TimeProps) => (
