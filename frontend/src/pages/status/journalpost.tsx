@@ -1,6 +1,7 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
@@ -14,7 +15,8 @@ interface JournalpostProps {
 }
 
 export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
-  const { temaId, tittel, datoOpprettet, avsenderMottaker, sak, vedlegg, journalposttype } = journalpost;
+  const { temaId, tittel, datoOpprettet, avsenderMottaker, sak, vedlegg, journalposttype, logiskeVedlegg } =
+    journalpost;
 
   const temaName = useFullTemaNameFromId(temaId);
 
@@ -39,13 +41,20 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
       <Sak sak={sak} />
       <InfoItem label="Type">{getJournalposttype(journalposttype)}</InfoItem>
 
+      <InfoItem label="Logiske vedlegg">
+        <ReadOnlyLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} />
+      </InfoItem>
+
       <InfoItem label="Vedlegg">
         {vedlegg.length === 0 ? (
-          <BodyShort>Ingen</BodyShort>
+          <BodyShort>Ingen vedlegg</BodyShort>
         ) : (
           <List>
-            {vedlegg.map(({ tittel: t, dokumentInfoId }) => (
-              <ListItem key={dokumentInfoId}>{t ?? 'Ingen tittel'}</ListItem>
+            {vedlegg.map((v) => (
+              <ListItem key={v.dokumentInfoId}>
+                <span>{v.tittel ?? 'Ingen tittel'}</span>
+                <ReadOnlyLogiskeVedlegg logiskeVedlegg={v.logiskeVedlegg} />
+              </ListItem>
             ))}
           </List>
         )}
