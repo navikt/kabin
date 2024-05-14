@@ -33,4 +33,5 @@ export const LogiskeVedleggListItem = styled.li`
 export const NoAttachmentsText = styled.span`
   font-weight: normal;
   font-style: italic;
+  white-space: nowrap;
 `;
