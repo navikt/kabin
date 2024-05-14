@@ -825,7 +825,7 @@ const FORSLAG: Record<string, string[]> = {
     'Stoppmelding',
     'Tilleggstrekk skatt',
     'Trekk',
-    'Trekkopplysninger for arbeidstaker som skal ha sykepenger foreldrepenger svangerskapspenger pleie-/opplæringspenger og omsorgspenger',
+    'Trekkopplysninger for arbeidstaker som skal ha sykepenger, foreldrepenger, svangerskapspenger, pleie-/opplæringspenger og omsorgspenger',
     'Vederlagstrekk',
   ],
   TRY: [
