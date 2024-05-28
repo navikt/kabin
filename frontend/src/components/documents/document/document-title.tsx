@@ -56,14 +56,12 @@ export const DocumentTitle = ({ dokumentInfoId, journalpostId, tittel }: Props) 
 };
 
 const StyledTitle = styled.div`
-  grid-area: title;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: left;
-  flex-grow: 1;
   overflow: hidden;
-  column-gap: 8px;
+  column-gap: 4px;
   height: 32px;
 `;
 
