@@ -1,6 +1,7 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
+import { styled } from 'styled-components';
 import { editTitle } from '@app/api/api';
 import { isApiError } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
@@ -97,7 +98,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
 
   return (
     <>
-      <TextField
+      <StyledTextField
         value={newTitle}
         onChange={({ target }) => setNewTitle(target.value)}
         label="Endre tittel"
@@ -108,27 +109,43 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
         onMouseDown={(e) => e.stopPropagation()}
         htmlSize={newTitle.length + 1}
       />
-      <Button
-        variant="tertiary"
-        size="xsmall"
-        icon={<CheckmarkIcon title="Lagre" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          isChanged ? onSaveClick() : exitEditMode();
-        }}
-        onMouseDown={(e) => e.stopPropagation()}
-        loading={isLoading}
-      />
-      <Button
-        variant="tertiary"
-        size="xsmall"
-        icon={<ArrowUndoIcon title="Avbryt" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          exitEditMode();
-        }}
-        onMouseDown={(e) => e.stopPropagation()}
-      />
+      <ButtonContainer>
+        <Button
+          variant="tertiary"
+          size="xsmall"
+          icon={<CheckmarkIcon title="Lagre" />}
+          onClick={(e) => {
+            e.stopPropagation();
+            isChanged ? onSaveClick() : exitEditMode();
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          loading={isLoading}
+        />
+        <Button
+          variant="tertiary"
+          size="xsmall"
+          icon={<ArrowUndoIcon title="Avbryt" />}
+          onClick={(e) => {
+            e.stopPropagation();
+            exitEditMode();
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+        />
+      </ButtonContainer>
     </>
   );
 };
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledTextField = styled(TextField)`
+  overflow: hidden;
+
+  && > input {
+    overflow: hidden;
+    width: 100%;
+  }
+`;
