@@ -70,7 +70,6 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
         klager: nullablePartToPartId(overstyringer.klager),
         fristInWeeks: overstyringer.fristInWeeks,
         svarbrevInput: {
-          enhetId: svarbrev.enhetId,
           fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
           title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
         },
@@ -89,7 +88,6 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
     overstyringer.fullmektig?.name,
     overstyringer.klager,
     overstyringer.mottattKlageinstans,
-    svarbrev.enhetId,
     svarbrev.fullmektigFritekst,
     svarbrev.title,
     ytelseId,

@@ -8,12 +8,11 @@ import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
-import { isSvarbrevValid } from '@app/pages/create/app-context/helpers';
 import { DEFAULT_SVARBREV_NAME, IAnkeState, Recipient, Type, ValidSvarbrev } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { IPart, skipToken } from '@app/types/common';
 import { ApiRecipient, CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
-import { IApiValidationResponse, IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
+import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (
@@ -59,11 +58,10 @@ const getSvarbrevInput = (
     return null;
   }
 
-  const { title, receivers, enhetId, fullmektigFritekst } = svarbrev;
+  const { title, receivers, fullmektigFritekst } = svarbrev;
 
   return {
     title: defaultString(title, DEFAULT_SVARBREV_NAME),
-    enhetId,
     fullmektigFritekst: defaultString(fullmektigFritekst, fullmektig?.name ?? null),
     receivers: receivers.map(recipientToApiRecipient),
   };
@@ -86,29 +84,7 @@ export const useCreateAnke = (
 
     const { svarbrev, sendSvarbrev } = state;
 
-    const isValidSvarbrev = isSvarbrevValid(svarbrev);
-
-    if (sendSvarbrev && !isValidSvarbrev) {
-      setErrors([
-        {
-          section: SectionNames.SVARBREV,
-          properties: [
-            {
-              reason: 'Enhet for svarbrev er ikke satt.',
-              field: ValidationFieldNames.ENHET,
-            },
-          ],
-        },
-      ]);
-
-      return;
-    }
-
-    const createAnkePayload = getAnkeApiPayload(
-      state,
-      sendSvarbrev && isValidSvarbrev ? svarbrev : null,
-      journalpost.journalpostId,
-    );
+    const createAnkePayload = getAnkeApiPayload(state, sendSvarbrev ? svarbrev : null, journalpost.journalpostId);
 
     try {
       const res = await createAnke(createAnkePayload);
