@@ -46,14 +46,12 @@ export interface Recipient {
 export interface Svarbrev {
   title: string;
   receivers: Recipient[];
-  enhetId: string | null;
   fullmektigFritekst: string | null;
 }
 
 export interface ValidSvarbrev {
   title: string;
   receivers: Recipient[];
-  enhetId: string;
   fullmektigFritekst: string | null;
 }
 
@@ -137,7 +135,6 @@ export const INITIAL_ANKE: IAnkeState = {
   },
   sendSvarbrev: true,
   svarbrev: {
-    enhetId: null,
     fullmektigFritekst: null,
     receivers: [],
     title: DEFAULT_SVARBREV_NAME,

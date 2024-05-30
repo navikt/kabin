@@ -14,7 +14,6 @@ export interface ApiRecipient {
 
 export interface SvarbrevPreviewInput {
   title: string;
-  enhetId: string;
   fullmektigFritekst: string | null;
 }
 

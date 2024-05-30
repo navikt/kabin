@@ -1,4 +1,4 @@
-import { Alert, Select, TextField } from '@navikt/ds-react';
+import { TextField } from '@navikt/ds-react';
 import React, { useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
@@ -6,12 +6,8 @@ import { Preview } from '@app/components/svarbrev/preview/preview';
 import { Receipients } from '@app/components/svarbrev/recipients';
 import { PartRecipient } from '@app/components/svarbrev/types';
 import { defaultString } from '@app/functions/empty-string';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { isSvarbrevValid } from '@app/pages/create/app-context/helpers';
 import { DEFAULT_SVARBREV_NAME, IAnkeOverstyringer, IAnkeState, Svarbrev } from '@app/pages/create/app-context/types';
-import { useInnsendingsenheter } from '@app/simple-api-state/use-kodeverk';
 import { IAnkeMulighet } from '@app/types/mulighet';
-import { ValidationFieldNames } from '@app/types/validation';
 
 interface Props {
   mulighet: IAnkeMulighet;
@@ -30,8 +26,6 @@ export const InternalSvarbrevInput = ({
   suggestedRecipients,
   updateState,
 }: Props) => {
-  const { data: enheter } = useInnsendingsenheter();
-
   const updateSvarbrev = useCallback(
     (update: Partial<Svarbrev>) => updateState({ svarbrev: { ...svarbrev, ...update } }),
     [svarbrev, updateState],
@@ -44,13 +38,11 @@ export const InternalSvarbrevInput = ({
     }
   }, [suggestedRecipients, svarbrev.receivers, updateSvarbrev]);
 
-  const error = useValidationError(ValidationFieldNames.ENHET);
-
   return (
     <>
       <Card title="Svarbrev">
         <Row>
-          <TextField
+          <StyledTextField
             label="Dokumentnavn"
             htmlSize={45}
             size="small"
@@ -59,7 +51,7 @@ export const InternalSvarbrevInput = ({
             onBlur={({ target }) => updateSvarbrev({ title: defaultString(target.value, DEFAULT_SVARBREV_NAME) })}
             onChange={({ target }) => updateSvarbrev({ title: target.value })}
           />
-          <TextField
+          <StyledTextField
             label="Navn på fullmektig i brevet"
             htmlSize={45}
             size="small"
@@ -73,21 +65,6 @@ export const InternalSvarbrevInput = ({
             onChange={({ target }) => updateSvarbrev({ fullmektigFritekst: target.value })}
             autoComplete="off"
           />
-          <Select
-            label="Enhet"
-            size="small"
-            value={svarbrev.enhetId ?? NONE}
-            onChange={({ target }) => updateSvarbrev({ enhetId: target.value })}
-            id={ValidationFieldNames.ENHET}
-            error={error}
-          >
-            {svarbrev.enhetId === null ? <option value={NONE}>Velg enhet</option> : null}
-            {enheter?.map((e) => (
-              <option key={e.id} value={e.id}>
-                {e.navn}
-              </option>
-            ))}
-          </Select>
         </Row>
         <Content>
           <Receipients
@@ -98,30 +75,24 @@ export const InternalSvarbrevInput = ({
         </Content>
       </Card>
       <Card title="Forhåndsvisning av svarbrev">
-        {isSvarbrevValid(svarbrev) ? (
-          <Preview
-            mulighet={mulighet}
-            overstyringer={overstyringer}
-            svarbrev={svarbrev}
-            journalpostId={journalpostId}
-          />
-        ) : (
-          <Alert variant="info" size="small">
-            Velg enhet for å se forhåndsvisning.
-          </Alert>
-        )}
+        <Preview mulighet={mulighet} overstyringer={overstyringer} svarbrev={svarbrev} journalpostId={journalpostId} />
       </Card>
     </>
   );
 };
 
-const NONE = 'NONE';
+const StyledTextField = styled(TextField)`
+  width: 100%;
+
+  && > input {
+    width: 100%;
+  }
+`;
 
 const Row = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   column-gap: 8px;
-  justify-content: space-between;
 `;
 
 const Content = styled.div`

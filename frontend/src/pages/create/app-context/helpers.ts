@@ -3,16 +3,7 @@ import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import {
-  IAnkeState,
-  IAnkeStateUpdate,
-  IAppContext,
-  IKlageState,
-  IKlageStateUpdate,
-  Svarbrev,
-  Type,
-  ValidSvarbrev,
-} from './types';
+import { IAnkeState, IAnkeStateUpdate, IAppContext, IKlageState, IKlageStateUpdate, Type } from './types';
 
 const TYPES = Object.values(Type);
 export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
@@ -105,8 +96,6 @@ export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
 
   return obj;
 };
-
-export const isSvarbrevValid = (svarbrev: Svarbrev): svarbrev is ValidSvarbrev => svarbrev.enhetId !== null;
 
 export const isSvarbrevState = (state: IAppContext['state']): state is IAnkeState =>
   state !== null && 'sendSvarbrev' in state && 'svarbrev' in state;
