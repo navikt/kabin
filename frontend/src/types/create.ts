@@ -38,6 +38,7 @@ interface CreateBasePayload {
   ytelseId: string | null;
   hjemmelIdList: string[];
   saksbehandlerIdent: string | null;
+  oppgaveId: number | null;
 }
 
 export interface CreateAnkeApiPayload extends CreateBasePayload {

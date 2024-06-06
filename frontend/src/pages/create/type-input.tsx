@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
+import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
@@ -48,6 +49,7 @@ export const TypeInput = () => {
       <>
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
+        <Oppgaver />
         <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
         <SvarbrevInput />
       </>
@@ -59,6 +61,7 @@ export const TypeInput = () => {
       <>
         <Klagemuligheter />
         <WillCreateNewJournalpostInfo />
+        <Oppgaver />
         <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
       </>
     );

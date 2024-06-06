@@ -2,6 +2,7 @@ import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { getStateFactory } from './state-factory';
 import { useSimpleApiState } from './use-simple-api-state';
@@ -141,3 +142,10 @@ const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE
 
 export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, JSON.stringify(params)));
+
+const getOppgaverState = getStateFactory<IOppgave[], IGetOppgaverParams>(`${KABIN_API_BASE_PATH}/searchoppgave`, {
+  method: 'POST',
+});
+
+export const useGetOppgaver = (params: IGetOppgaverParams | typeof skipToken) =>
+  useSimpleApiState(params === skipToken ? skipToken : getOppgaverState({}, { ...params }));

@@ -31,6 +31,7 @@ const getAnkeApiPayload = (
     avsender,
     saksbehandlerIdent,
     hjemmelIdList,
+    oppgaveId,
   } = overstyringer;
 
   const vedtak = mulighetToVedtak(mulighet);
@@ -47,6 +48,7 @@ const getAnkeApiPayload = (
     hjemmelIdList,
     saksbehandlerIdent,
     svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),
+    oppgaveId,
   };
 };
 
