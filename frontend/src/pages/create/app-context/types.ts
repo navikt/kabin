@@ -19,6 +19,7 @@ interface ICommonOverstyringer {
   ytelseId: string | null;
   hjemmelIdList: string[];
   saksbehandlerIdent: string | null;
+  oppgaveId: number | null;
 }
 
 interface IKlageOverstyringer extends ICommonOverstyringer {
@@ -116,6 +117,7 @@ export const INITIAL_KLAGE: IKlageState = {
     klager: null,
     avsender: null,
     saksbehandlerIdent: null,
+    oppgaveId: null,
   },
 };
 
@@ -132,6 +134,7 @@ export const INITIAL_ANKE: IAnkeState = {
     ytelseId: null,
     hjemmelIdList: [],
     saksbehandlerIdent: null,
+    oppgaveId: null,
   },
   sendSvarbrev: true,
   svarbrev: {

@@ -25,6 +25,7 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
     fullmektig,
     avsender: avsenderMottaker,
     saksbehandlerIdent,
+    oppgaveId,
   } = overstyringer;
 
   const vedtak = mulighetToVedtak(mulighet);
@@ -41,6 +42,7 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
     ytelseId: overstyringer.ytelseId,
     hjemmelIdList: overstyringer.hjemmelIdList,
     saksbehandlerIdent,
+    oppgaveId,
   };
 };
 

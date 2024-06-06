@@ -31,6 +31,7 @@ export enum ValidationFieldNames {
   BEHANDLING_ID = 'behandlingId',
   JOURNALPOST_ID = 'journalpostId',
   SAKSBEHANDLER = 'saksbehandlerId',
+  OPPGAVE = 'oppgaveId',
   // Frontend specific
   MULIGHET = 'mulighet',
   ENHET = 'enhet',
