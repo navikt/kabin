@@ -3,4 +3,4 @@ ingresses:
 tenant: nav.no
 roles:
   - 1c006e8b-c667-4622-9df7-43ed2fd494d6 # KABAL_OPPGAVESTYRING_ALLE_ENHETER
-  - cd78b8e8-73a3-4fb6-8234-7bebb5e5b9e9 # KABAL_ADMIN
+  - 90805436-8a2b-430a-a699-73b29205f25d # KABAL_ADMIN
