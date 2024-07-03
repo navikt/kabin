@@ -31,7 +31,11 @@ export const Row = ({
   const selected = state.overstyringer.oppgaveId === id;
 
   return (
-    <StyledRow content={<Beskrivelse beskrivelse={beskrivelse} />}>
+    <StyledRow
+      content={<Beskrivelse beskrivelse={beskrivelse} />}
+      selected={selected}
+      onClick={() => updateState({ overstyringer: { oppgaveId: selected ? null : id } })}
+    >
       <Table.DataCell>
         {opprettetTidspunkt === null ? null : isoDateTimeToPrettyDate(opprettetTidspunkt)}
       </Table.DataCell>
@@ -81,4 +85,5 @@ const StyledBeskrivelse = styled.section`
 
 const StyledRow = styled(Table.ExpandableRow)`
   height: 44px;
+  cursor: pointer;
 `;
