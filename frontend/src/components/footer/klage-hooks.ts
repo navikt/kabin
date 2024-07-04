@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { createKlage } from '@app/api/api';
 import { IApiErrorReponse, isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
 import { mulighetToVedtak } from '@app/components/footer/helpers';
+import { oppgaverIsEnabled } from '@app/components/oppgaver/hooks';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
@@ -12,7 +13,7 @@ import { IKlageState, Type } from '@app/pages/create/app-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
-import { IApiValidationResponse } from '@app/types/validation';
+import { IApiValidationResponse, IValidationError, SectionNames, ValidationFieldNames } from '@app/types/validation';
 
 const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKlageApiPayload => {
   const { mulighet, overstyringer } = state;
@@ -56,6 +57,31 @@ export const useCreateKlage = (
 
   return useCallback(async () => {
     if (journalpost === null || type !== Type.KLAGE) {
+      return;
+    }
+
+    // TODO: Remove when API validates Gosys-oppgave.
+    if (oppgaverIsEnabled(type, state) && state.overstyringer.oppgaveId === null) {
+      const oppgaveError: IValidationError = {
+        field: ValidationFieldNames.OPPGAVE,
+        reason: 'Velg en Gosys-oppgave.',
+      };
+
+      setError({
+        type: 'validation',
+        status: 400,
+        title: 'Valideringsfeil',
+        detail: 'Valideringsfeil',
+        sections: [{ section: SectionNames.SAKSDATA, properties: [oppgaveError] }],
+      });
+
+      setErrors([
+        {
+          section: SectionNames.SAKSDATA,
+          properties: [oppgaveError],
+        },
+      ]);
+
       return;
     }
 

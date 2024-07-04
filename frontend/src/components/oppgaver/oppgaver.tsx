@@ -39,7 +39,9 @@ export const Oppgaver = () => {
   return (
     <Card>
       <Header />
-      <ValidationErrorMessage error={error} />
+
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.OPPGAVE} />
+
       <Table size="small" zebraStripes>
         <TableHeaders />
         <Table.Body>
