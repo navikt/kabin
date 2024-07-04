@@ -14,6 +14,7 @@ export const FIELD_NAMES: Record<ValidationFieldNames, string> = {
   [ValidationFieldNames.SAKSBEHANDLER]: 'Saksbehandler',
   [ValidationFieldNames.MULIGHET]: 'Mulighet',
   [ValidationFieldNames.ENHET]: 'Enhet',
+  [ValidationFieldNames.VEDTAK]: 'Vedtak',
   [ValidationFieldNames.OPPGAVE]: 'Gosys-oppgave',
 };
 

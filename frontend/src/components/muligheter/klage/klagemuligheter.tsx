@@ -20,7 +20,7 @@ export const Klagemuligheter = () => {
 
   const { data: klagemuligheter, isLoading, refetch } = useKlagemuligheter(fnr);
   const [isExpanded, setIsExpanded] = useState(true);
-  const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
+  const error = useValidationError(ValidationFieldNames.VEDTAK);
 
   useEffect(() => {
     if (typeof klagemuligheter === 'undefined' && type === Type.KLAGE) {
@@ -83,7 +83,7 @@ export const Klagemuligheter = () => {
         )}
       </Header>
 
-      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.VEDTAK} />
 
       <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
     </CardSmall>
