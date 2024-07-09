@@ -1,7 +1,9 @@
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { loggedOutToast } from '@app/components/toast/toast-content/logged-out';
-import { getHeaders } from '@app/headers';
-import { InternalOptions, Listener, NoRetryError, Options, RequestBody, State, UpdateData } from './types';
+import { ENVIRONMENT } from '@app/environment';
+import { generateTraceParent } from '@app/functions/generate-request-id';
+import { HeaderKeys, tabId } from '@app/headers';
+import { InternalOptions, Listener, Method, NoRetryError, Options, RequestBody, State, UpdateData } from './types';
 
 export class SimpleApiState<T> {
   private data: T | undefined = undefined;
@@ -11,10 +13,18 @@ export class SimpleApiState<T> {
   private isSuccess = false;
   private error: Error | undefined = undefined;
   private listeners: Listener<T>[] = [];
-  private options: InternalOptions = { prefetch: false, cacheTime: 60_000, method: 'GET' };
-  private req: RequestInit;
+  private options: InternalOptions = { prefetch: false, cacheTime: 60_000, method: Method.GET };
   private retryTimer: NodeJS.Timeout | undefined;
   private transformResponse: ((response: T) => T) | undefined;
+
+  // Request data
+  private headers: Record<string, string> = {
+    [HeaderKeys.VERSION]: ENVIRONMENT.version,
+    [HeaderKeys.TAB_ID]: tabId,
+    Accept: 'application/json',
+  };
+  private body: string | null = null;
+  private cache: RequestCache = 'default';
 
   constructor(
     private url: string,
@@ -23,24 +33,26 @@ export class SimpleApiState<T> {
     transformResponse?: (response: T) => T,
   ) {
     this.options = Object.assign(this.options, options);
-    this.req = this.getRequest(this.options, body);
     this.transformResponse = transformResponse;
+
+    this.prepareStaticRequestData(this.options.method, body);
 
     if (this.options.prefetch) {
       this.fetchData();
     }
   }
 
-  private getRequest = ({ method }: InternalOptions, body: RequestBody): RequestInit => {
-    const req: RequestInit = { method, headers: { ...getHeaders(), Accept: 'application/json' } };
+  private prepareStaticRequestData = (method: Method, body: RequestBody): void => {
+    if (method === Method.POST || method === Method.PUT) {
+      this.headers['Content-Type'] = 'application/json';
+      this.cache = 'no-cache';
 
-    if (method === 'POST' || method === 'PUT') {
-      req.cache = 'no-cache';
-      req.headers = { ...req.headers, 'Content-Type': 'application/json' };
-      req.body = body === undefined || typeof body === 'string' ? body : JSON.stringify(body);
+      if (typeof body === 'string') {
+        this.body = body;
+      } else if (body !== null && body !== undefined) {
+        this.body = JSON.stringify(body);
+      }
     }
-
-    return req;
   };
 
   private fetchData = async (tryCount = 1): Promise<T | undefined> => {
@@ -48,8 +60,17 @@ export class SimpleApiState<T> {
     this.isLoading = true;
     this.onChange();
 
+    const { method } = this.options;
+
     try {
-      const response = await fetch(this.url, this.req);
+      this.headers[HeaderKeys.TRACEPARENT] = generateTraceParent();
+
+      const response = await fetch(this.url, {
+        method,
+        body: this.body,
+        cache: this.cache,
+        headers: this.headers,
+      });
 
       if (!response.ok) {
         if (response.status === 401) {

@@ -10,6 +10,13 @@ export interface State<T> {
   clear: () => void;
 }
 
+export enum Method {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
+
 export interface InternalOptions {
   /**
    * If set to `true`, data will be fetched immediately.
@@ -24,7 +31,7 @@ export interface InternalOptions {
    * @defaultValue `60_000` (1 minutes)
    */
   cacheTime: number;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: Method;
 }
 
 export type RequestBody = Record<string, unknown> | string | undefined;

@@ -1,9 +1,9 @@
 import { ENVIRONMENT } from '@app/environment';
 import { generateTraceParent } from '@app/functions/generate-request-id';
 
-const tabId = crypto.randomUUID();
+export const tabId = crypto.randomUUID();
 
-enum HeaderKeys {
+export enum HeaderKeys {
   TRACEPARENT = 'traceparent',
   VERSION = 'x-client-version',
   TAB_ID = 'x-tab-id',
