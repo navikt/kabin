@@ -1,4 +1,4 @@
-import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
+import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
@@ -24,7 +24,7 @@ interface IdParams {
 
 const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
   `${KABIN_API_BASE_PATH}/arkivertedokumenter?antall=50000`,
-  { method: 'POST', cacheTime: 0 },
+  { method: Method.POST, cacheTime: 0 },
 );
 
 export const useDokumenter = (idnummer: string | typeof skipToken) =>
@@ -32,7 +32,7 @@ export const useDokumenter = (idnummer: string | typeof skipToken) =>
 
 const getAnkemuligheterState = getStateFactory<IAnkeMulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
-  { method: 'POST', cacheTime: 0 },
+  { method: Method.POST, cacheTime: 0 },
 );
 
 export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
@@ -40,7 +40,7 @@ export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
 
 const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/klagemuligheter?antall=50000`,
-  { method: 'POST', cacheTime: 0 },
+  { method: Method.POST, cacheTime: 0 },
 );
 
 export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
@@ -55,7 +55,7 @@ export interface SearchPartWithAddressParams {
 const getSearchPartWithAddressState = getStateFactory<IPart, SearchPartWithAddressParams>(
   `${KABAL_API_BASE_PATH}/searchpartwithutsendingskanal`,
   {
-    method: 'POST',
+    method: Method.POST,
   },
 );
 
@@ -67,7 +67,7 @@ interface SearchPartParams {
 }
 
 const getSearchState = getStateFactory<ISimplePart, SearchPartParams>(`${KABAL_API_BASE_PATH}/searchpart`, {
-  method: 'POST',
+  method: Method.POST,
 });
 
 export const useSearchPart = (identifikator: string | typeof skipToken) =>
@@ -78,8 +78,8 @@ interface StatusParams {
   type: SaksTypeEnum;
 }
 
-const getAnkeStatusState = getStateFactory<IAnkestatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
-const getKlageStatusState = getStateFactory<IKlagestatus, void>(KABIN_API_BASE_PATH, { method: 'GET' });
+const getAnkeStatusState = getStateFactory<IAnkestatus, void>(KABIN_API_BASE_PATH, { method: Method.GET });
+const getKlageStatusState = getStateFactory<IKlagestatus, void>(KABIN_API_BASE_PATH, { method: Method.GET });
 
 export const useAnkeStatus = (params: StatusParams | typeof skipToken) => {
   const state = params === skipToken ? skipToken : getAnkeStatusState({ path: getPath(params) });
@@ -109,7 +109,7 @@ interface CalculateFristdatoParams {
 
 const calculateFristdatoState = getStateFactory<string, CalculateFristdatoParams>(
   `${KABIN_API_BASE_PATH}/calculatefrist`,
-  { method: 'POST', cacheTime: 300_000 },
+  { method: Method.POST, cacheTime: 300_000 },
 );
 
 export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken) =>
@@ -130,21 +130,21 @@ export interface ISaksbehandlerParams extends Record<string, unknown> {
 
 const saksbehandlereState = getStateFactory<ISaksbehandlereResponse, void>(
   `${INNSTILLINGER_BASE_PATH}/search/saksbehandlere`,
-  { method: 'POST' },
+  { method: Method.POST },
 );
 
 export const useSaksbehandlere = (params: ISaksbehandlerParams | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : saksbehandlereState({ path: '' }, params));
 
 const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE_PATH}/willcreatenewjournalpost`, {
-  method: 'POST',
+  method: Method.POST,
 });
 
 export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, JSON.stringify(params)));
 
 const getOppgaverState = getStateFactory<IOppgave[], IGetOppgaverParams>(`${KABIN_API_BASE_PATH}/searchoppgave`, {
-  method: 'POST',
+  method: Method.POST,
 });
 
 export const useGetOppgaver = (params: IGetOppgaverParams | typeof skipToken) =>
