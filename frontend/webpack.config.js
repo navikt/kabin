@@ -52,7 +52,7 @@ module.exports = (_env, { mode }) => ({
     historyApiFallback: true,
     proxy: [
       {
-        context: ['/api'],
+        context: ['/api', '/version'],
         target: 'https://kabin.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,
