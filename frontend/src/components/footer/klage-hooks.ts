@@ -15,13 +15,13 @@ import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse, IValidationError, SectionNames, ValidationFieldNames } from '@app/types/validation';
 
+// TODO: Same as anke-hooks where svarbrev is a nullable param
 const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKlageApiPayload => {
   const { mulighet, overstyringer } = state;
 
   const {
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
     klager,
     fullmektig,
     avsender: avsenderMottaker,
@@ -31,11 +31,14 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
 
   const vedtak = mulighetToVedtak(mulighet);
 
+  const { varsletBehandlingstidUnits, varsletBehandlingstidUnitType } = state.svarbrev;
+
   return {
     vedtak,
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
+    varsletBehandlingstidUnits,
+    varsletBehandlingstidUnitType,
     klager: nullablePartToPartId(klager),
     fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),

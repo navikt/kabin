@@ -1,20 +1,18 @@
-import { IAddress, IPartId } from './common';
-
-export enum HandlingEnum {
-  AUTO = 'AUTO',
-  LOCAL_PRINT = 'LOCAL_PRINT',
-  CENTRAL_PRINT = 'CENTRAL_PRINT',
-}
-
-export interface ApiRecipient {
-  id: string;
-  handling: HandlingEnum;
-  overriddenAddress: IAddress | null;
-}
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { ApiRecipient } from '@app/types/recipient';
+import { IPartId, SaksTypeEnum } from './common';
 
 export interface SvarbrevPreviewInput {
-  title: string;
+  mottattKlageinstans: string;
+  sakenGjelder: string;
+  ytelseId: string;
+  klager: string | null;
+  typeId: SaksTypeEnum;
   fullmektigFritekst: string | null;
+  varsletBehandlingstidUnits: number;
+  varsletBehandlingstidUnitType: BehandlingstidUnitType;
+  customText: string | null;
+  title: string;
 }
 
 interface SvarbrevInput extends SvarbrevPreviewInput {
@@ -30,7 +28,8 @@ export interface CaseVedtak {
 interface CreateBasePayload {
   vedtak: CaseVedtak | null;
   avsender: IPartId | null;
-  fristInWeeks: number | null; // Number of weeks
+  varsletBehandlingstidUnits: number | null;
+  varsletBehandlingstidUnitType: BehandlingstidUnitType | null;
   fullmektig: IPartId | null;
   journalpostId: string | null;
   klager: IPartId | null;
@@ -42,8 +41,12 @@ interface CreateBasePayload {
 }
 
 export interface CreateAnkeApiPayload extends CreateBasePayload {
-  svarbrevInput: SvarbrevInput | null;
+  svarbrevInput: Nullable<SvarbrevInput> | null;
 }
+
+type Nullable<T> = {
+  [P in keyof T]: T[P] | null;
+};
 
 export interface CreateKlageApiPayload extends CreateBasePayload {
   mottattVedtaksinstans: string | null; // LocalDate

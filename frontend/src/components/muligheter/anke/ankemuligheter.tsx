@@ -22,6 +22,29 @@ export const Ankemuligheter = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
+  // TODO: remove
+  useEffect(() => {
+    if (ankemuligheter === undefined) {
+      return;
+    }
+
+    if (state === null || state.mulighet !== null) {
+      return;
+    }
+
+    if (type !== Type.ANKE) {
+      return;
+    }
+
+    const [mulighet] = ankemuligheter;
+
+    if (mulighet === undefined) {
+      return;
+    }
+
+    updateState({ mulighet });
+  }, [ankemuligheter, state, type, updateState]);
+
   useEffect(() => {
     if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && state.mulighet !== null) {
       setIsExpanded(true);

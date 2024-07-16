@@ -1,6 +1,6 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, ToggleGroup } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
@@ -18,6 +18,13 @@ import { Type } from './app-context/types';
 
 export const TypeSelect = () => {
   const { type, setType, journalpost } = useContext(AppContext);
+
+  // TODO: remove
+  useEffect(() => {
+    if (type === Type.NONE) {
+      setType(Type.ANKE);
+    }
+  }, [type, setType]);
 
   const onChange = useCallback((v: string) => setType((e) => (isType(v) ? v : e)), [setType]);
 

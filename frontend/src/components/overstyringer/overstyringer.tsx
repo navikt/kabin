@@ -56,8 +56,8 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
         <TopRow>
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
-          <EditFrist />
         </TopRow>
+        <EditFrist />
       </Header>
       <Content>
         <Ytelse />
@@ -123,12 +123,12 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
 const Header = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 12px;
 `;
 
 const TopRow = styled.div`
-  display: grid;
-  column-gap: 8px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
+  column-gap: 16px;
 `;
 
 const Content = styled.div`
