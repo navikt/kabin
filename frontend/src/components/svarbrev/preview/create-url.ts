@@ -1,8 +1,8 @@
 import { createSvarbrevPDF } from '@app/api/api';
-import { PreviewPdfPayload } from '@app/types/preview';
+import { SvarbrevPreviewInput } from '@app/types/create';
 
 export const createSvarbrevUrl = async (
-  params: PreviewPdfPayload,
+  params: SvarbrevPreviewInput,
   abortController: AbortController,
   retry: number = 0,
 ): Promise<string> => {
@@ -19,9 +19,8 @@ export const createSvarbrevUrl = async (
   }
 
   const blob = await res.blob();
-  const file = new File([blob], params.svarbrevInput.title, { type: 'application/pdf' });
 
-  return URL.createObjectURL(file);
+  return URL.createObjectURL(blob);
 };
 
 export class ResponseError extends Error {

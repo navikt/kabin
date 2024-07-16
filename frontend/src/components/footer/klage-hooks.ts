@@ -2,31 +2,36 @@ import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createKlage } from '@app/api/api';
 import { IApiErrorReponse, isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
-import { mulighetToVedtak } from '@app/components/footer/helpers';
+import { getSvarbrevInput, mulighetToVedtak } from '@app/components/footer/helpers';
 import { oppgaverIsEnabled } from '@app/components/oppgaver/hooks';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { AppContext } from '@app/pages/create/app-context/app-context';
-import { IKlageState, Type } from '@app/pages/create/app-context/types';
+import { IKlageState, Svarbrev, Type } from '@app/pages/create/app-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse, IValidationError, SectionNames, ValidationFieldNames } from '@app/types/validation';
 
-const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKlageApiPayload => {
+const getKlageApiPayload = (
+  state: IKlageState,
+  svarbrev: Svarbrev | null,
+  journalpostId: string,
+): CreateKlageApiPayload => {
   const { mulighet, overstyringer } = state;
 
   const {
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
     klager,
     fullmektig,
     avsender: avsenderMottaker,
     saksbehandlerIdent,
     oppgaveId,
+    behandlingstidUnitType,
+    behandlingstidUnits,
   } = overstyringer;
 
   const vedtak = mulighetToVedtak(mulighet);
@@ -35,7 +40,8 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
     vedtak,
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
+    behandlingstidUnitType,
+    behandlingstidUnits,
     klager: nullablePartToPartId(klager),
     fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),
@@ -44,6 +50,7 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
     hjemmelIdList: overstyringer.hjemmelIdList,
     saksbehandlerIdent,
     oppgaveId,
+    svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),
   };
 };
 
@@ -85,7 +92,9 @@ export const useCreateKlage = (
       return;
     }
 
-    const createKlagePayload = getKlageApiPayload(state, journalpost.journalpostId);
+    const { sendSvarbrev, svarbrev } = state;
+
+    const createKlagePayload = getKlageApiPayload(state, sendSvarbrev ? svarbrev : null, journalpost.journalpostId);
 
     try {
       const res = await createKlage(createKlagePayload);

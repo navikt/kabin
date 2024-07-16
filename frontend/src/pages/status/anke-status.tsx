@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { AnkeDetails } from '@app/pages/status/anke-details';
 import { StatusHeading } from '@app/pages/status/common-components';
+import { StatusDetails } from '@app/pages/status/details';
 import { DataContainer, LoadingContainer, PageWrapper, StyledLoader } from '@app/pages/status/styled-components';
 import { useAnkeStatus } from '@app/simple-api-state/use-api';
 import { SaksTypeEnum, skipToken } from '@app/types/common';
@@ -42,5 +42,5 @@ const AnkeDetailsLoader = ({ loading, data, id }: AnkeDetailsLoaderProps) => {
     return <StyledLoader size="3xlarge" title="Laster..." />;
   }
 
-  return <AnkeDetails anke={data} id={id} />;
+  return <StatusDetails id={id} status={data} />;
 };

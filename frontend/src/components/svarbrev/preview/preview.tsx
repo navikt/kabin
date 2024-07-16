@@ -1,18 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { PDF_ASPECT_RATIO } from '@app/components/toast/constants';
-import { nullablePartToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
-import { DEFAULT_SVARBREV_NAME, IAnkeOverstyringer, ValidSvarbrev } from '@app/pages/create/app-context/types';
-import { IAnkeMulighet } from '@app/types/mulighet';
+import { AppContext } from '@app/pages/create/app-context/app-context';
+import {
+  DEFAULT_SVARBREV_NAME,
+  IAnkeOverstyringer,
+  IKlageOverstyringer,
+  Svarbrev,
+  TYPE_TO_SAKSTYPE,
+  Type,
+} from '@app/pages/create/app-context/types';
+import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
+import { skipToken } from '@app/types/common';
+import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
-  mulighet: IAnkeMulighet;
-  overstyringer: IAnkeOverstyringer;
-  svarbrev: ValidSvarbrev;
+  mulighet: IAnkeMulighet | IKlagemulighet;
+  overstyringer: IAnkeOverstyringer | IKlageOverstyringer;
+  svarbrev: Svarbrev;
   journalpostId: string;
 }
 
@@ -48,31 +58,35 @@ const PdfContainer = styled.div`
 `;
 
 const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
+  const { type, state } = useContext(AppContext);
+  const { data: svarbrevSettings } = useSvarbrevSettings(overstyringer.ytelseId ?? skipToken);
+
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
-  const ytelseId = overstyringer.ytelseId ?? mulighet.ytelseId;
+  const ytelseId: string | null =
+    (type === Type.ANKE ? overstyringer.ytelseId ?? state.mulighet?.ytelseId : overstyringer.ytelseId) ?? null;
+
+  const settings = getSvarbrevSettings(svarbrevSettings, type);
 
   useEffect(() => {
     const mk = overstyringer.mottattKlageinstans;
 
-    if (mk === null || ytelseId === null) {
+    if (mk === null || ytelseId === null || type === Type.NONE || settings === null) {
       return;
     }
 
     const timeout = setTimeout(async () => {
       const loader = PDF_MANAGER.load({
-        mottattKlageinstans: mk,
+        varsletBehandlingstidUnits: svarbrev.varsletBehandlingstidUnits ?? settings.behandlingstidUnits,
+        varsletBehandlingstidUnitType: svarbrev.varsletBehandlingstidUnitType ?? settings.behandlingstidUnitType,
+        fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
+        title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
+        customText: svarbrev.customText,
+        typeId: TYPE_TO_SAKSTYPE[type],
+        klager: overstyringer.klager?.id ?? null,
+        sakenGjelder: mulighet.sakenGjelder.id,
         ytelseId,
-        sakenGjelder: {
-          id: mulighet.sakenGjelder.id,
-          type: mulighet.sakenGjelder.type,
-        },
-        klager: nullablePartToPartId(overstyringer.klager),
-        fristInWeeks: overstyringer.fristInWeeks,
-        svarbrevInput: {
-          fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
-          title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
-        },
+        mottattKlageinstans: mk,
       });
 
       setLoaders((loaderList) =>
@@ -83,13 +97,16 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
     return () => clearTimeout(timeout);
   }, [
     mulighet.sakenGjelder.id,
-    mulighet.sakenGjelder.type,
-    overstyringer.fristInWeeks,
     overstyringer.fullmektig?.name,
-    overstyringer.klager,
+    overstyringer.klager?.id,
     overstyringer.mottattKlageinstans,
+    settings,
+    svarbrev.customText,
     svarbrev.fullmektigFritekst,
     svarbrev.title,
+    svarbrev.varsletBehandlingstidUnitType,
+    svarbrev.varsletBehandlingstidUnits,
+    type,
     ytelseId,
   ]);
 

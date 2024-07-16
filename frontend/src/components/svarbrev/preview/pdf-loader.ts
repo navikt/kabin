@@ -1,6 +1,6 @@
 import { createSvarbrevUrl } from '@app/components/svarbrev/preview/create-url';
 import { ErrorListenerFn, UrlListenerFn } from '@app/components/svarbrev/preview/types';
-import { PreviewPdfPayload } from '@app/types/preview';
+import { SvarbrevPreviewInput } from '@app/types/create';
 
 export class PdfLoader {
   public url: string | null = null;
@@ -9,13 +9,13 @@ export class PdfLoader {
   private errorListeners: ErrorListenerFn[] = [];
 
   constructor(
-    params: PreviewPdfPayload,
+    params: SvarbrevPreviewInput,
     public readonly key: string,
   ) {
     this.load(params);
   }
 
-  private async load(params: PreviewPdfPayload) {
+  private async load(params: SvarbrevPreviewInput) {
     try {
       const url = await createSvarbrevUrl(params, this.abortController);
       this.listeners.forEach((listener) => listener(url));

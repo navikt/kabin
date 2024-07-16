@@ -5,14 +5,18 @@ import { IArkivertDocument } from './dokument';
 interface IBaseStatus {
   fagsakId: string;
   fagsystemId: string;
-  frist: string; // LocalDate
+  /** Date */
+  frist: string;
   fullmektig: IPart | null;
   journalpost: IArkivertDocument;
   klager: IPart;
-  mottattKlageinstans: string; // LocalDate
+  /** Date */
+  mottattKlageinstans: string;
   sakenGjelder: IPart;
   ytelseId: string;
   tildeltSaksbehandler: ISaksbehandler | null;
+  /** Date */
+  varsletFrist: string | null;
 }
 
 export interface SvarbrevStatus {
@@ -31,4 +35,5 @@ export interface IKlagestatus extends IBaseStatus {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
   vedtakDate: string;
+  svarbrev: SvarbrevStatus | null;
 }

@@ -63,6 +63,7 @@ export const TypeInput = () => {
         <WillCreateNewJournalpostInfo />
         <Oppgaver />
         <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
+        <SvarbrevInput />
       </>
     );
   }

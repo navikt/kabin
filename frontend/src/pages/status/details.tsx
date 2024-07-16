@@ -1,6 +1,8 @@
+import { parseISO } from 'date-fns';
 import React from 'react';
 import { Svarbrev } from '@app/pages/status/svarbrev';
-import { IAnkestatus } from '@app/types/status';
+import { SaksTypeEnum } from '@app/types/common';
+import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { NavEmployee, Part } from './common-components';
 import { DateInfoItem } from './date';
 import { Journalpost } from './journalpost';
@@ -9,11 +11,12 @@ import { StyledCard } from './styled-components';
 
 interface Props {
   id: string;
-  anke: IAnkestatus;
+  status: IAnkestatus | IKlagestatus;
 }
 
-export const AnkeDetails = ({ id, anke }: Props) => {
+export const StatusDetails = ({ id, status }: Props) => {
   const {
+    typeId,
     journalpost,
     mottattKlageinstans,
     frist,
@@ -26,22 +29,33 @@ export const AnkeDetails = ({ id, anke }: Props) => {
     sakenGjelder,
     vedtakDate,
     ytelseId,
-  } = anke;
+    varsletFrist,
+  } = status;
+
+  const isKlage = typeId === SaksTypeEnum.KLAGE;
+
+  const journalpostTitle = isKlage ? 'Valgt journalpost' : 'Journalført anke';
+  const klagerTitle = isKlage ? 'Klager' : 'Ankende part';
+  const mulighetTitle = isKlage ? 'Valgt klagevedtak' : 'Valgt vedtak';
+
+  const mottattKlageinstansDate = parseISO(mottattKlageinstans);
 
   return (
     <>
-      <Journalpost title="Journalført anke" journalpost={journalpost} />
+      <Journalpost title={journalpostTitle} journalpost={journalpost} />
 
       <StyledCard title="Saksinfo" $gridArea="case" titleSize="medium">
+        {isKlage ? <DateInfoItem title="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} /> : null}
         <DateInfoItem title="Mottatt NAV Klageinstans" date={mottattKlageinstans} />
-        <DateInfoItem title="Frist" date={frist} />
-        <Part title="Ankende part" part={klager} />
+        <DateInfoItem title="Frist" date={frist} base={mottattKlageinstansDate} />
+        <DateInfoItem title="Varslet frist" date={varsletFrist} base={mottattKlageinstansDate} />
+        <Part title={klagerTitle} part={klager} />
         <Part title="Fullmektig" part={fullmektig} />
         <NavEmployee title="Tildelt saksbehandler" employee={tildeltSaksbehandler} />
       </StyledCard>
 
       <Mulighet
-        title="Valgt klagevedtak"
+        title={mulighetTitle}
         fagsakId={fagsakId}
         fagsystemId={fagsystemId}
         sakenGjelder={sakenGjelder}
