@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusHeading } from '@app/pages/status/common-components';
-import { KlageDetails } from '@app/pages/status/klage-details';
+import { StatusDetails } from '@app/pages/status/details';
 import { DataContainer, LoadingContainer, PageWrapper, StyledLoader } from '@app/pages/status/styled-components';
 import { useKlageStatus } from '@app/simple-api-state/use-api';
 import { SaksTypeEnum, skipToken } from '@app/types/common';
@@ -25,7 +25,7 @@ export const KlageStatusPage = ({ type }: KlageStatusProps) => {
           type={type}
           behandlingId={id}
         />
-        <KlageDetailsLoader loading={isLoading} data={data} />
+        <KlageDetailsLoader loading={isLoading} data={data} id={id} />
       </Container>
     </PageWrapper>
   );
@@ -33,13 +33,14 @@ export const KlageStatusPage = ({ type }: KlageStatusProps) => {
 
 interface KlageDetailsLoaderProps {
   data: IKlagestatus | undefined;
+  id: string | undefined;
   loading: boolean;
 }
 
-const KlageDetailsLoader = ({ loading, data }: KlageDetailsLoaderProps) => {
-  if (loading || data === undefined) {
+const KlageDetailsLoader = ({ loading, data, id }: KlageDetailsLoaderProps) => {
+  if (loading || data === undefined || id === undefined) {
     return <StyledLoader size="3xlarge" title="Laster..." />;
   }
 
-  return <KlageDetails {...data} />;
+  return <StatusDetails id={id} status={data} />;
 };

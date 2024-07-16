@@ -1,7 +1,8 @@
-import { IAddress, IPart, skipToken } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { IAddress, IPart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { HandlingEnum } from '@app/types/recipient';
 import { IValidationSection } from '@app/types/validation';
 
 export enum Type {
@@ -10,11 +11,17 @@ export enum Type {
   KLAGE = 'KLAGE',
 }
 
+export const TYPE_TO_SAKSTYPE: Record<Type.KLAGE | Type.ANKE, SaksTypeEnum> = {
+  [Type.KLAGE]: SaksTypeEnum.KLAGE,
+  [Type.ANKE]: SaksTypeEnum.ANKE,
+};
+
 interface ICommonOverstyringer {
-  fristInWeeks: number; // Number of weeks
   fullmektig: IPart | null;
   klager: IPart | null;
   mottattKlageinstans: string | null; // LocalDate
+  behandlingstidUnits: number;
+  behandlingstidUnitType: BehandlingstidUnitType;
   avsender: IPart | null;
   ytelseId: string | null;
   hjemmelIdList: string[];
@@ -22,7 +29,7 @@ interface ICommonOverstyringer {
   oppgaveId: number | null;
 }
 
-interface IKlageOverstyringer extends ICommonOverstyringer {
+export interface IKlageOverstyringer extends ICommonOverstyringer {
   mottattVedtaksinstans: string | null; // LocalDate
 }
 
@@ -34,6 +41,8 @@ export interface IKlageStateUpdate {
 export interface IKlageState extends IKlageStateUpdate {
   mulighet: IKlagemulighet | null;
   overstyringer: IKlageOverstyringer;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
 }
 
 export type IAnkeOverstyringer = ICommonOverstyringer;
@@ -46,14 +55,25 @@ export interface Recipient {
 
 export interface Svarbrev {
   title: string;
-  receivers: Recipient[];
+  varsletBehandlingstidUnits: number | null;
+  varsletBehandlingstidUnitType: BehandlingstidUnitType | null;
+  customText: string | null;
   fullmektigFritekst: string | null;
+  receivers: Recipient[];
 }
 
-export interface ValidSvarbrev {
-  title: string;
-  receivers: Recipient[];
-  fullmektigFritekst: string | null;
+export interface IAnkeState extends IAnkeStateUpdate {
+  mulighet: IAnkeMulighet | null;
+  overstyringer: IAnkeOverstyringer;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
+}
+
+export interface IKlageStateUpdate {
+  mulighet?: IKlagemulighet | null;
+  overstyringer?: Partial<IKlageOverstyringer>;
+  sendSvarbrev?: boolean;
+  svarbrev?: Partial<Svarbrev>;
 }
 
 export interface IAnkeStateUpdate {
@@ -105,31 +125,42 @@ interface IAnkeContext extends IBaseContext<IAnkeStateUpdate, IAnkeState> {
 
 export type IAppContext = INoneContext | IKlageContext | IAnkeContext;
 
+export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
+
 export const INITIAL_KLAGE: IKlageState = {
   mulighet: null,
   overstyringer: {
     mottattVedtaksinstans: null,
     mottattKlageinstans: null,
+    behandlingstidUnits: 12,
+    behandlingstidUnitType: BehandlingstidUnitType.WEEKS,
     hjemmelIdList: [],
     ytelseId: null,
-    fristInWeeks: 12,
     fullmektig: null,
     klager: null,
     avsender: null,
     saksbehandlerIdent: null,
     oppgaveId: null,
   },
+  sendSvarbrev: true,
+  svarbrev: {
+    varsletBehandlingstidUnits: null,
+    varsletBehandlingstidUnitType: null,
+    fullmektigFritekst: null,
+    receivers: [],
+    title: DEFAULT_SVARBREV_NAME,
+    customText: null,
+  },
 };
-
-export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
 
 export const INITIAL_ANKE: IAnkeState = {
   mulighet: null,
   overstyringer: {
-    fristInWeeks: 12,
     fullmektig: null,
     klager: null,
     mottattKlageinstans: null,
+    behandlingstidUnits: 12,
+    behandlingstidUnitType: BehandlingstidUnitType.WEEKS,
     avsender: null,
     ytelseId: null,
     hjemmelIdList: [],
@@ -138,8 +169,11 @@ export const INITIAL_ANKE: IAnkeState = {
   },
   sendSvarbrev: true,
   svarbrev: {
+    varsletBehandlingstidUnits: null,
+    varsletBehandlingstidUnitType: null,
     fullmektigFritekst: null,
     receivers: [],
     title: DEFAULT_SVARBREV_NAME,
+    customText: null,
   },
 };

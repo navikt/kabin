@@ -1,9 +1,11 @@
 import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
+import { CalculateFristdatoParams } from '@app/types/calculate-frist';
 import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
+import { SvarbrevSettings } from '../types/svarbrev-settings';
 import { getStateFactory } from './state-factory';
 import { useSimpleApiState } from './use-simple-api-state';
 
@@ -102,22 +104,13 @@ const getPath = ({ type, id }: StatusParams) => {
   }
 };
 
-interface CalculateFristdatoParams {
-  fromDate: string; // LocalDate
-  fristInWeeks: number;
-}
-
 const calculateFristdatoState = getStateFactory<string, CalculateFristdatoParams>(
   `${KABIN_API_BASE_PATH}/calculatefrist`,
   { method: Method.POST, cacheTime: 300_000 },
 );
 
 export const useCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken) =>
-  useSimpleApiState(
-    params === skipToken
-      ? skipToken
-      : calculateFristdatoState({ path: '' }, { fromDate: params.fromDate, fristInWeeks: params.fristInWeeks }),
-  );
+  useSimpleApiState(params === skipToken ? skipToken : calculateFristdatoState({ path: '' }, { ...params }));
 
 interface ISaksbehandlereResponse {
   saksbehandlere: ISaksbehandler[];
@@ -141,7 +134,15 @@ const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE
 });
 
 export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
-  useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, JSON.stringify(params)));
+  useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, { ...params }));
+
+const svarbrevSettingsState = getStateFactory<SvarbrevSettings, string>(
+  `${KABAL_API_BASE_PATH}/svarbrev-settings/ytelser/`,
+  { method: Method.GET },
+);
+
+export const useSvarbrevSettings = (ytelseId: string | typeof skipToken) =>
+  useSimpleApiState(ytelseId === skipToken ? skipToken : svarbrevSettingsState({ path: ytelseId }));
 
 const getOppgaverState = getStateFactory<IOppgave[], IGetOppgaverParams>(`${KABIN_API_BASE_PATH}/searchoppgave`, {
   method: Method.POST,

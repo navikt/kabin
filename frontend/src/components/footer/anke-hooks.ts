@@ -1,23 +1,22 @@
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createAnke } from '@app/api/api';
-import { mulighetToVedtak } from '@app/components/footer/helpers';
+import { getSvarbrevInput, mulighetToVedtak } from '@app/components/footer/helpers';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
-import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
-import { DEFAULT_SVARBREV_NAME, IAnkeState, Recipient, Type, ValidSvarbrev } from '@app/pages/create/app-context/types';
+import { IAnkeState, Svarbrev, Type } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { IPart, skipToken } from '@app/types/common';
-import { ApiRecipient, CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
+import { skipToken } from '@app/types/common';
+import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (
   state: IAnkeState,
-  svarbrev: ValidSvarbrev | null,
+  svarbrev: Svarbrev | null,
   journalpostId: string,
 ): CreateAnkeApiPayload => {
   const { mulighet, overstyringer } = state;
@@ -25,7 +24,8 @@ const getAnkeApiPayload = (
   const {
     ytelseId,
     mottattKlageinstans,
-    fristInWeeks,
+    behandlingstidUnitType,
+    behandlingstidUnits,
     klager,
     fullmektig,
     avsender,
@@ -39,7 +39,8 @@ const getAnkeApiPayload = (
   return {
     vedtak,
     mottattKlageinstans,
-    fristInWeeks,
+    behandlingstidUnits,
+    behandlingstidUnitType,
     klager: nullablePartToPartId(klager),
     fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsender),
@@ -47,29 +48,10 @@ const getAnkeApiPayload = (
     ytelseId,
     hjemmelIdList,
     saksbehandlerIdent,
-    svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),
     oppgaveId,
+    svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),
   };
 };
-
-const getSvarbrevInput = (
-  svarbrev: ValidSvarbrev | null,
-  fullmektig: IPart | null,
-): CreateAnkeApiPayload['svarbrevInput'] => {
-  if (svarbrev === null) {
-    return null;
-  }
-
-  const { title, receivers, fullmektigFritekst } = svarbrev;
-
-  return {
-    title: defaultString(title, DEFAULT_SVARBREV_NAME),
-    fullmektigFritekst: defaultString(fullmektigFritekst, fullmektig?.name ?? null),
-    receivers: receivers.map(recipientToApiRecipient),
-  };
-};
-
-const recipientToApiRecipient = ({ part, ...rest }: Recipient): ApiRecipient => ({ id: part.id, ...rest });
 
 export const useCreateAnke = (
   setError: (error: IApiValidationResponse | IApiErrorReponse | IValidationSection | Error | undefined) => void,

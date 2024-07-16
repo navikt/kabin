@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
+import { EditFrist } from '@app/components/overstyringer/edit-frist';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';
 import {
   AvsenderIcon,
@@ -21,7 +22,6 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
-import { EditFrist } from './edit-frist';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
 import { PartRead } from './part-read/part-read';
@@ -61,7 +61,6 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
       </Header>
       <Content>
         <Ytelse />
-
         <Innsendingshjemmel />
       </Content>
       {overstyringer.ytelseId === null ? (
@@ -123,12 +122,12 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
 const Header = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 12px;
 `;
 
 const TopRow = styled.div`
-  display: grid;
-  column-gap: 8px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
+  column-gap: 16px;
 `;
 
 const Content = styled.div`

@@ -2,20 +2,33 @@ import { TextField } from '@navikt/ds-react';
 import React, { useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
+import { EditVarsletFrist } from '@app/components/svarbrev/edit-varslet-frist';
 import { Preview } from '@app/components/svarbrev/preview/preview';
 import { Receipients } from '@app/components/svarbrev/recipients';
 import { PartRecipient } from '@app/components/svarbrev/types';
 import { defaultString } from '@app/functions/empty-string';
-import { DEFAULT_SVARBREV_NAME, IAnkeOverstyringer, IAnkeState, Svarbrev } from '@app/pages/create/app-context/types';
-import { IAnkeMulighet } from '@app/types/mulighet';
+import {
+  DEFAULT_SVARBREV_NAME,
+  IAnkeOverstyringer,
+  IAnkeState,
+  IAnkeStateUpdate,
+  IKlageOverstyringer,
+  IKlageState,
+  IKlageStateUpdate,
+  Svarbrev,
+  UpdateFn,
+} from '@app/pages/create/app-context/types';
+import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { SvarbrevSetting } from '@app/types/svarbrev-settings';
 
 interface Props {
-  mulighet: IAnkeMulighet;
-  overstyringer: IAnkeOverstyringer;
+  mulighet: IAnkeMulighet | IKlagemulighet;
+  overstyringer: IAnkeOverstyringer | IKlageOverstyringer;
   svarbrev: Svarbrev;
   journalpostId: string;
   suggestedRecipients: PartRecipient[];
-  updateState: (state: Partial<IAnkeState>) => void;
+  updateState: UpdateFn<IKlageStateUpdate, IKlageState> | UpdateFn<IAnkeStateUpdate, IAnkeState>;
+  setting: SvarbrevSetting;
 }
 
 export const InternalSvarbrevInput = ({
@@ -25,6 +38,7 @@ export const InternalSvarbrevInput = ({
   journalpostId,
   suggestedRecipients,
   updateState,
+  setting,
 }: Props) => {
   const updateSvarbrev = useCallback(
     (update: Partial<Svarbrev>) => updateState({ svarbrev: { ...svarbrev, ...update } }),
@@ -51,6 +65,7 @@ export const InternalSvarbrevInput = ({
             onBlur={({ target }) => updateSvarbrev({ title: defaultString(target.value, DEFAULT_SVARBREV_NAME) })}
             onChange={({ target }) => updateSvarbrev({ title: target.value })}
           />
+
           <StyledTextField
             label="Navn på fullmektig i brevet"
             htmlSize={45}
@@ -66,6 +81,9 @@ export const InternalSvarbrevInput = ({
             autoComplete="off"
           />
         </Row>
+
+        <EditVarsletFrist setting={setting} onChange={(s) => updateState({ svarbrev: s })} />
+
         <Content>
           <Receipients
             recipients={svarbrev.receivers}
@@ -74,6 +92,7 @@ export const InternalSvarbrevInput = ({
           />
         </Content>
       </Card>
+
       <Card title="Forhåndsvisning av svarbrev">
         <Preview mulighet={mulighet} overstyringer={overstyringer} svarbrev={svarbrev} journalpostId={journalpostId} />
       </Card>
