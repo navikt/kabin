@@ -7,44 +7,44 @@ import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, partToPartId } from '@app/domain/converters';
 import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
-import { getValidSvarbrev } from '@app/pages/create/app-context/helpers';
 import {
   DEFAULT_SVARBREV_NAME,
   IAnkeOverstyringer,
   Recipient,
+  Svarbrev,
   Type,
-  ValidSvarbrev,
 } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
-import { ApiRecipient, CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
+import { SaksTypeEnum, skipToken } from '@app/types/common';
+import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
 import { IAnkeMulighet } from '@app/types/mulighet';
+import { ApiRecipient } from '@app/types/recipient';
 import { IApiValidationResponse, IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (
   mulighet: IAnkeMulighet,
   overstyringer: IAnkeOverstyringer,
-  svarbrev: ValidSvarbrev,
+  svarbrev: Svarbrev,
   journalpostId: string,
 ): CreateAnkeApiPayload => {
   const { id, sourceId, sakenGjelder } = mulighet;
+  const { mottattKlageinstans, klager, fullmektig, avsender, saksbehandlerIdent, ytelseId, hjemmelIdList } =
+    overstyringer;
   const {
-    mottattKlageinstans,
-    fristInWeeks,
-    klager,
-    fullmektig,
-    avsender,
-    saksbehandlerIdent,
-    ytelseId,
-    hjemmelIdList,
-  } = overstyringer;
-  const { title, enhetId, fullmektigFritekst, receivers } = svarbrev;
+    title,
+    varsletBehandlingstidUnits,
+    varsletBehandlingstidUnitType,
+    customText,
+    fullmektigFritekst,
+    receivers,
+  } = svarbrev;
 
   return {
     id,
     mottattKlageinstans,
-    fristInWeeks,
+    varsletBehandlingstidUnits,
+    varsletBehandlingstidUnitType,
     sakenGjelder: {
       id: sakenGjelder.id,
       type: sakenGjelder.type,
@@ -58,10 +58,17 @@ const getAnkeApiPayload = (
     saksbehandlerIdent,
     sourceId,
     svarbrevInput: {
+      varsletBehandlingstidUnits,
+      varsletBehandlingstidUnitType,
       title: defaultString(title, DEFAULT_SVARBREV_NAME),
-      enhetId,
       fullmektigFritekst: defaultString(fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
       receivers: receivers.map(recipientToApiRecipient),
+      typeId: SaksTypeEnum.ANKE,
+      customText,
+      klager: klager?.id ?? null,
+      sakenGjelder: sakenGjelder.id,
+      mottattKlageinstans,
+      ytelseId,
     },
   };
 };
@@ -97,23 +104,6 @@ export const useCreateAnke = (
 
         setErrors((e) => (e === null ? [saksdataSection] : [...e, saksdataSection]));
         setError(new Error('Mulighet er ikke satt.'));
-
-        return;
-      }
-
-      if (!getValidSvarbrev(svarbrev)) {
-        const svarbrevSection: IValidationSection = {
-          properties: [
-            {
-              reason: 'Enhet for svarbrev er ikke satt.',
-              field: ValidationFieldNames.ENHET,
-            },
-          ],
-          section: SectionNames.SVARBREV,
-        };
-
-        setErrors((e) => (e === null ? [svarbrevSection] : [...e, svarbrevSection]));
-        setError(new Error('Enhet for svarbrev er ikke satt.'));
 
         return;
       }

@@ -6,7 +6,7 @@ import { Address } from '@app/components/svarbrev/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { Recipient } from '@app/pages/create/app-context/types';
 import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { HandlingEnum } from '@app/types/recipient';
 
 interface Props extends Recipient {
   onChange: (recipient: Recipient) => void;

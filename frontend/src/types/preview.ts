@@ -1,11 +1,11 @@
-import { IPartId } from '@app/types/common';
+import { Type } from '@app/pages/create/app-context/types';
 import { SvarbrevPreviewInput } from '@app/types/create';
 
 export interface PreviewPdfPayload {
   mottattKlageinstans: string;
-  fristInWeeks: number;
-  sakenGjelder: IPartId;
-  klager: IPartId | null;
+  sakenGjelder: string | null;
   ytelseId: string;
-  svarbrevInput: SvarbrevPreviewInput;
+  svarbrev: SvarbrevPreviewInput;
+  klager: string | null;
+  typeId: Type.KLAGE | Type.ANKE;
 }

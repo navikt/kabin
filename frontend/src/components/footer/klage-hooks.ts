@@ -17,18 +17,20 @@ const getKlageApiPayload = (state: IKlageState, journalpostId: string): CreateKl
   const {
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
     klager,
     fullmektig,
     avsender: avsenderMottaker,
     saksbehandlerIdent,
   } = state.overstyringer;
 
+  const { varsletBehandlingstidUnits, varsletBehandlingstidUnitType } = state.svarbrev;
+
   return {
     id: state.mulighet === null ? null : state.mulighet.behandlingId,
     mottattKlageinstans,
     mottattVedtaksinstans,
-    fristInWeeks,
+    varsletBehandlingstidUnits,
+    varsletBehandlingstidUnitType,
     klager: partToPartId(klager),
     fullmektig: partToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsenderMottaker),

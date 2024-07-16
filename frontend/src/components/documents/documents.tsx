@@ -22,6 +22,15 @@ export const Dokumenter = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const error = useValidationError(ValidationFieldNames.JOURNALPOST_ID);
 
+  // TODO: remove
+  useEffect(() => {
+    if (dokumenter === undefined || journalpost !== null) {
+      return;
+    }
+
+    setJournalpost(dokumenter.dokumenter[0] ?? null);
+  }, [dokumenter, journalpost, setJournalpost]);
+
   useEffect(() => {
     if (dokumenter === undefined) {
       setIsExpanded(true);

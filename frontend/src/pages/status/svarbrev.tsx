@@ -11,7 +11,7 @@ import { InfoItem } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { IdType, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { HandlingEnum } from '@app/types/recipient';
 import { SvarbrevStatus } from '@app/types/status';
 
 interface Props {

@@ -3,7 +3,7 @@ import { PartRecipient } from '@app/components/svarbrev/types';
 import { isNotNull } from '@app/functions/is-not';
 import { IAnkeState, Recipient } from '@app/pages/create/app-context/types';
 import { IPart } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { HandlingEnum } from '@app/types/recipient';
 
 export const getSuggestedBrevmottakere = (state: IAnkeState): PartRecipient[] => {
   if (state.mulighet === null) {

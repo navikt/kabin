@@ -16,7 +16,7 @@ export interface IPersonSearch {
 
 export const usePersonSearch = (): IPersonSearch => {
   const [rawSearch, setRawSearch] = useState<string>('');
-  const [search, setSearch] = useState<string | typeof skipToken>('');
+  const [search, setSearch] = useState<string | typeof skipToken>('25056321171'); // TODO: remove
   const [isValid, setIsValid] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 

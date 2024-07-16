@@ -140,7 +140,7 @@ const useApiContext = <P extends IKlageStateUpdate | IAnkeStateUpdate, S extends
       }
 
       if (isAnkeUpdate(update) && isAnkeState(state)) {
-        if (update.sendSvarbrev === false || update.svarbrev?.enhetId !== state.svarbrev.enhetId) {
+        if (update.sendSvarbrev === false) {
           setErrors(errors === null ? null : errors.filter((e) => e.section !== SectionNames.SVARBREV));
         }
 

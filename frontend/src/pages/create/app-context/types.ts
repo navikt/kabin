@@ -1,7 +1,8 @@
-import { IAddress, IPart, skipToken } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { IAddress, IPart, SaksTypeEnum, skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { HandlingEnum } from '@app/types/recipient';
 import { IValidationSection } from '@app/types/validation';
 
 export enum Type {
@@ -10,8 +11,12 @@ export enum Type {
   KLAGE = 'KLAGE',
 }
 
+export const TYPE_TO_SAKSTYPE: Record<Type.KLAGE | Type.ANKE, SaksTypeEnum> = {
+  [Type.KLAGE]: SaksTypeEnum.KLAGE,
+  [Type.ANKE]: SaksTypeEnum.ANKE,
+};
+
 interface ICommonOverstyringer {
-  fristInWeeks: number; // Number of weeks
   fullmektig: IPart | null;
   klager: IPart | null;
   mottattKlageinstans: string | null; // LocalDate
@@ -21,13 +26,15 @@ interface ICommonOverstyringer {
   saksbehandlerIdent: string | null;
 }
 
-interface IKlageOverstyringer extends ICommonOverstyringer {
+export interface IKlageOverstyringer extends ICommonOverstyringer {
   mottattVedtaksinstans: string | null; // LocalDate
 }
 
 export interface IKlageState extends IKlageStateUpdate {
   mulighet: IKlagemulighet | null;
   overstyringer: IKlageOverstyringer;
+  sendSvarbrev: boolean;
+  svarbrev: Svarbrev;
 }
 
 export type IAnkeOverstyringer = ICommonOverstyringer;
@@ -40,16 +47,11 @@ export interface Recipient {
 
 export interface Svarbrev {
   title: string;
-  receivers: Recipient[];
-  enhetId: string | null;
+  varsletBehandlingstidUnits: number | null;
+  varsletBehandlingstidUnitType: BehandlingstidUnitType | null;
+  customText: string | null;
   fullmektigFritekst: string | null;
-}
-
-export interface ValidSvarbrev {
-  title: string;
   receivers: Recipient[];
-  enhetId: string;
-  fullmektigFritekst: string | null;
 }
 
 export interface IAnkeState extends IAnkeStateUpdate {
@@ -62,6 +64,8 @@ export interface IAnkeState extends IAnkeStateUpdate {
 export interface IKlageStateUpdate {
   mulighet?: IKlagemulighet | null;
   overstyringer?: Partial<IKlageOverstyringer>;
+  sendSvarbrev?: boolean;
+  svarbrev?: Partial<Svarbrev>;
 }
 
 export interface IAnkeStateUpdate {
@@ -106,6 +110,8 @@ interface IAnkeContext extends IBaseContext<IAnkeStateUpdate, IAnkeState> {
 
 export type IAppContext = INoneContext | IKlageContext | IAnkeContext;
 
+export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
+
 export const INITIAL_KLAGE: IKlageState = {
   mulighet: null,
   overstyringer: {
@@ -113,20 +119,25 @@ export const INITIAL_KLAGE: IKlageState = {
     mottattKlageinstans: null,
     hjemmelIdList: [],
     ytelseId: null,
-    fristInWeeks: 12,
     fullmektig: null,
     klager: null,
     avsender: null,
     saksbehandlerIdent: null,
   },
+  sendSvarbrev: true,
+  svarbrev: {
+    varsletBehandlingstidUnits: null,
+    varsletBehandlingstidUnitType: null,
+    fullmektigFritekst: null,
+    receivers: [],
+    title: DEFAULT_SVARBREV_NAME,
+    customText: null,
+  },
 };
-
-export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
 
 export const INITIAL_ANKE: IAnkeState = {
   mulighet: null,
   overstyringer: {
-    fristInWeeks: 12,
     fullmektig: null,
     klager: null,
     mottattKlageinstans: null,
@@ -137,9 +148,11 @@ export const INITIAL_ANKE: IAnkeState = {
   },
   sendSvarbrev: true,
   svarbrev: {
-    enhetId: null,
+    varsletBehandlingstidUnits: null,
+    varsletBehandlingstidUnitType: null,
     fullmektigFritekst: null,
     receivers: [],
     title: DEFAULT_SVARBREV_NAME,
+    customText: null,
   },
 };

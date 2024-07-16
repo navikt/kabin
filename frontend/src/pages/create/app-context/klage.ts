@@ -1,5 +1,5 @@
 import { cleanObject, muligheterAreEqual } from '@app/pages/create/app-context/helpers';
-import { IKlageState, IKlageStateUpdate, State } from './types';
+import { IKlageState, IKlageStateUpdate, State, Svarbrev } from './types';
 
 export const getUpdatedKlageState = (
   state: IKlageState,
@@ -49,5 +49,18 @@ export const getUpdatedKlageState = (
           hjemmelIdList: hjemmelIdList ?? state.overstyringer.hjemmelIdList,
           saksbehandlerIdent: ytelseIsDifferent ? null : saksbehandlerIdent,
         },
+    sendSvarbrev: update.sendSvarbrev ?? state.sendSvarbrev,
+    svarbrev: getSvarbrev(state.svarbrev, update.svarbrev),
+  };
+};
+
+const getSvarbrev = (state: Svarbrev, update: Partial<Svarbrev> | undefined): Svarbrev => {
+  if (update === undefined) {
+    return state;
+  }
+
+  return {
+    ...state,
+    ...update,
   };
 };

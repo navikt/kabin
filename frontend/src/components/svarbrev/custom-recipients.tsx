@@ -10,7 +10,7 @@ import { EditPart } from '@app/components/svarbrev/part/edit-part';
 import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svarbrev/styled-components';
 import { Recipient } from '@app/pages/create/app-context/types';
 import { IdType } from '@app/types/common';
-import { HandlingEnum } from '@app/types/create';
+import { HandlingEnum } from '@app/types/recipient';
 
 interface Props {
   mottakerList: Recipient[];

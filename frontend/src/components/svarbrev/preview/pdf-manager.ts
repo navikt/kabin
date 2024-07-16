@@ -1,10 +1,10 @@
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
-import { PreviewPdfPayload } from '@app/types/preview';
+import { SvarbrevPreviewInput } from '@app/types/create';
 
 class PdfManager {
   private cache: Map<string, PdfLoader> = new Map();
 
-  public load(params: PreviewPdfPayload): PdfLoader {
+  public load(params: SvarbrevPreviewInput): PdfLoader {
     const cachKey = createCacheKey(params);
     const existing = this.cache.get(cachKey);
 
@@ -33,6 +33,6 @@ class PdfManager {
   }
 }
 
-const createCacheKey = (params: PreviewPdfPayload) => JSON.stringify(params);
+const createCacheKey = (params: SvarbrevPreviewInput) => JSON.stringify(params);
 
 export const PDF_MANAGER = new PdfManager();
