@@ -64,7 +64,7 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
   const ytelseId: string | null =
-    (type === Type.ANKE ? overstyringer.ytelseId ?? state.mulighet?.ytelseId : overstyringer.ytelseId) ?? null;
+    (type === Type.ANKE ? (overstyringer.ytelseId ?? state.mulighet?.ytelseId) : overstyringer.ytelseId) ?? null;
 
   const settings = getSvarbrevSettings(svarbrevSettings, type);
 

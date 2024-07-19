@@ -22,7 +22,9 @@ export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, fagsystemI
       <Part title="Saken gjelder" part={sakenGjelder} />
 
       <InfoItem label="Vedtaksdato">
-        {vedtakDate === null ? 'Ukjent' : isoDateToPretty(vedtakDate) ?? isoDateTimeToPretty(vedtakDate) ?? vedtakDate}
+        {vedtakDate === null
+          ? 'Ukjent'
+          : (isoDateToPretty(vedtakDate) ?? isoDateTimeToPretty(vedtakDate) ?? vedtakDate)}
       </InfoItem>
 
       <InfoItem label="Ytelse">

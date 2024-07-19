@@ -1,7 +1,7 @@
-import { ENVIRONMENT } from '@app/environment';
 import { CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { CopyButton, Dropdown } from '@navikt/ds-react';
 import { css, styled } from 'styled-components';
+import { ENVIRONMENT } from '@app/environment';
 
 export const UserDropdown = (): JSX.Element | null => {
   const { version } = ENVIRONMENT;
