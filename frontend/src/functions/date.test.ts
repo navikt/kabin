@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'bun:test';
 import { isDateAfter, isDateAfterOrEqual, isDateBefore, isDateBeforeOrEqual, isDateEqual } from './date';
 
 describe('isDate', () => {

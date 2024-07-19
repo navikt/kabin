@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'bun:test';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
 import { fuzzySearch } from './fuzzy-search';
 
