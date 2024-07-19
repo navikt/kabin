@@ -18,21 +18,20 @@ interface EditPartProps {
 
 export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
   const { state } = useContext(AppContext);
-  const [rawValue, setValue] = useState('');
+  const [rawValue, setRawValue] = useState('');
   const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching, isFetching, isError }] = useSearchPartWithUtsendingslkanal();
+  const [search, { data, isLoading: isSearching, isFetching, isError, reset }] = useSearchPartWithUtsendingslkanal();
+
+  const sakenGjelderId = state?.mulighet?.sakenGjelder.id;
+  const ytelseId = state?.mulighet?.temaId;
 
   const onClick = () => {
     const [value, inputError] = cleanAndValidate(rawValue);
 
     setError(inputError);
 
-    if (inputError === undefined && state !== null && state.mulighet !== null) {
-      search({
-        identifikator: value,
-        sakenGjelderId: state.mulighet.sakenGjelder.id,
-        ytelseId: state.mulighet.temaId,
-      });
+    if (inputError === undefined && sakenGjelderId !== undefined && ytelseId !== undefined) {
+      search({ identifikator: value, sakenGjelderId, ytelseId });
     }
   };
 
@@ -43,7 +42,7 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
       }
 
       onChange(data);
-      setValue('');
+      setRawValue('');
 
       return;
     }
@@ -54,17 +53,22 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
   };
 
   useEffect(() => {
-    const [value, inputError] = cleanAndValidate(rawValue);
-    setError(undefined);
+    const timeout = setTimeout(() => {
+      const [value, inputError] = cleanAndValidate(rawValue);
 
-    if (inputError === undefined && state !== null && state.mulighet !== null) {
-      search({
-        identifikator: value,
-        sakenGjelderId: state.mulighet.sakenGjelder.id,
-        ytelseId: state.mulighet.temaId,
-      });
-    }
-  }, [state, rawValue, search]);
+      setError(undefined);
+
+      if (inputError !== undefined) {
+        return reset();
+      }
+
+      if (sakenGjelderId !== undefined && ytelseId !== undefined) {
+        search({ identifikator: value, sakenGjelderId, ytelseId });
+      }
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [rawValue, search, sakenGjelderId, ytelseId, reset]);
 
   return (
     <StyledEditPart id={id}>
@@ -72,12 +76,12 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
         label="Søk"
         size="small"
         value={rawValue}
-        onChange={setValue}
+        onChange={setRawValue}
         error={error}
         onKeyDown={onKeyDown}
         autoFocus={autoFocus}
         autoComplete="off"
-        htmlSize={20}
+        htmlSize={63}
       >
         <Search.Button onClick={onClick} loading={isSearching || isFetching} />
       </Search>
@@ -85,7 +89,7 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
         part={data}
         search={rawValue}
         onChange={(p) => {
-          setValue('');
+          setRawValue('');
           onChange(p);
         }}
         isLoading={isLoading}
@@ -133,10 +137,20 @@ interface SearchPartWithUtsendingskanalParams {
   ytelseId: string;
 }
 
-const useSearchPartWithUtsendingslkanal = () => {
+type SearchResult = [
+  (params: SearchPartWithUtsendingskanalParams) => Promise<void>,
+  { data: IPart | undefined; isLoading: boolean; isFetching: boolean; isError: boolean; reset: () => void },
+];
+
+const useSearchPartWithUtsendingslkanal = (): SearchResult => {
   const [data, setData] = useState<IPart | undefined>();
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const reset = useCallback(() => {
+    setData(undefined);
+    setError(null);
+  }, []);
 
   const search = useCallback(async (params: SearchPartWithUtsendingskanalParams) => {
     setIsFetching(true);
@@ -171,5 +185,5 @@ const useSearchPartWithUtsendingslkanal = () => {
     }
   }, []);
 
-  return [search, { data, isLoading: isFetching && data === undefined, isFetching, isError: error !== null }] as const;
+  return [search, { data, isLoading: isFetching && data === undefined, isFetching, isError: error !== null, reset }];
 };
