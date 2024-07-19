@@ -1,4 +1,3 @@
-import React from 'react';
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
 import { useAddLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/use-logiske-vedlegg';
 import { LogiskVedlegg } from '@app/types/dokument';

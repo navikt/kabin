@@ -1,4 +1,3 @@
-import React from 'react';
 import { EditButton } from '@app/components/overstyringer/common/edit-button';
 import { RemovePartButton } from '@app/components/overstyringer/part-read/remove-part';
 import { ResetPartButton } from '@app/components/overstyringer/part-read/reset-part';

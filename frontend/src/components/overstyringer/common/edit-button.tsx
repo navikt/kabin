@@ -1,6 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 
 interface EditButtonProps {
   enterEditMode?: () => void;

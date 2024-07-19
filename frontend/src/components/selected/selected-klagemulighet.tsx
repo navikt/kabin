@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';

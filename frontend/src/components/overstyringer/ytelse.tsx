@@ -1,5 +1,5 @@
 import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useYtelseName } from '@app/hooks/kodeverk';
 import { usePrevious } from '@app/hooks/use-previous';

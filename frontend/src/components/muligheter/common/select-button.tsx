@@ -1,6 +1,5 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 
 interface Props {

@@ -1,6 +1,6 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { CardSmall } from '@app/components/card/card';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';

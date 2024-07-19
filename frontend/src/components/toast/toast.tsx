@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { keyframes, styled } from 'styled-components';
 import {
   CheckmarkCircleFillIconColored,

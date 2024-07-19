@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { CustomRecipients } from '@app/components/svarbrev/custom-recipients';
 import { SingleRecipient } from '@app/components/svarbrev/single-recipient';
 import { SuggestedRecipients } from '@app/components/svarbrev/suggested-recipients';

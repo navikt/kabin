@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { EditVarsletFrist } from '@app/components/svarbrev/edit-varslet-frist';

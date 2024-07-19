@@ -1,6 +1,6 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
-import React, { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { editTitle } from '@app/api/api';
 import { isApiError } from '@app/components/footer/error-type-guard';

@@ -1,5 +1,5 @@
 import { Alert, BodyLong, Table } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';

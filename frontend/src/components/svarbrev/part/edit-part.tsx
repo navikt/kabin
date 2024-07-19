@@ -1,5 +1,5 @@
 import { Search, Tag } from '@navikt/ds-react';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
 import { AppContext } from '@app/pages/create/app-context/app-context';

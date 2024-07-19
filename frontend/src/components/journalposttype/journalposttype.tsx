@@ -1,5 +1,4 @@
 import { Tag, TagProps } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { JournalposttypeEnum } from '@app/types/dokument';
 

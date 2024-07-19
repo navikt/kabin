@@ -1,5 +1,4 @@
 import { CopyButton, CopyButtonProps } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { formatId } from '@app/functions/format-id';
 

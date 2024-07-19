@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentViewer } from '@app/components/document-viewer/document-viewer';
 import { Dokumenter } from '@app/components/documents/documents';

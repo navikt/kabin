@@ -1,5 +1,5 @@
 import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';

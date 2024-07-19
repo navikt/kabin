@@ -1,6 +1,6 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, ToggleGroup } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';

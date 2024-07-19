@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { IApiErrorReponse, isApiError, isValidationSection } from '@app/components/footer/error-type-guard';
 import { IApiValidationResponse, IValidationSection } from '@app/types/validation';

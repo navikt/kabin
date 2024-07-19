@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { formatAvsenderMottaker } from '../avsender-mottaker';

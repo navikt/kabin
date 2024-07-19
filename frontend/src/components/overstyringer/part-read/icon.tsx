@@ -1,5 +1,4 @@
 import { Buldings2Icon, PersonIcon, QuestionmarkIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { AvsenderMottakerType, IdType } from '@app/types/common';
 
 interface Props {

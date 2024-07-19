@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { FullmektigIcon, KlagerIcon, SakenGjelderIcon, StyledAvsenderIcon } from '@app/components/overstyringer/icons';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { AppContext } from '@app/pages/create/app-context/app-context';

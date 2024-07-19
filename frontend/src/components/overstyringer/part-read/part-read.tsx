@@ -1,5 +1,4 @@
 import { Heading } from '@navikt/ds-react';
-import React from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { Icon } from '@app/components/overstyringer/part-read/icon';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';

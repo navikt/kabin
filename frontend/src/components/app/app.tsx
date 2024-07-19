@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticDataLoader } from '@app/components/app/static-data-context';
 import { NavHeader } from '@app/components/header/header';
@@ -7,7 +7,7 @@ import { GlobalStyles } from './global-styles';
 import { Router } from './router';
 
 export const App = () => (
-  <React.StrictMode>
+  <StrictMode>
     <BrowserRouter>
       <StaticDataLoader>
         <GlobalStyles />
@@ -16,5 +16,5 @@ export const App = () => (
         <Toasts />
       </StaticDataLoader>
     </BrowserRouter>
-  </React.StrictMode>
+  </StrictMode>
 );

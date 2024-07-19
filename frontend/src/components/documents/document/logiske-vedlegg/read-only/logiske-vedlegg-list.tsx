@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReadOnlyLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logisk-vedlegg';
 import {
   LogiskeVedleggList,

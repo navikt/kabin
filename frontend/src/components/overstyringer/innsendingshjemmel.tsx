@@ -1,5 +1,5 @@
 import { Alert, Label, Tag, TagProps } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useHjemmelName } from '@app/hooks/kodeverk';

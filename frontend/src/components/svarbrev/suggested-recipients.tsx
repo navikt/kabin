@@ -1,6 +1,6 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Checkbox, CheckboxGroup, Tooltip } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { StyledRecipient } from '@app/components/svarbrev/address/layout';
 import { Options } from '@app/components/svarbrev/options';

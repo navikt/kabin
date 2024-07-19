@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PartRead, PartReadProps } from './part-read/part-read';
 import { PartWrite, PartWriteProps } from './part-write';
 

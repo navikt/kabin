@@ -1,5 +1,5 @@
 import { ToggleGroup } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Fritekst } from '@app/components/edit-frist/fritekst';
 import { Container, TopRow } from '@app/components/edit-frist/styled-components';
 import { UnitType } from '@app/components/edit-frist/unit-type';

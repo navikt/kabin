@@ -1,6 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 
 interface ExpandButtonProps {

@@ -1,5 +1,5 @@
 import { Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditTag } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/styled-components';
 import { Suggestions } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/suggestions-dropdown';

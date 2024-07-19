@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';

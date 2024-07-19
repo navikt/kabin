@@ -1,5 +1,4 @@
 import { Skeleton, Table } from '@navikt/ds-react';
-import React from 'react';
 import { Card } from '@app/components/card/card';
 import { Header } from './header';
 import { TableHeaders } from './table-headers';

@@ -1,6 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Select } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { StyledSaksbehandlerIcon } from '@app/components/overstyringer/icons';
 import {

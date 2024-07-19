@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
