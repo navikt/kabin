@@ -71,9 +71,9 @@ export const EditVarsletFrist = ({ setting, onChange }: Props) => {
           <ToggleGroup.Item value={OVERSTYR} label="Overstyr" />
         </ToggleGroup>
 
-        <Units label="Frist i svarbrev" disabled={disabled} value={units} onChange={setUnits} />
+        <Units label="Antall" disabled={disabled} value={units} onChange={setUnits} />
 
-        <UnitType label="Frist i svarbrev" disabled={disabled} value={unitType} onChange={setUnitType} />
+        <UnitType disabled={disabled} value={unitType} onChange={setUnitType} />
 
         <Fritekst disabled={disabled} value={fritekst} onChange={setFritekst} />
       </TopRow>

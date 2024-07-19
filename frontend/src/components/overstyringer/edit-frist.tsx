@@ -1,3 +1,4 @@
+import { Heading, Label } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
@@ -46,10 +47,14 @@ const LoadedEditFrist = ({ updateState }: LoadedEditFristProps) => {
 
   return (
     <Container>
-      <Row>
-        <Units label="Frist i Kabal" value={units} onChange={setUnits} />
+      <Label as={Heading} size="small">
+        Frist i Kabal
+      </Label>
 
-        <UnitType label="Frist i Kabal" value={unitType} onChange={setUnitType} />
+      <Row>
+        <Units label="Antall" value={units} onChange={setUnits} />
+
+        <UnitType value={unitType} onChange={setUnitType} />
 
         <Fristdato units={units} unitType={unitType} />
       </Row>
@@ -57,16 +62,16 @@ const LoadedEditFrist = ({ updateState }: LoadedEditFristProps) => {
   );
 };
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 8px;
   padding-left: 16px;
   border-left: var(--a-border-subtle) solid 1px;
 `;
 
 const Row = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   column-gap: 16px;
 `;

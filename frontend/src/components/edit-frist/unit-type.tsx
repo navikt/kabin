@@ -11,11 +11,10 @@ import {
 interface Props {
   value: BehandlingstidUnitType;
   onChange: (value: BehandlingstidUnitType) => void;
-  label: string;
   disabled?: boolean;
 }
 
-export const UnitType = ({ disabled = false, value, onChange, label }: Props) => (
+export const UnitType = ({ disabled = false, value, onChange }: Props) => (
   <StyledToggleGroup
     value={value}
     onChange={(v) => {
@@ -28,7 +27,6 @@ export const UnitType = ({ disabled = false, value, onChange, label }: Props) =>
     $disabled={disabled}
     aria-disabled={disabled}
     aria-readonly={disabled}
-    label={label}
   >
     {BEHANDLINGSTID_UNIT_TYPES.map((t) => (
       <ToggleButton
