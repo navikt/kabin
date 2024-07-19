@@ -1,6 +1,6 @@
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tooltip } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { AppContext } from '@app/pages/create/app-context/app-context';

@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ValidationFieldNames } from '@app/types/validation';

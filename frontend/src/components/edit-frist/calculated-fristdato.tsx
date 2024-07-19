@@ -1,6 +1,6 @@
 import { CalculatorIcon } from '@navikt/aksel-icons';
 import { BodyShort, Loader, Tooltip } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { AppContext } from '@app/pages/create/app-context/app-context';

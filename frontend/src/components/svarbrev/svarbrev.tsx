@@ -1,6 +1,6 @@
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';

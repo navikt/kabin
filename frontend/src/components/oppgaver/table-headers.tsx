@@ -1,5 +1,4 @@
 import { Table } from '@navikt/ds-react';
-import React from 'react';
 
 export const TableHeaders = () => (
   <Table.Header>

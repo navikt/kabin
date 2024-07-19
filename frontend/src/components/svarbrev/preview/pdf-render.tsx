@@ -1,5 +1,5 @@
 import { Alert, BodyShort } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ResponseError } from '@app/components/svarbrev/preview/create-url';
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';

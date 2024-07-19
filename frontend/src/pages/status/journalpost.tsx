@@ -1,5 +1,4 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';

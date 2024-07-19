@@ -1,6 +1,6 @@
 import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
 import {

@@ -1,6 +1,6 @@
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import React, { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';

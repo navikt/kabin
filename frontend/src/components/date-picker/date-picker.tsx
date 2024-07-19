@@ -1,6 +1,6 @@
 import { DateInputProps, DatePicker } from '@navikt/ds-react';
 import { format } from 'date-fns';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { prettyDateToISO } from '@app/domain/date';
 import { FORMAT, PRETTY_FORMAT } from '@app/domain/date-formats';
 import { parseUserInput } from './parse-user-input';

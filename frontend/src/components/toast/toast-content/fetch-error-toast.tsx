@@ -1,5 +1,4 @@
 import { Detail, Label } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { toast } from '../store';
 import { ToastType } from '../types';

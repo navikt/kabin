@@ -1,5 +1,4 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
 import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
 import { useYtelseName } from '@app/hooks/kodeverk';
 import { InfoItem, Part, Sak } from '@app/pages/status/common-components';

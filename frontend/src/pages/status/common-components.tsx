@@ -1,6 +1,5 @@
 import { ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';

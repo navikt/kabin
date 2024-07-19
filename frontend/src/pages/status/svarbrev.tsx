@@ -1,6 +1,5 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Label, Tag, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';

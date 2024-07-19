@@ -1,6 +1,5 @@
 import { GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useViewDocument } from './use-view-document';
 

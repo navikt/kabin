@@ -1,5 +1,5 @@
 import { Heading, Label } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { UnitType } from '@app/components/edit-frist/unit-type';

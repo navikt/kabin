@@ -1,6 +1,6 @@
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HelpText } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';

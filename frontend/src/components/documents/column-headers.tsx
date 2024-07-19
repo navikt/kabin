@@ -1,6 +1,6 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';

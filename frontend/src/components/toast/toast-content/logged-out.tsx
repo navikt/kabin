@@ -1,5 +1,4 @@
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
-import React from 'react';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
 

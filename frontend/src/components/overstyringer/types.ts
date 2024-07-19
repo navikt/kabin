@@ -1,4 +1,3 @@
-import React from 'react';
 import { IPart } from '@app/types/common';
 
 export enum FieldNames {

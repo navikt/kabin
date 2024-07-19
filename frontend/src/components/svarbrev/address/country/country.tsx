@@ -1,6 +1,6 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { CountryOption } from '@app/components/svarbrev/address/country/option';

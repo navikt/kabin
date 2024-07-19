@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines */
 import { format } from 'date-fns';
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { FORMAT } from '@app/domain/date-formats';
 import { compareMuligheter } from '@app/domain/mulighet';
 import { isNotNullNorUndefined } from '@app/functions/is-not';

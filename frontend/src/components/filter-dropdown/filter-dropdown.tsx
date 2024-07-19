@@ -1,5 +1,5 @@
 import { Label } from '@navikt/ds-react';
-import React, { useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

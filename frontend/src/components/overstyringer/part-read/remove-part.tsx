@@ -1,5 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps } from '@app/components/overstyringer/types';
 import { AppContext } from '@app/pages/create/app-context/app-context';

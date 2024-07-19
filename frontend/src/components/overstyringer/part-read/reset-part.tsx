@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { avsenderIsPart } from '@app/domain/converters';

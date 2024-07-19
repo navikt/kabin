@@ -1,5 +1,4 @@
 import { InternalHeader } from '@navikt/ds-react';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';

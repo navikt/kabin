@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';

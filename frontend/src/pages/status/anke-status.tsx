@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusHeading } from '@app/pages/status/common-components';
 import { StatusDetails } from '@app/pages/status/details';

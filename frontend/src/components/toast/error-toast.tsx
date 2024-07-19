@@ -1,4 +1,3 @@
-import React from 'react';
 import { isApiError } from '@app/components/footer/error-type-guard';
 import { ErrorDetails } from './error-details';
 import { toast } from './store';

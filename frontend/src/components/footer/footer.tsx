@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { AppContext } from '@app/pages/create/app-context/app-context';

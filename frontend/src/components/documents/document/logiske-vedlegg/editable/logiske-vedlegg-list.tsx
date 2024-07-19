@@ -1,6 +1,6 @@
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { CreateLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/create';
 import { EditableLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/editable';

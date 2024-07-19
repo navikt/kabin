@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { IArkivertDocument } from '@app/types/dokument';

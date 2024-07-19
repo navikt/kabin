@@ -1,6 +1,6 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IArkivertDocument } from '@app/types/dokument';

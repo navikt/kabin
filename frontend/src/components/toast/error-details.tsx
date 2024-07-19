@@ -1,5 +1,4 @@
 import { Detail, Heading } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 

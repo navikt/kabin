@@ -1,6 +1,5 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Loader, Tag, TagProps, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';

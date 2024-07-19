@@ -1,6 +1,5 @@
 import { Tag } from '@navikt/ds-react';
 import { addMonths, differenceInDays, differenceInMonths, isEqual, parseISO } from 'date-fns';
-import React from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { InfoItem, Time } from './common-components';

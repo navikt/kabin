@@ -1,6 +1,6 @@
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CardFullHeight } from '@app/components/card/card';
 import { getDocumentUrl } from '@app/components/documents/document/use-view-document';

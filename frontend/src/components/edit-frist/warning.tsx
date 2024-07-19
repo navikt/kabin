@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';

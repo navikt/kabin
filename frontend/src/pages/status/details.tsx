@@ -1,5 +1,4 @@
 import { parseISO } from 'date-fns';
-import React from 'react';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';

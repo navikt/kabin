@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { BaseProps } from '@app/components/overstyringer/types';
 import { compareParts } from '@app/domain/part';
