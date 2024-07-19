@@ -1,4 +1,5 @@
-import { BodyShort, Label, Loader } from '@navikt/ds-react';
+import { CalculatorIcon } from '@navikt/aksel-icons';
+import { BodyShort, Loader, Tooltip } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
@@ -34,23 +35,24 @@ export const Fristdato = ({ units, unitType }: Props) => {
     return null;
   }
 
-  return (
-    <StyledFristdato>
-      <Label size="small">Beregnet fristdato</Label>
-      {isLoading ? (
-        <Loader size="xsmall" />
-      ) : (
-        <BodyShort as="time" dateTime={fristdato}>
+  return isLoading ? (
+    <Loader size="xsmall" />
+  ) : (
+    <Tooltip content="Beregnet fristdato">
+      <BodyShort as="time" dateTime={fristdato}>
+        <Content>
+          <CalculatorIcon aria-hidden />
           {isoDateToPretty(fristdato) ?? '-'}
-        </BodyShort>
-      )}
-    </StyledFristdato>
+        </Content>
+      </BodyShort>
+    </Tooltip>
   );
 };
 
-const StyledFristdato = styled.div`
+const Content = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  height: 100%;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 4px;
+  color: var(--a-text-subtle);
 `;
