@@ -2,20 +2,22 @@ import { CheckmarkIcon, CogRotationIcon } from '@navikt/aksel-icons';
 import { Button, InternalHeader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { css, styled } from 'styled-components';
+import { ENVIRONMENT } from '@app/environment';
 import { VersionChecker } from './version-checker';
 
 export const VersionCheckerStatus = () => {
   const [needsUpdate, setNeedsUpdate] = useState(false);
+  const { version } = ENVIRONMENT;
 
   useEffect(() => {
-    if (process.env.VERSION === 'dev') {
+    if (version === 'local') {
       return;
     }
 
     const versionChecker = new VersionChecker(setNeedsUpdate);
 
     return () => versionChecker.close();
-  }, []);
+  }, [version]);
 
   if (!needsUpdate) {
     return <Version />;

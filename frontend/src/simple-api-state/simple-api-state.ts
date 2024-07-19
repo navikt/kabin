@@ -14,7 +14,7 @@ export class SimpleApiState<T> {
   private error: Error | undefined = undefined;
   private listeners: Listener<T>[] = [];
   private options: InternalOptions = { prefetch: false, cacheTime: 60_000, method: Method.GET };
-  private retryTimer: NodeJS.Timeout | undefined;
+  private retryTimer: Timer | undefined;
   private transformResponse: ((response: T) => T) | undefined;
 
   // Request data
@@ -149,7 +149,7 @@ export class SimpleApiState<T> {
     }
   };
 
-  private dataTimeout: NodeJS.Timeout | undefined;
+  private dataTimeout: Timer | undefined;
 
   public unlisten = (listener: Listener<T>): void => {
     clearTimeout(this.dataTimeout);

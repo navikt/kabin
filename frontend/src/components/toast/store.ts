@@ -52,7 +52,7 @@ class Store {
     this.notify();
   }
 
-  private setExpiresAt(id: string, expiresAt: number, previousTimer: NodeJS.Timeout | null) {
+  private setExpiresAt(id: string, expiresAt: number, previousTimer: Timer | null) {
     if (previousTimer !== null) {
       clearTimeout(previousTimer);
     }
@@ -79,12 +79,6 @@ class Store {
 
   private removeMessage(id: string) {
     this.messages = this.messages.filter((m) => m.id !== id);
-    this.notify();
-  }
-
-  private removeExpiredMessages() {
-    const now = Date.now();
-    this.messages = this.messages.filter((m) => m.expiresAt > now);
     this.notify();
   }
 }
