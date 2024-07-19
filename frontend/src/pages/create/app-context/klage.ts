@@ -30,7 +30,7 @@ export const getUpdatedKlageState = (
   } = update.overstyringer ?? {};
 
   return {
-    mulighet: hasKlagemulighet ? updateMulighet ?? null : state.mulighet,
+    mulighet: hasKlagemulighet ? (updateMulighet ?? null) : state.mulighet,
     overstyringer: klagemulighetIsDifferent
       ? {
           ...state.overstyringer,

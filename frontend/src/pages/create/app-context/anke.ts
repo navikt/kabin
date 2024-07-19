@@ -29,8 +29,8 @@ export const getUpdatedAnkeState = (state: IAnkeState, newState: State<IAnkeStat
       ? {
           ...state.overstyringer,
           ...update.overstyringer,
-          klager: klager === undefined ? mulighet?.klager ?? null : klager, // If no klager is provided in the update, use klager from mulighet.
-          fullmektig: fullmektig === undefined ? mulighet?.fullmektig ?? null : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
+          klager: klager === undefined ? (mulighet?.klager ?? null) : klager, // If no klager is provided in the update, use klager from mulighet.
+          fullmektig: fullmektig === undefined ? (mulighet?.fullmektig ?? null) : fullmektig, // If no fullmektig is provided in the update, use fullmektig from mulighet.
           ytelseId: mulighet?.ytelseId ?? null,
           hjemmelIdList: mulighet?.hjemmelIdList ?? [],
         }
