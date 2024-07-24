@@ -23,13 +23,15 @@ const getKlageApiPayload = (
   const { mulighet, overstyringer } = state;
 
   const {
+    ytelseId,
     mottattKlageinstans,
     mottattVedtaksinstans,
     klager,
     fullmektig,
-    avsender: avsenderMottaker,
+    avsender,
     saksbehandlerIdent,
     oppgaveId,
+    hjemmelIdList,
     behandlingstidUnitType,
     behandlingstidUnits,
   } = overstyringer;
@@ -44,10 +46,10 @@ const getKlageApiPayload = (
     behandlingstidUnits,
     klager: nullablePartToPartId(klager),
     fullmektig: nullablePartToPartId(fullmektig),
-    avsender: avsenderMottakerToPartId(avsenderMottaker),
+    avsender: avsenderMottakerToPartId(avsender),
     journalpostId,
-    ytelseId: overstyringer.ytelseId,
-    hjemmelIdList: overstyringer.hjemmelIdList,
+    ytelseId,
+    hjemmelIdList,
     saksbehandlerIdent,
     oppgaveId,
     svarbrevInput: getSvarbrevInput(svarbrev, fullmektig),

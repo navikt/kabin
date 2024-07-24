@@ -31,14 +31,14 @@ const getAnkeApiPayload = (
   const {
     ytelseId,
     mottattKlageinstans,
-    behandlingstidUnitType,
-    behandlingstidUnits,
     klager,
     fullmektig,
     avsender,
     saksbehandlerIdent,
     hjemmelIdList,
     oppgaveId,
+    behandlingstidUnitType,
+    behandlingstidUnits,
   } = overstyringer;
 
   const vedtak = mulighetToVedtak(mulighet);
