@@ -21,10 +21,19 @@ const KABAL_URL = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'ht
 
 export const InfoItem = ({ label, children }: InfoProps) => (
   <StyledInfo>
-    <Label>{label}</Label>
-    {typeof children === 'string' ? <BodyShort>{children}</BodyShort> : children}
+    <StyledLabel>
+      {label}
+
+      {typeof children === 'string' ? <BodyShort>{children}</BodyShort> : children}
+    </StyledLabel>
   </StyledInfo>
 );
+
+const StyledLabel = styled(Label)`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
 
 const StyledInfo = styled.div`
   display: flex;
