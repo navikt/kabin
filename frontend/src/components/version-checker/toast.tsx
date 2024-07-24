@@ -22,7 +22,7 @@ export const VersionToast = ({ isRequired = false }: Props) => (
           variant="secondary"
           size="small"
           onClick={(e) => {
-            pushEvent('close_update_toast', { required: isRequired ? 'true' : 'false' });
+            pushEvent('close_update_toast', 'update', { required: isRequired ? 'true' : 'false' });
             e.target.dispatchEvent(new Event(CLOSE_TOAST_EVENT_TYPE, { bubbles: true }));
           }}
         >
@@ -38,7 +38,7 @@ export const VersionToast = ({ isRequired = false }: Props) => (
       size="small"
       icon={<CogRotationIcon aria-hidden />}
       onClick={() => {
-        pushEvent('click_update_toast', { required: isRequired ? 'true' : 'false' });
+        pushEvent('click_update_toast', 'update', { required: isRequired ? 'true' : 'false' });
         window.location.reload();
       }}
       data-testid="update-kabin-button"
