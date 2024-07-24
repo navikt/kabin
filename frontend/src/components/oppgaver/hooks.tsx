@@ -33,11 +33,11 @@ export const oppgaverIsEnabled = (type: Type, state: IKlageState | IAnkeState | 
     return false;
   }
 
-  if (type === Type.ANKE && state.mulighet.fagsystemId === SourceId.INFOTRYGD) {
+  if (type === Type.KLAGE) {
     return true;
   }
 
-  if (type === Type.KLAGE) {
+  if (type === Type.ANKE && state.mulighet.fagsystemId === SourceId.INFOTRYGD) {
     return true;
   }
 
