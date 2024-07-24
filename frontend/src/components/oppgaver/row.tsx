@@ -23,7 +23,7 @@ export const Row = ({
   const { type, state, updateState } = useContext(AppContext);
   const { data: tema = [] } = useTema();
 
-  if (type !== Type.KLAGE) {
+  if (type === Type.NONE) {
     return null;
   }
 
