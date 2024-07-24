@@ -149,3 +149,8 @@ export interface ISaksbehandler {
   navIdent: string;
   navn: string;
 }
+
+export interface DateRange {
+  from: Date | undefined;
+  to?: Date | undefined;
+}

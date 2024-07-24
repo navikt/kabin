@@ -1,10 +1,10 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useTema } from '@app/simple-api-state/use-kodeverk';
+import { DateRange } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { DateFilter } from './date-filter';
 import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from './filter-helpers';
