@@ -43,7 +43,7 @@ initializeFaro({
   ],
 });
 
-export const pushEvent = (name: string, attributes?: Record<string, string>, domain?: string) =>
+export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) =>
   faro.api.pushEvent(name, attributes, domain, { skipDedupe: true });
 
 // eslint-disable-next-line import/no-unused-modules

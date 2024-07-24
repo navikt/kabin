@@ -87,7 +87,7 @@ export const VersionCheckerStatus = () => {
   }, []);
 
   const onCloseModal = useCallback(() => {
-    pushEvent('close_update_modal');
+    pushEvent('close_update_modal', 'update');
     const now = Date.now();
     setIgnoredAt(now);
     window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
@@ -114,7 +114,7 @@ export const VersionCheckerStatus = () => {
           variant="primary"
           icon={<CogRotationIcon aria-hidden />}
           onClick={() => {
-            pushEvent('click_update_modal');
+            pushEvent('click_update_modal', 'update');
             window.location.reload();
           }}
           data-testid="update-button"
