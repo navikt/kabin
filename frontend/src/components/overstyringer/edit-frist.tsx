@@ -22,20 +22,23 @@ export const EditFrist = () => {
     return null;
   }
 
-  return <LoadedEditFrist type={type} state={state} updateState={updateState} />;
+  return <LoadedEditFrist state={state} updateState={updateState} />;
 };
 
 interface LoadedEditFristProps {
-  type: Type.KLAGE | Type.ANKE;
   state: IKlageState | IAnkeState;
   updateState: UpdateFn<IKlageStateUpdate, IKlageState> | UpdateFn<IAnkeStateUpdate, IAnkeState>;
 }
 
-const LoadedEditFrist = ({ updateState }: LoadedEditFristProps) => {
+const LoadedEditFrist = ({ updateState, state }: LoadedEditFristProps) => {
   const [units, setUnits] = useState(12);
   const [unitType, setUnitType] = useState(BehandlingstidUnitType.WEEKS);
 
   useEffect(() => {
+    if (units === state.overstyringer.behandlingstidUnits && unitType === state.overstyringer.behandlingstidUnitType) {
+      return;
+    }
+
     const timeout = setTimeout(() => {
       updateState({ overstyringer: { behandlingstidUnits: units, behandlingstidUnitType: unitType } });
     }, 100);
@@ -43,7 +46,13 @@ const LoadedEditFrist = ({ updateState }: LoadedEditFristProps) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [unitType, units, updateState]);
+  }, [
+    state.overstyringer.behandlingstidUnitType,
+    state.overstyringer.behandlingstidUnits,
+    unitType,
+    units,
+    updateState,
+  ]);
 
   return (
     <Container>
