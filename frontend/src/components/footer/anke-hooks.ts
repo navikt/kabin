@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createAnke } from '@app/api/api';
 import { getSvarbrevInput, mulighetToVedtak } from '@app/components/footer/helpers';
+import { oppgaverIsEnabled } from '@app/components/oppgaver/hooks';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
 import { ToastType } from '@app/components/toast/types';
@@ -11,7 +12,13 @@ import { IAnkeState, Svarbrev, Type } from '@app/pages/create/app-context/types'
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
 import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
+import {
+  IApiValidationResponse,
+  IValidationError,
+  IValidationSection,
+  SectionNames,
+  ValidationFieldNames,
+} from '@app/types/validation';
 import { IApiErrorReponse, isApiError, isValidationResponse } from './error-type-guard';
 
 const getAnkeApiPayload = (
@@ -63,6 +70,31 @@ export const useCreateAnke = (
 
   return useCallback(async () => {
     if (journalpost === null || type !== Type.ANKE) {
+      return;
+    }
+
+    // TODO: Remove when API validates Gosys-oppgave.
+    if (oppgaverIsEnabled(type, state) && state.overstyringer.oppgaveId === null) {
+      const oppgaveError: IValidationError = {
+        field: ValidationFieldNames.OPPGAVE,
+        reason: 'Velg en Gosys-oppgave.',
+      };
+
+      setError({
+        type: 'validation',
+        status: 400,
+        title: 'Valideringsfeil',
+        detail: 'Valideringsfeil',
+        sections: [{ section: SectionNames.SAKSDATA, properties: [oppgaveError] }],
+      });
+
+      setErrors([
+        {
+          section: SectionNames.SAKSDATA,
+          properties: [oppgaveError],
+        },
+      ]);
+
       return;
     }
 
