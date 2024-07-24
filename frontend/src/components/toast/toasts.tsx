@@ -1,34 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { Message, subscribe, unsubscribe } from './store';
+import { Message, toast } from './store';
 import { Toast } from './toast';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
+  const previousLength = useRef(0);
 
   useEffect(() => {
-    subscribe(setToasts);
+    toast.subscribe(setToasts);
 
-    return () => unsubscribe(setToasts);
+    return () => toast.unsubscribe(setToasts);
   }, []);
+
+  useEffect(() => {
+    if (toasts.length > previousLength.current) {
+      const { current } = ref;
+
+      if (current !== null) {
+        current.scrollTop = current.scrollHeight;
+      }
+    }
+    previousLength.current = toasts.length;
+  }, [toasts.length]);
 
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
 
-  return <Container>{toastList}</Container>;
+  return (
+    <Container ref={ref} aria-live="polite" aria-relevant="additions text">
+      {toastList}
+    </Container>
+  );
 };
 
 const Container = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: 8px;
   right: 0;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
+  padding-right: 8px;
+  margin-right: 0;
+  margin-bottom: 0;
   margin-top: 8px;
   max-height: calc(100% - 16px);
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
 `;

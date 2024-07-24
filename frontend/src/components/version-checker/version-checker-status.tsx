@@ -1,74 +1,155 @@
-import { CheckmarkIcon, CogRotationIcon } from '@navikt/aksel-icons';
-import { Button, InternalHeader } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { css, styled } from 'styled-components';
+import { CogRotationIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from '@app/components/toast/store';
+import { VersionToast } from '@app/components/version-checker/toast';
 import { ENVIRONMENT } from '@app/environment';
-import { VersionChecker } from './version-checker';
+import { pushEvent } from '@app/observability';
+import { UpdateRequest, VERSION_CHECKER } from './version-checker';
+
+const IGNORE_UPDATE_KEY = 'ignoreUpdate';
+const IGNORE_UPDATE_TIMEOUT = ENVIRONMENT.isProduction ? 1_000 * 60 * 60 : 10_000; // 1 hour for production, 10 seconds for development.
+
+const UPDATE_TOAST_TIMEOUT: number = Infinity;
+const UPDATED_TOAST_TIMEOUT: number = 5_000;
 
 export const VersionCheckerStatus = () => {
-  const [needsUpdate, setNeedsUpdate] = useState(false);
-  const { version } = ENVIRONMENT;
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [ignoredAt, setIgnoredAt] = useState(getIgnoredAt());
+  const ignoredUntil = ignoredAt === 0 ? 0 : ignoredAt + IGNORE_UPDATE_TIMEOUT;
+  const closeToast = useRef<() => void>(() => undefined);
 
-  useEffect(() => {
-    if (version === 'local') {
+  const showToast = useCallback((isRequired: boolean) => {
+    closeToast.current();
+
+    if (isRequired) {
+      closeToast.current = toast.warning(<VersionToast isRequired />, UPDATE_TOAST_TIMEOUT);
+
       return;
     }
 
-    const versionChecker = new VersionChecker(setNeedsUpdate);
+    closeToast.current = toast.info(<VersionToast />, UPDATE_TOAST_TIMEOUT);
+  }, []);
 
-    return () => versionChecker.close();
-  }, [version]);
+  const handleUpdateRequest = useCallback(
+    (updateRequest: UpdateRequest) => {
+      if (updateRequest === UpdateRequest.NONE) {
+        return;
+      }
 
-  if (!needsUpdate) {
-    return <Version />;
-  }
+      const isIgnored = ignoredUntil > Date.now();
 
-  return (
-    <InternalHeader.Button
-      as={UpdateButton}
-      title="Det finnes en ny versjon av Kabin. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
-      onClick={() => window.location.reload()}
-      size="small"
-      data-testid="update-kabin-button"
-    >
-      <CogRotationIcon /> Oppdater til siste versjon
-    </InternalHeader.Button>
+      if (isIgnored) {
+        return;
+      }
+
+      const isNonDisturbPage = getIsNonDisturbPage();
+      const isRequired = updateRequest === UpdateRequest.REQUIRED;
+
+      if (isRequired && !isNonDisturbPage) {
+        closeToast.current();
+        modalRef.current?.showModal();
+      } else {
+        showToast(isRequired);
+      }
+    },
+    [ignoredUntil, showToast],
   );
-};
-
-const Version = () => {
-  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setShow(false), 20_000);
-  }, [setShow]);
+    VERSION_CHECKER.addUpdateRequestListener(handleUpdateRequest);
 
-  if (!show) {
-    return null;
-  }
+    return () => VERSION_CHECKER.removeUpdateRequestListener(handleUpdateRequest);
+  }, [handleUpdateRequest]);
+
+  useEffect(() => {
+    const isIgnored = ignoredUntil > Date.now();
+
+    if (!isIgnored) {
+      return;
+    }
+
+    const timeout = setTimeout(
+      () => handleUpdateRequest(VERSION_CHECKER.getUpdateRequest()),
+      ignoredUntil - Date.now(),
+    );
+
+    return () => clearTimeout(timeout);
+  }, [handleUpdateRequest, ignoredUntil]);
+
+  useEffect(() => {
+    const lastViewedVersion = localStorage.getItem('lastViewedVersion');
+
+    if (ENVIRONMENT.version !== lastViewedVersion) {
+      toast.success('Kabin er oppdatert.', UPDATED_TOAST_TIMEOUT);
+      localStorage.setItem('lastViewedVersion', ENVIRONMENT.version);
+    }
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    pushEvent('close_update_modal');
+    const now = Date.now();
+    setIgnoredAt(now);
+    window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
+    showToast(true);
+  }, [showToast]);
+
+  const onIgnoreModal = useCallback(() => modalRef.current?.close(), []);
 
   return (
-    <div>
-      <IconText>
-        <CheckmarkIcon /> Kabin er klar til bruk!
-      </IconText>
-    </div>
+    <Modal
+      onClose={onCloseModal}
+      closeOnBackdropClick
+      header={{
+        heading: 'Ny versjon av Kabin er tilgjengelig!',
+      }}
+      ref={modalRef}
+      width={500}
+    >
+      <Modal.Body>
+        <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="primary"
+          icon={<CogRotationIcon aria-hidden />}
+          onClick={() => {
+            pushEvent('click_update_modal');
+            window.location.reload();
+          }}
+          data-testid="update-button"
+          size="medium"
+        >
+          Oppdater Kabin
+        </Button>
+        <Button variant="secondary" onClick={onIgnoreModal} size="medium">
+          Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-const iconText = css`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  white-space: nowrap;
-`;
+const getIgnoredAt = () => {
+  const raw = window.localStorage.getItem(IGNORE_UPDATE_KEY);
 
-const IconText = styled.span`
-  ${iconText}
-  color: #fff;
-`;
+  if (raw === null) {
+    return 0;
+  }
 
-const UpdateButton = styled(Button)`
-  ${iconText}
-  border-left: none;
-`;
+  const parsed = Number.parseInt(raw, 10);
+
+  if (Number.isNaN(parsed)) {
+    return 0;
+  }
+
+  return parsed;
+};
+
+const NON_DISTURB_PATHS: string[] = [];
+
+const getIsNonDisturbPage = () => {
+  const { pathname } = window.location;
+
+  return NON_DISTURB_PATHS.some((path) => pathname.startsWith(path));
+};

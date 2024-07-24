@@ -1,7 +1,6 @@
 import { Detail, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { toast } from '../store';
-import { ToastType } from '../types';
 
 export const apiErrorToast = (res: Response, url: string) => {
   const message = (
@@ -13,7 +12,7 @@ export const apiErrorToast = (res: Response, url: string) => {
     </>
   );
 
-  toast({ type: ToastType.ERROR, message });
+  toast.error(message);
 };
 
 interface DetailProps {
@@ -39,4 +38,5 @@ const DetailLabel = styled.span`
 
 const StyledCode = styled.code`
   font-size: 12px;
+  word-break: break-word;
 `;

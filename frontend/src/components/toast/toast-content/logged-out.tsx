@@ -1,8 +1,7 @@
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
 
-const LoggedOut = (
+const LoggedOut = () => (
   <>
     <Heading level="1" size="xsmall">
       Du er blitt logget ut
@@ -14,4 +13,4 @@ const LoggedOut = (
   </>
 );
 
-export const loggedOutToast = () => toast({ type: ToastType.ERROR, message: LoggedOut });
+export const loggedOutToast = () => toast.error(<LoggedOut />);

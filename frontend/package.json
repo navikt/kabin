@@ -37,6 +37,9 @@
     "vite-tsconfig-paths": "4.3.2"
   },
   "dependencies": {
+    "@grafana/faro-react": "^1.8.2",
+    "@grafana/faro-web-sdk": "^1.8.2",
+    "@grafana/faro-web-tracing": "^1.8.2",
     "@navikt/aksel-icons": "6.13.0",
     "@navikt/ds-css": "6.13.0",
     "@navikt/ds-react": "6.13.0",

@@ -3,7 +3,6 @@ import { addLogiskVedlegg, removeLogiskVedlegg, updateLogiskVedlegg } from '@app
 import { isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument, LogiskVedlegg } from '@app/types/dokument';
@@ -47,7 +46,7 @@ export const useAddLogiskVedlegg = (dokumentInfoId: string): AddLogiskVedlegg =>
 
       if (e instanceof Error) {
         const message = `Feil ved oppretting av logisk vedlegg: ${e.message}`;
-        toast({ type: ToastType.ERROR, message });
+        toast.error(message);
         setError(message);
       }
     } finally {
@@ -86,7 +85,7 @@ export const useUpdateLogiskVedlegg = (dokumentInfoId: string): UpdateLogiskVedl
 
       if (e instanceof Error) {
         const message = `Feil ved oppretting av logisk vedlegg: ${e.message}`;
-        toast({ type: ToastType.ERROR, message });
+        toast.error(message);
         setError(message);
       }
     } finally {
@@ -121,7 +120,7 @@ export const useDeleteLogiskVedlegg = (dokumentInfoId: string): DeleteLogiskVedl
 
       if (e instanceof Error) {
         const message = `Feil ved sletting av logisk vedlegg: ${e.message}`;
-        toast({ type: ToastType.ERROR, message });
+        toast.error(message);
         setError(message);
       }
     } finally {

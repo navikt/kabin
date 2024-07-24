@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
+import { PDF_ASPECT_RATIO } from '@app/components/svarbrev/preview/constants';
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
-import { PDF_ASPECT_RATIO } from '@app/components/toast/constants';
 import { defaultString } from '@app/functions/empty-string';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import {
