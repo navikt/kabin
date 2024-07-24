@@ -7,6 +7,7 @@ export const NavHeader = () => (
     <InternalHeader.Title as={NavLink} to="/">
       Kabin
     </InternalHeader.Title>
+    <div style={{ flexGrow: 1 }} aria-hidden role="presentation" />
     <User />
   </InternalHeader>
 );
