@@ -2,10 +2,10 @@ import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@nav
 import { BodyShort, Button, DatePicker, DatePickerProps } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { DateRange } from '@app/types/common';
 
 interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
   children: React.ReactNode;

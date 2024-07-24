@@ -1,10 +1,9 @@
 import { isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import { DateRange } from 'react-day-picker';
 import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
 import { useKlageenheter, useVedtaksenheter } from '@app/simple-api-state/use-kodeverk';
-import { AvsenderMottakerType } from '@app/types/common';
+import { AvsenderMottakerType, DateRange } from '@app/types/common';
 import { IArkivertDocument, IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
 
 interface IOption<T> {

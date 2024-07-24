@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
+import { DateRange } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ColumnHeaders } from './column-headers';
 import { Dokument } from './document/document';
