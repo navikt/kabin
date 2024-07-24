@@ -20,7 +20,7 @@ interface Props {
 
 export const Svarbrev = ({ svarbrev, id }: Props) => (
   <>
-    <StyledCard title="Svarbrev" $gridArea="svarbrev-metadata" titleSize="medium">
+    <StyledCard title="Svarbrevinfo" $gridArea="svarbrev-metadata" titleSize="medium">
       <InfoItem label="Dokumentnavn">{svarbrev.title}</InfoItem>
       <Section>
         <Label>Mottakere</Label>
