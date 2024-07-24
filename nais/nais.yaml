@@ -43,6 +43,7 @@ spec:
         - /*.png
   prometheus:
     enabled: true
+    path: /metrics
   accessPolicy:
     outbound:
       rules:
@@ -60,5 +61,17 @@ spec:
     - secret: slack-url
   liveness:
     path: /isAlive
+    initialDelay: 3
+    periodSeconds: 1
+    timeout: 1
+    failureThreshold: 10
   readiness:
     path: /isReady
+    initialDelay: 3
+    periodSeconds: 1
+    timeout: 1
+    failureThreshold: 10
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
