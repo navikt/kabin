@@ -1,8 +1,9 @@
-import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
+import { Button, Table, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
+import { Beskrivelse } from '@app/components/oppgaver/beskrivelse';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
@@ -61,27 +62,6 @@ export const Row = ({
     </StyledRow>
   );
 };
-
-const Beskrivelse = ({ beskrivelse }: { beskrivelse: string | null }) => (
-  <StyledBeskrivelse>
-    <Heading size="small" level="1">
-      Beskrivelse
-    </Heading>
-    <StyledBodyLong>{beskrivelse ?? 'Ingen beskrivelse tilgjengelig.'}</StyledBodyLong>
-  </StyledBeskrivelse>
-);
-
-const StyledBodyLong = styled(BodyLong)`
-  white-space: pre;
-  border-left: 4px solid var(--a-border-subtle);
-  padding-left: 1rem;
-`;
-
-const StyledBeskrivelse = styled.section`
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-`;
 
 const StyledRow = styled(Table.ExpandableRow)`
   height: 44px;

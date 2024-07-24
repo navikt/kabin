@@ -19,4 +19,5 @@ export const StyledCopyButton = styled(CopyButton)`
   border: 2px solid var(--a-border-default);
   white-space: nowrap;
   align-self: flex-start;
+  flex-shrink: 0;
 `;
