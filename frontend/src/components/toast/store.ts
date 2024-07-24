@@ -1,22 +1,21 @@
-import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
-import { NewMessage } from './types';
+import { TOAST_TIMEOUT } from './constants';
+import { NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
+
+type CloseFn = () => void;
+
 export interface Message extends NewMessage {
   id: string;
   createdAt: number;
   expiresAt: number;
-  dismiss: () => void;
+  close: () => void;
   setExpiresAt: (ms: number) => void;
 }
 
 class Store {
   private messages: Message[] = [];
   private listeners: ListenerFn[] = [];
-
-  private notify() {
-    this.listeners.forEach((listener) => listener(this.messages));
-  }
 
   public subscribe(listener: ListenerFn) {
     if (!this.listeners.includes(listener)) {
@@ -29,46 +28,48 @@ class Store {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  public addMessage(message: NewMessage) {
-    const createdAt = Date.now();
-    const expiresAt = createdAt + TOAST_TIMEOUT;
-    const id = `${message.type}-${createdAt}-${Math.random()}`;
+  public success = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.SUCCESS, message, timeout);
+  public error = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.ERROR, message, timeout);
+  public warning = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.WARNING, message, timeout);
+  public info = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, message, timeout);
 
-    const timeout = setTimeout(() => this.removeMessage(id), TOAST_TIMEOUT);
-    const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
+  private notify() {
+    this.listeners.forEach((listener) => listener(this.messages));
+  }
+
+  private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT): CloseFn {
+    const createdAt = Date.now();
+    const expiresAt = createdAt + timeout;
+    const id = crypto.randomUUID();
+
+    const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
+
+    const close: CloseFn = () => this.removeMessage(id);
 
     this.messages = [
       ...this.messages,
       {
-        ...message,
+        type,
+        message,
         id,
         createdAt,
         expiresAt,
-        dismiss: () => setExpiresAt(Date.now() + SLIDE_DURATION),
+        close,
         setExpiresAt,
       },
     ];
 
     this.notify();
+
+    return close;
   }
 
-  private setExpiresAt(id: string, expiresAt: number, previousTimer: Timer | null) {
-    if (previousTimer !== null) {
-      clearTimeout(previousTimer);
-    }
-
+  private setExpiresAt(id: string, expiresAt: number) {
     this.messages = this.messages.map((message) => {
       if (message.id === id) {
-        const timeout =
-          expiresAt === Infinity ? null : setTimeout(() => this.removeMessage(id), expiresAt - Date.now());
+        const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 
-        const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
-
-        return {
-          ...message,
-          expiresAt,
-          setExpiresAt,
-        };
+        return { ...message, expiresAt, setExpiresAt };
       }
 
       return message;
@@ -83,8 +84,4 @@ class Store {
   }
 }
 
-const toastStore = new Store();
-
-export const toast = toastStore.addMessage.bind(toastStore);
-export const subscribe = toastStore.subscribe.bind(toastStore);
-export const unsubscribe = toastStore.unsubscribe.bind(toastStore);
+export const toast = new Store();

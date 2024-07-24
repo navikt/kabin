@@ -13,7 +13,7 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      if (e.target instanceof global.Node) {
+      if (e.target instanceof window.Node) {
         const { target } = e;
 
         if (children && Array.from(ref.current.children).every((c) => !c.contains(target))) {

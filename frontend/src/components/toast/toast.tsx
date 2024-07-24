@@ -1,70 +1,182 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { memo, useEffect, useRef, useState } from 'react';
-import { keyframes, styled } from 'styled-components';
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
   InformationSquareFillIconColored,
   XMarkOctagonFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
+import {
+  BaseToastStyle,
+  Container,
+  Content,
+  StyledCloseButton,
+  TimedToastStyle,
+} from '@app/components/toast/styled-components';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
 import { Message } from './store';
 import { ToastType } from './types';
 
+export const CLOSE_TOAST_EVENT_TYPE = 'close-toast';
+
 export const Toast = memo(
-  ({ type, message, dismiss, setExpiresAt, expiresAt }: Message) => {
+  ({ type, expiresAt, close, message, id, ...rest }: Message) => {
     const ref = useRef<HTMLDivElement>(null);
-    const [remaining, setRemaining] = useState<number | null>(null);
 
-    const onMouseLeave = () => {
-      setExpiresAt(Date.now() + (remaining === null || remaining === Infinity ? TOAST_TIMEOUT : remaining));
-      setRemaining(null);
-    };
+    const slideOut = useCallback(() => {
+      if (ref.current === null) {
+        return close();
+      }
 
-    const onMouseEnter = () => {
-      setExpiresAt(Infinity);
-      setRemaining(expiresAt - Date.now());
-    };
+      const anim = ref.current.animate(SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS);
+
+      anim.addEventListener('finish', close);
+    }, [close]);
 
     useEffect(() => {
-      if (expiresAt === Infinity || ref.current === null) {
+      const element = ref.current;
+
+      if (element === null) {
         return;
       }
 
-      const timeout = expiresAt - Date.now() - SLIDE_DURATION;
+      element.addEventListener(CLOSE_TOAST_EVENT_TYPE, slideOut);
 
-      const timer = setTimeout(() => {
-        if (ref.current === null) {
-          return;
-        }
+      return () => element.removeEventListener(CLOSE_TOAST_EVENT_TYPE, slideOut);
+    }, [slideOut]);
 
-        ref.current.animate([{ transform: 'translateX(0%)' }, { transform: 'translateX(100%)' }], {
-          duration: SLIDE_DURATION,
-          easing: 'ease-in-out',
-          fill: 'forwards',
-        });
-      }, timeout);
-
-      return () => clearTimeout(timer);
-    }, [expiresAt]);
-
-    const paused = remaining !== null;
+    if (expiresAt !== Infinity) {
+      return (
+        <TimedToast
+          type={type}
+          expiresAt={expiresAt}
+          close={close}
+          message={message}
+          id={id}
+          key={id}
+          ref={ref}
+          {...rest}
+        />
+      );
+    }
 
     return (
-      <StyledToast $type={type} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} $paused={paused} ref={ref}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={dismiss} icon={<XMarkIcon aria-hidden />} />
+      <BaseToastStyle $type={type} ref={ref} key={id}>
+        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>
         </Container>
-      </StyledToast>
+      </BaseToastStyle>
     );
   },
   (prevProps, nextProps) => prevProps.id === nextProps.id && prevProps.expiresAt === nextProps.expiresAt,
 );
 
 Toast.displayName = 'Toast';
+
+const TimedToast = forwardRef<HTMLDivElement, Message>(
+  ({ type, message, close, setExpiresAt, expiresAt, id }, forwardedRef) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    useImperativeHandle(forwardedRef, () => ref.current!);
+
+    const [remaining, setRemaining] = useState<number | null>(null);
+    const mouse = useRef<MouseEvent | null>(null);
+
+    const onMouseLeave = useCallback(() => {
+      setExpiresAt(Date.now() + (remaining === null || remaining === Infinity ? TOAST_TIMEOUT : remaining));
+      setRemaining(null);
+    }, [remaining, setExpiresAt]);
+
+    const onMouseEnter = useCallback(() => {
+      setRemaining(expiresAt - Date.now());
+      setExpiresAt(Infinity);
+    }, [expiresAt, setExpiresAt]);
+
+    useEffect(() => {
+      const listener = (e: MouseEvent) => {
+        mouse.current = e;
+      };
+
+      window.addEventListener('mousemove', listener);
+
+      return () => window.removeEventListener('mousemove', listener);
+    }, []);
+
+    useEffect(() => {
+      if (mouse.current === null) {
+        return;
+      }
+
+      const { target } = mouse.current;
+
+      if (
+        expiresAt === Infinity &&
+        ref.current !== null &&
+        target instanceof window.Node &&
+        ref.current !== target &&
+        !ref.current.contains(target)
+      ) {
+        onMouseLeave();
+      }
+    }, [expiresAt, onMouseLeave, ref]);
+
+    const slideOut = useCallback(() => {
+      if (ref.current === null) {
+        return close();
+      }
+
+      const anim = ref.current.animate(SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS);
+
+      anim.addEventListener('finish', close);
+    }, [close]);
+
+    useEffect(() => {
+      if (expiresAt === Infinity) {
+        return;
+      }
+
+      const timeout = expiresAt - Date.now() - SLIDE_DURATION;
+      const timer = setTimeout(slideOut, timeout);
+
+      return () => clearTimeout(timer);
+    }, [expiresAt, slideOut]);
+
+    const paused = remaining !== null;
+
+    return (
+      <TimedToastStyle
+        $type={type}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        $paused={paused}
+        $timeout={expiresAt - Date.now()}
+        ref={ref}
+        key={id}
+      >
+        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+        <Container>
+          <Icon type={type} />
+          <Content>{message}</Content>
+        </Container>
+      </TimedToastStyle>
+    );
+  },
+);
+
+TimedToast.displayName = 'TimedToast';
+
+const SLIDE_OUT_KEYFRAMES: Keyframe[] = [
+  { transform: 'translateX(0%)' },
+  { transform: 'translateX(calc(100% + 8px))' },
+];
+
+const SLIDE_OUT_OPTIONS: KeyframeAnimationOptions = {
+  duration: SLIDE_DURATION,
+  easing: 'ease-in-out',
+  fill: 'forwards',
+};
 
 interface IconProps {
   type: ToastType;
@@ -73,105 +185,12 @@ interface IconProps {
 const Icon = ({ type }: IconProps) => {
   switch (type) {
     case ToastType.SUCCESS:
-      return <CheckmarkCircleFillIconColored />;
+      return <CheckmarkCircleFillIconColored aria-hidden />;
     case ToastType.ERROR:
-      return <XMarkOctagonFillIconColored />;
+      return <XMarkOctagonFillIconColored aria-hidden />;
     case ToastType.INFO:
-      return <InformationSquareFillIconColored />;
+      return <InformationSquareFillIconColored aria-hidden />;
     case ToastType.WARNING:
-      return <ExclamationmarkTriangleFillIconColored />;
-  }
-};
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 24px 1fr;
-  align-items: center;
-  column-gap: 8px;
-  white-space: pre-wrap;
-  hyphens: auto;
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`;
-
-const StyledCloseButton = styled(Button)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: black;
-`;
-
-const scaleX = keyframes`
-  from {
-    transform: scaleX(100%);
-  }
-
-  to {
-    transform: scaleX(0%);
-  }
-`;
-
-const slideIn = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0%);
-  }
-`;
-
-const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }>`
-  color: black;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ $type }) => getSubtleColor($type)};
-  border-radius: 4px;
-  width: 300px;
-  padding: var(--a-spacing-4);
-  border: 1px solid ${({ $type }) => getColor($type)};
-  animation-name: ${slideIn};
-  animation-duration: ${SLIDE_DURATION}ms;
-  animation-timing-function: ease-in-out;
-  animation-delay: 0ms;
-  animation-play-state: 'running';
-  animation-fill-mode: forwards;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background-color: ${({ $type }) => getColor($type)};
-    transform-origin: left;
-    animation-play-state: ${({ $paused }) => ($paused ? 'paused' : 'running')};
-    animation-name: ${scaleX};
-    animation-duration: ${TOAST_TIMEOUT - SLIDE_DURATION}ms;
-    animation-timing-function: linear;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-  }
-`;
-
-const getSubtleColor = (type: ToastType) => `var(--a-surface-${typeToCss(type)}-subtle)`;
-const getColor = (type: ToastType) => `var(--a-border-${typeToCss(type)})`;
-
-const typeToCss = (type: ToastType) => {
-  switch (type) {
-    case ToastType.SUCCESS:
-      return 'success';
-    case ToastType.ERROR:
-      return 'danger';
-    case ToastType.INFO:
-      return 'info';
-    case ToastType.WARNING:
-      return 'warning';
+      return <ExclamationmarkTriangleFillIconColored aria-hidden />;
   }
 };

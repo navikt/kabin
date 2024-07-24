@@ -6,7 +6,6 @@ import { editTitle } from '@app/api/api';
 import { isApiError } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useDokumenter } from '@app/simple-api-state/use-api';
@@ -34,7 +33,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
       const res = await editTitle(newTitle, journalpostId, dokumentInfoId);
 
       if (res.ok) {
-        toast({ type: ToastType.SUCCESS, message: `Dokumenttittel endret` });
+        toast.success(`Dokumenttittel endret`);
 
         setJournalpost((journalpost) => {
           if (journalpost === null) {
@@ -73,7 +72,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
       }
     } catch (e) {
       if (e instanceof Error) {
-        toast({ type: ToastType.ERROR, message: `Feil ved endring av dokumenttittel: ${e.message}` });
+        toast.error(`Feil ved endring av dokumenttittel: ${e.message}`);
       }
     }
 

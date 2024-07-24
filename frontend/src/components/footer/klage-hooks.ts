@@ -6,7 +6,6 @@ import { getSvarbrevInput, mulighetToVedtak } from '@app/components/footer/helpe
 import { oppgaverIsEnabled } from '@app/components/oppgaver/hooks';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
 import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/converters';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IKlageState, Svarbrev, Type } from '@app/pages/create/app-context/types';
@@ -125,7 +124,7 @@ export const useCreateKlage = (
       }
     } catch (e) {
       if (e instanceof Error) {
-        toast({ type: ToastType.ERROR, message: `Feil ved oppretting av klage: ${e.message}` });
+        toast.error(`Feil ved oppretting av klage: ${e.message}`);
 
         setError(e);
       }
