@@ -12,7 +12,7 @@ interface ReadOnlyProps extends StyleProps {
 }
 
 export const ReadOnlyLogiskeVedlegg = ({ logiskeVedlegg, ...styleProps }: ReadOnlyProps) => (
-  <LogiskeVedleggList {...styleProps}>
+  <LogiskeVedleggList {...styleProps} aria-label="Logiske vedlegg">
     {logiskeVedlegg.length === 0 ? (
       <LogiskeVedleggListItem key="none">
         <NoAttachmentsText>Ingen logiske vedlegg</NoAttachmentsText>

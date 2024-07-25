@@ -35,7 +35,7 @@ const BORDER_COLORS: Record<States, string> = {
   [States.ERROR]: 'var(--a-border-danger)',
 };
 
-export const StyledContainer = styled.div<ContainerProps>`
+export const StyledContainer = styled.section<ContainerProps>`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

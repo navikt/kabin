@@ -3,34 +3,35 @@ import { styled } from 'styled-components';
 
 interface Props extends CardContentProps {
   className?: string;
+  labelledBy?: string;
 }
 
-export const Card = ({ className, ...cardContentProps }: Props) => (
-  <StyledCard className={className}>
+export const Card = ({ className, labelledBy, ...cardContentProps }: Props) => (
+  <StyledCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
     <CardContent {...cardContentProps} />
   </StyledCard>
 );
 
-export const CardSmall = ({ className, ...cardContentProps }: Props) => (
-  <StyledSmallCard className={className}>
+export const CardSmall = ({ className, labelledBy, ...cardContentProps }: Props) => (
+  <StyledSmallCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
     <CardContent {...cardContentProps} />
   </StyledSmallCard>
 );
 
-export const CardMedium = ({ className, ...cardContentProps }: Props) => (
-  <StyledMediumCard className={className}>
+export const CardMedium = ({ className, labelledBy, ...cardContentProps }: Props) => (
+  <StyledMediumCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
     <CardContent {...cardContentProps} />
   </StyledMediumCard>
 );
 
-export const CardLarge = ({ className, ...cardContentProps }: Props) => (
-  <StyledLargeCard className={className}>
+export const CardLarge = ({ className, labelledBy, ...cardContentProps }: Props) => (
+  <StyledLargeCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
     <CardContent {...cardContentProps} />
   </StyledLargeCard>
 );
 
-export const CardFullHeight = ({ className, ...cardContentProps }: Props) => (
-  <StyledFullHeightCard className={className}>
+export const CardFullHeight = ({ className, labelledBy, ...cardContentProps }: Props) => (
+  <StyledFullHeightCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
     <CardContent {...cardContentProps} />
   </StyledFullHeightCard>
 );

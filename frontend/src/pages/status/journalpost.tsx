@@ -48,7 +48,7 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
         {vedlegg.length === 0 ? (
           <BodyShort>Ingen vedlegg</BodyShort>
         ) : (
-          <List>
+          <List data-testid="status-journalpost-vedlegg-list">
             {vedlegg.map((v) => (
               <ListItem key={v.dokumentInfoId}>
                 <span>{v.tittel ?? 'Ingen tittel'}</span>

@@ -22,8 +22,8 @@ export const Svarbrev = ({ svarbrev, id }: Props) => (
   <>
     <StyledCard title="Svarbrevinfo" $gridArea="svarbrev-metadata" titleSize="medium">
       <InfoItem label="Dokumentnavn">{svarbrev.title}</InfoItem>
-      <Section>
-        <Label>Mottakere</Label>
+      <Section aria-labelledby="svarbrevinfo-mottakere">
+        <Label id="svarbrevinfo-mottakere">Mottakere</Label>
         <StyledList>
           {svarbrev.receivers.map((recipient) => (
             <Part key={recipient.part.id} {...recipient} />
@@ -58,7 +58,7 @@ const Part = ({ part, overriddenAddress, handling }: Recipient) => {
   const isPerson = part.type === IdType.FNR;
 
   return (
-    <PartContent>
+    <PartContent aria-label={part.name ?? part.id}>
       <StyledName>
         <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
           {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}

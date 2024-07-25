@@ -76,9 +76,9 @@ export const Dokumenter = () => {
   };
 
   return (
-    <CardMedium>
+    <CardMedium labelledBy="documents-heading">
       <Header>
-        <Heading size="small" level="1">
+        <Heading size="small" level="1" id="documents-heading">
           Velg journalpost
         </Heading>
 

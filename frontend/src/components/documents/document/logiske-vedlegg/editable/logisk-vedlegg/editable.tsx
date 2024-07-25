@@ -49,7 +49,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
   return (
     <EditableTag size="small" variant="neutral" title={logiskVedlegg.tittel}>
-      <Title $isFocused={isFocused}>{logiskVedlegg.tittel}</Title>
+      <Title $isFocused={isFocused} data-testid="logisk-vedlegg">
+        {logiskVedlegg.tittel}
+      </Title>
 
       <AbsoluteTitle $isFocused={isFocused} aria-hidden role="presentation">
         {logiskVedlegg.tittel}

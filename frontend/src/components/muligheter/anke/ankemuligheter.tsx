@@ -131,7 +131,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
 
   return (
     <TableContainer $showShadow={ankemuligheter.length >= 3}>
-      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET}>
+      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
         <StyledTableHeader>
           <Table.Row>
             <Table.HeaderCell>Type</Table.HeaderCell>

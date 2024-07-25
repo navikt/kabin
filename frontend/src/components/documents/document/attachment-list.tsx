@@ -30,7 +30,7 @@ export const AttachmentList = ({ dokument, isOpen, temaId }: Props) => {
         <ReadOnlyLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} $inset />
       )}
       {vedlegg.length === 0 ? null : (
-        <StyledAttachmentList data-testid="documents-vedlegg-list">
+        <StyledAttachmentList data-testid="documents-vedlegg-list" aria-label="Vedlegg">
           {vedlegg.map((v) => (
             <Attachment key={`vedlegg_${journalpostId}_${v.dokumentInfoId}`} vedlegg={v} dokument={dokument} />
           ))}

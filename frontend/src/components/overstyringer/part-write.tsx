@@ -86,7 +86,7 @@ export const PartWrite = ({
   };
 
   return (
-    <StyledContainer $state={part === null ? States.UNSET : States.SET}>
+    <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>
       {icon}
       <PartContent>
         <StyledPartSearch>
