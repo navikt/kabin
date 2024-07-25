@@ -1,9 +1,10 @@
 import { parseISO } from 'date-fns';
+import { getDuration } from '@app/pages/status/duration';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { NavEmployee, Part } from './common-components';
-import { DateInfoItem } from './date';
+import { DateInfoItem, getDifference } from './date';
 import { Journalpost } from './journalpost';
 import { Mulighet } from './mulighet';
 import { StyledCard } from './styled-components';
@@ -29,6 +30,8 @@ export const StatusDetails = ({ id, status }: Props) => {
     vedtakDate,
     ytelseId,
     varsletFrist,
+    varsletFristUnits,
+    varsletFristUnitTypeId,
   } = status;
 
   const isKlage = typeId === SaksTypeEnum.KLAGE;
@@ -44,10 +47,16 @@ export const StatusDetails = ({ id, status }: Props) => {
       <Journalpost title={journalpostTitle} journalpost={journalpost} />
 
       <StyledCard title="Saksinfo" $gridArea="case" titleSize="medium">
-        {isKlage ? <DateInfoItem title="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} /> : null}
-        <DateInfoItem title="Mottatt NAV Klageinstans" date={mottattKlageinstans} />
-        <DateInfoItem title="Frist" date={frist} base={mottattKlageinstansDate} />
-        <DateInfoItem title="Varslet frist" date={varsletFrist} base={mottattKlageinstansDate} />
+        {isKlage ? <DateInfoItem label="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} /> : null}
+        <DateInfoItem label="Mottatt NAV Klageinstans" date={mottattKlageinstans} />
+        <DateInfoItem label="Frist" date={frist}>
+          {getDifference(mottattKlageinstansDate, parseISO(frist))}
+        </DateInfoItem>
+        <DateInfoItem label="Varslet frist" date={varsletFrist}>
+          {varsletFristUnits === null || varsletFristUnitTypeId === null
+            ? undefined
+            : getDuration(varsletFristUnits, varsletFristUnitTypeId)}
+        </DateInfoItem>
         <Part title={klagerTitle} part={klager} />
         <Part title="Fullmektig" part={fullmektig} />
         <NavEmployee title="Tildelt saksbehandler" employee={tildeltSaksbehandler} />

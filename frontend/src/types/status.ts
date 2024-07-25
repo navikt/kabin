@@ -1,4 +1,5 @@
 import { Recipient } from '@app/pages/create/app-context/types';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from './dokument';
 
@@ -17,6 +18,8 @@ interface IBaseStatus {
   tildeltSaksbehandler: ISaksbehandler | null;
   /** Date */
   varsletFrist: string | null;
+  varsletFristUnits: number | null;
+  varsletFristUnitTypeId: BehandlingstidUnitType | null;
 }
 
 export interface SvarbrevStatus {
