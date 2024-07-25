@@ -46,8 +46,10 @@ export const Dokument = ({ dokument }: Props) => {
   const canExpand = hasVedlegg || harTilgangTilArkivvariant;
   const [isExpanded, setIsExpanded] = useState(hasVedlegg);
 
+  const title = tittel ?? '';
+
   return (
-    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant}>
+    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant} aria-label={title}>
       <StyledGrid
         as="article"
         data-testid="document"
@@ -59,7 +61,7 @@ export const Dokument = ({ dokument }: Props) => {
       >
         <TitleContainer>
           {canExpand ? <StyledExpandButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} /> : null}
-          <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
+          <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={title} />
         </TitleContainer>
         <GridTag variant="alt3" size="small" title={temaName} $gridArea={GridArea.TEMA}>
           <Ellipsis>{temaName}</Ellipsis>

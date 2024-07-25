@@ -26,7 +26,7 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
   const hasLogiskeVedlegg = logiskeVedlegg.length !== 0;
 
   return (
-    <LogiskeVedleggList onMouseDown={stopMouseDown} {...styleProps}>
+    <LogiskeVedleggList onMouseDown={stopMouseDown} {...styleProps} aria-label="Logiske vedlegg">
       {!hasLogiskeVedlegg && !isOpen ? (
         <LogiskeVedleggListItem key="none-create">
           <Tooltip content="Legg til logisk vedlegg">

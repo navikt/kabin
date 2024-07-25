@@ -55,8 +55,8 @@ const LoadedEditFrist = ({ updateState, state }: LoadedEditFristProps) => {
   ]);
 
   return (
-    <Container>
-      <Label as={Heading} size="small">
+    <Container aria-labelledby="fristIKabal">
+      <Label as={Heading} size="small" id="fristIKabal">
         Frist i Kabal
       </Label>
 
