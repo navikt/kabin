@@ -4,7 +4,7 @@ import { ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 interface BaseSvarbrevSetting {
   id: string;
   ytelseId: string;
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   behandlingstidUnits: number;
   customText: string | null;
   shouldSend: boolean;

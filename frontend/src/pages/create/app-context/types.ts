@@ -21,7 +21,7 @@ interface ICommonOverstyringer {
   klager: IPart | null;
   mottattKlageinstans: string | null; // LocalDate
   behandlingstidUnits: number;
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   avsender: IPart | null;
   ytelseId: string | null;
   hjemmelIdList: string[];
@@ -56,7 +56,7 @@ export interface Recipient {
 export interface Svarbrev {
   title: string;
   varsletBehandlingstidUnits: number | null;
-  varsletBehandlingstidUnitType: BehandlingstidUnitType | null;
+  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType | null;
   customText: string | null;
   fullmektigFritekst: string | null;
   receivers: Recipient[];
@@ -133,7 +133,7 @@ export const INITIAL_KLAGE: IKlageState = {
     mottattVedtaksinstans: null,
     mottattKlageinstans: null,
     behandlingstidUnits: 12,
-    behandlingstidUnitType: BehandlingstidUnitType.WEEKS,
+    behandlingstidUnitTypeId: BehandlingstidUnitType.WEEKS,
     hjemmelIdList: [],
     ytelseId: null,
     fullmektig: null,
@@ -145,7 +145,7 @@ export const INITIAL_KLAGE: IKlageState = {
   sendSvarbrev: true,
   svarbrev: {
     varsletBehandlingstidUnits: null,
-    varsletBehandlingstidUnitType: null,
+    varsletBehandlingstidUnitTypeId: null,
     fullmektigFritekst: null,
     receivers: [],
     title: DEFAULT_SVARBREV_NAME,
@@ -160,7 +160,7 @@ export const INITIAL_ANKE: IAnkeState = {
     klager: null,
     mottattKlageinstans: null,
     behandlingstidUnits: 12,
-    behandlingstidUnitType: BehandlingstidUnitType.WEEKS,
+    behandlingstidUnitTypeId: BehandlingstidUnitType.WEEKS,
     avsender: null,
     ytelseId: null,
     hjemmelIdList: [],
@@ -170,7 +170,7 @@ export const INITIAL_ANKE: IAnkeState = {
   sendSvarbrev: true,
   svarbrev: {
     varsletBehandlingstidUnits: null,
-    varsletBehandlingstidUnitType: null,
+    varsletBehandlingstidUnitTypeId: null,
     fullmektigFritekst: null,
     receivers: [],
     title: DEFAULT_SVARBREV_NAME,

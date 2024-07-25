@@ -6,7 +6,7 @@ interface SvarbrevBase {
   title: string;
   fullmektigFritekst: string | null;
   varsletBehandlingstidUnits: number;
-  varsletBehandlingstidUnitType: BehandlingstidUnitType;
+  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType;
   customText: string | null;
 }
 
@@ -32,7 +32,7 @@ interface CreateBasePayload {
   vedtak: CaseVedtak | null;
   avsender: IPartId | null;
   behandlingstidUnits: number | null;
-  behandlingstidUnitType: BehandlingstidUnitType | null;
+  behandlingstidUnitTypeId: BehandlingstidUnitType | null;
   fullmektig: IPartId | null;
   journalpostId: string | null;
   klager: IPartId | null;

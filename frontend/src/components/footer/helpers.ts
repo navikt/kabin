@@ -25,14 +25,14 @@ export const getSvarbrevInput = (svarbrev: Svarbrev | null, fullmektig: IPart | 
 
   const {
     customText,
-    varsletBehandlingstidUnitType,
+    varsletBehandlingstidUnitTypeId,
     varsletBehandlingstidUnits,
     fullmektigFritekst,
     receivers,
     title,
   } = svarbrev;
 
-  if (varsletBehandlingstidUnitType === null || varsletBehandlingstidUnits === null) {
+  if (varsletBehandlingstidUnitTypeId === null || varsletBehandlingstidUnits === null) {
     return null;
   }
 
@@ -40,7 +40,7 @@ export const getSvarbrevInput = (svarbrev: Svarbrev | null, fullmektig: IPart | 
     title: defaultString(title, DEFAULT_SVARBREV_NAME),
     fullmektigFritekst: defaultString(fullmektigFritekst, fullmektig?.name ?? null),
     varsletBehandlingstidUnits,
-    varsletBehandlingstidUnitType,
+    varsletBehandlingstidUnitTypeId,
     customText,
     receivers: receivers.map(recipientToApiRecipient),
   };

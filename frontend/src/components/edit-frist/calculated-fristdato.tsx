@@ -25,7 +25,7 @@ export const Fristdato = ({ units, unitType }: Props) => {
     return {
       fromDate: state.overstyringer.mottattKlageinstans,
       varsletBehandlingstidUnits: units,
-      varsletBehandlingstidUnitType: unitType,
+      varsletBehandlingstidUnitTypeId: unitType,
     };
   }, [state?.overstyringer.mottattKlageinstans, type, unitType, units]);
 

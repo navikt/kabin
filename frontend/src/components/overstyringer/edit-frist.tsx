@@ -35,19 +35,22 @@ const LoadedEditFrist = ({ updateState, state }: LoadedEditFristProps) => {
   const [unitType, setUnitType] = useState(BehandlingstidUnitType.WEEKS);
 
   useEffect(() => {
-    if (units === state.overstyringer.behandlingstidUnits && unitType === state.overstyringer.behandlingstidUnitType) {
+    if (
+      units === state.overstyringer.behandlingstidUnits &&
+      unitType === state.overstyringer.behandlingstidUnitTypeId
+    ) {
       return;
     }
 
     const timeout = setTimeout(() => {
-      updateState({ overstyringer: { behandlingstidUnits: units, behandlingstidUnitType: unitType } });
+      updateState({ overstyringer: { behandlingstidUnits: units, behandlingstidUnitTypeId: unitType } });
     }, 100);
 
     return () => {
       clearTimeout(timeout);
     };
   }, [
-    state.overstyringer.behandlingstidUnitType,
+    state.overstyringer.behandlingstidUnitTypeId,
     state.overstyringer.behandlingstidUnits,
     unitType,
     units,

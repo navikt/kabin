@@ -14,7 +14,7 @@ const OVERSTYR = 'OVERSTYR';
 interface Props {
   setting: SvarbrevSetting;
   onChange: (
-    svarbrev: Pick<Svarbrev, 'varsletBehandlingstidUnitType' | 'varsletBehandlingstidUnits' | 'customText'>,
+    svarbrev: Pick<Svarbrev, 'varsletBehandlingstidUnitTypeId' | 'varsletBehandlingstidUnits' | 'customText'>,
   ) => void;
 }
 
@@ -22,7 +22,7 @@ export const EditVarsletFrist = ({ setting, onChange }: Props) => {
   const [editMode, setEditMode] = useState(UENDRET);
   const [fritekst, setFritekst] = useState(setting.customText);
   const [units, setUnits] = useState(setting.behandlingstidUnits);
-  const [unitType, setUnitType] = useState(setting.behandlingstidUnitType);
+  const [unitType, setUnitType] = useState(setting.behandlingstidUnitTypeId);
 
   useEffect(() => {
     if (editMode === UENDRET) {
@@ -32,7 +32,7 @@ export const EditVarsletFrist = ({ setting, onChange }: Props) => {
     const timeout = setTimeout(() => {
       onChange({
         varsletBehandlingstidUnits: units,
-        varsletBehandlingstidUnitType: unitType,
+        varsletBehandlingstidUnitTypeId: unitType,
         customText: fritekst,
       });
     }, 100);
@@ -52,12 +52,12 @@ export const EditVarsletFrist = ({ setting, onChange }: Props) => {
           onChange={(m) => {
             if (m === UENDRET) {
               setUnits(setting.behandlingstidUnits);
-              setUnitType(setting.behandlingstidUnitType);
+              setUnitType(setting.behandlingstidUnitTypeId);
               setFritekst(setting.customText);
 
               onChange({
                 varsletBehandlingstidUnits: setting.behandlingstidUnits,
-                varsletBehandlingstidUnitType: setting.behandlingstidUnitType,
+                varsletBehandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
                 customText: setting.customText,
               });
             }
@@ -78,7 +78,7 @@ export const EditVarsletFrist = ({ setting, onChange }: Props) => {
         <Fritekst disabled={disabled} value={fritekst} onChange={setFritekst} />
       </TopRow>
 
-      {editMode === OVERSTYR ? <Warning behandlingstidUnits={units} behandlingstidUnitType={unitType} /> : null}
+      {editMode === OVERSTYR ? <Warning behandlingstidUnits={units} behandlingstidUnitTypeId={unitType} /> : null}
     </Container>
   );
 };

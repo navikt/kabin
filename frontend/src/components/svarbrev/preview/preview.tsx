@@ -78,7 +78,7 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
     const timeout = setTimeout(async () => {
       const loader = PDF_MANAGER.load({
         varsletBehandlingstidUnits: svarbrev.varsletBehandlingstidUnits ?? settings.behandlingstidUnits,
-        varsletBehandlingstidUnitType: svarbrev.varsletBehandlingstidUnitType ?? settings.behandlingstidUnitType,
+        varsletBehandlingstidUnitTypeId: svarbrev.varsletBehandlingstidUnitTypeId ?? settings.behandlingstidUnitTypeId,
         fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
         title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
         customText: svarbrev.customText,
@@ -104,7 +104,7 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
     svarbrev.customText,
     svarbrev.fullmektigFritekst,
     svarbrev.title,
-    svarbrev.varsletBehandlingstidUnitType,
+    svarbrev.varsletBehandlingstidUnitTypeId,
     svarbrev.varsletBehandlingstidUnits,
     type,
     ytelseId,

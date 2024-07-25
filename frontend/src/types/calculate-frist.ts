@@ -1,6 +1,6 @@
 export enum BehandlingstidUnitType {
-  WEEKS = 'WEEKS',
-  MONTHS = 'MONTHS',
+  WEEKS = '1',
+  MONTHS = '2',
 }
 
 export const BEHANDLINGSTID_UNIT_TYPES = Object.values(BehandlingstidUnitType);
@@ -16,5 +16,5 @@ export const isVarsletBehandlingstidUnitType = (value: string): value is Behandl
 export interface CalculateFristdatoParams {
   fromDate: string; // LocalDate
   varsletBehandlingstidUnits: number;
-  varsletBehandlingstidUnitType: BehandlingstidUnitType;
+  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType;
 }

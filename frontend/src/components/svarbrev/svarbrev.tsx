@@ -123,7 +123,7 @@ const LoadedSvarbrevInput = ({
       sendSvarbrev: setting.shouldSend,
       svarbrev: {
         varsletBehandlingstidUnits: setting.behandlingstidUnits,
-        varsletBehandlingstidUnitType: setting.behandlingstidUnitType,
+        varsletBehandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
         customText: setting.customText,
       },
     });

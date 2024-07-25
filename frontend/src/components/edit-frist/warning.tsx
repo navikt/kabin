@@ -8,11 +8,11 @@ import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { skipToken } from '@app/types/common';
 
 interface Props {
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   behandlingstidUnits: number;
 }
 
-export const Warning = ({ behandlingstidUnitType, behandlingstidUnits }: Props) => {
+export const Warning = ({ behandlingstidUnitTypeId, behandlingstidUnits }: Props) => {
   const { state, type } = useContext(AppContext);
   const { data } = useSvarbrevSettings(state?.overstyringer.ytelseId ?? skipToken);
 
@@ -39,12 +39,12 @@ export const Warning = ({ behandlingstidUnitType, behandlingstidUnits }: Props) 
   }
 
   const overstyringUnits = behandlingstidUnits ?? svarbrevSettings.behandlingstidUnits;
-  const overstyringUnitType = behandlingstidUnitType ?? svarbrevSettings.behandlingstidUnitType;
+  const overstyringUnitType = behandlingstidUnitTypeId ?? svarbrevSettings.behandlingstidUnitTypeId;
 
   const overstyringFristdato = getFristDate(overstyringUnits, overstyringUnitType, mottattKlageinstansDate);
   const svarbrevFristdato = getFristDate(
     svarbrevSettings.behandlingstidUnits,
-    svarbrevSettings.behandlingstidUnitType,
+    svarbrevSettings.behandlingstidUnitTypeId,
     mottattKlageinstansDate,
   );
 

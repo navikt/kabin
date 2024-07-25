@@ -36,7 +36,7 @@ const getAnkeApiPayload = (
     saksbehandlerIdent,
     hjemmelIdList,
     oppgaveId,
-    behandlingstidUnitType,
+    behandlingstidUnitTypeId,
     behandlingstidUnits,
   } = overstyringer;
 
@@ -46,7 +46,7 @@ const getAnkeApiPayload = (
     vedtak,
     mottattKlageinstans,
     behandlingstidUnits,
-    behandlingstidUnitType,
+    behandlingstidUnitTypeId,
     klager: nullablePartToPartId(klager),
     fullmektig: nullablePartToPartId(fullmektig),
     avsender: avsenderMottakerToPartId(avsender),
