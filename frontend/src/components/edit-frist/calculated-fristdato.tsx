@@ -1,5 +1,6 @@
 import { CalculatorIcon } from '@navikt/aksel-icons';
-import { BodyShort, Loader, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Tooltip } from '@navikt/ds-react';
+import { addMonths, addWeeks, format, parse } from 'date-fns';
 import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
@@ -29,15 +30,13 @@ export const Fristdato = ({ units, unitType }: Props) => {
     };
   }, [state?.overstyringer.mottattKlageinstans, type, unitType, units]);
 
-  const { data: fristdato, isLoading } = useCalculateFristdato(params);
+  const fristdato = useOptimisticCalculateFristdato(params);
 
-  if (type === Type.NONE || state.overstyringer.mottattKlageinstans === null) {
+  if (fristdato === null || type === Type.NONE || state.overstyringer.mottattKlageinstans === null) {
     return null;
   }
 
-  return isLoading ? (
-    <Loader size="xsmall" />
-  ) : (
+  return (
     <Tooltip content="Beregnet fristdato">
       <BodyShort as="time" dateTime={fristdato}>
         <Content>
@@ -56,3 +55,27 @@ const Content = styled.div`
   column-gap: 4px;
   color: var(--a-text-subtle);
 `;
+
+const DATE_FORMAT = 'yyyy-MM-dd';
+
+const useOptimisticCalculateFristdato = (params: CalculateFristdatoParams | typeof skipToken): string | null => {
+  const { data, isLoading } = useCalculateFristdato(params);
+
+  if (params === skipToken) {
+    return null;
+  }
+
+  if (isLoading || data === undefined) {
+    const { fromDate, varsletBehandlingstidUnitTypeId, varsletBehandlingstidUnits } = params;
+    const parsedFromDate = parse(fromDate, DATE_FORMAT, new Date());
+
+    switch (varsletBehandlingstidUnitTypeId) {
+      case BehandlingstidUnitType.WEEKS:
+        return format(addWeeks(parsedFromDate, varsletBehandlingstidUnits), DATE_FORMAT);
+      case BehandlingstidUnitType.MONTHS:
+        return format(addMonths(parsedFromDate, varsletBehandlingstidUnits), DATE_FORMAT);
+    }
+  }
+
+  return data;
+};
