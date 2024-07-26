@@ -81,7 +81,7 @@ export const muligheterAreEqual = (
   return a.fagsakId === b.fagsakId && a.fagsystemId === b.fagsystemId && a.vedtakDate === b.vedtakDate;
 };
 
-const isObject = (o: object | undefined | null): o is Record<string, unknown> => o !== null && typeof o === 'object';
+const isObject = (o: unknown): o is Record<string, unknown> => o !== null && typeof o === 'object' && !Array.isArray(o);
 
 export const cleanObject = <T extends object | undefined | null>(obj: T): T => {
   if (!isObject(obj)) {
