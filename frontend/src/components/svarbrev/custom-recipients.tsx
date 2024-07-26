@@ -45,12 +45,12 @@ const Recipients = ({ recipientList, removeRecipients, changeRecipient }: Recipi
   }
 
   return (
-    <StyledRecipientList>
+    <StyledRecipientList aria-label="Liste over ekstra mottakere">
       {recipientList.map(({ part, handling, overriddenAddress }) => {
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledRecipient key={part.id}>
+          <StyledRecipient key={part.id} aria-label={part.name ?? part.id}>
             <StyledRecipientContent>
               <StyledBrevmottaker>
                 <StyledRecipientInnerContent>

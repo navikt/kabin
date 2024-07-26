@@ -42,7 +42,7 @@ export const recipientStyle = css`
   }
 `;
 
-export const StyledRecipient = styled.div`
+export const StyledRecipient = styled.section`
   ${recipientStyle}
 `;
 
