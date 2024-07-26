@@ -7,28 +7,28 @@ export enum SourceId {
 }
 
 interface IBasemulighet {
-  id: string;
-  fagsakId: string;
-  fagsystemId: string;
-  sakenGjelder: IPart;
-  temaId: string;
-  sourceId: SourceId;
+  readonly id: string;
+  readonly fagsakId: string;
+  readonly fagsystemId: string;
+  readonly sakenGjelder: IPart;
+  readonly temaId: string;
+  readonly sourceId: SourceId;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
-  klageBehandlendeEnhet: string;
-  vedtakDate: string;
+  readonly klageBehandlendeEnhet: string;
+  readonly vedtakDate: string;
 }
 
 export interface IAnkeMulighet extends IBasemulighet {
-  ytelseId: Ytelse | null;
-  hjemmelIdList: string[];
-  klager: IPart;
-  fullmektig: IPart | null;
-  previousSaksbehandler: ISaksbehandler | null;
-  vedtakDate: string | null;
-  typeId: TypeId;
-  sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
+  readonly ytelseId: Ytelse | null;
+  readonly hjemmelIdList: string[];
+  readonly klager: IPart;
+  readonly fullmektig: IPart | null;
+  readonly previousSaksbehandler: ISaksbehandler | null;
+  readonly vedtakDate: string | null;
+  readonly typeId: TypeId;
+  readonly sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
 }
 
 interface ExistingAnkebehandling {

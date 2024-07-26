@@ -1,11 +1,10 @@
 import { Table } from '@navikt/ds-react';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -13,23 +12,24 @@ interface Props {
 }
 
 export const Klagemulighet = ({ mulighet }: Props) => {
-  const { type, updateState, state } = useContext(AppContext);
+  const selectedMulighet = useAppStateStore((s) => s.mulighet);
+  const setSelectedMulighet = useAppStateStore((s) => s.setMulighet);
 
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
-  const isSelected = type === Type.KLAGE && state.mulighet?.id === mulighet.id;
+  const isSelected = selectedMulighet?.id === mulighet.id;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (type === Type.KLAGE && state.mulighet !== mulighet) {
-        updateState({ mulighet });
+      if (selectedMulighet !== mulighet) {
+        setSelectedMulighet(mulighet);
       }
     },
-    [mulighet, state?.mulighet, type, updateState],
+    [mulighet, selectedMulighet, setSelectedMulighet],
   );
 
   return (

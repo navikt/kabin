@@ -149,14 +149,14 @@ export const INITIAL_KLAGE: IKlageState = {
 export const INITIAL_ANKE: IAnkeState = {
   mulighet: null,
   overstyringer: {
-    fullmektig: null,
-    klager: null,
     mottattKlageinstans: null,
     behandlingstidUnits: 12,
     behandlingstidUnitTypeId: BehandlingstidUnitType.WEEKS,
-    avsender: null,
-    ytelseId: null,
     hjemmelIdList: [],
+    ytelseId: null,
+    fullmektig: null,
+    klager: null,
+    avsender: null,
     saksbehandlerIdent: null,
     oppgaveId: null,
   },

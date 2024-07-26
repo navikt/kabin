@@ -1,8 +1,8 @@
 import { Search, Tag } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { IPart } from '@app/types/common';
 import { Lookup } from './lookup';
@@ -17,13 +17,13 @@ interface EditPartProps {
 }
 
 export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
-  const { state } = useContext(AppContext);
+  const mulighet = useAppStateStore((state) => state.mulighet);
   const [rawValue, setRawValue] = useState('');
   const [error, setError] = useState<string>();
   const [search, { data, isLoading: isSearching, isFetching, isError, reset }] = useSearchPartWithUtsendingslkanal();
 
-  const sakenGjelderId = state?.mulighet?.sakenGjelder.id;
-  const ytelseId = state?.mulighet?.temaId;
+  const sakenGjelderId = mulighet?.sakenGjelder.id;
+  const ytelseId = mulighet?.temaId;
 
   const onClick = () => {
     const [value, inputError] = cleanAndValidate(rawValue);

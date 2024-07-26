@@ -1,12 +1,11 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
 import { useFagsystemName, useYtelseName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { IAnkeMulighet } from '@app/types/mulighet';
 
@@ -15,13 +14,13 @@ interface Props {
 }
 
 export const SelectedAnkemulighet = ({ onClick }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
 
-  if (type !== Type.ANKE || state.mulighet === null) {
+  if (type !== Type.ANKE) {
     return null;
   }
 
-  return <RenderAnkemulighet mulighet={state.mulighet} onClick={onClick} />;
+  return <RenderAnkemulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

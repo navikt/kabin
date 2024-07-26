@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const useValidationError = (field: ValidationFieldNames): string | undefined => {
-  const { errors } = useContext(AppContext);
+  const errors = useAppStateStore((state) => state.errors);
 
   if (errors === null) {
     return undefined;

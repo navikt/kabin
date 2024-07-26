@@ -1,10 +1,10 @@
 import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useYtelseName } from '@app/hooks/kodeverk';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { skipToken } from '@app/types/common';
@@ -18,8 +18,10 @@ const NoneOption = ({ value }: { value: string | null | undefined }) =>
   value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
 
 export const Ytelse = () => {
-  const { state, updateState, type } = useContext(AppContext);
-  const tema = state?.mulighet?.temaId ?? skipToken;
+  const { type, mulighet } = useAppStateStore();
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
+  const tema = mulighet?.temaId ?? skipToken;
   const { data = [], isLoading, isUninitialized } = useTemaYtelser(tema);
 
   const prevData = usePrevious(data);
@@ -35,31 +37,31 @@ export const Ytelse = () => {
       isLoading ||
       data.length !== 1 ||
       first === undefined ||
-      first.id === state.overstyringer.ytelseId ||
+      first.id === ytelseId ||
       areEqual(prevData, data)
     ) {
       return;
     }
 
-    updateState({ overstyringer: { ytelseId: first.id, hjemmelIdList: [] } });
-  }, [data, isLoading, isUninitialized, state, prevData, type, updateState]);
+    setOverstyringer({ ytelseId: first.id, hjemmelIdList: [] });
+  }, [data, isLoading, isUninitialized, prevData, type, setOverstyringer, ytelseId]);
 
   if (type === Type.NONE) {
     return null;
   }
 
-  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.sourceId === SourceId.KABAL) {
+  if (type === Type.ANKE && mulighet !== null && mulighet.sourceId === SourceId.KABAL) {
     return (
       <ReadOnlyContainer>
         <Heading level="1" size="xsmall" spacing>
           Ytelse
         </Heading>
-        {state.mulighet.ytelseId === null ? (
+        {mulighet.ytelseId === null ? (
           <Alert variant="error" size="small" inline>
             Teknisk feil: Ytelse mangler. Kontakt Team Klage.
           </Alert>
         ) : (
-          <YtelseTag ytelseId={state.mulighet.ytelseId} />
+          <YtelseTag ytelseId={mulighet.ytelseId} />
         )}
       </ReadOnlyContainer>
     );
@@ -76,12 +78,12 @@ export const Ytelse = () => {
       error={error}
       label="Ytelse"
       size="small"
-      onChange={({ target }) => updateState({ overstyringer: { ytelseId: target.value, hjemmelIdList: [] } })}
-      value={state.overstyringer.ytelseId ?? NONE_SELECTED}
+      onChange={({ target }) => setOverstyringer({ ytelseId: target.value, hjemmelIdList: [] })}
+      value={ytelseId ?? NONE_SELECTED}
       id={ValidationFieldNames.YTELSE_ID}
       $gridColumn={1}
     >
-      <NoneOption value={state.overstyringer.ytelseId} />
+      <NoneOption value={ytelseId} />
       {options}
     </StyledSelect>
   );
@@ -91,7 +93,7 @@ interface ElementProps {
   $gridColumn: number;
 }
 
-const StyledSelect = styled(Select)<ElementProps>`
+const StyledSelect = styled(Select) <ElementProps>`
   grid-column: ${({ $gridColumn }) => $gridColumn};
 `;
 

@@ -1,8 +1,7 @@
-import { useContext } from 'react';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { avsenderIsPart } from '@app/domain/converters';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { IPart } from '@app/types/common';
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 export const ResetPartButton = ({ part, partField }: Props) => {
-  const { type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
   const defaultPart = useDefaultPart(partField);
 
   if (type === Type.NONE || defaultPart === null) {
@@ -31,7 +30,7 @@ export const ResetPartButton = ({ part, partField }: Props) => {
 };
 
 const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
-  const { type, state, journalpost } = useContext(AppContext);
+  const { type, journalpost, mulighet } = useAppStateStore();
 
   if (fieldId === FieldNames.AVSENDER) {
     if (journalpost !== null && journalpost.avsenderMottaker !== null) {
@@ -43,14 +42,14 @@ const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
 
   switch (type) {
     case Type.ANKE: {
-      return state.mulighet?.[fieldId] ?? null;
+      return mulighet?.[fieldId] ?? null;
     }
     case Type.KLAGE: {
       if (fieldId !== FieldNames.SAKEN_GJELDER) {
         return null;
       }
 
-      return state.mulighet?.[fieldId] ?? null;
+      return mulighet?.[fieldId] ?? null;
     }
     case Type.NONE:
       return null;

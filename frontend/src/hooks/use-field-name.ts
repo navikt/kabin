@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 
@@ -21,7 +20,7 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {
-  const { type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
 
   if (field === ValidationFieldNames.KLAGER) {
     if (type === Type.ANKE) {

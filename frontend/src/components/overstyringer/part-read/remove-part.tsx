@@ -1,8 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import { useContext } from 'react';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps } from '@app/components/overstyringer/types';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { IPart } from '@app/types/common';
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 export const RemovePartButton = ({ part, partField }: Props) => {
-  const { type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
 
   if (type === Type.NONE || part === null) {
     return null;

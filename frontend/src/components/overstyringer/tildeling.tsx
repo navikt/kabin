@@ -1,6 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Select } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { StyledSaksbehandlerIcon } from '@app/components/overstyringer/icons';
 import {
@@ -13,23 +12,20 @@ import {
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { ISaksbehandlerParams, useSaksbehandlere } from '@app/simple-api-state/use-api';
 import { ISaksbehandler, skipToken } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Tildeling = () => {
-  const { state } = useContext(AppContext);
+  const saksbehandlerIdent = useOverstyringerStore((state) => state.saksbehandlerIdent);
   const label = useFieldName(ValidationFieldNames.SAKSBEHANDLER);
 
   const error = useValidationError(ValidationFieldNames.SAKSBEHANDLER);
 
   return (
-    <StyledContainer
-      id={ValidationFieldNames.SAKSBEHANDLER}
-      $state={getState(state?.overstyringer.saksbehandlerIdent, error)}
-    >
+    <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} $state={getState(saksbehandlerIdent, error)}>
       <StyledSaksbehandlerIcon aria-hidden />
       <PartContent>
         <PartTextContent>
@@ -48,24 +44,22 @@ export const Tildeling = () => {
 };
 
 const useSaksbehandlereParams = (): ISaksbehandlerParams | typeof skipToken => {
-  const { state, type } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
 
-  if (type === Type.NONE || state.overstyringer.ytelseId === null || state.mulighet === null) {
+  if (type === Type.NONE || ytelseId === null || mulighet === null) {
     return skipToken;
   }
 
-  return { ytelseId: state.overstyringer.ytelseId, fnr: state.mulighet.sakenGjelder.id };
+  return { ytelseId, fnr: mulighet.sakenGjelder.id };
 };
 
 const useSaksbehandler = (): ISaksbehandler | null => {
   const params = useSaksbehandlereParams();
   const { data } = useSaksbehandlere(params);
-  const { state } = useContext(AppContext);
+  const saksbehandlerIdent = useOverstyringerStore((state) => state.saksbehandlerIdent);
 
-  return (
-    data?.saksbehandlere.find((saksbehandler) => saksbehandler.navIdent === state?.overstyringer.saksbehandlerIdent) ??
-    null
-  );
+  return data?.saksbehandlere.find((saksbehandler) => saksbehandler.navIdent === saksbehandlerIdent) ?? null;
 };
 
 const NONE = 'NONE';
@@ -74,7 +68,10 @@ const Content = () => {
   const saksbehandler = useSaksbehandler();
   const params = useSaksbehandlereParams();
   const { data } = useSaksbehandlere(params);
-  const { state, updateState, type } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const saksbehandlerIdent = useOverstyringerStore((state) => state.saksbehandlerIdent);
+  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
 
   if (type === Type.NONE) {
     return (
@@ -84,7 +81,7 @@ const Content = () => {
     );
   }
 
-  if (state.overstyringer.ytelseId === null) {
+  if (ytelseId === null) {
     return (
       <Alert size="small" variant="info" inline>
         Velg ytelse først.
@@ -92,7 +89,7 @@ const Content = () => {
     );
   }
 
-  if (state.mulighet === null) {
+  if (mulighet === null) {
     return (
       <Alert size="small" variant="info" inline>
         Velg mulighet først.
@@ -106,10 +103,8 @@ const Content = () => {
         size="small"
         label="Saksbehandler"
         hideLabel
-        value={state?.overstyringer.saksbehandlerIdent ?? NONE}
-        onChange={(e) =>
-          updateState({ overstyringer: { saksbehandlerIdent: e.target.value === NONE ? null : e.target.value } })
-        }
+        value={saksbehandlerIdent ?? NONE}
+        onChange={(e) => setOverstyringer({ saksbehandlerIdent: e.target.value === NONE ? null : e.target.value })}
       >
         <option value={NONE}>Ingen</option>
         {data?.saksbehandlere.map(({ navIdent, navn }) => (
@@ -124,20 +119,20 @@ const Content = () => {
 };
 
 const Actions = () => {
-  const { state, type } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
 
-  if (type === Type.NONE || state.mulighet === null) {
+  if (type === Type.NONE) {
     return null;
   }
 
   return (
     <PartActionsContainer>
       <SetButton label="Fjern" title="Fjern" icon={<TrashIcon aria-hidden />} saksbehandlerIdent={null} />
-      {type === Type.ANKE && state.mulighet.previousSaksbehandler !== null ? (
+      {type === Type.ANKE && mulighet.previousSaksbehandler !== null ? (
         <SetButton
           label="Fra klagen"
-          title={state.mulighet.previousSaksbehandler.navn}
-          saksbehandlerIdent={state.mulighet.previousSaksbehandler.navIdent}
+          title={mulighet.previousSaksbehandler.navn}
+          saksbehandlerIdent={mulighet.previousSaksbehandler.navIdent}
         />
       ) : null}
     </PartActionsContainer>
@@ -152,14 +147,16 @@ interface SetButtonProps {
 }
 
 const SetButton = ({ label, title, icon, saksbehandlerIdent }: SetButtonProps) => {
-  const { state, updateState, type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
+  const selectedSaksbehandlerIdent = useOverstyringerStore((state) => state.saksbehandlerIdent);
+  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
   const params = useSaksbehandlereParams();
   const { data, isLoading } = useSaksbehandlere(params);
 
   if (
     type === Type.NONE ||
     isLoading ||
-    state.overstyringer.saksbehandlerIdent === saksbehandlerIdent ||
+    selectedSaksbehandlerIdent === saksbehandlerIdent ||
     typeof data === 'undefined'
   ) {
     return null;
@@ -178,7 +175,7 @@ const SetButton = ({ label, title, icon, saksbehandlerIdent }: SetButtonProps) =
       variant="secondary"
       title={title}
       icon={icon}
-      onClick={() => updateState({ overstyringer: { saksbehandlerIdent } })}
+      onClick={() => setOverstyringer({ saksbehandlerIdent })}
     >
       {label}
     </Button>

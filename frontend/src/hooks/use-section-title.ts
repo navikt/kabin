@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { SectionNames } from '@app/types/validation';
 
@@ -19,7 +18,7 @@ const DEFAULT_SECTIONS: Record<SectionNames, string> = {
 };
 
 const useSections = () => {
-  const { type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
 
   switch (type) {
     case Type.KLAGE:

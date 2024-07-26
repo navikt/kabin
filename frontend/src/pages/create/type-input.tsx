@@ -1,6 +1,6 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, ToggleGroup } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
@@ -9,15 +9,17 @@ import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
-import { AppContext } from './app-context/app-context';
 import { isType } from './app-context/helpers';
 import { Type } from './app-context/types';
 
 export const TypeSelect = () => {
-  const { type, setType, journalpost } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
+  const setType = useAppStateStore((state) => state.setType);
+  const journalpost = useAppStateStore((state) => state.journalpost);
 
   const onChange = useCallback((v: string) => setType((e) => (isType(v) ? v : e)), [setType]);
 
@@ -42,7 +44,7 @@ export const TypeSelect = () => {
 };
 
 export const TypeInput = () => {
-  const { type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
 
   if (type === Type.ANKE) {
     return (
@@ -117,13 +119,14 @@ const WillCreateNewJournalpostInfo = () => {
 };
 
 const useJournalpostAndMulighet = () => {
-  const { journalpost, state } = useContext(AppContext);
+  const journalpost = useAppStateStore((state) => state.journalpost);
+  const mulighet = useAppStateStore((state) => state.mulighet);
 
-  if (journalpost === null || state === null || state.mulighet === null) {
+  if (journalpost === null || mulighet === null) {
     return null;
   }
 
-  return { journalpost, mulighet: state.mulighet };
+  return { journalpost, mulighet };
 };
 
 const Row = styled.div`

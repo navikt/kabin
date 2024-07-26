@@ -1,20 +1,21 @@
 import { Alert, Label, Tag, TagProps } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useHjemmelName } from '@app/hooks/kodeverk';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Innsendingshjemmel = () => {
   const { data = [] } = useLatestYtelser();
-  const { updateState, state, type } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const selectedHjemmelIdList = useOverstyringerStore((state) => state.hjemmelIdList);
+  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
   const error = useValidationError(ValidationFieldNames.HJEMMEL_ID_LIST);
-
-  const ytelseId = state?.overstyringer.ytelseId;
 
   const options = useMemo(() => {
     if (type === Type.NONE || ytelseId === null) {
@@ -47,14 +48,14 @@ export const Innsendingshjemmel = () => {
     <StyledFilterDropdown
       label="Hjemler"
       options={options}
-      selected={state.overstyringer.hjemmelIdList}
-      onChange={(hjemmelIdList) => updateState({ overstyringer: { hjemmelIdList } })}
+      selected={selectedHjemmelIdList}
+      onChange={(hjemmelIdList) => setOverstyringer({ hjemmelIdList })}
       error={error}
       id={ValidationFieldNames.HJEMMEL_ID_LIST}
       disabled={ytelseId === null}
     >
       <HjemlerContainer>
-        {state.overstyringer.hjemmelIdList.map((id) => (
+        {selectedHjemmelIdList.map((id) => (
           <HjemmelTag hjemmelId={id} key={id} size="small" />
         ))}
       </HjemlerContainer>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { PDF_ASPECT_RATIO } from '@app/components/svarbrev/preview/constants';
@@ -6,28 +6,13 @@ import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { defaultString } from '@app/functions/empty-string';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import {
-  DEFAULT_SVARBREV_NAME,
-  IAnkeOverstyringer,
-  IKlageOverstyringer,
-  Svarbrev,
-  TYPE_TO_SAKSTYPE,
-  Type,
-} from '@app/pages/create/app-context/types';
+import { useAppStateStore, useOverstyringerStore, useSvarbrevStore } from '@app/pages/create/app-context/state';
+import { DEFAULT_SVARBREV_NAME, TYPE_TO_SAKSTYPE, Type } from '@app/pages/create/app-context/types';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
 import { skipToken } from '@app/types/common';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 
-interface Props {
-  mulighet: IAnkeMulighet | IKlagemulighet;
-  overstyringer: IAnkeOverstyringer | IKlageOverstyringer;
-  svarbrev: Svarbrev;
-  journalpostId: string;
-}
-
-export const Preview = (props: Props) => {
-  const loaders = useUrl(props);
+export const Preview = () => {
+  const loaders = useUrl();
 
   const rendered: PdfLoader[] = [];
 
@@ -57,21 +42,30 @@ const PdfContainer = styled.div`
   background-color: white;
 `;
 
-const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
-  const { type, state } = useContext(AppContext);
-  const { data: svarbrevSettings } = useSvarbrevSettings(overstyringer.ytelseId ?? skipToken);
+const useUrl = () => {
+  const { type, mulighet } = useAppStateStore();
+  const selectedYtelseId = useOverstyringerStore((state) => state.ytelseId);
+  const mottattKlageinstans = useOverstyringerStore((state) => state.mottattKlageinstans);
+  const fullmektig = useOverstyringerStore((state) => state.fullmektig);
+  const klager = useOverstyringerStore((state) => state.klager);
+  const svarbrev = useSvarbrevStore();
+  const { data: svarbrevSettings } = useSvarbrevSettings(selectedYtelseId ?? skipToken);
 
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
   const ytelseId: string | null =
-    (type === Type.ANKE ? (overstyringer.ytelseId ?? state.mulighet?.ytelseId) : overstyringer.ytelseId) ?? null;
+    (type === Type.ANKE ? (selectedYtelseId ?? mulighet?.ytelseId) : selectedYtelseId) ?? null;
 
   const settings = getSvarbrevSettings(svarbrevSettings, type);
 
   useEffect(() => {
-    const mk = overstyringer.mottattKlageinstans;
-
-    if (mk === null || ytelseId === null || type === Type.NONE || settings === null) {
+    if (
+      mottattKlageinstans === null ||
+      ytelseId === null ||
+      type === Type.NONE ||
+      settings === null ||
+      mulighet === null
+    ) {
       return;
     }
 
@@ -79,14 +73,14 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
       const loader = PDF_MANAGER.load({
         varsletBehandlingstidUnits: svarbrev.varsletBehandlingstidUnits ?? settings.behandlingstidUnits,
         varsletBehandlingstidUnitTypeId: svarbrev.varsletBehandlingstidUnitTypeId ?? settings.behandlingstidUnitTypeId,
-        fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
+        fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? null),
         title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
         customText: svarbrev.customText,
         typeId: TYPE_TO_SAKSTYPE[type],
-        klager: overstyringer.klager?.id ?? null,
+        klager: klager?.id ?? null,
         sakenGjelder: mulighet.sakenGjelder.id,
         ytelseId,
-        mottattKlageinstans: mk,
+        mottattKlageinstans,
       });
 
       setLoaders((loaderList) =>
@@ -96,10 +90,11 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
 
     return () => clearTimeout(timeout);
   }, [
-    mulighet.sakenGjelder.id,
-    overstyringer.fullmektig?.name,
-    overstyringer.klager?.id,
-    overstyringer.mottattKlageinstans,
+    fullmektig?.name,
+    klager?.id,
+    mottattKlageinstans,
+    mulighet,
+    mulighet?.sakenGjelder.id,
     settings,
     svarbrev.customText,
     svarbrev.fullmektigFritekst,

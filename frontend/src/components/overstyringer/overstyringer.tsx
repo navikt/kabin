@@ -1,6 +1,5 @@
 import { DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
@@ -19,7 +18,7 @@ import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
@@ -33,12 +32,16 @@ interface Props {
 }
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const klager = useOverstyringerStore((state) => state.klager);
+  const fullmektig = useOverstyringerStore((state) => state.fullmektig);
+  const avsender = useOverstyringerStore((state) => state.avsender);
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  if (type === Type.NONE || state.mulighet === null) {
+  if (type === Type.NONE) {
     return (
       <CardLarge title={title}>
         <Placeholder>
@@ -47,8 +50,6 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
       </CardLarge>
     );
   }
-
-  const { overstyringer, mulighet } = state;
 
   return (
     <CardLarge title={title}>
@@ -63,7 +64,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
         <Ytelse />
         <Innsendingshjemmel />
       </Content>
-      {overstyringer.ytelseId === null ? (
+      {ytelseId === null ? (
         <Placeholder>
           <PersonGroupIcon aria-hidden />
         </Placeholder>
@@ -79,7 +80,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
             />
             <Part
               partField={FieldNames.KLAGER}
-              part={overstyringer.klager}
+              part={klager}
               label={klagerLabel}
               icon={<StyledKlagerIcon aria-hidden />}
               error={klagerError}
@@ -94,7 +95,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
             />
             <Part
               partField={FieldNames.FULLMEKTIG}
-              part={overstyringer.fullmektig}
+              part={fullmektig}
               label="Fullmektig"
               icon={<StyledFullmektigIcon aria-hidden />}
               required={false}
@@ -102,7 +103,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
               options={[
                 {
                   label: 'Avsender',
-                  defaultPart: avsenderMottakerToPart(overstyringer.avsender),
+                  defaultPart: avsenderMottakerToPart(avsender),
                   title: 'Avsender',
                   icon: <AvsenderIcon aria-hidden />,
                 },

@@ -1,11 +1,10 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { IKlagemulighet } from '@app/types/mulighet';
 
@@ -14,13 +13,13 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
 
-  if (type !== Type.KLAGE || state.mulighet === null) {
+  if (type !== Type.KLAGE) {
     return null;
   }
 
-  return <RenderKlagemulighet mulighet={state.mulighet} onClick={onClick} />;
+  return <RenderKlagemulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

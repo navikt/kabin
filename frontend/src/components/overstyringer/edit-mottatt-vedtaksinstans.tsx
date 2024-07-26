@@ -4,6 +4,7 @@ import { Datepicker } from '@app/components/date-picker/date-picker';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 
@@ -23,7 +24,7 @@ interface Props {
 }
 
 const RenderEditMottattNAV = ({ value, toDate }: Props) => {
-  const { type, updateState } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
   const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
 
   const parsedValue = useMemo(() => (value === null ? undefined : parseISO(value)), [value]);

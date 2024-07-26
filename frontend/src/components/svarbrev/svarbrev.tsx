@@ -1,6 +1,6 @@
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
@@ -8,7 +8,7 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { getSuggestedBrevmottakere } from '@app/components/svarbrev/get-suggested-part-recipients';
 import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
 import { PartRecipient } from '@app/components/svarbrev/types';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import {
   IAnkeOverstyringer,
   IAnkeState,
@@ -32,14 +32,20 @@ enum SvarbrevOptionEnum {
 }
 
 export const SvarbrevInput = () => {
-  const { type, state, updateState, journalpost } = useContext(AppContext);
-  const { data } = useSvarbrevSettings(state?.overstyringer.ytelseId ?? skipToken);
+  // const { type, state, updateState, journalpost } = useContext(AppContext);
+  const type = useAppStateStore((state) => state.type);
+  const journalpost = useAppStateStore((state) => state.journalpost);
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const mulighet = useAppStateStore((state) => state.mulighet);
+  const sendSvarbrev = useAppStateStore((state) => state.sendSvarbrev);
+
+  const { data } = useSvarbrevSettings(ytelseId ?? skipToken);
 
   if (type === Type.NONE) {
     return null;
   }
 
-  if (state.mulighet === null || journalpost === null || state.overstyringer.ytelseId === null) {
+  if (mulighet === null || journalpost === null || ytelseId === null) {
     return (
       <>
         <Row>
@@ -77,10 +83,10 @@ export const SvarbrevInput = () => {
 
   return (
     <LoadedSvarbrevInput
-      sendSvarbrev={state.sendSvarbrev}
+      sendSvarbrev={sendSvarbrev}
       svarbrev={state.svarbrev}
       journalpost={journalpost}
-      mulighet={state.mulighet}
+      mulighet={mulighet}
       overstyringer={state.overstyringer}
       updateState={updateState}
       suggestedRecipients={suggestedRecipients}

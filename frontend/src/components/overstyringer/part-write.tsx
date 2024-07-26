@@ -1,10 +1,10 @@
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
 import { IPart, skipToken } from '@app/types/common';
@@ -27,25 +27,26 @@ export const PartWrite = ({
   icon,
   error: validationError,
 }: PartWriteProps & InternalProps) => {
-  const { type, updateState } = useContext(AppContext);
+  const { type, mulighet } = useAppStateStore();
+  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
-  const { state } = useContext(AppContext);
 
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
   const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
-    if (!isValid || state === null || state.mulighet === null || state.overstyringer.ytelseId === null) {
+    if (!isValid || mulighet === null || ytelseId === null) {
       return skipToken;
     }
 
     return {
       identifikator: search,
-      sakenGjelderId: state.mulighet.sakenGjelder.id,
-      ytelseId: state.overstyringer.ytelseId,
+      sakenGjelderId: mulighet.sakenGjelder.id,
+      ytelseId,
     };
-  }, [isValid, state, search]);
+  }, [isValid, mulighet, ytelseId, search]);
 
   const { data, isLoading } = useSearchPartWithAddress(searchParams);
 
@@ -53,7 +54,7 @@ export const PartWrite = ({
     return null;
   }
 
-  const setPart = (newPart: IPart | null) => updateState({ overstyringer: { [partField]: newPart } });
+  const setPart = (newPart: IPart | null) => setOverstyringer({ [partField]: newPart });
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 

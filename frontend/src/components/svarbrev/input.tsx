@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { EditVarsletFrist } from '@app/components/svarbrev/edit-varslet-frist';
@@ -7,6 +7,7 @@ import { Preview } from '@app/components/svarbrev/preview/preview';
 import { Receipients } from '@app/components/svarbrev/recipients';
 import { PartRecipient } from '@app/components/svarbrev/types';
 import { defaultString } from '@app/functions/empty-string';
+import { useOverstyringerStore, useSvarbrevStore } from '@app/pages/create/app-context/state';
 import {
   DEFAULT_SVARBREV_NAME,
   IAnkeOverstyringer,
@@ -31,26 +32,18 @@ interface Props {
   setting: SvarbrevSetting;
 }
 
-export const InternalSvarbrevInput = ({
-  svarbrev,
-  mulighet,
-  overstyringer,
-  journalpostId,
-  suggestedRecipients,
-  updateState,
-  setting,
-}: Props) => {
-  const updateSvarbrev = useCallback(
-    (update: Partial<Svarbrev>) => updateState({ svarbrev: { ...svarbrev, ...update } }),
-    [svarbrev, updateState],
-  );
+export const InternalSvarbrevInput = ({ svarbrev, suggestedRecipients, updateState, setting }: Props) => {
+  const fullmektig = useOverstyringerStore((state) => state.fullmektig);
+  const setTitle = useSvarbrevStore((state) => state.setTitle);
+  const setFullmektigFritekst = useSvarbrevStore((state) => state.setFullmektigFritekst);
+  const setReceivers = useSvarbrevStore((state) => state.setReceivers);
 
   useEffect(() => {
     // Automatically add suggested recipients if there is only one and no recipients are added.
     if (suggestedRecipients.length === 1 && svarbrev.receivers.length === 0) {
-      updateSvarbrev({ receivers: suggestedRecipients });
+      setReceivers(suggestedRecipients);
     }
-  }, [suggestedRecipients, svarbrev.receivers, updateSvarbrev]);
+  }, [setReceivers, suggestedRecipients, svarbrev.receivers]);
 
   return (
     <>
@@ -62,22 +55,18 @@ export const InternalSvarbrevInput = ({
             size="small"
             placeholder={DEFAULT_SVARBREV_NAME}
             value={svarbrev.title}
-            onBlur={({ target }) => updateSvarbrev({ title: defaultString(target.value, DEFAULT_SVARBREV_NAME) })}
-            onChange={({ target }) => updateSvarbrev({ title: target.value })}
+            onBlur={({ target }) => setTitle(defaultString(target.value, DEFAULT_SVARBREV_NAME))}
+            onChange={({ target }) => setTitle(target.value)}
           />
 
           <StyledTextField
             label="Navn på fullmektig i brevet"
             htmlSize={45}
             size="small"
-            placeholder={overstyringer.fullmektig?.name ?? undefined}
-            value={svarbrev.fullmektigFritekst ?? overstyringer.fullmektig?.name ?? ''}
-            onBlur={({ target }) =>
-              updateSvarbrev({
-                fullmektigFritekst: defaultString(target.value, overstyringer.fullmektig?.name ?? null),
-              })
-            }
-            onChange={({ target }) => updateSvarbrev({ fullmektigFritekst: target.value })}
+            placeholder={fullmektig?.name ?? undefined}
+            value={svarbrev.fullmektigFritekst ?? fullmektig?.name ?? ''}
+            onBlur={({ target }) => setFullmektigFritekst(defaultString(target.value, fullmektig?.name ?? null))}
+            onChange={({ target }) => setFullmektigFritekst(target.value)}
             autoComplete="off"
           />
         </Row>
@@ -87,14 +76,14 @@ export const InternalSvarbrevInput = ({
         <Content>
           <Receipients
             recipients={svarbrev.receivers}
-            setRecipients={(receivers) => updateSvarbrev({ receivers })}
+            setRecipients={(receivers) => setReceivers(receivers)}
             suggestedRecipients={suggestedRecipients}
           />
         </Content>
       </Card>
 
       <Card title="Forhåndsvisning av svarbrev">
-        <Preview mulighet={mulighet} overstyringer={overstyringer} svarbrev={svarbrev} journalpostId={journalpostId} />
+        <Preview />
       </Card>
     </>
   );
