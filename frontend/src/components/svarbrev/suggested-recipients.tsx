@@ -68,7 +68,7 @@ export const SuggestedRecipients = ({
         const isChecked = selectedIds.includes(part.id);
 
         return (
-          <StyledRecipient key={part.id}>
+          <StyledRecipient key={part.id} aria-label={part.name ?? part.id}>
             <StyledBrevmottaker>
               <Checkbox size="small" value={part.id} data-testid="document-send-recipient">
                 <StyledRecipientContent>
