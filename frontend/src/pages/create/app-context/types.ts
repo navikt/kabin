@@ -29,6 +29,15 @@ interface ICommonOverstyringer {
   oppgaveId: number | null;
 }
 
+export interface Svarbrev {
+  title: string;
+  varsletBehandlingstidUnits: number | null;
+  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType | null;
+  customText: string | null;
+  fullmektigFritekst: string | null;
+  receivers: Recipient[];
+}
+
 export interface IKlageOverstyringer extends ICommonOverstyringer {
   mottattVedtaksinstans: string | null; // LocalDate
 }
@@ -51,22 +60,6 @@ export interface Recipient {
   part: IPart;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;
-}
-
-export interface Svarbrev {
-  title: string;
-  varsletBehandlingstidUnits: number | null;
-  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType | null;
-  customText: string | null;
-  fullmektigFritekst: string | null;
-  receivers: Recipient[];
-}
-
-export interface IAnkeState extends IAnkeStateUpdate {
-  mulighet: IAnkeMulighet | null;
-  overstyringer: IAnkeOverstyringer;
-  sendSvarbrev: boolean;
-  svarbrev: Svarbrev;
 }
 
 export interface IKlageStateUpdate {
