@@ -15,7 +15,6 @@ jobs:
   e2e_tests:
     name: E2E
     runs-on: ubuntu-latest
-    if: false # TODO: Remove this line when E2E tests are available
     permissions:
       contents: read
       id-token: write
