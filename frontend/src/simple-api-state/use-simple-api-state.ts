@@ -1,6 +1,6 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect, useState } from 'react';
 import { SimpleApiState } from '@app/simple-api-state/simple-api-state';
-import { skipToken } from '@app/types/common';
 import { State } from './types';
 
 const SKIP_STATE = {

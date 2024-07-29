@@ -1,9 +1,10 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useParams } from 'react-router-dom';
 import { StatusHeading } from '@app/pages/status/common-components';
 import { StatusDetails } from '@app/pages/status/details';
 import { DataContainer, LoadingContainer, PageWrapper, StyledLoader } from '@app/pages/status/styled-components';
 import { useKlageStatus } from '@app/simple-api-state/use-api';
-import { SaksTypeEnum, skipToken } from '@app/types/common';
+import { SaksTypeEnum } from '@app/types/common';
 import { IKlagestatus } from '@app/types/status';
 
 interface KlageStatusProps {

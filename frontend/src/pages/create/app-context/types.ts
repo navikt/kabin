@@ -1,5 +1,6 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { IAddress, IPart, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IAddress, IPart, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { HandlingEnum } from '@app/types/recipient';

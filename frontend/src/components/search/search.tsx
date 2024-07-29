@@ -4,12 +4,10 @@ import { IPersonSearch } from './hook';
 import { SearchDetails } from './search-details';
 
 interface Props extends IPersonSearch {
-  isInitialized: boolean;
   label?: string;
 }
 
 export const PersonSearch = ({
-  isInitialized,
   rawSearch,
   search,
   person,
@@ -38,22 +36,16 @@ export const PersonSearch = ({
       autoCapitalize="off"
       autoSave="off"
     />
-    <SearchDetails
-      person={person}
-      searchString={search}
-      isLoading={isLoading}
-      isValid={isValid}
-      isInitialized={isInitialized}
-    />
+    <SearchDetails person={person} searchString={search} isLoading={isLoading} isValid={isValid} />
   </>
 );
 
-export const SearchArea = styled.div<{ $isInitialized: boolean }>`
+export const SearchArea = styled.div`
   grid-area: search;
   display: flex;
   flex-direction: row;
   gap: 16px;
-  justify-content: ${({ $isInitialized }) => ($isInitialized ? 'flex-start' : 'center')};
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   flex-wrap: wrap;

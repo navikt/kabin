@@ -10,18 +10,40 @@ import { useCreateAnke } from './anke-hooks';
 import { useCreateKlage } from './klage-hooks';
 
 interface Props {
-  show: boolean;
-  closeConfirm: () => void;
   setError: (error: IApiValidationResponse | IApiErrorReponse | IValidationSection | Error | undefined) => void;
 }
 
-export const Confirm = ({ show, setError, closeConfirm }: Props) => {
+export const FinishButton = ({ setError }: Props) => {
+  const { state } = useContext(AppContext);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const toggleConfirm = () => setShowConfirm(!showConfirm);
+  const closeConfirm = () => setShowConfirm(false);
+
+  return (
+    <>
+      <Button
+        onClick={toggleConfirm}
+        size="small"
+        icon={<CheckmarkIcon aria-hidden />}
+        variant="primary"
+        disabled={state === null}
+      >
+        Fullfør
+      </Button>
+
+      {showConfirm ? <Confirm setError={setError} closeConfirm={closeConfirm} /> : null}
+    </>
+  );
+};
+
+const Confirm = ({ setError, closeConfirm }: Props & { closeConfirm: () => void }) => {
   const [loading, setLoading] = useState(false);
   const { type, state, setErrors } = useContext(AppContext);
   const createAnkeCallback = useCreateAnke(setError);
   const createKlageCallback = useCreateKlage(setError);
 
-  if (!show || type === Type.NONE) {
+  if (type === Type.NONE) {
     return null;
   }
 

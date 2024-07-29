@@ -1,5 +1,6 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, ToggleGroup } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
@@ -9,21 +10,31 @@ import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useAppStateStore } from '@app/pages/create/app-context/state';
+import { useGetRegistreringQuery, useSetTypeMutation } from '@app/redux/api/registrering';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
+import { TypeId } from '@app/types/mulighet';
 import { isType } from './app-context/helpers';
-import { Type } from './app-context/types';
 
 export const TypeSelect = () => {
-  const type = useAppStateStore((state) => state.type);
-  const setType = useAppStateStore((state) => state.setType);
-  const journalpost = useAppStateStore((state) => state.journalpost);
+  const registreringId = useRegistreringId();
+  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const [setType] = useSetTypeMutation();
 
-  const onChange = useCallback((v: string) => setType((e) => (isType(v) ? v : e)), [setType]);
+  const onChange = useCallback(
+    (typeId: string) => {
+      if (!isType(typeId) || registreringId === skipToken) {
+        return;
+      }
 
-  if (journalpost === null) {
+      setType({ id: registreringId, typeId });
+    },
+    [registreringId, setType],
+  );
+
+  if (registrering === undefined || registrering.journalpostId === null) {
     return (
       <Row>
         <Alert variant="info" size="small" inline>
@@ -35,18 +46,19 @@ export const TypeSelect = () => {
 
   return (
     <Row>
-      <ToggleGroup onChange={onChange} value={type} size="small">
-        <ToggleGroup.Item value={Type.KLAGE}>Klage</ToggleGroup.Item>
-        <ToggleGroup.Item value={Type.ANKE}>Anke</ToggleGroup.Item>
+      <ToggleGroup onChange={onChange} value={registrering.typeId ?? undefined} size="small">
+        <ToggleGroup.Item value={TypeId.KLAGE}>Klage</ToggleGroup.Item>
+        <ToggleGroup.Item value={TypeId.ANKE}>Anke</ToggleGroup.Item>
       </ToggleGroup>
     </Row>
   );
 };
 
 export const TypeInput = () => {
-  const type = useAppStateStore((state) => state.type);
+  const registreringId = useRegistreringId();
+  const { data: registrering } = useGetRegistreringQuery(registreringId);
 
-  if (type === Type.ANKE) {
+  if (registrering?.typeId === TypeId.ANKE) {
     return (
       <>
         <Ankemuligheter />
@@ -58,7 +70,7 @@ export const TypeInput = () => {
     );
   }
 
-  if (type === Type.KLAGE) {
+  if (registrering?.typeId === TypeId.KLAGE) {
     return (
       <>
         <Klagemuligheter />

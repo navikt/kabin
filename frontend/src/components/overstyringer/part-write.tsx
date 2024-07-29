@@ -1,5 +1,6 @@
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -7,7 +8,7 @@ import { isValidOrgnr } from '@app/domain/orgnr';
 import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
-import { IPart, skipToken } from '@app/types/common';
+import { IPart } from '@app/types/common';
 import { SearchResult } from './search-result';
 import { PartContent, States, StyledContainer } from './styled-components';
 import { BaseProps } from './types';

@@ -1,5 +1,6 @@
 import { CalculatorIcon } from '@navikt/aksel-icons';
 import { BodyShort, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, format, parse } from 'date-fns';
 import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
@@ -8,7 +9,6 @@ import { AppContext } from '@app/pages/create/app-context/app-context';
 import { Type } from '@app/pages/create/app-context/types';
 import { useCalculateFristdato } from '@app/simple-api-state/use-api';
 import { BehandlingstidUnitType, CalculateFristdatoParams } from '@app/types/calculate-frist';
-import { skipToken } from '@app/types/common';
 
 interface Props {
   units: number;

@@ -1,4 +1,5 @@
 import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useYtelseName } from '@app/hooks/kodeverk';
@@ -7,7 +8,6 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
-import { skipToken } from '@app/types/common';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';

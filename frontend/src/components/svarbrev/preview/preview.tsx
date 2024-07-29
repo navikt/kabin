@@ -1,3 +1,4 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
@@ -9,7 +10,6 @@ import { defaultString } from '@app/functions/empty-string';
 import { useAppStateStore, useOverstyringerStore, useSvarbrevStore } from '@app/pages/create/app-context/state';
 import { DEFAULT_SVARBREV_NAME, TYPE_TO_SAKSTYPE, Type } from '@app/pages/create/app-context/types';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
 
 export const Preview = () => {
   const loaders = useUrl();

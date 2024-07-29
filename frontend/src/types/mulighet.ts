@@ -45,3 +45,9 @@ export enum TypeId {
   ANKE = '2',
   ANKE_I_TR = '3',
 }
+
+export const TYPE_NAME: Record<TypeId, string> = {
+  [TypeId.KLAGE]: 'Klage',
+  [TypeId.ANKE]: 'Anke',
+  [TypeId.ANKE_I_TR]: 'Anke i Trygderetten',
+};

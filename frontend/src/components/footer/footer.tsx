@@ -1,41 +1,31 @@
-import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
+import { DeleteButton } from '@app/components/footer/delete-button';
 import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { FinishButton } from '@app/components/footer/finish-button';
 import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
-import { Confirm } from './confirm';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 type FooterErrors = IApiValidationResponse | IValidationSection | IApiErrorReponse | Error;
 
 export const Footer = () => {
-  const [error, setError] = useState<FooterErrors | undefined>();
-  const { state } = useContext(AppContext);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const toggleConfirm = () => setShowConfirm(!showConfirm);
-  const closeConfirm = () => setShowConfirm(false);
+  const [error, setError] = useState<FooterErrors>();
 
   return (
     <StyledFooter $hasError={error !== undefined}>
-      <Button
-        onClick={toggleConfirm}
-        size="small"
-        icon={<CheckmarkIcon aria-hidden />}
-        variant="primary"
-        disabled={state === null}
-      >
-        Fullfør
-      </Button>
-
-      <Confirm show={showConfirm} setError={setError} closeConfirm={closeConfirm} />
-
+      <Buttons>
+        <FinishButton setError={setError} />
+        <DeleteButton />
+      </Buttons>
       <ValidationSummaryPopup error={error} />
     </StyledFooter>
   );
 };
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
 
 interface IStyleProps {
   $hasError: boolean;

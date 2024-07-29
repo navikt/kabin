@@ -1,6 +1,7 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { CalculateFristdatoParams } from '@app/types/calculate-frist';
-import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';

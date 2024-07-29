@@ -1,11 +1,11 @@
 import { Alert } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
 import { useContext } from 'react';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { skipToken } from '@app/types/common';
 
 interface Props {
   behandlingstidUnitTypeId: BehandlingstidUnitType;

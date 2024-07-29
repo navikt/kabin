@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines */
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { FORMAT } from '@app/domain/date-formats';
@@ -8,7 +9,7 @@ import { isNotNullNorUndefined } from '@app/functions/is-not';
 import { partToRecipient } from '@app/functions/part-to-recipient';
 import { getUpdatedAnkeState } from '@app/pages/create/app-context/anke';
 import { getUpdatedKlageState } from '@app/pages/create/app-context/klage';
-import { IPart, skipToken } from '@app/types/common';
+import { IPart } from '@app/types/common';
 import { IValidationSection, SectionNames } from '@app/types/validation';
 import {
   NOOP,

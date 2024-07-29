@@ -1,3 +1,4 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createKlage } from '@app/api/api';
@@ -10,7 +11,6 @@ import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/conv
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IKlageState, Svarbrev, Type } from '@app/pages/create/app-context/types';
 import { useKlagemuligheter } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
 import { CreateKlageApiPayload, CreateResponse } from '@app/types/create';
 import { IApiValidationResponse, IValidationError, SectionNames, ValidationFieldNames } from '@app/types/validation';
 

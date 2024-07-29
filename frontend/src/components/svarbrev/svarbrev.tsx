@@ -1,5 +1,6 @@
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
@@ -21,7 +22,6 @@ import {
   UpdateFn,
 } from '@app/pages/create/app-context/types';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
 import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { SvarbrevSetting } from '@app/types/svarbrev-settings';

@@ -1,5 +1,5 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { IAnkeState, IKlageState, Type } from '@app/pages/create/app-context/types';
-import { skipToken } from '@app/types/common';
 import { SourceId } from '@app/types/mulighet';
 
 export const useParams = (

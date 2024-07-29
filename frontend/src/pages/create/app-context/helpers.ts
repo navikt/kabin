@@ -1,12 +1,12 @@
 import { avsenderIsPart } from '@app/domain/converters';
 import { IPart } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IAnkeMulighet, IKlagemulighet, TypeId } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
-import { IAnkeState, IAnkeStateUpdate, IAppContext, IKlageState, IKlageStateUpdate, Type } from './types';
+import { IAnkeState, IAnkeStateUpdate, IAppContext, IKlageState, IKlageStateUpdate } from './types';
 
-const TYPES = Object.values(Type);
-export const isType = (type: string): type is Type => TYPES.some((t) => t === type);
+const TYPES = Object.values(TypeId);
+export const isType = (type: string): type is TypeId => TYPES.some((t) => t === type);
 
 export const NOOP = () => {
   /* No operation */

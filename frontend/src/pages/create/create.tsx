@@ -1,69 +1,29 @@
-import { Loader } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentViewer } from '@app/components/document-viewer/document-viewer';
 import { Dokumenter } from '@app/components/documents/documents';
 import { Footer } from '@app/components/footer/footer';
-import { usePersonSearch } from '@app/components/search/hook';
-import { PersonSearch, SearchArea } from '@app/components/search/search';
-import { useDokumenter } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
-import { AppContextState } from './app-context/app-context';
+import { Person } from '@app/pages/create/person/person';
 import { DocumentViewerContextState } from './document-viewer-context';
 import { TypeInput, TypeSelect } from './type-input';
 
-export const CreatePage = () => {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const personSearch = usePersonSearch();
-
-  const { search } = personSearch;
-
-  const { isLoading } = useDokumenter(search);
-
-  useEffect(() => setIsInitialized((v) => (v ? v : search !== skipToken && !isLoading)), [isLoading, search]);
-
-  return (
-    <PageWrapper>
-      <AppContextState fnr={search}>
-        <StyledMain $isIinitialized={isInitialized}>
-          <SearchArea $isInitialized={isInitialized}>
-            <PersonSearch isInitialized={isInitialized} {...personSearch} />
-          </SearchArea>
-          <CreatePageLoader isInitialized={isInitialized} isLoading={isLoading} />
-        </StyledMain>
-        <Footer />
-      </AppContextState>
-    </PageWrapper>
-  );
-};
-
-interface LoaderProps {
-  isInitialized: boolean;
-  isLoading: boolean;
-}
-
-const CreatePageLoader = ({ isLoading, isInitialized }: LoaderProps) => {
-  if (!isInitialized) {
-    if (isLoading) {
-      return <Loader size="3xlarge">Laster...</Loader>;
-    }
-
-    return null;
-  }
-
-  return (
-    <DocumentViewerContextState>
-      <LeftColumn>
-        <Dokumenter />
-        <TypeSelect />
-        <TypeInput />
-      </LeftColumn>
-      <RightColumn>
-        <DocumentViewer />
-      </RightColumn>
-    </DocumentViewerContextState>
-  );
-};
+export const CreatePage = () => (
+  <PageWrapper>
+    <StyledMain>
+      <Person />
+      <DocumentViewerContextState>
+        <LeftColumn>
+          <Dokumenter />
+          <TypeSelect />
+          <TypeInput />
+        </LeftColumn>
+        <RightColumn>
+          <DocumentViewer />
+        </RightColumn>
+      </DocumentViewerContextState>
+    </StyledMain>
+    <Footer />
+  </PageWrapper>
+);
 
 const PageWrapper = styled.div`
   display: flex;
@@ -74,11 +34,11 @@ const PageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const StyledMain = styled.main<{ $isIinitialized: boolean }>`
-  display: ${({ $isIinitialized }) => ($isIinitialized ? 'grid' : 'flex')};
+const StyledMain = styled.main`
+  display: grid;
   flex-direction: row;
-  align-items: ${({ $isIinitialized }) => ($isIinitialized ? 'flex-start' : 'center')};
-  justify-content: ${({ $isIinitialized }) => ($isIinitialized ? 'flex-start' : 'center')};
+  align-items: flex-start;
+  justify-content: flex-start;
   align-content: flex-start;
   grid-template-areas: 'search search' 'left right';
   grid-template-columns: min-content 1fr;

@@ -1,21 +1,21 @@
 import { Loader, Tag, TagProps } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
 import { getSakspartNameAndId } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import { ISimplePart, skipToken } from '@app/types/common';
+import { ISimplePart } from '@app/types/common';
 
 interface Props {
   searchString: string | typeof skipToken;
   person: ISimplePart | null;
   isLoading: boolean;
   isValid: boolean;
-  isInitialized: boolean;
 }
 
 const SIZE: TagProps['size'] = 'medium';
 
-export const SearchDetails = ({ searchString, person, isLoading, isValid, isInitialized }: Props) => {
-  if (!isValid || !isInitialized || searchString === skipToken || searchString.length === 0) {
+export const SearchDetails = ({ searchString, person, isLoading, isValid }: Props) => {
+  if (!isValid || searchString === skipToken || searchString.length === 0) {
     return null;
   }
 

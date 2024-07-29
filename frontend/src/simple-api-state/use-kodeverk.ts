@@ -1,4 +1,4 @@
-import { skipToken } from '@app/types/common';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
 import { SimpleApiState } from './simple-api-state';
 import { getStateFactory } from './state-factory';

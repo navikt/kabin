@@ -1,5 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { StyledSaksbehandlerIcon } from '@app/components/overstyringer/icons';
 import {
@@ -15,7 +16,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
 import { Type } from '@app/pages/create/app-context/types';
 import { ISaksbehandlerParams, useSaksbehandlere } from '@app/simple-api-state/use-api';
-import { ISaksbehandler, skipToken } from '@app/types/common';
+import { ISaksbehandler } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Tildeling = () => {

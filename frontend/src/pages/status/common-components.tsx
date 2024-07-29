@@ -9,7 +9,7 @@ import { PersonSearch } from '@app/components/search/search';
 import { ENVIRONMENT } from '@app/environment';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
-import { IPart, ISaksbehandler, SaksTypeEnum, skipToken } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
@@ -143,11 +143,7 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId }: St
           {alertText}
         </Alert>
         <Inputs>
-          <PersonSearch
-            {...personSearch}
-            label="Søk på nytt ID-nummer"
-            isInitialized={personSearch.search !== skipToken}
-          />
+          <PersonSearch {...personSearch} label="Søk på nytt ID-nummer" />
           <Button as={NavLink} to="/" variant="primary" size="small" icon={<HouseIcon aria-hidden />}>
             Tilbake til forsiden
           </Button>
@@ -179,7 +175,7 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId }: St
   );
 };
 
-const StyledAlert = styled(Alert)<{ $gridArea: string }>`
+const StyledAlert = styled(Alert) <{ $gridArea: string }>`
   grid-area: ${({ $gridArea }) => $gridArea};
 `;
 

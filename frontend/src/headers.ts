@@ -21,6 +21,14 @@ export const getHeaders = () => ({
   [HeaderKeys.TAB_ID]: tabId,
 });
 
+export const setHeaders = (headers: Headers): Headers => {
+  headers.set(HeaderKeys.TRACEPARENT, generateTraceParent());
+  headers.set(HeaderKeys.VERSION, ENVIRONMENT.version);
+  headers.set(HeaderKeys.TAB_ID, tabId);
+
+  return headers;
+};
+
 export const getQueryParams = () => {
   const { version } = ENVIRONMENT;
   const traceParent = generateTraceParent();

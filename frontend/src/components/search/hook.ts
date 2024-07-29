@@ -1,8 +1,11 @@
 import { idnr } from '@navikt/fnrvalidator';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSearchPart } from '@app/simple-api-state/use-api';
-import { ISimplePart, skipToken } from '@app/types/common';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useGetPartQuery } from '@app/redux/api/part';
+import { useSetSakenGjelderMutation } from '@app/redux/api/registrering';
+import { ISimplePart } from '@app/types/common';
 
 export interface IPersonSearch {
   rawSearch: string;
@@ -16,24 +19,30 @@ export interface IPersonSearch {
 }
 
 export const usePersonSearch = (): IPersonSearch => {
+  const registreringId = useRegistreringId();
+  const [setSakenGjelder] = useSetSakenGjelderMutation();
   const fnr = useStateSearch();
   const [rawSearch, setRawSearch] = useState<string>(fnr);
   const [error, setError] = useState<string>();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const cleaned = rawSearch.replaceAll(' ', '');
   const isValid = idnr(cleaned).status === 'valid';
   const search = isValid ? cleaned : skipToken;
-  const { data: person = null, isLoading, isSuccess } = useSearchPart(search);
+  const { data: person = null, isLoading } = useGetPartQuery(search);
 
-  if (isSuccess && pathname !== '/opprett' && isValid) {
-    navigate(`/opprett`, { state: { search } });
-  }
+  useEffect(() => {
+    if (!isValid || registreringId === skipToken) {
+      return;
+    }
 
-  if (isValid && error !== undefined) {
-    setError(undefined);
-  }
+    if (person !== null) {
+      setSakenGjelder({ id: registreringId, sakenGjelderValue: person.id });
+    }
+
+    if (error !== undefined) {
+      setError(undefined);
+    }
+  }, [error, isValid, person, registreringId, setSakenGjelder]);
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
     if (key === 'Escape') {

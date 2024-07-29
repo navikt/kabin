@@ -1,3 +1,4 @@
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { createAnke } from '@app/api/api';
@@ -9,7 +10,6 @@ import { avsenderMottakerToPartId, nullablePartToPartId } from '@app/domain/conv
 import { AppContext } from '@app/pages/create/app-context/app-context';
 import { IAnkeState, Svarbrev, Type } from '@app/pages/create/app-context/types';
 import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
 import { CreateAnkeApiPayload, CreateResponse } from '@app/types/create';
 import {
   IApiValidationResponse,
