@@ -1,25 +1,25 @@
 import { Alert, BodyLong, Table } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
 import { useGetOppgaver } from '@app/simple-api-state/use-api';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Header } from './header';
-import { oppgaverIsEnabled, useParams } from './hooks';
+import { useParams } from './hooks';
 import { Row } from './row';
 import { SkeletonTable } from './skeleton-table';
 import { TableHeaders } from './table-headers';
 
 export const Oppgaver = () => {
-  const { fnr, type, state } = useContext(AppContext);
-  const { data: oppgaver, isLoading } = useGetOppgaver(useParams(type, fnr, state));
+  const oppgaverParams = useParams();
+  const { data: oppgaver, isLoading } = useGetOppgaver(oppgaverParams);
   const error = useValidationError(ValidationFieldNames.OPPGAVE);
 
-  if (!oppgaverIsEnabled(type, state)) {
+  if (oppgaverParams === skipToken) {
     return null;
   }
 
@@ -31,7 +31,7 @@ export const Oppgaver = () => {
     return (
       <Card>
         <Header />
-        <ErrorMessage type={type} />
+        <ErrorMessage />
       </Card>
     );
   }
@@ -70,8 +70,10 @@ const Contact = () => (
   </BodyLong>
 );
 
-const ErrorMessage = ({ type }: { type: Type }) => {
-  if (type === Type.KLAGE) {
+const ErrorMessage = () => {
+  const { typeId } = useRegistrering();
+
+  if (typeId === SaksTypeEnum.KLAGE) {
     return (
       <StyledAlert variant="warning" size="small">
         <BodyLong>
@@ -83,7 +85,7 @@ const ErrorMessage = ({ type }: { type: Type }) => {
     );
   }
 
-  if (type === Type.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE) {
     return (
       <StyledAlert variant="warning" size="small">
         <BodyLong>

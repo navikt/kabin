@@ -1,11 +1,10 @@
 import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer';
 import { useTema } from '@app/simple-api-state/use-kodeverk';
 import { IOppgave } from '@app/types/oppgave';
 
@@ -20,21 +19,22 @@ export const Row = ({
   tildeltEnhetsnr,
   beskrivelse,
 }: IOppgave) => {
-  const { type, state, updateState } = useContext(AppContext);
+  const { id: registreringId, typeId, overstyringer } = useRegistrering();
+  const [setOppgaveId] = useSetOppgaveIdMutation();
   const { data: tema = [] } = useTema();
 
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 
   const temaName = tema.find((t) => t.id === temaId)?.beskrivelse ?? temaId;
-  const selected = state.overstyringer.oppgaveId === id;
+  const selected = overstyringer.oppgaveId === id.toString(10);
 
   return (
     <StyledRow
       content={<Beskrivelse beskrivelse={beskrivelse} />}
       selected={selected}
-      onClick={() => updateState({ overstyringer: { oppgaveId: selected ? null : id } })}
+      onClick={() => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id })}
     >
       <Table.DataCell>
         {opprettetTidspunkt === null ? null : isoDateTimeToPrettyDate(opprettetTidspunkt)}
@@ -51,7 +51,7 @@ export const Row = ({
           <Button
             size="small"
             variant="tertiary"
-            onClick={() => updateState({ overstyringer: { oppgaveId: selected ? null : id } })}
+            onClick={() => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id })}
             icon={selected ? <CheckmarkCircleFillIconColored aria-hidden /> : null}
           >
             {selected ? null : 'Velg'}

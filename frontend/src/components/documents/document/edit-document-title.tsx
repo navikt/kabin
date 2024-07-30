@@ -2,13 +2,9 @@ import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
-import { editTitle } from '@app/api/api';
-import { isApiError } from '@app/components/footer/error-type-guard';
-import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
-import { AppContext } from '@app/pages/create/app-context/app-context';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
-import { useDokumenter } from '@app/simple-api-state/use-api';
+import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
 
 interface Props {
   exitEditMode: () => void;
@@ -19,9 +15,7 @@ interface Props {
 
 export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }: Props) => {
   const { viewDokument } = useContext(DocumentViewerContext);
-  const { fnr, setJournalpost } = useContext(AppContext);
-
-  const { updateData: updateDokumenter } = useDokumenter(fnr);
+  const [setJournalpostTitle] = useSetArkivertDokumentTitleMutation();
 
   const [newTitle, setNewTitle] = useState(title ?? '');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,46 +24,11 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
     setIsLoading(true);
 
     try {
-      const res = await editTitle(newTitle, journalpostId, dokumentInfoId);
+      await setJournalpostTitle({ journalpostId, dokumentInfoId, tittel: newTitle });
 
-      if (res.ok) {
-        toast.success(`Dokumenttittel endret`);
+      toast.success(`Dokumenttittel endret`);
 
-        setJournalpost((journalpost) => {
-          if (journalpost === null) {
-            return null;
-          }
-
-          return { ...journalpost, tittel: newTitle };
-        });
-
-        viewDokument({ tittel: newTitle, journalpostId, dokumentInfoId });
-
-        updateDokumenter((data) =>
-          data === undefined
-            ? undefined
-            : {
-                ...data,
-                dokumenter: data.dokumenter.map((doc) =>
-                  doc.journalpostId === journalpostId
-                    ? {
-                        ...doc,
-                        tittel: doc.dokumentInfoId === dokumentInfoId ? newTitle : doc.tittel,
-                        vedlegg: doc.vedlegg.map((v) =>
-                          v.dokumentInfoId === dokumentInfoId ? { ...v, tittel: newTitle } : v,
-                        ),
-                      }
-                    : doc,
-                ),
-              },
-        );
-      } else {
-        const json = (await res.json()) as unknown;
-
-        if (isApiError(json)) {
-          errorToast(json);
-        }
-      }
+      viewDokument({ tittel: newTitle, journalpostId, dokumentInfoId });
     } catch (e) {
       if (e instanceof Error) {
         toast.error(`Feil ved endring av dokumenttittel: ${e.message}`);
@@ -78,7 +37,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
 
     setIsLoading(false);
     exitEditMode();
-  }, [exitEditMode, newTitle, journalpostId, dokumentInfoId, viewDokument, updateDokumenter, setJournalpost]);
+  }, [exitEditMode, setJournalpostTitle, journalpostId, dokumentInfoId, newTitle, viewDokument]);
 
   const isChanged = title !== newTitle;
 

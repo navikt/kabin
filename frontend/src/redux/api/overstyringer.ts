@@ -1,10 +1,16 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { registreringApi } from '@app/redux/api/registrering';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { AvsenderMottakerType, IdType } from '@app/types/common';
 
 interface UpdatePartPayload {
   id: string;
   type: IdType | AvsenderMottakerType;
+}
+
+interface BehandlingstidPayload {
+  units: number;
+  unitType: BehandlingstidUnitType;
 }
 
 const overstyringerSlice = registreringApi.injectEndpoints({
@@ -20,6 +26,13 @@ const overstyringerSlice = registreringApi.injectEndpoints({
     setMottattKlageinstans: builder.mutation<void, { id: string; mottattKlageinstans: string }>({
       query: ({ id, ...body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/mottatt-klageinstans`,
+        method: 'PUT',
+        body,
+      }),
+    }),
+    setBehandlingstid: builder.mutation<void, { id: string } & BehandlingstidPayload>({
+      query: ({ id, ...body }) => ({
+        url: `/kabin-api/registreringer/${id}/overstyringer/behandlingstid`,
         method: 'PUT',
         body,
       }),
@@ -90,7 +103,7 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setOppgaveId: builder.mutation<void, { id: string; oppgaveId: string | null }>({
+    setOppgaveId: builder.mutation<void, { id: string; oppgaveId: number | null }>({
       query: ({ id, ...body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/oppgave-id`,
         method: 'PUT',
@@ -101,13 +114,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
 });
 
 export const {
-  useSetMottattVedtaksinstansMutation,
-  useSetMottattKlageinstansMutation,
-  useSetHjemmelIdListMutation,
-  useSetYtelseIdMutation,
-  useSetFullmektigMutation,
-  useSetKlagerMutation,
   useSetAvsenderMutation,
-  useSetSaksbehandlerIdentMutation,
+  useSetBehandlingstidMutation,
+  useSetFullmektigMutation,
+  useSetHjemmelIdListMutation,
+  useSetKlagerMutation,
+  useSetMottattKlageinstansMutation,
+  useSetMottattVedtaksinstansMutation,
   useSetOppgaveIdMutation,
+  useSetSaksbehandlerIdentMutation,
+  useSetYtelseIdMutation,
 } = overstyringerSlice;

@@ -5,5 +5,7 @@ import { useGetArkivertDokumentQuery } from '@app/redux/api/journalposter';
 export const useJournalpost = () => {
   const { journalpostId } = useRegistrering();
 
-  return useGetArkivertDokumentQuery(journalpostId ?? skipToken);
+  const { data, ...rest } = useGetArkivertDokumentQuery(journalpostId ?? skipToken);
+
+  return { journalpost: data, ...rest };
 };

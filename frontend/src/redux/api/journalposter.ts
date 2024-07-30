@@ -2,6 +2,11 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { API_BASE_QUERY } from '@app/redux/api/common';
 import { IArkivertDocument } from '@app/types/dokument';
 
+interface JournalpostId {
+  journalpostId: string;
+  dokumentInfoId: string;
+}
+
 export const arkiverteDokumenterApi = createApi({
   reducerPath: 'arkiverteDokumenterApi',
   baseQuery: API_BASE_QUERY,
@@ -25,8 +30,20 @@ export const arkiverteDokumenterApi = createApi({
     getArkivertDokument: builder.query<IArkivertDocument, string>({
       query: (id) => `/kabin-api/arkivertedokumenter/${id}`, // TODO: Finnes ikke i backend. Hva trenger vi av data?
     }),
+    setArkivertDokumentTitle: builder.mutation<{ tittel: string }, { tittel: string } & JournalpostId>({
+      query: ({ journalpostId, dokumentInfoId, tittel }) => ({
+        url: `/kabin-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/tittel`,
+        method: 'PUT',
+        body: { tittel },
+      }),
+      // TODO: Optimistic update.
+    }),
   }),
 });
 
-export const { useGetArkiverteDokumenterQuery, useLazyGetArkivertDokumentQuery, useGetArkivertDokumentQuery } =
-  arkiverteDokumenterApi;
+export const {
+  useGetArkiverteDokumenterQuery,
+  useLazyGetArkivertDokumentQuery,
+  useGetArkivertDokumentQuery,
+  useSetArkivertDokumentTitleMutation,
+} = arkiverteDokumenterApi;

@@ -1,24 +1,25 @@
-import { useContext } from 'react';
 import { FullmektigIcon, KlagerIcon, SakenGjelderIcon, StyledAvsenderIcon } from '@app/components/overstyringer/icons';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Part } from './part';
 import { FieldNames } from './types';
 
 export const Avsender = () => {
-  const { type, state, journalpost } = useContext(AppContext);
+  const { overstyringer } = useRegistrering();
+  const { typeId, mulighet } = useMulighet();
+  const { data: journalpost } = useJournalpost();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
 
-  if (type === Type.NONE || state.mulighet === null) {
+  if (typeId === null || mulighet === undefined) {
     return null;
   }
 
-  const { overstyringer, mulighet } = state;
-
-  if (journalpost === null || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
+  if (journalpost === undefined || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
     return null;
   }
 
@@ -37,9 +38,9 @@ export const Avsender = () => {
           icon: <SakenGjelderIcon aria-hidden />,
         },
         {
-          label: getKlagerLabel(type),
+          label: getKlagerLabel(typeId),
           defaultPart: overstyringer.klager,
-          title: getKlagerLabel(type),
+          title: getKlagerLabel(typeId),
           icon: <KlagerIcon aria-hidden />,
         },
         {
@@ -53,11 +54,11 @@ export const Avsender = () => {
   );
 };
 
-const getKlagerLabel = (type: Type.ANKE | Type.KLAGE) => {
+const getKlagerLabel = (type: SaksTypeEnum) => {
   switch (type) {
-    case Type.ANKE:
+    case SaksTypeEnum.ANKE:
       return 'Ankende part';
-    case Type.KLAGE:
+    case SaksTypeEnum.KLAGE:
       return 'Klager';
   }
 };

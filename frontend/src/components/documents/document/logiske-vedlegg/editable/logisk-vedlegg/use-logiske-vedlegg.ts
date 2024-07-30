@@ -1,9 +1,10 @@
-import { useContext, useState } from 'react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useState } from 'react';
 import { addLogiskVedlegg, removeLogiskVedlegg, updateLogiskVedlegg } from '@app/api/api';
 import { isApiError, isValidationResponse } from '@app/components/footer/error-type-guard';
 import { errorToast } from '@app/components/toast/error-toast';
 import { toast } from '@app/components/toast/store';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useDokumenter } from '@app/simple-api-state/use-api';
 import { IArkivertDocument, LogiskVedlegg } from '@app/types/dokument';
 
@@ -148,8 +149,8 @@ const handleNotOk = async (res: Response, setError: (e: string) => void) => {
 type UpdateLogiskeVedlegg = (logiskeVedlegg: LogiskVedlegg[]) => LogiskVedlegg[];
 
 const useUpdateDocuments = (dokumentInfoId: string) => {
-  const { fnr } = useContext(AppContext);
-  const { data, updateData } = useDokumenter(fnr);
+  const { sakenGjelderValue } = useRegistrering();
+  const { data, updateData } = useDokumenter(sakenGjelderValue ?? skipToken);
 
   return (updateLogiskeVedlegg: UpdateLogiskeVedlegg) => {
     const originalData = structuredClone(data);
@@ -176,9 +177,9 @@ const useUpdateDocuments = (dokumentInfoId: string) => {
           vedlegg: doc.vedlegg.map((v) =>
             v.dokumentInfoId === dokumentInfoId
               ? {
-                  ...v,
-                  logiskeVedlegg: updateLogiskeVedlegg(v.logiskeVedlegg),
-                }
+                ...v,
+                logiskeVedlegg: updateLogiskeVedlegg(v.logiskeVedlegg),
+              }
               : v,
           ),
         });

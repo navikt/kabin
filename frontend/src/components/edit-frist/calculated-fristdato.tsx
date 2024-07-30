@@ -27,7 +27,7 @@ export const Fristdato = ({ units, unitType }: Props) => {
       varsletBehandlingstidUnits: units,
       varsletBehandlingstidUnitTypeId: unitType,
     };
-  }, [overstyringer.mottattKlageinstans, type, unitType, units]);
+  }, [overstyringer.mottattKlageinstans, typeId, unitType, units]);
 
   const fristdato = useOptimisticCalculateFristdato(params);
 

@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useJournalpost } from '@app/hooks/use-journalpost';
 import { IArkivertDocument } from '@app/types/dokument';
 import { GridArea, GridTag, StyledField, StyledGrid } from '../styled-grid-components';
 import { AttachmentList } from './attachment-list';
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const Dokument = ({ dokument }: Props) => {
-  const { journalpost } = useContext(AppContext);
+  const { journalpost } = useJournalpost();
   const {
     dokumentInfoId,
     journalpostId,
