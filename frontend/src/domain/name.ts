@@ -2,9 +2,9 @@ import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { IAvsenderMottaker, IPart, ISimplePart, IdType } from '@app/types/common';
 
 export const getSakspartName = (
-  sakspart: IPart | ISimplePart | IAvsenderMottaker | undefined,
+  sakspart: IPart | ISimplePart | IAvsenderMottaker | undefined | null,
   defaultValue: string | undefined = '-',
-): string | null => (sakspart === undefined ? defaultValue : sakspart.name);
+): string | null => (sakspart === undefined || sakspart === null ? defaultValue : sakspart.name);
 
 const getSakspartId = (sakspart: IPart | ISimplePart | undefined): string | null => {
   if (sakspart === undefined) {

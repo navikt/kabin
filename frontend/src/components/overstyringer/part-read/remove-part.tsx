@@ -1,8 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps } from '@app/components/overstyringer/types';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { IPart } from '@app/types/common';
 
 interface Props {
@@ -11,9 +10,9 @@ interface Props {
 }
 
 export const RemovePartButton = ({ part, partField }: Props) => {
-  const type = useAppStateStore((state) => state.type);
+  const { typeId } = useRegistrering();
 
-  if (type === Type.NONE || part === null) {
+  if (typeId === null || part === null) {
     return null;
   }
 

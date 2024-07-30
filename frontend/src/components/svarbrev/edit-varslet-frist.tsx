@@ -1,84 +1,59 @@
 import { ToggleGroup } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
 import { Fritekst } from '@app/components/edit-frist/fritekst';
 import { Container, TopRow } from '@app/components/edit-frist/styled-components';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
 import { Warning } from '@app/components/edit-frist/warning';
-import { Svarbrev } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import {
+  useSetSvarbrevBehandlingstidMutation,
+  useSetSvarbrevOverrideBehandlingstidMutation,
+} from '@app/redux/api/svarbrev';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SvarbrevSetting } from '@app/types/svarbrev-settings';
-
-const UENDRET = 'UENDRET';
-const OVERSTYR = 'OVERSTYR';
 
 interface Props {
   setting: SvarbrevSetting;
-  onChange: (
-    svarbrev: Pick<Svarbrev, 'varsletBehandlingstidUnitTypeId' | 'varsletBehandlingstidUnits' | 'customText'>,
-  ) => void;
 }
 
-export const EditVarsletFrist = ({ setting, onChange }: Props) => {
-  const [editMode, setEditMode] = useState(UENDRET);
-  const [fritekst, setFritekst] = useState(setting.customText);
-  const [units, setUnits] = useState(setting.behandlingstidUnits);
-  const [unitType, setUnitType] = useState(setting.behandlingstidUnitTypeId);
+export const EditVarsletFrist = ({ setting }: Props) => {
+  const registrering = useRegistrering();
+  const [setBehandlingstid] = useSetSvarbrevBehandlingstidMutation();
+  const [setOverrideBehandlingstid] = useSetSvarbrevOverrideBehandlingstidMutation();
 
-  useEffect(() => {
-    if (editMode === UENDRET) {
-      return;
-    }
+  const { id } = registrering;
 
-    const timeout = setTimeout(() => {
-      onChange({
-        varsletBehandlingstidUnits: units,
-        varsletBehandlingstidUnitTypeId: unitType,
-        customText: fritekst,
-      });
-    }, 100);
+  const units = registrering.svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
+  const unitTypeId = registrering.svarbrev.behandlingstid?.unitType ?? setting.behandlingstidUnitTypeId;
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [editMode, fritekst, onChange, unitType, units]);
+  const setUnits = (u: number) => setBehandlingstid({ id, behandlingstid: { units: u, unitTypeId } });
 
-  const disabled = editMode === UENDRET;
+  const setUnitType = (type: BehandlingstidUnitType) =>
+    setBehandlingstid({ id, behandlingstid: { units, unitTypeId: type } });
+
+  const disabled = registrering.svarbrev.overrideBehandlingstid === false;
 
   return (
     <Container>
       <TopRow>
         <ToggleGroup
-          value={editMode}
-          onChange={(m) => {
-            if (m === UENDRET) {
-              setUnits(setting.behandlingstidUnits);
-              setUnitType(setting.behandlingstidUnitTypeId);
-              setFritekst(setting.customText);
-
-              onChange({
-                varsletBehandlingstidUnits: setting.behandlingstidUnits,
-                varsletBehandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
-                customText: setting.customText,
-              });
-            }
-
-            setEditMode(m);
-          }}
+          value={registrering.svarbrev.overrideBehandlingstid ? 'true' : 'false'}
+          onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true' })}
           size="small"
           label="Frist i svarbrev"
         >
-          <ToggleGroup.Item value={UENDRET} label="Uendret" />
-          <ToggleGroup.Item value={OVERSTYR} label="Overstyr" />
+          <ToggleGroup.Item value="false" label="Uendret" />
+          <ToggleGroup.Item value="true" label="Overstyr" />
         </ToggleGroup>
 
         <Units label="Antall" disabled={disabled} value={units} onChange={setUnits} />
 
-        <UnitType disabled={disabled} value={unitType} onChange={setUnitType} />
+        <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />
 
-        <Fritekst disabled={disabled} value={fritekst} onChange={setFritekst} />
+        <Fritekst />
       </TopRow>
 
-      {editMode === OVERSTYR ? <Warning behandlingstidUnits={units} behandlingstidUnitTypeId={unitType} /> : null}
+      {!disabled ? <Warning behandlingstidUnits={units} behandlingstidUnitTypeId={unitTypeId} /> : null}
     </Container>
   );
 };

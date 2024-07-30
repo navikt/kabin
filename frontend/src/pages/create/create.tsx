@@ -3,25 +3,28 @@ import { DocumentViewer } from '@app/components/document-viewer/document-viewer'
 import { Dokumenter } from '@app/components/documents/documents';
 import { Footer } from '@app/components/footer/footer';
 import { Person } from '@app/pages/create/person/person';
+import { RegistreringLoader } from '@app/pages/create/registrering-context';
 import { DocumentViewerContextState } from './document-viewer-context';
 import { TypeInput, TypeSelect } from './type-input';
 
 export const CreatePage = () => (
   <PageWrapper>
-    <StyledMain>
-      <Person />
-      <DocumentViewerContextState>
-        <LeftColumn>
-          <Dokumenter />
-          <TypeSelect />
-          <TypeInput />
-        </LeftColumn>
-        <RightColumn>
-          <DocumentViewer />
-        </RightColumn>
-      </DocumentViewerContextState>
-    </StyledMain>
-    <Footer />
+    <RegistreringLoader>
+      <StyledMain>
+        <Person />
+        <DocumentViewerContextState>
+          <LeftColumn>
+            <Dokumenter />
+            <TypeSelect />
+            <TypeInput />
+          </LeftColumn>
+          <RightColumn>
+            <DocumentViewer />
+          </RightColumn>
+        </DocumentViewerContextState>
+      </StyledMain>
+      <Footer />
+    </RegistreringLoader>
   </PageWrapper>
 );
 

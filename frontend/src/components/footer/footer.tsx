@@ -1,23 +1,21 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton } from '@app/components/footer/delete-button';
-import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { FinishButton } from '@app/components/footer/finish-button';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
-type FooterErrors = IApiValidationResponse | IValidationSection | IApiErrorReponse | Error;
-
 export const Footer = () => {
-  const [error, setError] = useState<FooterErrors>();
+  const id = useRegistreringId();
+  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: id });
 
   return (
-    <StyledFooter $hasError={error !== undefined}>
+    <StyledFooter $hasError={isError}>
       <Buttons>
-        <FinishButton setError={setError} />
+        <FinishButton />
         <DeleteButton />
       </Buttons>
-      <ValidationSummaryPopup error={error} />
+      <ValidationSummaryPopup />
     </StyledFooter>
   );
 };

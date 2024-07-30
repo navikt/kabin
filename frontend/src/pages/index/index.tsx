@@ -1,5 +1,7 @@
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { Registreringer } from '@app/pages/index/registreringer';
 import {
@@ -10,7 +12,7 @@ import {
 
 export const IndexPage = () => {
   const { data: uferdige, isLoading: isUferdigeLoading } = useGetUferdigeRegistreringerQuery();
-  const { data: ferdige, isLoading: isFerdigeLoading } = useGetFerdigeRegistreringerQuery();
+  const { data: ferdige, isLoading: isFerdigeLoading } = useGetFerdigeRegistreringerQuery({ sidenDager: 30 });
 
   if (isUferdigeLoading || isFerdigeLoading || uferdige === undefined || ferdige === undefined) {
     return (
@@ -34,37 +36,38 @@ export const IndexPage = () => {
 
   return (
     <PageWrapper>
-      <Heading level="1" size="medium" spacing>
-        Påbegynte registreringer
-      </Heading>
-
       <CreateButton />
-
-      <Registreringer registreringer={uferdige} isLoading={isUferdigeLoading} />
-
-      <Heading level="1" size="medium" spacing>
-        Ferdige registreringer
-      </Heading>
-
-      <Registreringer registreringer={ferdige} isLoading={isFerdigeLoading} />
+      <Registreringer registreringer={uferdige} isLoading={isUferdigeLoading} heading="Påbegynte registreringer" />
+      <Registreringer
+        registreringer={ferdige}
+        isLoading={isFerdigeLoading}
+        heading="Ferdige registreringer siste 30 dager"
+      />
     </PageWrapper>
   );
 };
 
 const CreateButton = () => {
+  const navigate = useNavigate();
   const [create, { isLoading }] = useCreateRegistreringMutation();
 
+  const onClick = useCallback(async () => {
+    const { id } = await create().unwrap();
+    navigate(`/registrering/${id}`);
+  }, [create, navigate]);
+
   return (
-    <Button onClick={() => create()} loading={isLoading} icon={<PlusCircleIcon aria-hidden role="presentation" />}>
+    <Button onClick={onClick} loading={isLoading} icon={<PlusIcon aria-hidden role="presentation" />}>
       Opprett ny registrering
     </Button>
   );
 };
 
 const PageWrapper = styled.main`
+  overflow: hidden;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  overflow: hidden;
+  row-gap: 32px;
+  align-items: flex-start;
 `;

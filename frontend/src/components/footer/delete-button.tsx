@@ -1,20 +1,14 @@
 import { BodyShort, Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useDeleteRegistreringMutation } from '@app/redux/api/registrering';
 
-const useFixedCacheKey = () => {
-  const id = useRegistreringId();
-
-  return id === skipToken ? 'no-id' : id;
-};
-
 export const DeleteButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
-  const fixedCacheKey = useFixedCacheKey();
-  const [, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey });
+  const id = useRegistreringId();
+
+  const [, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id });
 
   return (
     <DeleteContainer>
@@ -35,22 +29,15 @@ export const DeleteButton = () => {
 
 const Confirm = ({ close }: { close: () => void }) => {
   const id = useRegistreringId();
-  const fixedCacheKey = useFixedCacheKey();
 
-  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey });
+  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id });
 
   return (
     <Container>
       <BodyShort>Er du sikker på at du vil slette denne registreringen?</BodyShort>
       <Buttons>
         <Button
-          onClick={() => {
-            if (id === skipToken) {
-              return;
-            }
-
-            return deleteRegistrering(id);
-          }}
+          onClick={() => deleteRegistrering(id)}
           size="small"
           variant="danger"
           disabled={isLoading}

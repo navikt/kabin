@@ -1,5 +1,5 @@
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNames.KLAGER>, string> = {
@@ -20,10 +20,10 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {
-  const type = useAppStateStore((state) => state.type);
+  const { typeId } = useRegistrering();
 
   if (field === ValidationFieldNames.KLAGER) {
-    if (type === Type.ANKE) {
+    if (typeId === SaksTypeEnum.ANKE) {
       return 'Ankende part';
     }
 

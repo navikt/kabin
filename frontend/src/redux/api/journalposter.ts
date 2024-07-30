@@ -28,4 +28,5 @@ export const arkiverteDokumenterApi = createApi({
   }),
 });
 
-export const { useGetArkiverteDokumenterQuery, useLazyGetArkivertDokumentQuery } = arkiverteDokumenterApi;
+export const { useGetArkiverteDokumenterQuery, useLazyGetArkivertDokumentQuery, useGetArkivertDokumentQuery } =
+  arkiverteDokumenterApi;

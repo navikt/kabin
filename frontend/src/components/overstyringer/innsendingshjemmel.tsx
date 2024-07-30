@@ -3,33 +3,32 @@ import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useHjemmelName } from '@app/hooks/kodeverk';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Innsendingshjemmel = () => {
+  const registrering = useRegistrering();
   const { data = [] } = useLatestYtelser();
-  const type = useAppStateStore((state) => state.type);
-  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
-  const selectedHjemmelIdList = useOverstyringerStore((state) => state.hjemmelIdList);
-  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
+  const { id, typeId } = registrering;
+  const { ytelseId, hjemmelIdList } = registrering.overstyringer;
+  const [setHjemmelIdList] = useSetHjemmelIdListMutation();
+
   const error = useValidationError(ValidationFieldNames.HJEMMEL_ID_LIST);
 
   const options = useMemo(() => {
-    if (type === Type.NONE || ytelseId === null) {
+    if (typeId === null || ytelseId === null) {
       return [];
     }
 
     return (
-      data
-        .find(({ id }) => id === ytelseId)
-        ?.innsendingshjemler.map(({ id, beskrivelse }) => ({ value: id, label: beskrivelse })) ?? []
+      data.find((y) => y.id === ytelseId)?.innsendingshjemler.map((h) => ({ value: h.id, label: h.beskrivelse })) ?? []
     );
-  }, [data, type, ytelseId]);
+  }, [data, typeId, ytelseId]);
 
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 
@@ -48,16 +47,14 @@ export const Innsendingshjemmel = () => {
     <StyledFilterDropdown
       label="Hjemler"
       options={options}
-      selected={selectedHjemmelIdList}
-      onChange={(hjemmelIdList) => setOverstyringer({ hjemmelIdList })}
+      selected={hjemmelIdList ?? []}
+      onChange={(list) => setHjemmelIdList({ id, hjemmelIdList: list })}
       error={error}
       id={ValidationFieldNames.HJEMMEL_ID_LIST}
       disabled={ytelseId === null}
     >
       <HjemlerContainer>
-        {selectedHjemmelIdList.map((id) => (
-          <HjemmelTag hjemmelId={id} key={id} size="small" />
-        ))}
+        {hjemmelIdList?.map((h) => <HjemmelTag hjemmelId={h} key={h} size="small" />)}
       </HjemlerContainer>
     </StyledFilterDropdown>
   );

@@ -4,8 +4,8 @@ import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -13,9 +13,9 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { type, mulighet } = useAppStateStore();
+  const { typeId, mulighet } = useMulighet();
 
-  if (type !== Type.KLAGE) {
+  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined) {
     return null;
   }
 

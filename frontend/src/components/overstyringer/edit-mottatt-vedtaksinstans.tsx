@@ -3,18 +3,15 @@ import { parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMottattVedtaksinstansMutation } from '@app/redux/api/overstyringer';
-import { useGetRegistreringQuery } from '@app/redux/api/registrering';
-import { TypeId } from '@app/types/mulighet';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const EditMottattVedtaksinstans = () => {
-  const { data: registrering } = useGetRegistreringQuery(useRegistreringId());
+  const registrering = useRegistrering();
   const { data: journalposter } = useGetArkiverteDokumenterQuery(registrering?.sakenGjelderValue ?? skipToken);
 
   if (registrering === undefined) {
@@ -25,7 +22,7 @@ export const EditMottattVedtaksinstans = () => {
 
   const { typeId } = registrering;
 
-  if (typeId !== TypeId.KLAGE || journalpost === undefined) {
+  if (typeId !== SaksTypeEnum.KLAGE || journalpost === undefined) {
     return null;
   }
 
@@ -40,10 +37,8 @@ interface Props {
 }
 
 const RenderEditMottattNAV = ({ toDate }: Props) => {
-  const type = useAppStateStore((state) => state.type);
   const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
-  const registreringId = useRegistreringId();
-  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const registrering = useRegistrering();
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
   const parsedValue = useMemo(
@@ -57,13 +52,13 @@ const RenderEditMottattNAV = ({ toDate }: Props) => {
 
   const onChange = useCallback(
     (mottattVedtaksinstans: string | null) => {
-      if (type === Type.NONE || registreringId === skipToken || mottattVedtaksinstans === null) {
+      if (registrering === undefined || registrering.typeId === null || mottattVedtaksinstans === null) {
         return;
       }
 
-      setMottattVedtaksinstans({ id: registreringId, mottattVedtaksinstans });
+      setMottattVedtaksinstans({ id: registrering.id, mottattVedtaksinstans });
     },
-    [type, registreringId, setMottattVedtaksinstans],
+    [registrering, setMottattVedtaksinstans],
   );
 
   return (

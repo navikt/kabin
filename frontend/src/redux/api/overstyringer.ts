@@ -1,9 +1,10 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { registreringApi } from '@app/redux/api/registrering';
+import { AvsenderMottakerType, IdType } from '@app/types/common';
 
 interface UpdatePartPayload {
   id: string;
-  type: IdType.FNR;
+  type: IdType | AvsenderMottakerType;
 }
 
 const overstyringerSlice = registreringApi.injectEndpoints({
@@ -37,35 +38,59 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
     }),
-    setFullmektig: builder.mutation<PartResponse, { id: string; fullmektig: UpdatePartPayload }>({
-      query: ({ id, ...body }) => ({
+    setFullmektig: builder.mutation<PartResponse, { id: string; part: UpdatePartPayload | null }>({
+      query: ({ id, part: body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/fullmektig`,
         method: 'PUT',
         body,
       }),
     }),
-    setKlager: builder.mutation<PartResponse, { id: string; klager: UpdatePartPayload }>({
-      query: ({ id, ...body }) => ({
+    setKlager: builder.mutation<PartResponse, { id: string; part: UpdatePartPayload | null }>({
+      query: ({ id, part: body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/klager`,
         method: 'PUT',
         body,
       }),
     }),
-    setAvsender: builder.mutation<PartResponse, { id: string; avsender: UpdatePartPayload }>({
-      query: ({ id, ...body }) => ({
+    setAvsender: builder.mutation<PartResponse, { id: string; part: UpdatePartPayload | null }>({
+      query: ({ id, part: body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/avsender`,
         method: 'PUT',
         body,
       }),
     }),
-    setSaksbehandlerIdent: builder.mutation<void, { id: string; saksbehandlerIdent: string }>({
+    setSaksbehandlerIdent: builder.mutation<void, { id: string; saksbehandlerIdent: string | null }>({
       query: ({ id, ...body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/saksbehandler-ident`,
         method: 'PUT',
         body,
       }),
+      onQueryStarted: async ({ id, saksbehandlerIdent }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          registreringApi.util.updateQueryData('getRegistrering', id, (draft) => {
+            draft.overstyringer.saksbehandlerIdent = saksbehandlerIdent;
+          }),
+        );
+
+        const uferdigePatchResult = dispatch(
+          registreringApi.util.updateQueryData('getUferdigeRegistreringer', undefined, (draft) => {
+            for (const registrering of draft) {
+              if (registrering.id === id) {
+                registrering.overstyringer.saksbehandlerIdent = saksbehandlerIdent;
+              }
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+          uferdigePatchResult.undo();
+        }
+      },
     }),
-    setOppgaveId: builder.mutation<void, { id: string; oppgaveId: string }>({
+    setOppgaveId: builder.mutation<void, { id: string; oppgaveId: string | null }>({
       query: ({ id, ...body }) => ({
         url: `/kabin-api/registreringer/${id}/overstyringer/oppgave-id`,
         method: 'PUT',

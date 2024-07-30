@@ -1,16 +1,16 @@
-import { Type } from '@app/pages/create/app-context/types';
+import { SaksTypeEnum } from '@app/types/common';
 import { SvarbrevSettings } from '@app/types/svarbrev-settings';
 
-export const getSvarbrevSettings = (settings: SvarbrevSettings | undefined, type: Type) => {
+export const getSvarbrevSettings = (settings: SvarbrevSettings | undefined, type: SaksTypeEnum | null) => {
   if (settings === undefined) {
     return null;
   }
 
-  if (type === Type.ANKE) {
+  if (type === SaksTypeEnum.ANKE) {
     return settings[1];
   }
 
-  if (type === Type.KLAGE) {
+  if (type === SaksTypeEnum.KLAGE) {
     return settings[0];
   }
 

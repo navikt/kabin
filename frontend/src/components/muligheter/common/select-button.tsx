@@ -6,9 +6,10 @@ interface Props {
   isSelected: boolean;
   select: (e: React.MouseEvent) => void;
   isValid: boolean;
+  isLoading: boolean;
 }
 
-export const SelectMulighet = ({ isSelected, select, isValid }: Props) => {
+export const SelectMulighet = ({ isSelected, select, isValid, isLoading }: Props) => {
   const [icon, buttonText, title] = useButtonProps(isSelected, isValid);
 
   return (
@@ -20,6 +21,7 @@ export const SelectMulighet = ({ isSelected, select, isValid }: Props) => {
       onClick={select}
       disabled={!isValid}
       data-testid="select-ankemulighet"
+      loading={isLoading}
     >
       {buttonText}
     </Button>

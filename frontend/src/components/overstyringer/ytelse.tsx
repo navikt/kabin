@@ -1,14 +1,13 @@
 import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useYtelseName } from '@app/hooks/kodeverk';
-import { usePrevious } from '@app/hooks/use-previous';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
-import { IKodeverkSimpleValue } from '@app/types/kodeverk';
+import { SaksTypeEnum } from '@app/types/common';
 import { SourceId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
@@ -18,39 +17,21 @@ const NoneOption = ({ value }: { value: string | null | undefined }) =>
   value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
 
 export const Ytelse = () => {
-  const { type, mulighet } = useAppStateStore();
-  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
-  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
+  const registrering = useRegistrering();
+  const { id } = registrering;
+  const { typeId, mulighet } = useMulighet();
+  const { ytelseId } = registrering.overstyringer;
+  const [setYtelseId] = useSetYtelseIdMutation();
   const tema = mulighet?.temaId ?? skipToken;
-  const { data = [], isLoading, isUninitialized } = useTemaYtelser(tema);
-
-  const prevData = usePrevious(data);
+  const { data: ytelser = [] } = useTemaYtelser(tema);
 
   const error = useValidationError(ValidationFieldNames.YTELSE_ID);
 
-  useEffect(() => {
-    const [first] = data;
-
-    if (
-      type === Type.NONE ||
-      isUninitialized ||
-      isLoading ||
-      data.length !== 1 ||
-      first === undefined ||
-      first.id === ytelseId ||
-      areEqual(prevData, data)
-    ) {
-      return;
-    }
-
-    setOverstyringer({ ytelseId: first.id, hjemmelIdList: [] });
-  }, [data, isLoading, isUninitialized, prevData, type, setOverstyringer, ytelseId]);
-
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 
-  if (type === Type.ANKE && mulighet !== null && mulighet.sourceId === SourceId.KABAL) {
+  if (typeId === SaksTypeEnum.ANKE && mulighet !== undefined && mulighet.fagsystemId === SourceId.KABAL) {
     return (
       <ReadOnlyContainer>
         <Heading level="1" size="xsmall" spacing>
@@ -67,9 +48,9 @@ export const Ytelse = () => {
     );
   }
 
-  const options = data.map(({ id, navn }) => (
-    <option key={id} value={id}>
-      {navn}
+  const options = ytelser.map((ytelse) => (
+    <option key={ytelse.id} value={ytelse.id}>
+      {ytelse.navn}
     </option>
   ));
 
@@ -78,7 +59,7 @@ export const Ytelse = () => {
       error={error}
       label="Ytelse"
       size="small"
-      onChange={({ target }) => setOverstyringer({ ytelseId: target.value, hjemmelIdList: [] })}
+      onChange={({ target }) => setYtelseId({ id, ytelseId: target.value })}
       value={ytelseId ?? NONE_SELECTED}
       id={ValidationFieldNames.YTELSE_ID}
       $gridColumn={1}
@@ -93,7 +74,7 @@ interface ElementProps {
   $gridColumn: number;
 }
 
-const StyledSelect = styled(Select) <ElementProps>`
+const StyledSelect = styled(Select)<ElementProps>`
   grid-column: ${({ $gridColumn }) => $gridColumn};
 `;
 
@@ -114,15 +95,3 @@ const YtelseTag = ({ ytelseId }: IYtelseTagProps) => {
 const ReadOnlyContainer = styled.section`
   grid-column: 1;
 `;
-
-const areEqual = (prev: IKodeverkSimpleValue[] | undefined, current: IKodeverkSimpleValue[]) => {
-  if (prev === undefined) {
-    return false;
-  }
-
-  if (prev.length !== current.length) {
-    return false;
-  }
-
-  return prev.every(({ id }) => current.some((c) => c.id === id));
-};

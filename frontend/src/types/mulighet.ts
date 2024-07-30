@@ -1,4 +1,4 @@
-import { IPart, ISaksbehandler } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 
 export enum SourceId {
@@ -20,14 +20,14 @@ export interface IKlagemulighet extends IBasemulighet {
   readonly vedtakDate: string;
 }
 
-export interface IAnkeMulighet extends IBasemulighet {
+export interface IAnkemulighet extends IBasemulighet {
   readonly ytelseId: Ytelse | null;
   readonly hjemmelIdList: string[];
   readonly klager: IPart;
   readonly fullmektig: IPart | null;
   readonly previousSaksbehandler: ISaksbehandler | null;
   readonly vedtakDate: string | null;
-  readonly typeId: TypeId;
+  readonly typeId: SaksTypeEnum;
   readonly sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
 }
 
@@ -40,14 +40,7 @@ interface ExistingAnkebehandling {
   completed: string | null;
 }
 
-export enum TypeId {
-  KLAGE = '1',
-  ANKE = '2',
-  ANKE_I_TR = '3',
-}
-
-export const TYPE_NAME: Record<TypeId, string> = {
-  [TypeId.KLAGE]: 'Klage',
-  [TypeId.ANKE]: 'Anke',
-  [TypeId.ANKE_I_TR]: 'Anke i Trygderetten',
+export const TYPE_NAME: Record<SaksTypeEnum, string> = {
+  [SaksTypeEnum.KLAGE]: 'Klage',
+  [SaksTypeEnum.ANKE]: 'Anke',
 };

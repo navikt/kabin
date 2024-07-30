@@ -1,20 +1,14 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
-import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
-import { useCreateAnke } from './anke-hooks';
-import { useCreateKlage } from './klage-hooks';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
+import { SaksTypeEnum } from '@app/types/common';
+// import { useCreateAnke } from './anke-hooks';
+// import { useCreateKlage } from './klage-hooks';
 
-interface Props {
-  setError: (error: IApiValidationResponse | IApiErrorReponse | IValidationSection | Error | undefined) => void;
-}
-
-export const FinishButton = ({ setError }: Props) => {
-  const { state } = useContext(AppContext);
+export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
@@ -22,48 +16,28 @@ export const FinishButton = ({ setError }: Props) => {
 
   return (
     <>
-      <Button
-        onClick={toggleConfirm}
-        size="small"
-        icon={<CheckmarkIcon aria-hidden />}
-        variant="primary"
-        disabled={state === null}
-      >
+      <Button onClick={toggleConfirm} size="small" icon={<CheckmarkIcon aria-hidden />} variant="primary">
         Fullfør
       </Button>
 
-      {showConfirm ? <Confirm setError={setError} closeConfirm={closeConfirm} /> : null}
+      {showConfirm ? <Confirm closeConfirm={closeConfirm} /> : null}
     </>
   );
 };
 
-const Confirm = ({ setError, closeConfirm }: Props & { closeConfirm: () => void }) => {
-  const [loading, setLoading] = useState(false);
-  const { type, state, setErrors } = useContext(AppContext);
-  const createAnkeCallback = useCreateAnke(setError);
-  const createKlageCallback = useCreateKlage(setError);
+const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
+  // const [loading, setLoading] = useState(false);
+  // const { type, state, setErrors } = useContext(AppContext);
+  // const createAnkeCallback = useCreateAnke(setError);
+  // const createKlageCallback = useCreateKlage(setError);
+  const { id, typeId, svarbrev } = useRegistrering();
+  const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id });
 
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 
-  const text = getText(type, type === Type.ANKE && state.sendSvarbrev);
-
-  const onClick = async () => {
-    setLoading(true);
-    setError(undefined);
-    setErrors(null);
-
-    if (type === Type.ANKE) {
-      await createAnkeCallback();
-    }
-
-    if (type === Type.KLAGE) {
-      await createKlageCallback();
-    }
-
-    setLoading(false);
-  };
+  const text = getText(typeId, typeId === SaksTypeEnum.ANKE && svarbrev?.send);
 
   return (
     <StyledConfirm>
@@ -75,9 +49,9 @@ const Confirm = ({ setError, closeConfirm }: Props & { closeConfirm: () => void 
           variant="primary"
           size="small"
           icon={<CheckmarkIcon aria-hidden />}
-          loading={loading}
-          onClick={onClick}
-          disabled={state === null || loading}
+          loading={isLoading}
+          onClick={() => finish(id)}
+          disabled={isLoading}
         >
           Bekreft
         </Button>
@@ -107,16 +81,16 @@ const Buttons = styled.div`
   justify-content: space-between;
 `;
 
-const getText = (type: Type.KLAGE | Type.ANKE, sendSvarbrev: boolean = false) => {
+const getText = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, sendSvarbrev: boolean = false) => {
   switch (type) {
-    case Type.ANKE: {
+    case SaksTypeEnum.ANKE: {
       if (sendSvarbrev) {
         return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av anken.';
       }
 
       return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av anken.';
     }
-    case Type.KLAGE:
+    case SaksTypeEnum.KLAGE:
       return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
   }
 };

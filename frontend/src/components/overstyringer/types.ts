@@ -1,7 +1,6 @@
 import { IPart } from '@app/types/common';
 
 export enum FieldNames {
-  SAKEN_GJELDER = 'sakenGjelder',
   KLAGER = 'klager',
   FULLMEKTIG = 'fullmektig',
   AVSENDER = 'avsender',

@@ -5,14 +5,21 @@ import { IAnkeState, IKlageState, Recipient } from '@app/pages/create/app-contex
 import { IPart } from '@app/types/common';
 import { HandlingEnum } from '@app/types/recipient';
 
-export const getSuggestedBrevmottakere = (state: IAnkeState | IKlageState): PartRecipient[] => {
-  if (state.mulighet === null) {
-    return EMPTY_BREVMOTTAKER_LIST;
-  }
+interface Props {
+  klager: IPart | null;
+  fullmektig: IPart | null;
+  sakenGjelder: IPart;
+  receivers: Recipient[];
+}
 
-  const { klager, fullmektig } = state.overstyringer;
-  const { sakenGjelder } = state.mulighet;
-  const receivers = state.svarbrev?.receivers ?? EMPTY_RECIPIENTS_LIST;
+export const getSuggestedBrevmottakere = ({ klager, fullmektig, sakenGjelder, receivers }: Props): PartRecipient[] => {
+  // if (state.mulighet === null) {
+  //   return EMPTY_BREVMOTTAKER_LIST;
+  // }
+
+  // const { klager, fullmektig } = state.overstyringer;
+  // const { sakenGjelder } = state.mulighet;
+  // const receivers = state.svarbrev?.receivers ?? EMPTY_RECIPIENTS_LIST;
 
   const suggestedRecipients = [
     partToPartRecipient(klager, RecipientType.KLAGER),

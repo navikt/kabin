@@ -10,28 +10,28 @@ import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { useGetRegistreringQuery, useSetTypeMutation } from '@app/redux/api/registrering';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetTypeMutation } from '@app/redux/api/registrering';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
-import { TypeId } from '@app/types/mulighet';
+import { SaksTypeEnum } from '@app/types/common';
 import { isType } from './app-context/helpers';
 
 export const TypeSelect = () => {
-  const registreringId = useRegistreringId();
-  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const registrering = useRegistrering();
   const [setType] = useSetTypeMutation();
 
   const onChange = useCallback(
     (typeId: string) => {
-      if (!isType(typeId) || registreringId === skipToken) {
+      if (!isType(typeId)) {
         return;
       }
 
-      setType({ id: registreringId, typeId });
+      setType({ id: registrering.id, typeId });
     },
-    [registreringId, setType],
+    [registrering.id, setType],
   );
 
   if (registrering === undefined || registrering.journalpostId === null) {
@@ -47,18 +47,17 @@ export const TypeSelect = () => {
   return (
     <Row>
       <ToggleGroup onChange={onChange} value={registrering.typeId ?? undefined} size="small">
-        <ToggleGroup.Item value={TypeId.KLAGE}>Klage</ToggleGroup.Item>
-        <ToggleGroup.Item value={TypeId.ANKE}>Anke</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
       </ToggleGroup>
     </Row>
   );
 };
 
 export const TypeInput = () => {
-  const registreringId = useRegistreringId();
-  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const registrering = useRegistrering();
 
-  if (registrering?.typeId === TypeId.ANKE) {
+  if (registrering?.typeId === SaksTypeEnum.ANKE) {
     return (
       <>
         <Ankemuligheter />
@@ -70,7 +69,7 @@ export const TypeInput = () => {
     );
   }
 
-  if (registrering?.typeId === TypeId.KLAGE) {
+  if (registrering?.typeId === SaksTypeEnum.KLAGE) {
     return (
       <>
         <Klagemuligheter />
@@ -131,10 +130,10 @@ const WillCreateNewJournalpostInfo = () => {
 };
 
 const useJournalpostAndMulighet = () => {
-  const journalpost = useAppStateStore((state) => state.journalpost);
-  const mulighet = useAppStateStore((state) => state.mulighet);
+  const { data: journalpost } = useJournalpost();
+  const { mulighet } = useMulighet();
 
-  if (journalpost === null || mulighet === null) {
+  if (journalpost === undefined || mulighet === undefined) {
     return null;
   }
 

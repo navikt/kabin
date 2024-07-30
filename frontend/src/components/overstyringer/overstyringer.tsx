@@ -17,9 +17,9 @@ import { Tildeling } from '@app/components/overstyringer/tildeling';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderMottakerToPart } from '@app/domain/converters';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
 import { ValidationFieldNames } from '@app/types/validation';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
@@ -32,16 +32,14 @@ interface Props {
 }
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
-  const { type, mulighet } = useAppStateStore();
-  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
-  const klager = useOverstyringerStore((state) => state.klager);
-  const fullmektig = useOverstyringerStore((state) => state.fullmektig);
-  const avsender = useOverstyringerStore((state) => state.avsender);
+  const { typeId, overstyringer } = useRegistrering();
+  const { ytelseId, klager, fullmektig, avsender } = overstyringer;
+  const { klagemulighet, ankemulighet } = useMulighet();
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  if (type === Type.NONE) {
+  if (typeId === null || mulighet === null) {
     return (
       <CardLarge title={title}>
         <Placeholder>

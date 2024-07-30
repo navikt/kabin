@@ -5,8 +5,8 @@ import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
-import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
 import { IPart } from '@app/types/common';
 import { SearchResult } from './search-result';
@@ -28,9 +28,11 @@ export const PartWrite = ({
   icon,
   error: validationError,
 }: PartWriteProps & InternalProps) => {
-  const { type, mulighet } = useAppStateStore();
-  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
-  const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
+  const registrering = useRegistrering();
+  const { overstyringer } = registrering;
+  const { typeId, mulighet } = useMulighet();
+  const { ytelseId } = overstyringer;
+  // const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
@@ -38,7 +40,7 @@ export const PartWrite = ({
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
   const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
-    if (!isValid || mulighet === null || ytelseId === null) {
+    if (!isValid || mulighet === undefined || ytelseId === null) {
       return skipToken;
     }
 
@@ -51,7 +53,7 @@ export const PartWrite = ({
 
   const { data, isLoading } = useSearchPartWithAddress(searchParams);
 
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 

@@ -5,18 +5,17 @@ import { Card } from '@app/components/card/card';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { getSakspartName } from '@app/domain/name';
 import { useFagsystemName, useYtelseName } from '@app/hooks/kodeverk';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
-import { IAnkeMulighet } from '@app/types/mulighet';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { IAnkemulighet } from '@app/types/mulighet';
 
 interface Props {
   onClick: () => void;
 }
 
 export const SelectedAnkemulighet = ({ onClick }: Props) => {
-  const { type, mulighet } = useAppStateStore();
+  const { typeId, mulighet } = useMulighet();
 
-  if (type !== Type.ANKE) {
+  if (typeId !== null || mulighet === undefined) {
     return null;
   }
 
@@ -24,7 +23,7 @@ export const SelectedAnkemulighet = ({ onClick }: Props) => {
 };
 
 interface RenderProps extends Props {
-  mulighet: IAnkeMulighet;
+  mulighet: IAnkemulighet;
 }
 
 const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {

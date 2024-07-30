@@ -2,15 +2,15 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { IApiErrorReponse, isApiError, isValidationSection } from '@app/components/footer/error-type-guard';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
+import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
 import { StyledHeader, ValidationSummary } from './validation-summary';
 
-interface Props {
-  error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error | undefined;
-}
+export const ValidationSummaryPopup = () => {
+  const id = useRegistreringId();
+  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: id });
 
-export const ValidationSummaryPopup = ({ error }: Props) => {
   const hasError = error !== undefined;
   const [isOpen, setIsOpen] = useState(hasError);
 
@@ -50,7 +50,7 @@ export const ValidationSummaryPopup = ({ error }: Props) => {
   );
 };
 
-const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error }) => {
+const RenderError = ({ error }: { error: unknown }) => {
   if (error instanceof Error) {
     return (
       <Alert variant="warning">
@@ -75,7 +75,11 @@ const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSec
     return <ValidationSummary sections={[error]} />;
   }
 
-  return <ValidationSummary sections={error.sections} />;
+  if (isValidationResponse(error)) {
+    return <ValidationSummary sections={error.sections} />;
+  }
+
+  return <Alert variant="error">Ukjent feil</Alert>;
 };
 
 const StyledAlertStripeText = styled.div`

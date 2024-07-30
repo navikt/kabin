@@ -1,12 +1,12 @@
 import { avsenderIsPart } from '@app/domain/converters';
-import { IPart } from '@app/types/common';
+import { IPart, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { IAnkeMulighet, IKlagemulighet, TypeId } from '@app/types/mulighet';
+import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IValidationSection, SectionNames, ValidationFieldNames } from '@app/types/validation';
 import { IAnkeState, IAnkeStateUpdate, IAppContext, IKlageState, IKlageStateUpdate } from './types';
 
-const TYPES = Object.values(TypeId);
-export const isType = (type: string): type is TypeId => TYPES.some((t) => t === type);
+const TYPES = Object.values(SaksTypeEnum);
+export const isType = (type: string): type is SaksTypeEnum => TYPES.some((t) => t === type);
 
 export const NOOP = () => {
   /* No operation */
@@ -67,8 +67,8 @@ export const getUpdateAvsender = (update: IArkivertDocument | null): IPart | nul
 };
 
 export const muligheterAreEqual = (
-  a: IKlagemulighet | IAnkeMulighet | null,
-  b: IKlagemulighet | IAnkeMulighet | null,
+  a: IKlagemulighet | IAnkemulighet | null,
+  b: IKlagemulighet | IAnkemulighet | null,
 ) => {
   if (a === b) {
     return true;

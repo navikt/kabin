@@ -8,17 +8,16 @@ import { DocumentTable } from '@app/components/documents/document-table';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
-import { useGetRegistreringQuery, useSetJournalpostIdMutation } from '@app/redux/api/registrering';
+import { useSetJournalpostIdMutation } from '@app/redux/api/registrering';
 import { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Dokumenter = () => {
-  const registreringId = useRegistreringId();
-  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const registrering = useRegistrering();
   const {
     data: dokumenter,
     isLoading,
@@ -35,16 +34,11 @@ export const Dokumenter = () => {
       setIsExpanded(true);
       viewDokument(null);
 
-      if (
-        registreringId !== skipToken &&
-        registrering !== undefined &&
-        registrering.typeId !== null &&
-        registrering.journalpostId !== null
-      ) {
-        setJournalpost({ id: registreringId, journalpostId: null });
+      if (registrering !== undefined && registrering.typeId !== null && registrering.journalpostId !== null) {
+        setJournalpost({ id: registrering.id, journalpostId: null });
       }
     }
-  }, [dokumenter, registrering, registreringId, setJournalpost, viewDokument]);
+  }, [dokumenter, registrering, registrering.id, setJournalpost, viewDokument]);
 
   if (registrering === undefined) {
     return null;

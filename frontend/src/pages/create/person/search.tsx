@@ -1,3 +1,4 @@
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
@@ -8,7 +9,11 @@ import { PersonDetails } from '@app/pages/create/person/details';
 import { useGetPartQuery } from '@app/redux/api/part';
 import { useSetSakenGjelderMutation } from '@app/redux/api/registrering';
 
-export const PersonSearch = () => {
+interface Props {
+  onDone: () => void;
+}
+
+export const PersonSearch = ({ onDone }: Props) => {
   const registreringId = useRegistreringId();
   const [setSakenGjelder, { isLoading: isSetting }] = useSetSakenGjelderMutation();
   const [rawSearch, setRawSearch] = useState('');
@@ -19,20 +24,6 @@ export const PersonSearch = () => {
   const search = isValid ? cleaned : skipToken;
   const { data: person } = useGetPartQuery(search);
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
-    if (key === 'Escape') {
-      setRawSearch('');
-
-      return;
-    }
-
-    if (key !== 'Enter') {
-      return;
-    }
-
-    setError(isValid ? undefined : 'Ugyldig ID-nummer');
-  };
-
   const onSelect = useCallback(() => {
     if (person !== undefined) {
       setSakenGjelder({ id: registreringId, sakenGjelderValue: person.id });
@@ -41,7 +32,29 @@ export const PersonSearch = () => {
     if (error !== undefined) {
       setError(undefined);
     }
-  }, [error, person, registreringId, setSakenGjelder]);
+
+    onDone();
+  }, [error, onDone, person, registreringId, setSakenGjelder]);
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    ({ key }) => {
+      if (key === 'Escape') {
+        setRawSearch('');
+        onDone();
+
+        return;
+      }
+
+      if (key !== 'Enter') {
+        onSelect();
+
+        return;
+      }
+
+      setError(isValid ? undefined : 'Ugyldig ID-nummer');
+    },
+    [isValid, onDone, onSelect],
+  );
 
   return (
     <>
@@ -66,11 +79,27 @@ export const PersonSearch = () => {
       {isValid && search !== skipToken ? (
         <>
           <PersonDetails person={person} />
-          <Button size="small" variant="primary" onClick={onSelect} loading={isSetting || person === undefined}>
+          <Button
+            size="small"
+            variant="primary"
+            onClick={onSelect}
+            loading={isSetting || person === undefined}
+            icon={<CheckmarkIcon role="presentation" aria-hidden />}
+          >
             Velg
           </Button>
         </>
       ) : null}
+
+      <Button
+        size="small"
+        variant="secondary"
+        onClick={onDone}
+        loading={isSetting}
+        icon={<XMarkIcon role="presentation" aria-hidden />}
+      >
+        Avbryt
+      </Button>
     </>
   );
 };

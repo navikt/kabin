@@ -4,32 +4,34 @@ import { SelectMulighet } from '@app/components/muligheter/common/select-button'
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
+import { Registrering, useSetMulighetMutation } from '@app/redux/api/registrering';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
+  registrering: Registrering;
   mulighet: IKlagemulighet;
 }
 
-export const Klagemulighet = ({ mulighet }: Props) => {
-  const selectedMulighet = useAppStateStore((s) => s.mulighet);
-  const setSelectedMulighet = useAppStateStore((s) => s.setMulighet);
+export const Klagemulighet = ({ registrering, mulighet }: Props) => {
+  const { id } = registrering;
+  const selectedMulighetId = registrering.mulighet?.id;
+  const [setSelectedMulighet, { isLoading }] = useSetMulighetMutation();
 
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(mulighet.fagsystemId);
 
-  const isSelected = selectedMulighet?.id === mulighet.id;
+  const isSelected = selectedMulighetId === mulighet.id;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (selectedMulighet !== mulighet) {
-        setSelectedMulighet(mulighet);
+      if (!isLoading && selectedMulighetId !== mulighet.id) {
+        setSelectedMulighet({ id, mulighetId: mulighet.id, fagsystemId: mulighet.fagsystemId });
       }
     },
-    [mulighet, selectedMulighet, setSelectedMulighet],
+    [isLoading, mulighet, id, selectedMulighetId, setSelectedMulighet],
   );
 
   return (
@@ -41,7 +43,7 @@ export const Klagemulighet = ({ mulighet }: Props) => {
       <Table.DataCell>{vedtaksenhetName}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectKlage} isValid />
+        <SelectMulighet isSelected={isSelected} select={selectKlage} isValid isLoading={isLoading} />
       </StyledButtonCell>
     </StyledTableRow>
   );

@@ -3,7 +3,7 @@ import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/typ
 import { CalculateFristdatoParams } from '@app/types/calculate-frist';
 import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { SvarbrevSettings } from '../types/svarbrev-settings';
@@ -33,7 +33,7 @@ const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
 export const useDokumenter = (idnummer: string | typeof skipToken) =>
   useSimpleApiState(idnummer === skipToken ? skipToken : getDokumenterState({ path: '' }, { idnummer }));
 
-const getAnkemuligheterState = getStateFactory<IAnkeMulighet[], IdParams>(
+const getAnkemuligheterState = getStateFactory<IAnkemulighet[], IdParams>(
   `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
   { method: Method.POST, cacheTime: 0 },
 );

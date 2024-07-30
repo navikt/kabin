@@ -1,11 +1,12 @@
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
-import { useContext } from 'react';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { SaksTypeEnum } from '@app/types/common';
 
 interface Props {
   behandlingstidUnitTypeId: BehandlingstidUnitType;
@@ -13,26 +14,31 @@ interface Props {
 }
 
 export const Warning = ({ behandlingstidUnitTypeId, behandlingstidUnits }: Props) => {
-  const { state, type } = useContext(AppContext);
-  const { data } = useSvarbrevSettings(state?.overstyringer.ytelseId ?? skipToken);
+  const registrering = useRegistrering();
+  const { data } = useSvarbrevSettings(registrering?.overstyringer.ytelseId ?? skipToken);
+  const { typeId, mulighet } = useMulighet();
 
-  if (state === null) {
+  if (typeId === null) {
     return;
   }
 
-  const { mottattKlageinstans } = state.overstyringer;
-
-  if (mottattKlageinstans === null) {
+  if (typeId === SaksTypeEnum.KLAGE || mulighet === undefined) {
     return null;
   }
 
-  const svarbrevSettings = getSvarbrevSettings(data, type);
+  const { vedtakDate } = mulighet;
+
+  if (vedtakDate === null) {
+    return null;
+  }
+
+  const svarbrevSettings = getSvarbrevSettings(data, registrering.typeId);
 
   if (svarbrevSettings === null) {
     return;
   }
 
-  const mottattKlageinstansDate = parseISO(mottattKlageinstans);
+  const mottattKlageinstansDate = parseISO(vedtakDate);
 
   if (!isValid(mottattKlageinstansDate)) {
     return null;

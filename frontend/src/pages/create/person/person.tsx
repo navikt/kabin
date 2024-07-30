@@ -1,24 +1,18 @@
-import { Button, Loader } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { PersonInfo } from '@app/pages/create/person/info';
 import { PersonSearch } from '@app/pages/create/person/search';
-import { useGetRegistreringQuery } from '@app/redux/api/registrering';
 
 export const Person = () => {
-  const registreringId = useRegistreringId();
-  const { data: registrering } = useGetRegistreringQuery(registreringId);
+  const registrering = useRegistrering();
   const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  if (registrering === undefined) {
-    return <Loader />;
-  }
 
   if (isEditing || registrering.sakenGjelderValue === null) {
     return (
       <Container>
-        <PersonSearch />
+        <PersonSearch onDone={() => setIsEditing(false)} />
       </Container>
     );
   }

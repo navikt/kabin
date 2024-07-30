@@ -7,7 +7,7 @@ import { formatAvsenderMottaker } from '@app/components/documents/avsender-motta
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
+import { useJournalpost } from '@app/hooks/use-journalpost';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 
@@ -16,13 +16,13 @@ interface Props {
 }
 
 export const SelectedDocument = ({ onClick }: Props) => {
-  const journalpost = useAppStateStore((s) => s.journalpost);
+  const { data } = useJournalpost();
 
-  if (journalpost === null) {
+  if (data === undefined) {
     return null;
   }
 
-  return <RenderDokument dokument={journalpost} onClick={onClick} />;
+  return <RenderDokument dokument={data} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

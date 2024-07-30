@@ -2,11 +2,10 @@ import { CalculatorIcon } from '@navikt/aksel-icons';
 import { BodyShort, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, format, parse } from 'date-fns';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useCalculateFristdato } from '@app/simple-api-state/use-api';
 import { BehandlingstidUnitType, CalculateFristdatoParams } from '@app/types/calculate-frist';
 
@@ -16,23 +15,23 @@ interface Props {
 }
 
 export const Fristdato = ({ units, unitType }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { typeId, overstyringer } = useRegistrering();
 
   const params: CalculateFristdatoParams | typeof skipToken = useMemo(() => {
-    if (type === Type.NONE || state.overstyringer.mottattKlageinstans === null) {
+    if (typeId === null || overstyringer.mottattKlageinstans === null) {
       return skipToken;
     }
 
     return {
-      fromDate: state.overstyringer.mottattKlageinstans,
+      fromDate: overstyringer.mottattKlageinstans,
       varsletBehandlingstidUnits: units,
       varsletBehandlingstidUnitTypeId: unitType,
     };
-  }, [state?.overstyringer.mottattKlageinstans, type, unitType, units]);
+  }, [overstyringer.mottattKlageinstans, type, unitType, units]);
 
   const fristdato = useOptimisticCalculateFristdato(params);
 
-  if (fristdato === null || type === Type.NONE || state.overstyringer.mottattKlageinstans === null) {
+  if (fristdato === null || typeId === null || overstyringer.mottattKlageinstans === null) {
     return null;
   }
 

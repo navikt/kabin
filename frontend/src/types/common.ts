@@ -67,43 +67,43 @@ export enum PartStatusEnum {
 
 export type IPersonStatus =
   | {
-    status: PartStatusEnum.DEAD;
-    date: string;
-  }
+      status: PartStatusEnum.DEAD;
+      date: string;
+    }
   | {
-    status: PartStatusEnum.EGEN_ANSATT;
-    date: null;
-  }
+      status: PartStatusEnum.EGEN_ANSATT;
+      date: null;
+    }
   | {
-    status: PartStatusEnum.VERGEMAAL;
-    date: null;
-  }
+      status: PartStatusEnum.VERGEMAAL;
+      date: null;
+    }
   | {
-    status: PartStatusEnum.FULLMAKT;
-    date: null;
-  }
+      status: PartStatusEnum.FULLMAKT;
+      date: null;
+    }
   | {
-    status: PartStatusEnum.FORTROLIG;
-    date: null;
-  }
+      status: PartStatusEnum.FORTROLIG;
+      date: null;
+    }
   | {
-    status: PartStatusEnum.STRENGT_FORTROLIG;
-    date: null;
-  }
+      status: PartStatusEnum.STRENGT_FORTROLIG;
+      date: null;
+    }
   | {
-    status: PartStatusEnum.RESERVERT_I_KRR;
-    date: null;
-  };
+      status: PartStatusEnum.RESERVERT_I_KRR;
+      date: null;
+    };
 
 export type IOrganizationStatus =
   | {
-    status: PartStatusEnum.DELETED;
-    date: string;
-  }
+      status: PartStatusEnum.DELETED;
+      date: string;
+    }
   | {
-    status: PartStatusEnum.DELT_ANSVAR;
-    date: null;
-  };
+      status: PartStatusEnum.DELT_ANSVAR;
+      date: null;
+    };
 
 interface IPersonPart extends IPartBase {
   type: IdType.FNR;

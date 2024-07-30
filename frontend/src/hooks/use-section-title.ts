@@ -1,5 +1,5 @@
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { SaksTypeEnum } from '@app/types/common';
 import { SectionNames } from '@app/types/validation';
 
 const ANKE_SECTIONS: Record<SectionNames, string> = {
@@ -18,14 +18,14 @@ const DEFAULT_SECTIONS: Record<SectionNames, string> = {
 };
 
 const useSections = () => {
-  const type = useAppStateStore((state) => state.type);
+  const { typeId } = useRegistrering();
 
-  switch (type) {
-    case Type.KLAGE:
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
       return KLAGE_SECTIONS;
-    case Type.ANKE:
+    case SaksTypeEnum.ANKE:
       return ANKE_SECTIONS;
-    case Type.NONE:
+    case null:
       return DEFAULT_SECTIONS;
   }
 };

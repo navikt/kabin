@@ -1,7 +1,7 @@
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
@@ -9,21 +9,12 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { getSuggestedBrevmottakere } from '@app/components/svarbrev/get-suggested-part-recipients';
 import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
 import { PartRecipient } from '@app/components/svarbrev/types';
-import { useAppStateStore, useOverstyringerStore } from '@app/pages/create/app-context/state';
-import {
-  IAnkeOverstyringer,
-  IAnkeState,
-  IAnkeStateUpdate,
-  IKlageOverstyringer,
-  IKlageState,
-  IKlageStateUpdate,
-  Svarbrev,
-  Type,
-  UpdateFn,
-} from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
+import { Overstyringer, Svarbrev } from '@app/redux/api/registrering';
+import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev';
 import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
-import { IArkivertDocument } from '@app/types/dokument';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
 import { SvarbrevSetting } from '@app/types/svarbrev-settings';
 
 enum SvarbrevOptionEnum {
@@ -33,19 +24,24 @@ enum SvarbrevOptionEnum {
 
 export const SvarbrevInput = () => {
   // const { type, state, updateState, journalpost } = useContext(AppContext);
-  const type = useAppStateStore((state) => state.type);
-  const journalpost = useAppStateStore((state) => state.journalpost);
-  const ytelseId = useOverstyringerStore((state) => state.ytelseId);
-  const mulighet = useAppStateStore((state) => state.mulighet);
-  const sendSvarbrev = useAppStateStore((state) => state.sendSvarbrev);
+  // const type = useAppStateStore((state) => state.type);
+  // const journalpost = useAppStateStore((state) => state.journalpost);
+  // const ytelseId = useOverstyringerStore((state) => state.ytelseId);
+  // const mulighet = useAppStateStore((state) => state.mulighet);
+  // const sendSvarbrev = useAppStateStore((state) => state.sendSvarbrev);
+  const registrering = useRegistrering();
+  const { data: svarbrevSettings } = useSvarbrevSettings(registrering?.overstyringer.ytelseId ?? skipToken);
+  const { data: sakenGjelder } = useGetPartWithUtsendingskanalQuery(registrering?.sakenGjelderValue ?? skipToken);
 
-  const { data } = useSvarbrevSettings(ytelseId ?? skipToken);
+  if (registrering === undefined || sakenGjelder === undefined) {
+    return <Loader title="Laster..." />;
+  }
 
-  if (type === Type.NONE) {
+  if (registrering.typeId === null) {
     return null;
   }
 
-  if (mulighet === null || journalpost === null || ytelseId === null) {
+  if (typeof registrering.overstyringer.ytelseId !== 'string') {
     return (
       <>
         <Row>
@@ -62,7 +58,7 @@ export const SvarbrevInput = () => {
     );
   }
 
-  const setting = getSvarbrevSettings(data, type);
+  const setting = getSvarbrevSettings(svarbrevSettings, registrering.typeId);
 
   if (setting === null) {
     return (
@@ -79,16 +75,21 @@ export const SvarbrevInput = () => {
     );
   }
 
-  const suggestedRecipients = getSuggestedBrevmottakere(state);
+  const suggestedRecipients = getSuggestedBrevmottakere({
+    fullmektig: registrering.overstyringer.fullmektig,
+    klager: registrering.overstyringer.klager,
+    receivers: registrering.svarbrev.receivers,
+    sakenGjelder,
+  });
 
   return (
     <LoadedSvarbrevInput
-      sendSvarbrev={sendSvarbrev}
-      svarbrev={state.svarbrev}
-      journalpost={journalpost}
-      mulighet={mulighet}
-      overstyringer={state.overstyringer}
-      updateState={updateState}
+      sendSvarbrev={registrering.svarbrev.send}
+      svarbrev={registrering.svarbrev}
+      // journalpost={journalpost}
+      // mulighet={registrering.mulighet}
+      overstyringer={registrering.overstyringer}
+      // updateState={updateState}
       suggestedRecipients={suggestedRecipients}
       setting={setting}
     />
@@ -98,10 +99,10 @@ export const SvarbrevInput = () => {
 interface LoadedProps {
   sendSvarbrev: boolean;
   svarbrev: Svarbrev;
-  journalpost: IArkivertDocument;
-  mulighet: IAnkeMulighet | IKlagemulighet;
-  overstyringer: IAnkeOverstyringer | IKlageOverstyringer;
-  updateState: UpdateFn<IKlageStateUpdate, IKlageState> | UpdateFn<IAnkeStateUpdate, IAnkeState>;
+  // journalpost: IArkivertDocument;
+  // mulighet: Mulighet;
+  overstyringer: Overstyringer;
+  // updateState: UpdateFn<IKlageStateUpdate, IKlageState> | UpdateFn<IAnkeStateUpdate, IAnkeState>;
   suggestedRecipients: PartRecipient[];
   setting: SvarbrevSetting;
 }
@@ -109,35 +110,39 @@ interface LoadedProps {
 const LoadedSvarbrevInput = ({
   sendSvarbrev,
   svarbrev,
-  journalpost,
-  mulighet,
-  overstyringer,
-  updateState,
+  // journalpost,
+  // mulighet,
+  // overstyringer,
+  // updateState,
   suggestedRecipients,
   setting,
 }: LoadedProps) => {
-  const isInitialized = useRef(false);
+  const [setSend] = useSetSvarbrevSendMutation();
+  // const isInitialized = useRef(false);
 
-  useEffect(() => {
-    if (isInitialized.current) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (isInitialized.current) {
+  //     return;
+  //   }
 
-    isInitialized.current = true;
+  //   isInitialized.current = true;
 
-    updateState({
-      sendSvarbrev: setting.shouldSend,
-      svarbrev: {
-        varsletBehandlingstidUnits: setting.behandlingstidUnits,
-        varsletBehandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
-        customText: setting.customText,
-      },
-    });
-  }, [setting, updateState]);
+  //   updateState({
+  //     sendSvarbrev: setting.shouldSend,
+  //     svarbrev: {
+  //       varsletBehandlingstidUnits: setting.behandlingstidUnits,
+  //       varsletBehandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
+  //       customText: setting.customText,
+  //     },
+  //   });
+  // }, [setting, updateState]);
+
+  const id = useRegistreringId();
 
   const onToggleChange = useCallback(
-    (value: string) => updateState({ sendSvarbrev: value === SvarbrevOptionEnum.SEND }),
-    [updateState],
+    // (value: string) => updateState({ sendSvarbrev: value === SvarbrevOptionEnum.SEND }),
+    (value: string) => setSend({ send: value === SvarbrevOptionEnum.SEND, id }),
+    [id, setSend],
   );
 
   return (
@@ -156,11 +161,11 @@ const LoadedSvarbrevInput = ({
       {sendSvarbrev ? (
         <InternalSvarbrevInput
           svarbrev={svarbrev}
-          mulighet={mulighet}
-          overstyringer={overstyringer}
-          journalpostId={journalpost.journalpostId}
+          // mulighet={mulighet}
+          // overstyringer={overstyringer}
+          // journalpostId={journalpost.journalpostId}
           suggestedRecipients={suggestedRecipients}
-          updateState={updateState}
+          // updateState={updateState}
           setting={setting}
         />
       ) : null}

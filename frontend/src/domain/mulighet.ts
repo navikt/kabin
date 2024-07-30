@@ -1,6 +1,6 @@
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
-type Mulighet = IAnkeMulighet | IKlagemulighet;
+type Mulighet = IAnkemulighet | IKlagemulighet;
 
 export const compareMuligheter = <T extends Mulighet>(a: T | null, b: T | null): boolean => {
   if (a === null && b === null) {
@@ -35,4 +35,4 @@ export const compareMuligheter = <T extends Mulighet>(a: T | null, b: T | null):
   return a.temaId === b.temaId && a.klageBehandlendeEnhet === b.klageBehandlendeEnhet;
 };
 
-const isAnkeMulighet = (mulighet: Mulighet): mulighet is IAnkeMulighet => 'klager' in mulighet;
+const isAnkeMulighet = (mulighet: Mulighet): mulighet is IAnkemulighet => 'klager' in mulighet;

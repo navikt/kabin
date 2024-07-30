@@ -2,7 +2,7 @@ import { skipToken } from '@reduxjs/toolkit/query/react';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IAddress, IPart, SaksTypeEnum } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 import { HandlingEnum } from '@app/types/recipient';
 import { IValidationSection } from '@app/types/validation';
 
@@ -12,9 +12,9 @@ export enum Type {
   KLAGE = 'KLAGE',
 }
 
-export const TYPE_TO_SAKSTYPE: Record<Type.KLAGE | Type.ANKE, SaksTypeEnum> = {
-  [Type.KLAGE]: SaksTypeEnum.KLAGE,
-  [Type.ANKE]: SaksTypeEnum.ANKE,
+export const TYPE_TO_SAKSTYPE: Record<SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, SaksTypeEnum> = {
+  [SaksTypeEnum.KLAGE]: SaksTypeEnum.KLAGE,
+  [SaksTypeEnum.ANKE]: SaksTypeEnum.ANKE,
 };
 
 interface ICommonOverstyringer {
@@ -71,14 +71,14 @@ export interface IKlageStateUpdate {
 }
 
 export interface IAnkeStateUpdate {
-  mulighet?: IAnkeMulighet | null;
+  mulighet?: IAnkemulighet | null;
   overstyringer?: Partial<IAnkeOverstyringer>;
   sendSvarbrev?: boolean;
   svarbrev?: Partial<Svarbrev>;
 }
 
 export interface IAnkeState extends IAnkeStateUpdate {
-  mulighet: IAnkeMulighet | null;
+  mulighet: IAnkemulighet | null;
   overstyringer: IAnkeOverstyringer;
   sendSvarbrev: boolean;
   svarbrev: Svarbrev;

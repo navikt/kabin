@@ -1,9 +1,10 @@
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
 import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { avsenderIsPart } from '@app/domain/converters';
-import { useAppStateStore } from '@app/pages/create/app-context/state';
-import { Type } from '@app/pages/create/app-context/types';
-import { IPart } from '@app/types/common';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { IPart, SaksTypeEnum } from '@app/types/common';
 
 interface Props {
   partField: BaseProps['partField'];
@@ -11,10 +12,10 @@ interface Props {
 }
 
 export const ResetPartButton = ({ part, partField }: Props) => {
-  const type = useAppStateStore((state) => state.type);
+  const { typeId } = useRegistrering();
   const defaultPart = useDefaultPart(partField);
 
-  if (type === Type.NONE || defaultPart === null) {
+  if (typeId === null || defaultPart === null) {
     return null;
   }
 
@@ -30,28 +31,29 @@ export const ResetPartButton = ({ part, partField }: Props) => {
 };
 
 const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
-  const { type, journalpost, mulighet } = useAppStateStore();
+  const { data: journalpost } = useJournalpost();
+  const { typeId, mulighet } = useMulighet();
+
+  if (mulighet === undefined) {
+    return null;
+  }
 
   if (fieldId === FieldNames.AVSENDER) {
-    if (journalpost !== null && journalpost.avsenderMottaker !== null) {
+    if (journalpost !== undefined && journalpost.avsenderMottaker !== null) {
       return avsenderIsPart(journalpost.avsenderMottaker) ? journalpost.avsenderMottaker : null;
     }
 
     return null;
   }
 
-  switch (type) {
-    case Type.ANKE: {
-      return mulighet?.[fieldId] ?? null;
+  switch (typeId) {
+    case SaksTypeEnum.ANKE: {
+      return mulighet[fieldId] ?? null;
     }
-    case Type.KLAGE: {
-      if (fieldId !== FieldNames.SAKEN_GJELDER) {
-        return null;
-      }
-
-      return mulighet?.[fieldId] ?? null;
+    case SaksTypeEnum.KLAGE: {
+      return mulighet[fieldId] ?? null;
     }
-    case Type.NONE:
+    case null:
       return null;
   }
 };

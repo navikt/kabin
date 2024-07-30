@@ -1,3 +1,4 @@
+import { Recipient } from '@app/pages/create/app-context/types';
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { registreringApi } from '@app/redux/api/registrering';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
@@ -24,7 +25,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
     }),
-    setSvarbrevFullmektigFritekst: builder.mutation<void, { id: string; fullmektigFritekst: string }>({
+    setSvarbrevFullmektigFritekst: builder.mutation<void, { id: string; fullmektigFritekst: string | null }>({
       query: ({ id, ...body }) => ({
         url: `/kabin-api/registreringer/${id}/svarbrev/fullmektig-fritekst`,
         method: 'PUT',
@@ -52,6 +53,20 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
     }),
+    setSvarbrevOverrideBehandlingstid: builder.mutation<void, { id: string; overrideBehandlingstid: boolean }>({
+      query: ({ id, ...body }) => ({
+        url: `/kabin-api/registreringer/${id}/svarbrev/override-behandlingstid`,
+        method: 'PUT',
+        body,
+      }),
+    }),
+    setSvarbrevOverrideCustomText: builder.mutation<void, { id: string; overrideCustomText: boolean }>({
+      query: ({ id, ...body }) => ({
+        url: `/kabin-api/registreringer/${id}/svarbrev/override-custom-text`,
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -62,4 +77,6 @@ export const {
   useSetSvarbrevReceiversMutation,
   useSetSvarbrevTitleMutation,
   useSetSvarbrevCustomTextMutation,
+  useSetSvarbrevOverrideBehandlingstidMutation,
+  useSetSvarbrevOverrideCustomTextMutation,
 } = svarbrevSlice;
