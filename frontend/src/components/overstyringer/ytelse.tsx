@@ -1,11 +1,13 @@
-import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
+import { Alert, Heading, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
-import { useYtelseName } from '@app/hooks/kodeverk';
+import { ReadOnlyYtelse, YtelseTag } from '@app/components/read-only-info/read-only-info';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
 import { SourceId } from '@app/types/mulighet';
@@ -17,18 +19,26 @@ const NoneOption = ({ value }: { value: string | null | undefined }) =>
   value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
 
 export const Ytelse = () => {
-  const registrering = useRegistrering();
-  const { id } = registrering;
+  const { id } = useRegistrering();
+  const ytelseId = useYtelseId();
   const { typeId, mulighet } = useMulighet();
-  const { ytelseId } = registrering.overstyringer;
   const [setYtelseId] = useSetYtelseIdMutation();
   const tema = mulighet?.temaId ?? skipToken;
   const { data: ytelser = [] } = useTemaYtelser(tema);
+  const canEdit = useCanEdit();
 
   const error = useValidationError(ValidationFieldNames.YTELSE_ID);
 
   if (typeId === null) {
     return null;
+  }
+
+  if (!canEdit) {
+    return (
+      <ReadOnlyContainer>
+        <ReadOnlyYtelse id={ValidationFieldNames.YTELSE_ID} label="Ytelse" ytelseId={ytelseId} />
+      </ReadOnlyContainer>
+    );
   }
 
   if (typeId === SaksTypeEnum.ANKE && mulighet !== undefined && mulighet.fagsystemId === SourceId.KABAL) {
@@ -44,6 +54,19 @@ export const Ytelse = () => {
         ) : (
           <YtelseTag ytelseId={mulighet.ytelseId} />
         )}
+      </ReadOnlyContainer>
+    );
+  }
+
+  const [onlyYtelse] = ytelser;
+
+  if (ytelser.length === 1 && onlyYtelse !== undefined) {
+    return (
+      <ReadOnlyContainer>
+        <Heading level="1" size="xsmall" spacing>
+          Ytelse
+        </Heading>
+        <YtelseTag ytelseId={onlyYtelse.id} />
       </ReadOnlyContainer>
     );
   }
@@ -77,20 +100,6 @@ interface ElementProps {
 const StyledSelect = styled(Select)<ElementProps>`
   grid-column: ${({ $gridColumn }) => $gridColumn};
 `;
-
-interface IYtelseTagProps {
-  ytelseId: string;
-}
-
-const YtelseTag = ({ ytelseId }: IYtelseTagProps) => {
-  const ytelseName = useYtelseName(ytelseId);
-
-  return (
-    <Tag variant="info" size="medium" title="Hentet fra kildesystem">
-      {ytelseName}
-    </Tag>
-  );
-};
 
 const ReadOnlyContainer = styled.section`
   grid-column: 1;

@@ -1,18 +1,28 @@
 import { parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
+import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
 import { FORMAT } from '@app/domain/date-formats';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer';
+import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
+const ID = ValidationFieldNames.MOTTATT_KLAGEINSTANS;
+const LABEL = FIELD_NAMES[ID];
+
 export const EditMottattKlageinstans = () => {
-  const { typeId } = useRegistrering();
+  const { typeId, overstyringer } = useRegistrering();
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    return <ReadOnlyTime id={ID} label={LABEL} value={overstyringer.mottattKlageinstans} />;
+  }
 
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
@@ -26,8 +36,8 @@ export const EditMottattKlageinstans = () => {
 
 const Klage = () => {
   const { overstyringer } = useRegistrering();
-  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
-  const { data: journalpost } = useJournalpost();
+  const { journalpost } = useJournalpost();
+  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans ?? journalpost?.datoOpprettet ?? null);
 
   const fromDate =
     journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
@@ -44,9 +54,9 @@ const Klage = () => {
 
 const Anke = () => {
   const { overstyringer } = useRegistrering();
-  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
+  const { journalpost } = useJournalpost();
+  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans ?? journalpost?.datoOpprettet ?? null);
   const { mulighet } = useMulighet();
-  const { data: journalpost } = useJournalpost();
 
   const fromDate = mulighet === undefined || mulighet.vedtakDate === null ? undefined : parseISO(mulighet.vedtakDate);
 
@@ -68,7 +78,7 @@ interface Props {
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
   const { id } = useRegistrering();
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
-  const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
+  const error = useValidationError(ID);
 
   const onChange = useCallback(
     (mottattKlageinstans: string | null) => {
@@ -81,17 +91,15 @@ const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
   );
 
   return (
-    <div>
-      <Datepicker
-        label={FIELD_NAMES[ValidationFieldNames.MOTTATT_KLAGEINSTANS]}
-        onChange={onChange}
-        value={value}
-        size="small"
-        toDate={toDate}
-        fromDate={fromDate}
-        id={ValidationFieldNames.MOTTATT_KLAGEINSTANS}
-        error={error}
-      />
-    </div>
+    <Datepicker
+      label={LABEL}
+      onChange={onChange}
+      value={value}
+      size="small"
+      toDate={toDate}
+      fromDate={fromDate}
+      id={ValidationFieldNames.MOTTATT_KLAGEINSTANS}
+      error={error}
+    />
   );
 };

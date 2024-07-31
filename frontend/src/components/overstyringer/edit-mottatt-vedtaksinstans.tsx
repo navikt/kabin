@@ -1,34 +1,35 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
+import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
+import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
-import { useSetMottattVedtaksinstansMutation } from '@app/redux/api/overstyringer';
+import { useSetMottattVedtaksinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
+const ID = ValidationFieldNames.MOTTATT_VEDTAKSINSTANS;
+const LABEL = FIELD_NAMES[ID];
+
 export const EditMottattVedtaksinstans = () => {
-  const registrering = useRegistrering();
-  const { data: journalposter } = useGetArkiverteDokumenterQuery(registrering?.sakenGjelderValue ?? skipToken);
+  const { overstyringer, typeId } = useRegistrering();
+  const { journalpost } = useJournalpost();
+  const canEdit = useCanEdit();
 
-  if (registrering === undefined) {
-    return null;
-  }
-
-  const journalpost = journalposter?.dokumenter.find((jp) => jp.journalpostId === registrering.journalpostId);
-
-  const { typeId } = registrering;
+  const { mottattVedtaksinstans } = overstyringer;
 
   if (typeId !== SaksTypeEnum.KLAGE || journalpost === undefined) {
     return null;
   }
 
-  return (
-    <RenderEditMottattNAV value={registrering.overstyringer.mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />
-  );
+  if (!canEdit) {
+    return <ReadOnlyTime id={ID} label={LABEL} value={mottattVedtaksinstans} />;
+  }
+
+  return <RenderEditMottattNAV value={mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />;
 };
 
 interface Props {
@@ -37,7 +38,7 @@ interface Props {
 }
 
 const RenderEditMottattNAV = ({ toDate }: Props) => {
-  const error = useValidationError(ValidationFieldNames.MOTTATT_VEDTAKSINSTANS);
+  const error = useValidationError(ID);
   const registrering = useRegistrering();
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
@@ -64,12 +65,12 @@ const RenderEditMottattNAV = ({ toDate }: Props) => {
   return (
     <div>
       <Datepicker
-        label={FIELD_NAMES[ValidationFieldNames.MOTTATT_VEDTAKSINSTANS]}
+        label={LABEL}
         onChange={onChange}
         value={parsedValue}
         size="small"
         toDate={parsedToDate}
-        id={ValidationFieldNames.MOTTATT_VEDTAKSINSTANS}
+        id={ID}
         error={error}
       />
     </div>

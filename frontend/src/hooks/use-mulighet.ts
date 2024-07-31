@@ -20,16 +20,14 @@ interface NoneResult {
 }
 
 export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
-  const { typeId, mulighet } = useRegistrering();
+  const { id, typeId, mulighet } = useRegistrering();
 
   const hasMulighet = mulighet !== null;
 
-  const { data: ankemulighet } = useGetAnkemulighetQuery(
-    hasMulighet && typeId === SaksTypeEnum.ANKE ? mulighet.id : skipToken,
-  );
+  const { data: ankemulighet } = useGetAnkemulighetQuery(hasMulighet && typeId === SaksTypeEnum.ANKE ? id : skipToken);
 
   const { data: klagemulighet } = useGetKlagemulighetQuery(
-    hasMulighet && typeId === SaksTypeEnum.KLAGE ? mulighet.id : skipToken,
+    hasMulighet && typeId === SaksTypeEnum.KLAGE ? id : skipToken,
   );
 
   if (typeId === SaksTypeEnum.ANKE) {

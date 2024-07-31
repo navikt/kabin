@@ -1,19 +1,20 @@
 import { TextField, ToggleGroup } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useSetSvarbrevCustomTextMutation, useSetSvarbrevOverrideCustomTextMutation } from '@app/redux/api/svarbrev';
+import {
+  useSetSvarbrevCustomTextMutation,
+  useSetSvarbrevOverrideCustomTextMutation,
+} from '@app/redux/api/svarbrev/svarbrev';
 
 export const Fritekst = () => {
   const [override] = useSetSvarbrevOverrideCustomTextMutation();
   const [setCustomText] = useSetSvarbrevCustomTextMutation();
-  const id = useRegistreringId();
-  const registrering = useRegistrering();
+  const { id, svarbrev } = useRegistrering();
 
   return (
     <>
       <ToggleGroup
-        value={registrering.svarbrev.overrideCustomText ? 'true' : 'false'}
+        value={svarbrev.overrideCustomText ? 'true' : 'false'}
         onChange={(m) => override({ id, overrideCustomText: m === 'true' })}
         size="small"
         label="Overstyr fritekst"
@@ -25,8 +26,8 @@ export const Fritekst = () => {
       <StyledFritekst
         size="small"
         label="Fritekst"
-        disabled={registrering.svarbrev.overrideCustomText}
-        value={registrering.svarbrev.customText ?? ''}
+        disabled={!svarbrev.overrideCustomText}
+        value={svarbrev.customText ?? ''}
         onChange={({ target }) => setCustomText({ id, customText: target.value })}
       />
     </>

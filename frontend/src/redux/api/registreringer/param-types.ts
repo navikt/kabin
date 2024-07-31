@@ -1,0 +1,23 @@
+import { SaksTypeEnum } from '@app/types/common';
+import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+
+export interface SetTypeParams {
+  id: string;
+  typeId: SaksTypeEnum;
+}
+
+export interface SetKlagemulighetParams {
+  id: string;
+  mulighet: IKlagemulighet;
+}
+
+export interface SetAnkemulisghetParams {
+  id: string;
+  mulighet: IAnkemulighet;
+}
+
+export interface SearchPartWithUtsendingskanalParams {
+  identifikator: string;
+  sakenGjelderId: string;
+  ytelseId: string;
+}

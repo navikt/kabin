@@ -3,7 +3,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
+import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { SaksTypeEnum } from '@app/types/common';
 // import { useCreateAnke } from './anke-hooks';
 // import { useCreateKlage } from './klage-hooks';
@@ -37,7 +37,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
     return null;
   }
 
-  const text = getText(typeId, typeId === SaksTypeEnum.ANKE && svarbrev?.send);
+  const text = getText(typeId, svarbrev?.send === true);
 
   return (
     <StyledConfirm>
@@ -81,7 +81,7 @@ const Buttons = styled.div`
   justify-content: space-between;
 `;
 
-const getText = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, sendSvarbrev: boolean = false) => {
+const getText = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, sendSvarbrev: boolean) => {
   switch (type) {
     case SaksTypeEnum.ANKE: {
       if (sendSvarbrev) {

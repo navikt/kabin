@@ -5,9 +5,9 @@ import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
 import { PDF_ASPECT_RATIO, PDF_PARAMS } from '@app/components/svarbrev/preview/constants';
-import { Recipient } from '@app/pages/create/app-context/types';
 import { InfoItem } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
+import { Receiver } from '@app/redux/api/registreringer/types';
 import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { IdType, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/recipient';
@@ -54,7 +54,7 @@ const StyledPdf = styled.object`
   aspect-ratio: ${PDF_ASPECT_RATIO};
 `;
 
-const Part = ({ part, overriddenAddress, handling }: Recipient) => {
+const Part = ({ part, overriddenAddress, handling }: Receiver) => {
   const isPerson = part.type === IdType.FNR;
 
   return (

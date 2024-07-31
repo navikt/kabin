@@ -4,9 +4,10 @@ import { styled } from 'styled-components';
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer';
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
 
 export const EditFrist = () => {
   const { typeId } = useRegistrering();
@@ -22,20 +23,21 @@ const LoadedEditFrist = () => {
   const { id, overstyringer } = useRegistrering();
   const { behandlingstid } = overstyringer;
   const [setBehandlingstid] = useSetBehandlingstidMutation();
+  const canEdit = useCanEdit();
 
   const onUnitChange = useCallback(
     (units: number) =>
-      setBehandlingstid({ id, units, unitType: behandlingstid?.unitType ?? BehandlingstidUnitType.WEEKS }),
-    [behandlingstid?.unitType, id, setBehandlingstid],
+      setBehandlingstid({ id, units, unitTypeId: behandlingstid?.unitTypeId ?? BehandlingstidUnitType.WEEKS }),
+    [behandlingstid?.unitTypeId, id, setBehandlingstid],
   );
 
   const onUnitTypeChange = useCallback(
-    (unitType: BehandlingstidUnitType) => setBehandlingstid({ id, units: behandlingstid?.units ?? 12, unitType }),
+    (unitTypeId: BehandlingstidUnitType) => setBehandlingstid({ id, units: behandlingstid?.units ?? 12, unitTypeId }),
     [behandlingstid?.units, id, setBehandlingstid],
   );
 
   const units = behandlingstid?.units ?? 12;
-  const unitType = behandlingstid?.unitType ?? BehandlingstidUnitType.WEEKS;
+  const unitType = behandlingstid?.unitTypeId ?? BehandlingstidUnitType.WEEKS;
 
   return (
     <Container aria-labelledby="fristIKabal">
@@ -44,9 +46,16 @@ const LoadedEditFrist = () => {
       </Label>
 
       <Row>
-        <Units label="Antall" value={units} onChange={onUnitChange} />
-
-        <UnitType value={unitType} onChange={onUnitTypeChange} />
+        {canEdit ? (
+          <>
+            <Units label="Antall" value={units} onChange={onUnitChange} />
+            <UnitType value={unitType} onChange={onUnitTypeChange} />
+          </>
+        ) : (
+          <span>
+            {units} {BEHANDLINGSTID_UNIT_TYPE_NAMES[unitType]}
+          </span>
+        )}
 
         <Fristdato units={units} unitType={unitType} />
       </Row>

@@ -1,6 +1,7 @@
-import { Button } from '@navikt/ds-react';
+import { Button, Tag } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { PersonInfo } from '@app/pages/create/person/info';
 import { PersonSearch } from '@app/pages/create/person/search';
@@ -8,6 +9,23 @@ import { PersonSearch } from '@app/pages/create/person/search';
 export const Person = () => {
   const registrering = useRegistrering();
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    const { sakenGjelderValue } = registrering;
+
+    return sakenGjelderValue === null ? (
+      <Container>
+        <Tag variant="alt3" size="small">
+          <i>Ingen person valgt</i>
+        </Tag>
+      </Container>
+    ) : (
+      <Container>
+        <PersonInfo sakenGjelderValue={sakenGjelderValue} />
+      </Container>
+    );
+  }
 
   if (isEditing || registrering.sakenGjelderValue === null) {
     return (

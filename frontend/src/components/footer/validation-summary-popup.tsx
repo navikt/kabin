@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
+import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { StyledHeader, ValidationSummary } from './validation-summary';
 
 export const ValidationSummaryPopup = () => {

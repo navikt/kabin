@@ -7,39 +7,58 @@ import { recipientStyle } from '@app/components/svarbrev/address/layout';
 import { Options } from '@app/components/svarbrev/options';
 import { EditPart } from '@app/components/svarbrev/part/edit-part';
 import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svarbrev/styled-components';
-import { Recipient } from '@app/pages/create/app-context/types';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { Receiver } from '@app/redux/api/registreringer/types';
+import {
+  useAddSvarbrevReceiverMutation,
+  useChangeSvarbrevReceiverMutation,
+  useRemoveSvarbrevReceiverMutation,
+} from '@app/redux/api/svarbrev/svarbrev';
 import { IdType } from '@app/types/common';
 import { HandlingEnum } from '@app/types/recipient';
 
 interface Props {
-  mottakerList: Recipient[];
-  addRecipients: (recipients: Recipient[]) => void;
-  removeRecipients: (ids: string[]) => void;
-  changeRecipient: (recipient: Recipient) => void;
+  mottakerList: Receiver[];
+  // addRecipients: (recipients: Recipient[]) => void;
+  // removeRecipients: (ids: string[]) => void;
+  // changeRecipient: (recipient: Recipient) => void;
 }
 
-export const CustomRecipients = ({ mottakerList, addRecipients, removeRecipients, changeRecipient }: Props) => (
-  <section>
-    <Label size="small" htmlFor="extra-recipients">
-      Ekstra mottakere
-    </Label>
-    <EditPart
-      isLoading={false}
-      id="extra-recipients"
-      onChange={(part) => addRecipients([{ part, handling: HandlingEnum.AUTO, overriddenAddress: null }])}
-      buttonText="Legg til mottaker"
-    />
-    <Recipients recipientList={mottakerList} removeRecipients={removeRecipients} changeRecipient={changeRecipient} />
-  </section>
-);
+export const CustomRecipients = ({ mottakerList }: Props) => {
+  const id = useRegistreringId();
+  const [addRecipient] = useAddSvarbrevReceiverMutation();
+
+  return (
+    <section>
+      <Label size="small" htmlFor="extra-recipients">
+        Ekstra mottakere
+      </Label>
+      <EditPart
+        isLoading={false}
+        id="extra-recipients"
+        onChange={(part) =>
+          addRecipient({ id, receiver: { part, handling: HandlingEnum.AUTO, overriddenAddress: null } })
+        }
+        buttonText="Legg til mottaker"
+      />
+      <Recipients recipientList={mottakerList} />
+    </section>
+  );
+};
 
 interface RecipientsProps {
-  recipientList: Recipient[];
-  removeRecipients: (ids: string[]) => void;
-  changeRecipient: (recipient: Recipient) => void;
+  recipientList: Receiver[];
+  // removeRecipients: (ids: string[]) => void;
+  // changeRecipient: (recipient: Recipient) => void;
 }
 
-const Recipients = ({ recipientList, removeRecipients, changeRecipient }: RecipientsProps) => {
+const Recipients = ({ recipientList }: RecipientsProps) => {
+  const id = useRegistreringId();
+  const [remove] = useRemoveSvarbrevReceiverMutation();
+  const [change] = useChangeSvarbrevReceiverMutation();
+
+  const onChange = (recipient: Receiver) => change({ id: recipient.part.id, receiver: recipient });
+
   if (recipientList.length === 0) {
     return null;
   }
@@ -60,7 +79,7 @@ const Recipients = ({ recipientList, removeRecipients, changeRecipient }: Recipi
                       variant="tertiary-neutral"
                       title="Fjern"
                       icon={<TrashIcon color="var(--a-surface-danger)" aria-hidden />}
-                      onClick={() => removeRecipients([part.id])}
+                      onClick={() => remove({ id, receiverId: part.id })}
                     />
                   </Tooltip>
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
@@ -74,7 +93,7 @@ const Recipients = ({ recipientList, removeRecipients, changeRecipient }: Recipi
                 </StyledRecipientInnerContent>
               </StyledBrevmottaker>
             </StyledRecipientContent>
-            <Options part={part} handling={handling} overriddenAddress={overriddenAddress} onChange={changeRecipient} />
+            <Options part={part} handling={handling} overriddenAddress={overriddenAddress} onChange={onChange} />
           </StyledRecipient>
         );
       })}

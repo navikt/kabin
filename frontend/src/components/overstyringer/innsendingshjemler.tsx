@@ -1,22 +1,27 @@
-import { Alert, Label, Tag, TagProps } from '@navikt/ds-react';
+import { Alert, Label } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
-import { useHjemmelName } from '@app/hooks/kodeverk';
+import { HjemmelTag, ReadOnlyHjemler } from '@app/components/read-only-info/read-only-info';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
-export const Innsendingshjemmel = () => {
-  const registrering = useRegistrering();
-  const { data = [] } = useLatestYtelser();
-  const { id, typeId } = registrering;
-  const { ytelseId, hjemmelIdList } = registrering.overstyringer;
-  const [setHjemmelIdList] = useSetHjemmelIdListMutation();
+const ID = ValidationFieldNames.HJEMMEL_ID_LIST;
 
-  const error = useValidationError(ValidationFieldNames.HJEMMEL_ID_LIST);
+export const Innsendingshjemler = () => {
+  const { id, typeId, overstyringer } = useRegistrering();
+  const { data = [] } = useLatestYtelser();
+  const { hjemmelIdList } = overstyringer;
+  const [setHjemmelIdList] = useSetHjemmelIdListMutation();
+  const canEdit = useCanEdit();
+  const ytelseId = useYtelseId();
+
+  const error = useValidationError(ID);
 
   const options = useMemo(() => {
     if (typeId === null || ytelseId === null) {
@@ -30,6 +35,10 @@ export const Innsendingshjemmel = () => {
 
   if (typeId === null) {
     return null;
+  }
+
+  if (!canEdit) {
+    return <ReadOnlyHjemler id={ID} label="hjemler" hjemmelIdList={hjemmelIdList} />;
   }
 
   if (options.length === 0) {
@@ -50,12 +59,10 @@ export const Innsendingshjemmel = () => {
       selected={hjemmelIdList ?? []}
       onChange={(list) => setHjemmelIdList({ id, hjemmelIdList: list })}
       error={error}
-      id={ValidationFieldNames.HJEMMEL_ID_LIST}
+      id={ID}
       disabled={ytelseId === null}
     >
-      <HjemlerContainer>
-        {hjemmelIdList?.map((h) => <HjemmelTag hjemmelId={h} key={h} size="small" />)}
-      </HjemlerContainer>
+      <HjemlerContainer>{hjemmelIdList?.map((h) => <HjemmelTag hjemmelId={h} key={h} />)}</HjemlerContainer>
     </StyledFilterDropdown>
   );
 };
@@ -76,13 +83,3 @@ const NoHjemmelOptionsContainer = styled.div`
   row-gap: 8px;
   grid-column: 2;
 `;
-
-const HjemmelTag = ({ hjemmelId, size }: { hjemmelId: string; size?: TagProps['size'] }) => {
-  const hjemmelName = useHjemmelName(hjemmelId);
-
-  return (
-    <Tag variant="info" size={size} title="Hentet fra kildesystem">
-      {hjemmelName}
-    </Tag>
-  );
-};

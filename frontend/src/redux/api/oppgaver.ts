@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { API_BASE_QUERY } from '@app/redux/api/common';
-import { IArkivertDocument } from '@app/types/dokument';
 import { IOppgave } from '@app/types/oppgave';
 
 export interface IGetOppgaverParams {

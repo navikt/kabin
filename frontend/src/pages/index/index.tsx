@@ -4,15 +4,15 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { Registreringer } from '@app/pages/index/registreringer';
+import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
 import {
-  useCreateRegistreringMutation,
   useGetFerdigeRegistreringerQuery,
   useGetUferdigeRegistreringerQuery,
-} from '@app/redux/api/registrering';
+} from '@app/redux/api/registreringer/queries';
 
 export const IndexPage = () => {
   const { data: uferdige, isLoading: isUferdigeLoading } = useGetUferdigeRegistreringerQuery();
-  const { data: ferdige, isLoading: isFerdigeLoading } = useGetFerdigeRegistreringerQuery({ sidenDager: 30 });
+  const { data: ferdige, isLoading: isFerdigeLoading } = useGetFerdigeRegistreringerQuery();
 
   if (isUferdigeLoading || isFerdigeLoading || uferdige === undefined || ferdige === undefined) {
     return (

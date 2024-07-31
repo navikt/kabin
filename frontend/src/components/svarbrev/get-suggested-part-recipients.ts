@@ -1,33 +1,44 @@
-import { RecipientType } from '@app/components/svarbrev/type-name';
-import { PartRecipient } from '@app/components/svarbrev/types';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { ReceiverType } from '@app/components/svarbrev/type-name';
+import { PartReceiver, PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { isNotNull } from '@app/functions/is-not';
-import { IAnkeState, IKlageState, Recipient } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import { IPart } from '@app/types/common';
 import { HandlingEnum } from '@app/types/recipient';
 
-interface Props {
-  klager: IPart | null;
-  fullmektig: IPart | null;
-  sakenGjelder: IPart;
-  receivers: Recipient[];
-}
+export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiver)[] => {
+  const { sakenGjelderValue, overstyringer, svarbrev } = useRegistrering();
+  const { klager, fullmektig, ytelseId } = overstyringer;
+  const { data: sakenGjelder } = useGetPartWithUtsendingskanalQuery(
+    sakenGjelderValue === null || ytelseId === null
+      ? skipToken
+      : { sakenGjelderId: sakenGjelderValue, identifikator: sakenGjelderValue, ytelseId },
+  );
 
-export const getSuggestedBrevmottakere = ({ klager, fullmektig, sakenGjelder, receivers }: Props): PartRecipient[] => {
-  // if (state.mulighet === null) {
-  //   return EMPTY_BREVMOTTAKER_LIST;
-  // }
+  if (sakenGjelder === undefined) {
+    return [];
+  }
 
-  // const { klager, fullmektig } = state.overstyringer;
-  // const { sakenGjelder } = state.mulighet;
-  // const receivers = state.svarbrev?.receivers ?? EMPTY_RECIPIENTS_LIST;
+  const existingRecipients = svarbrev.receivers.map((r) => {
+    const typeList = [
+      r.id === klager?.id ? ReceiverType.KLAGER : null,
+      r.id === sakenGjelderValue ? ReceiverType.SAKEN_GJELDER : null,
+      r.id === fullmektig?.id ? ReceiverType.FULLMEKTIG : null,
+    ].filter(isNotNull);
+
+    return { ...r, typeList };
+  });
 
   const suggestedRecipients = [
-    partToPartRecipient(klager, RecipientType.KLAGER),
-    partToPartRecipient(sakenGjelder, RecipientType.SAKEN_GJELDER),
-    partToPartRecipient(fullmektig, RecipientType.FULLMEKTIG),
+    partToPartRecipient(klager, ReceiverType.KLAGER),
+    partToPartRecipient(sakenGjelder, ReceiverType.SAKEN_GJELDER),
+    partToPartRecipient(fullmektig, ReceiverType.FULLMEKTIG),
   ]
     .filter(isNotNull)
-    .reduce<PartRecipient[]>((acc, curr) => {
+    .filter((r) => !existingRecipients.some((er) => er.part.id === r.part.id))
+    .concat(existingRecipients)
+    .reduce<PartSuggestedReceiver[]>((acc, curr) => {
       const found = acc.find(({ part }) => part.id === curr.part.id);
 
       if (found === undefined) {
@@ -39,20 +50,24 @@ export const getSuggestedBrevmottakere = ({ klager, fullmektig, sakenGjelder, re
       found.typeList.push(...curr.typeList);
 
       return acc;
-    }, [])
-    .map((sm) => {
-      const recipient = receivers.find((m) => m.part.id === sm.part.id);
+    }, []);
+  // .map((sm) => {
+  //   const recipient = existingRecipients.find((m) => m.part.id === sm.part.id);
 
-      return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
-    });
+  //   return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
+  // });
 
-  return suggestedRecipients;
+  const list = suggestedRecipients;
+
+  console.log('suggested recipients', list);
+
+  return list;
 };
 
-const EMPTY_RECIPIENTS_LIST: Recipient[] = [];
-const EMPTY_BREVMOTTAKER_LIST: PartRecipient[] = [];
+// const EMPTY_RECIPIENTS_LIST: Recipient[] = [];
+// const EMPTY_BREVMOTTAKER_LIST: PartRecipient[] = [];
 
-const partToPartRecipient = (part: IPart | null, brevmottakerType: RecipientType): PartRecipient | null => {
+const partToPartRecipient = (part: IPart | null, brevmottakerType: ReceiverType): PartSuggestedReceiver | null => {
   if (part === null) {
     return null;
   }

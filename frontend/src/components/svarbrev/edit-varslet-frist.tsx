@@ -4,13 +4,18 @@ import { Container, TopRow } from '@app/components/edit-frist/styled-components'
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
 import { Warning } from '@app/components/edit-frist/warning';
+import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
   useSetSvarbrevBehandlingstidMutation,
   useSetSvarbrevOverrideBehandlingstidMutation,
-} from '@app/redux/api/svarbrev';
+} from '@app/redux/api/svarbrev/svarbrev';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SvarbrevSetting } from '@app/types/svarbrev-settings';
+
+const ID = 'svarbrev-frist';
+const LABEL = 'Frist i svarbrev';
 
 interface Props {
   setting: SvarbrevSetting;
@@ -20,16 +25,23 @@ export const EditVarsletFrist = ({ setting }: Props) => {
   const registrering = useRegistrering();
   const [setBehandlingstid] = useSetSvarbrevBehandlingstidMutation();
   const [setOverrideBehandlingstid] = useSetSvarbrevOverrideBehandlingstidMutation();
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    const { behandlingstid } = registrering.svarbrev;
+    const value = behandlingstid === null ? null : `${behandlingstid.units} ${behandlingstid.unitTypeId}`;
+
+    return <ReadOnlyText label={LABEL} value={value} id={ID} />;
+  }
 
   const { id } = registrering;
 
   const units = registrering.svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
-  const unitTypeId = registrering.svarbrev.behandlingstid?.unitType ?? setting.behandlingstidUnitTypeId;
+  const unitTypeId = registrering.svarbrev.behandlingstid?.unitTypeId ?? setting.behandlingstidUnitTypeId;
 
-  const setUnits = (u: number) => setBehandlingstid({ id, behandlingstid: { units: u, unitTypeId } });
+  const setUnits = (u: number) => setBehandlingstid({ id, units: u, unitTypeId });
 
-  const setUnitType = (type: BehandlingstidUnitType) =>
-    setBehandlingstid({ id, behandlingstid: { units, unitTypeId: type } });
+  const setUnitType = (type: BehandlingstidUnitType) => setBehandlingstid({ id, units, unitTypeId: type });
 
   const disabled = registrering.svarbrev.overrideBehandlingstid === false;
 
@@ -53,7 +65,7 @@ export const EditVarsletFrist = ({ setting }: Props) => {
         <Fritekst />
       </TopRow>
 
-      {!disabled ? <Warning behandlingstidUnits={units} behandlingstidUnitTypeId={unitTypeId} /> : null}
+      {!disabled ? <Warning units={units} unitTypeId={unitTypeId} /> : null}
     </Container>
   );
 };

@@ -1,80 +1,15 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { CalculateFristdatoParams } from '@app/types/calculate-frist';
-import { IPart, ISaksbehandler, ISimplePart, SaksTypeEnum } from '@app/types/common';
-import { IArkivertDocument } from '@app/types/dokument';
-import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import { ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
-import { SvarbrevSettings } from '../types/svarbrev-settings';
 import { getStateFactory } from './state-factory';
 import { useSimpleApiState } from './use-simple-api-state';
 
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 export const KABAL_API_BASE_PATH = '/api/kabal-api';
 export const KABIN_API_BASE_PATH = '/api/kabin-api';
-
-interface IDokumenterResponse {
-  dokumenter: IArkivertDocument[];
-  pageReference: string | null;
-  antall: number;
-  totaltAntall: number;
-}
-
-interface IdParams {
-  idnr: string;
-}
-
-const getDokumenterState = getStateFactory<IDokumenterResponse, IdParams>(
-  `${KABIN_API_BASE_PATH}/arkivertedokumenter?antall=50000`,
-  { method: Method.POST, cacheTime: 0 },
-);
-
-export const useDokumenter = (idnummer: string | typeof skipToken) =>
-  useSimpleApiState(idnummer === skipToken ? skipToken : getDokumenterState({ path: '' }, { idnummer }));
-
-const getAnkemuligheterState = getStateFactory<IAnkemulighet[], IdParams>(
-  `${KABIN_API_BASE_PATH}/ankemuligheter?antall=50000`,
-  { method: Method.POST, cacheTime: 0 },
-);
-
-export const useAnkemuligheter = (idnummer: string | typeof skipToken) =>
-  useSimpleApiState(idnummer === skipToken ? skipToken : getAnkemuligheterState({ path: '' }, { idnummer }));
-
-const getKlagemuligheterState = getStateFactory<IKlagemulighet[], IdParams>(
-  `${KABIN_API_BASE_PATH}/klagemuligheter?antall=50000`,
-  { method: Method.POST, cacheTime: 0 },
-);
-
-export const useKlagemuligheter = (idnummer: string | typeof skipToken) =>
-  useSimpleApiState(idnummer === skipToken ? skipToken : getKlagemuligheterState({ path: '' }, { idnummer }));
-
-export interface SearchPartWithAddressParams {
-  identifikator: string;
-  sakenGjelderId: string;
-  ytelseId: string;
-}
-
-const getSearchPartWithAddressState = getStateFactory<IPart, SearchPartWithAddressParams>(
-  `${KABAL_API_BASE_PATH}/searchpartwithutsendingskanal`,
-  {
-    method: Method.POST,
-  },
-);
-
-export const useSearchPartWithAddress = (params: SearchPartWithAddressParams | typeof skipToken) =>
-  useSimpleApiState(params === skipToken ? skipToken : getSearchPartWithAddressState({}, { ...params }));
-
-interface SearchPartParams {
-  identifikator: string;
-}
-
-const getSearchState = getStateFactory<ISimplePart, SearchPartParams>(`${KABAL_API_BASE_PATH}/searchpart`, {
-  method: Method.POST,
-});
-
-export const useSearchPart = (identifikator: string | typeof skipToken) =>
-  useSimpleApiState(identifikator === skipToken ? skipToken : getSearchState({ path: '' }, { identifikator }));
 
 interface StatusParams {
   id: string;
@@ -136,14 +71,6 @@ const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE
 
 export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, { ...params }));
-
-const svarbrevSettingsState = getStateFactory<SvarbrevSettings, string>(
-  `${KABAL_API_BASE_PATH}/svarbrev-settings/ytelser/`,
-  { method: Method.GET },
-);
-
-export const useSvarbrevSettings = (ytelseId: string | typeof skipToken) =>
-  useSimpleApiState(ytelseId === skipToken ? skipToken : svarbrevSettingsState({ path: ytelseId }));
 
 const getOppgaverState = getStateFactory<IOppgave[], IGetOppgaverParams>(`${KABIN_API_BASE_PATH}/searchoppgave`, {
   method: Method.POST,

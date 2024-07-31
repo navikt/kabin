@@ -1,5 +1,5 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
-import { Alert, ToggleGroup } from '@navikt/ds-react';
+import { Alert, Tag, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
@@ -9,32 +9,64 @@ import { Klagemuligheter } from '@app/components/muligheter/klage/klagemulighete
 import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { SvarbrevInput } from '@app/components/svarbrev/svarbrev';
+import { Svarbrev } from '@app/components/svarbrev/svarbrev';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetTypeMutation } from '@app/redux/api/registrering';
+import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
 import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
 import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
-import { SaksTypeEnum } from '@app/types/common';
-import { isType } from './app-context/helpers';
+import { SaksTypeEnum, isType } from '@app/types/common';
+
+const ReadOnlyType = ({ typeId }: { typeId: SaksTypeEnum | null }) => {
+  switch (typeId) {
+    case SaksTypeEnum.ANKE:
+      return (
+        <Tag variant="alt1" size="small">
+          Anke
+        </Tag>
+      );
+    case SaksTypeEnum.KLAGE:
+      return (
+        <Tag variant="info" size="small">
+          Klage
+        </Tag>
+      );
+    case null:
+      return (
+        <Tag variant="info" size="small">
+          Ingen sakstype valgt
+        </Tag>
+      );
+  }
+};
 
 export const TypeSelect = () => {
-  const registrering = useRegistrering();
+  const { id, typeId, journalpostId } = useRegistrering();
   const [setType] = useSetTypeMutation();
+  const canEdit = useCanEdit();
 
   const onChange = useCallback(
-    (typeId: string) => {
-      if (!isType(typeId)) {
+    (newTypeId: string) => {
+      if (!isType(newTypeId)) {
         return;
       }
 
-      setType({ id: registrering.id, typeId });
+      setType({ id, typeId: newTypeId });
     },
-    [registrering.id, setType],
+    [id, setType],
   );
 
-  if (registrering === undefined || registrering.journalpostId === null) {
+  if (!canEdit) {
+    return (
+      <Row>
+        <ReadOnlyType typeId={typeId} />
+      </Row>
+    );
+  }
+
+  if (journalpostId === null) {
     return (
       <Row>
         <Alert variant="info" size="small" inline>
@@ -44,9 +76,12 @@ export const TypeSelect = () => {
     );
   }
 
+  const value = typeId ?? undefined;
+
+  // Without `key` TogglegGroup will remember last non-undefined value when undefined.
   return (
     <Row>
-      <ToggleGroup onChange={onChange} value={registrering.typeId ?? undefined} size="small">
+      <ToggleGroup onChange={onChange} value={value} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
       </ToggleGroup>
@@ -64,7 +99,7 @@ export const TypeInput = () => {
         <WillCreateNewJournalpostInfo />
         <Oppgaver />
         <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
-        <SvarbrevInput />
+        <Svarbrev />
       </>
     );
   }
@@ -76,7 +111,7 @@ export const TypeInput = () => {
         <WillCreateNewJournalpostInfo />
         <Oppgaver />
         <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
-        <SvarbrevInput />
+        <Svarbrev />
       </>
     );
   }
@@ -130,7 +165,7 @@ const WillCreateNewJournalpostInfo = () => {
 };
 
 const useJournalpostAndMulighet = () => {
-  const { data: journalpost } = useJournalpost();
+  const { journalpost } = useJournalpost();
   const { mulighet } = useMulighet();
 
   if (journalpost === undefined || mulighet === undefined) {

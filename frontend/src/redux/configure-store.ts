@@ -3,7 +3,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { muligheterApi } from '@app/redux/api/muligheter';
 import { partApi } from '@app/redux/api/part';
-import { registreringApi } from '@app/redux/api/registrering';
+import { registreringApi } from '@app/redux/api/registreringer/registrering';
+import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
 import { RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
@@ -18,6 +19,7 @@ export const reduxStore = configureStore({
       arkiverteDokumenterApi.middleware,
       partApi.middleware,
       muligheterApi.middleware,
+      svarbrevSettingsApi.middleware,
     ]),
 });
 

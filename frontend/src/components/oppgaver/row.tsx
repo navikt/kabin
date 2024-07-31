@@ -4,7 +4,7 @@ import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/co
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer';
+import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useTema } from '@app/simple-api-state/use-kodeverk';
 import { IOppgave } from '@app/types/oppgave';
 
@@ -28,7 +28,7 @@ export const Row = ({
   }
 
   const temaName = tema.find((t) => t.id === temaId)?.beskrivelse ?? temaId;
-  const selected = overstyringer.oppgaveId === id.toString(10);
+  const selected = overstyringer.oppgaveId === id;
 
   return (
     <StyledRow

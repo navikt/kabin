@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useGetPartQuery } from '@app/redux/api/part';
-import { Registrering } from '@app/redux/api/registrering';
+import { Registrering } from '@app/redux/api/registreringer/types';
 import { TYPE_NAME } from '@app/types/mulighet';
 
 interface Props extends RegistreringerTableProps {

@@ -1,20 +1,20 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Search } from '@navikt/ds-react';
+import { Alert, Button, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { PersonDetails } from '@app/pages/create/person/details';
 import { useGetPartQuery } from '@app/redux/api/part';
-import { useSetSakenGjelderMutation } from '@app/redux/api/registrering';
+import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 
 interface Props {
   onDone: () => void;
 }
 
 export const PersonSearch = ({ onDone }: Props) => {
-  const registreringId = useRegistreringId();
+  const { id, sakenGjelderValue } = useRegistrering();
   const [setSakenGjelder, { isLoading: isSetting }] = useSetSakenGjelderMutation();
   const [rawSearch, setRawSearch] = useState('');
   const [error, setError] = useState<string>();
@@ -26,7 +26,7 @@ export const PersonSearch = ({ onDone }: Props) => {
 
   const onSelect = useCallback(() => {
     if (person !== undefined) {
-      setSakenGjelder({ id: registreringId, sakenGjelderValue: person.id });
+      setSakenGjelder({ id, sakenGjelderValue: person.id });
     }
 
     if (error !== undefined) {
@@ -34,7 +34,7 @@ export const PersonSearch = ({ onDone }: Props) => {
     }
 
     onDone();
-  }, [error, onDone, person, registreringId, setSakenGjelder]);
+  }, [error, id, onDone, person, setSakenGjelder]);
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     ({ key }) => {
@@ -91,15 +91,21 @@ export const PersonSearch = ({ onDone }: Props) => {
         </>
       ) : null}
 
-      <Button
-        size="small"
-        variant="secondary"
-        onClick={onDone}
-        loading={isSetting}
-        icon={<XMarkIcon role="presentation" aria-hidden />}
-      >
-        Avbryt
-      </Button>
+      {sakenGjelderValue === null ? (
+        <Alert variant="info" size="small" inline>
+          Velg person
+        </Alert>
+      ) : (
+        <Button
+          size="small"
+          variant="secondary"
+          onClick={onDone}
+          loading={isSetting}
+          icon={<XMarkIcon role="presentation" aria-hidden />}
+        >
+          Avbryt
+        </Button>
+      )}
     </>
   );
 };

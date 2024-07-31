@@ -16,13 +16,13 @@ interface Props {
 }
 
 export const SelectedDocument = ({ onClick }: Props) => {
-  const { data } = useJournalpost();
+  const { journalpost } = useJournalpost();
 
-  if (data === undefined) {
+  if (journalpost === undefined) {
     return null;
   }
 
-  return <RenderDokument dokument={data} onClick={onClick} />;
+  return <RenderDokument dokument={journalpost} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {

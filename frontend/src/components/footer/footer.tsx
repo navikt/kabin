@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { DeleteButton } from '@app/components/footer/delete-button';
 import { FinishButton } from '@app/components/footer/finish-button';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useFinishRegistreringMutation } from '@app/redux/api/registrering';
+import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const Footer = () => {

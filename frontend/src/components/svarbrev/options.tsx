@@ -4,12 +4,12 @@ import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { Address } from '@app/components/svarbrev/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { Recipient } from '@app/pages/create/app-context/types';
+import { Receiver } from '@app/redux/api/registreringer/types';
 import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/recipient';
 
-interface Props extends Recipient {
-  onChange: (recipient: Recipient) => void;
+interface Props extends Receiver {
+  onChange: (recipient: Receiver) => void;
 }
 
 export const Options = ({ part, handling, overriddenAddress, onChange }: Props) => {

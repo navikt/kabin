@@ -3,7 +3,7 @@ import { Button, Heading, HelpText } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer';
+import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useGetOppgaver } from '@app/simple-api-state/use-api';
 import { SaksTypeEnum } from '@app/types/common';
 import { useParams } from './hooks';
@@ -21,7 +21,7 @@ export const Header = () => {
   const onRefresh = async () => {
     const oppgaver = await refetch();
 
-    if (oppgaver === undefined || oppgaver.find((o) => o.id.toString(10) === overstyringer.oppgaveId) === undefined) {
+    if (oppgaver === undefined || oppgaver.find((o) => o.id === overstyringer.oppgaveId) === undefined) {
       setOppgaveId({ id, oppgaveId: null });
     }
   };

@@ -1,29 +1,26 @@
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
-import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SaksTypeEnum } from '@app/types/common';
 
 interface Props {
-  behandlingstidUnitTypeId: BehandlingstidUnitType;
-  behandlingstidUnits: number;
+  unitTypeId: BehandlingstidUnitType;
+  units: number;
 }
 
-export const Warning = ({ behandlingstidUnitTypeId, behandlingstidUnits }: Props) => {
-  const registrering = useRegistrering();
-  const { data } = useSvarbrevSettings(registrering?.overstyringer.ytelseId ?? skipToken);
+export const Warning = ({ unitTypeId, units }: Props) => {
+  const ytelseId = useYtelseId();
   const { typeId, mulighet } = useMulighet();
+  const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
+    typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
+  );
 
-  if (typeId === null) {
+  if (typeId === null || svarbrevSetting === undefined || typeId === SaksTypeEnum.KLAGE || mulighet === undefined) {
     return;
-  }
-
-  if (typeId === SaksTypeEnum.KLAGE || mulighet === undefined) {
-    return null;
   }
 
   const { vedtakDate } = mulighet;
@@ -32,25 +29,19 @@ export const Warning = ({ behandlingstidUnitTypeId, behandlingstidUnits }: Props
     return null;
   }
 
-  const svarbrevSettings = getSvarbrevSettings(data, registrering.typeId);
-
-  if (svarbrevSettings === null) {
-    return;
-  }
-
   const mottattKlageinstansDate = parseISO(vedtakDate);
 
   if (!isValid(mottattKlageinstansDate)) {
     return null;
   }
 
-  const overstyringUnits = behandlingstidUnits ?? svarbrevSettings.behandlingstidUnits;
-  const overstyringUnitType = behandlingstidUnitTypeId ?? svarbrevSettings.behandlingstidUnitTypeId;
+  const overstyringUnits = units ?? svarbrevSetting.behandlingstidUnits;
+  const overstyringUnitType = unitTypeId ?? svarbrevSetting.behandlingstidUnitTypeId;
 
   const overstyringFristdato = getFristDate(overstyringUnits, overstyringUnitType, mottattKlageinstansDate);
   const svarbrevFristdato = getFristDate(
-    svarbrevSettings.behandlingstidUnits,
-    svarbrevSettings.behandlingstidUnitTypeId,
+    svarbrevSetting.behandlingstidUnits,
+    svarbrevSetting.behandlingstidUnitTypeId,
     mottattKlageinstansDate,
   );
 

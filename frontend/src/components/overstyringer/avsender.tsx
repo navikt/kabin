@@ -12,7 +12,7 @@ import { FieldNames } from './types';
 export const Avsender = () => {
   const { overstyringer } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
-  const { data: journalpost } = useJournalpost();
+  const { journalpost } = useJournalpost();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
 
   if (typeId === null || mulighet === undefined) {

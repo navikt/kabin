@@ -3,11 +3,11 @@ import { IAvsenderMottaker, IPart, ISimplePart, IdType } from '@app/types/common
 
 export const getSakspartName = (
   sakspart: IPart | ISimplePart | IAvsenderMottaker | undefined | null,
-  defaultValue: string | undefined = '-',
+  defaultValue: string | undefined | null = '-',
 ): string | null => (sakspart === undefined || sakspart === null ? defaultValue : sakspart.name);
 
-const getSakspartId = (sakspart: IPart | ISimplePart | undefined): string | null => {
-  if (sakspart === undefined) {
+const getSakspartId = (sakspart: IPart | ISimplePart | undefined | null): string | null => {
+  if (sakspart === undefined || sakspart === null) {
     return null;
   }
 
@@ -22,7 +22,7 @@ const getSakspartId = (sakspart: IPart | ISimplePart | undefined): string | null
   return null;
 };
 
-export const getSakspartNameAndId = (sakspart: IPart | ISimplePart | undefined): string | null => {
+export const getSakspartNameAndId = (sakspart: IPart | ISimplePart | undefined | null): string | null => {
   const partName = getSakspartName(sakspart);
   const partId = getSakspartId(sakspart);
 

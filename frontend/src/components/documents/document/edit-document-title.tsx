@@ -3,6 +3,7 @@ import { Button, TextField } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
 import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
 
@@ -15,6 +16,7 @@ interface Props {
 
 export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }: Props) => {
   const { viewDokument } = useContext(DocumentViewerContext);
+  const { sakenGjelderValue } = useRegistrering();
   const [setJournalpostTitle] = useSetArkivertDokumentTitleMutation();
 
   const [newTitle, setNewTitle] = useState(title ?? '');
@@ -24,7 +26,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
     setIsLoading(true);
 
     try {
-      await setJournalpostTitle({ journalpostId, dokumentInfoId, tittel: newTitle });
+      await setJournalpostTitle({ sakenGjelderValue, journalpostId, dokumentInfoId, tittel: newTitle });
 
       toast.success(`Dokumenttittel endret`);
 
@@ -37,7 +39,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
 
     setIsLoading(false);
     exitEditMode();
-  }, [exitEditMode, setJournalpostTitle, journalpostId, dokumentInfoId, newTitle, viewDokument]);
+  }, [sakenGjelderValue, exitEditMode, setJournalpostTitle, journalpostId, dokumentInfoId, newTitle, viewDokument]);
 
   const isChanged = title !== newTitle;
 

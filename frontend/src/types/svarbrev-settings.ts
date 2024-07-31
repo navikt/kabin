@@ -22,5 +22,3 @@ interface AnkeSvarbrevSetting extends BaseSvarbrevSetting {
 }
 
 export type SvarbrevSetting = KlageSvarbrevSetting | AnkeSvarbrevSetting;
-
-export type SvarbrevSettings = [KlageSvarbrevSetting, AnkeSvarbrevSetting];

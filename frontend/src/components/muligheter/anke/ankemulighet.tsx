@@ -6,9 +6,11 @@ import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/com
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useFullTemaNameFromId, useYtelseName } from '@app/hooks/kodeverk';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { MulighetId, useSetMulighetMutation } from '@app/redux/api/registrering';
+import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
+import { MulighetId } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet } from '@app/types/mulighet';
 
@@ -18,11 +20,12 @@ interface Props {
 
 export const Ankemulighet = ({ ankemulighet }: Props) => {
   const { id, mulighet } = useRegistrering();
-  const { data: journalpost } = useJournalpost();
-  const [setMulighet, { isLoading }] = useSetMulighetMutation();
+  const { journalpost } = useJournalpost();
+  const [setAnkemulighet, { isLoading }] = useSetAnkemulighetMutation();
   const temaName = useFullTemaNameFromId(ankemulighet.temaId);
   const ytelseName = useYtelseName(ankemulighet.ytelseId);
   const fagsystemName = useFagsystemName(ankemulighet.fagsystemId);
+  const canEdit = useCanEdit();
 
   const typeName = useMemo(() => {
     switch (ankemulighet.typeId) {
@@ -64,10 +67,10 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
       }
 
       if (mulighet === null || !isSameMulighet(mulighet, ankemulighet)) {
-        setMulighet({ id, mulighetId: ankemulighet.id, fagsystemId: ankemulighet.fagsystemId });
+        setAnkemulighet({ id, mulighet: ankemulighet });
       }
     },
-    [isValid, mulighet, ankemulighet, setMulighet, id],
+    [isValid, mulighet, ankemulighet, setAnkemulighet, id],
   );
 
   mulighet?.fagsystemId;
@@ -90,7 +93,9 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
         )}
       </Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
+        {canEdit ? (
+          <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
+        ) : null}
       </StyledButtonCell>
     </StyledTableRow>
   );

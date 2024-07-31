@@ -31,7 +31,7 @@ export const ResetPartButton = ({ part, partField }: Props) => {
 };
 
 const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
-  const { data: journalpost } = useJournalpost();
+  const { journalpost } = useJournalpost();
   const { typeId, mulighet } = useMulighet();
 
   if (mulighet === undefined) {
@@ -51,7 +51,7 @@ const useDefaultPart = (fieldId: BaseProps['partField']): IPart | null => {
       return mulighet[fieldId] ?? null;
     }
     case SaksTypeEnum.KLAGE: {
-      return mulighet[fieldId] ?? null;
+      return null;
     }
     case null:
       return null;

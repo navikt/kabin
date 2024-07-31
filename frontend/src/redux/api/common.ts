@@ -54,13 +54,11 @@ const API_PATH = '/api';
 
 export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
 
-export const KABIN_API_BASE_PATH = '/api/kabin-api';
+const KABIN_API_BASE_PATH = '/api/kabin-api';
 export const KABIN_API_BASE_QUERY = staggeredBaseQuery(KABIN_API_BASE_PATH);
 
-export const KABAL_API_BASE_PATH = '/kabal-api';
+const KABAL_API_BASE_PATH = '/api/kabal-api';
 export const KABAL_API_BASE_QUERY = staggeredBaseQuery(KABAL_API_BASE_PATH);
 
-export const KABAL_BEHANDLINGER_BASE_PATH = `${KABAL_API_BASE_PATH}/behandlinger`;
-export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
-
+const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PATH);

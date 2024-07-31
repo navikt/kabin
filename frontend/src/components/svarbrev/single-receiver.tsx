@@ -5,18 +5,27 @@ import { StyledRecipient } from '@app/components/svarbrev/address/layout';
 import { Options } from '@app/components/svarbrev/options';
 import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svarbrev/styled-components';
 import { getTypeNames } from '@app/components/svarbrev/type-name';
-import { PartRecipient } from '@app/components/svarbrev/types';
-import { Recipient } from '@app/pages/create/app-context/types';
+import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { isReceiver } from '@app/pages/create/app-context/types';
+import { useChangeSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { IdType } from '@app/types/common';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { Receiver } from '@app/redux/api/registreringer/types';
 
 interface Props {
-  recipient: PartRecipient;
-  changeRecipient: (recipient: Recipient) => void;
+  receiver: PartSuggestedReceiver;
 }
 
-export const SingleRecipient = ({ recipient, changeRecipient }: Props) => {
-  const { part, handling, overriddenAddress, typeList } = recipient;
+export const SingleReceiver = ({ receiver }: Props) => {
+  const { part, handling, overriddenAddress, typeList } = receiver;
   const isPerson = part.type === IdType.FNR;
+  const {id,svarbrev} = useRegistrering();
+  const [changeRecipient] = useChangeSvarbrevReceiverMutation();
+
+  const isAdded = isReceiver(receiver) && svarbrev.receivers.some((r) => r.id === receiver.id);
+
+  const onChange = (receiver: Receiver) => changeRecipient({ id, receiver });
 
   return (
     <section>
@@ -33,7 +42,7 @@ export const SingleRecipient = ({ recipient, changeRecipient }: Props) => {
             <PartStatusList statusList={part.statusList} />
           </StyledRecipientContent>
         </StyledBrevmottaker>
-        <Options part={part} handling={handling} overriddenAddress={overriddenAddress} onChange={changeRecipient} />
+        {isAdded ? <Options {...receiver} onChange={onChange} /> : null}
       </StyledRecipient>
     </section>
   );

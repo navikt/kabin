@@ -6,40 +6,73 @@ import { styled } from 'styled-components';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { useRegistrering } from '@app/hooks/use-registrering';
-import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import {
+  useSetAvsenderMutation,
+  useSetFullmektigMutation,
+  useSetKlagerMutation,
+} from '@app/redux/api/overstyringer/overstyringer';
+import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
+import { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
 import { IPart } from '@app/types/common';
 import { SearchResult } from './search-result';
 import { PartContent, States, StyledContainer } from './styled-components';
-import { BaseProps } from './types';
+import { BaseProps, FieldNames } from './types';
 
-interface InternalProps {
+interface Props extends BaseProps {
   exitEditMode: () => void;
   error?: string;
 }
 
-export type PartWriteProps = BaseProps;
+export const PartWrite = (props: Props) => {
+  const setAvsender = useSetAvsenderMutation();
+  const setFullmektig = useSetFullmektigMutation();
+  const setKlager = useSetKlagerMutation();
+  const id = useRegistreringId();
 
-export const PartWrite = ({
+  const mutation = useMemo(() => {
+    switch (props.partField) {
+      case FieldNames.AVSENDER:
+        return setAvsender;
+      case FieldNames.FULLMEKTIG:
+        return setFullmektig;
+      case FieldNames.KLAGER:
+        return setKlager;
+    }
+  }, [props.partField, setAvsender, setFullmektig, setKlager]);
+
+  const [set, { isLoading }] = mutation;
+
+  const setPart = (part: IPart | null) => set({ id, part });
+
+  return <PartWriteInternal {...props} setPart={setPart} isSaving={isLoading} />;
+};
+
+interface InternalProps extends Props {
+  setPart: (part: IPart | null) => void;
+  isSaving: boolean;
+}
+
+const PartWriteInternal = ({
   part,
   partField,
   label,
   exitEditMode,
   icon,
   error: validationError,
-}: PartWriteProps & InternalProps) => {
-  const registrering = useRegistrering();
-  const { overstyringer } = registrering;
+  setPart,
+  isSaving,
+}: InternalProps) => {
   const { typeId, mulighet } = useMulighet();
-  const { ytelseId } = overstyringer;
-  // const setOverstyringer = useOverstyringerStore((state) => state.setOverstyringer);
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
+  const ytelseId = useYtelseId();
 
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
-  const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
+  const searchParams = useMemo<SearchPartWithUtsendingskanalParams | typeof skipToken>(() => {
     if (!isValid || mulighet === undefined || ytelseId === null) {
       return skipToken;
     }
@@ -51,13 +84,13 @@ export const PartWrite = ({
     };
   }, [isValid, mulighet, ytelseId, search]);
 
-  const { data, isLoading } = useSearchPartWithAddress(searchParams);
+  const { data, isLoading } = useGetPartWithUtsendingskanalQuery(searchParams);
 
   if (typeId === null) {
     return null;
   }
 
-  const setPart = (newPart: IPart | null) => setOverstyringer({ [partField]: newPart });
+  // const setPart = (newPart: IPart | null) => setOverstyringer({ [partField]: newPart });
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
@@ -116,6 +149,7 @@ export const PartWrite = ({
           label={label}
           searchString={search}
           isValid={isValid}
+          isSaving={isSaving}
         />
       </PartContent>
       <ValidationErrorMessage error={validationError} />

@@ -12,7 +12,7 @@ import {
   StyledKlagerIcon,
   StyledSakenGjelderIcon,
 } from '@app/components/overstyringer/icons';
-import { Innsendingshjemmel } from '@app/components/overstyringer/innsendingshjemmel';
+import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshjemler';
 import { Tildeling } from '@app/components/overstyringer/tildeling';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
@@ -20,10 +20,11 @@ import { avsenderMottakerToPart } from '@app/domain/converters';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { ValidationFieldNames } from '@app/types/validation';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
-import { PartRead } from './part-read/part-read';
+import { SakenGjelder } from './part-read/part-read';
 import { FieldNames } from './types';
 
 interface Props {
@@ -32,14 +33,15 @@ interface Props {
 }
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
-  const { typeId, overstyringer } = useRegistrering();
-  const { ytelseId, klager, fullmektig, avsender } = overstyringer;
-  const { klagemulighet, ankemulighet } = useMulighet();
+  const { overstyringer } = useRegistrering();
+  const { klager, fullmektig, avsender } = overstyringer;
+  const { typeId, mulighet } = useMulighet();
+  const ytelseId = useYtelseId();
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  if (typeId === null || mulighet === null) {
+  if (typeId === null || mulighet === undefined) {
     return (
       <CardLarge title={title}>
         <Placeholder>
@@ -60,7 +62,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
       </Header>
       <Content>
         <Ytelse />
-        <Innsendingshjemmel />
+        <Innsendingshjemler />
       </Content>
       {ytelseId === null ? (
         <Placeholder>
@@ -70,8 +72,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
         <>
           <Label size="small">Parter</Label>
           <Content>
-            <PartRead
-              partField={FieldNames.SAKEN_GJELDER}
+            <SakenGjelder
               part={mulighet.sakenGjelder}
               label="Saken gjelder"
               icon={<StyledSakenGjelderIcon aria-hidden />}

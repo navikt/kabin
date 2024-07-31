@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useGetPartQuery } from '@app/redux/api/part';
-import { useSetSakenGjelderMutation } from '@app/redux/api/registrering';
+import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 import { ISimplePart } from '@app/types/common';
 
 export interface IPersonSearch {
@@ -31,7 +31,7 @@ export const usePersonSearch = (): IPersonSearch => {
   const { data: person = null, isLoading } = useGetPartQuery(search);
 
   useEffect(() => {
-    if (!isValid || registreringId === skipToken) {
+    if (!isValid) {
       return;
     }
 

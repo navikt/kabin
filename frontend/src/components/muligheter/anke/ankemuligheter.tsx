@@ -12,7 +12,7 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useAnkemuligheter } from '@app/simple-api-state/use-api';
+import { useGetAnkemuligheterQuery } from '@app/redux/api/muligheter';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -22,8 +22,13 @@ import { Ankemulighet } from './ankemulighet';
 export const Ankemuligheter = () => {
   const { sakenGjelderValue } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
-  const { data: journalpost } = useJournalpost();
-  const { data: ankemuligheter, isLoading, refetch } = useAnkemuligheter(sakenGjelderValue ?? skipToken);
+  const { journalpost } = useJournalpost();
+  const {
+    data: ankemuligheter,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetAnkemuligheterQuery(sakenGjelderValue ?? skipToken);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
@@ -46,7 +51,7 @@ export const Ankemuligheter = () => {
           size="xsmall"
           variant="tertiary"
           onClick={refetch}
-          loading={isLoading}
+          loading={isFetching}
           icon={<ArrowsCirclepathIcon aria-hidden />}
           title="Oppdater"
         />

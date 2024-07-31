@@ -66,44 +66,17 @@ export enum PartStatusEnum {
 }
 
 export type IPersonStatus =
-  | {
-      status: PartStatusEnum.DEAD;
-      date: string;
-    }
-  | {
-      status: PartStatusEnum.EGEN_ANSATT;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.VERGEMAAL;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.FULLMAKT;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.FORTROLIG;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.STRENGT_FORTROLIG;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.RESERVERT_I_KRR;
-      date: null;
-    };
+  | { status: PartStatusEnum.DEAD; date: string }
+  | { status: PartStatusEnum.EGEN_ANSATT; date: null }
+  | { status: PartStatusEnum.VERGEMAAL; date: null }
+  | { status: PartStatusEnum.FULLMAKT; date: null }
+  | { status: PartStatusEnum.FORTROLIG; date: null }
+  | { status: PartStatusEnum.STRENGT_FORTROLIG; date: null }
+  | { status: PartStatusEnum.RESERVERT_I_KRR; date: null };
 
 export type IOrganizationStatus =
-  | {
-      status: PartStatusEnum.DELETED;
-      date: string;
-    }
-  | {
-      status: PartStatusEnum.DELT_ANSVAR;
-      date: null;
-    };
+  | { status: PartStatusEnum.DELETED; date: string }
+  | { status: PartStatusEnum.DELT_ANSVAR; date: null };
 
 interface IPersonPart extends IPartBase {
   type: IdType.FNR;
@@ -141,7 +114,12 @@ export interface IPartId {
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
+  // ANKE_I_TR = '3',
 }
+
+const TYPES = Object.values(SaksTypeEnum);
+
+export const isType = (type: string): type is SaksTypeEnum => TYPES.some((t) => t === type);
 
 export interface ISaksbehandler {
   navIdent: string;

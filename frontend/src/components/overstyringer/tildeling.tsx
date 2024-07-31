@@ -10,22 +10,32 @@ import {
   StyledContainer,
   getState,
 } from '@app/components/overstyringer/styled-components';
+import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { ISaksbehandlerParams, useSaksbehandlere } from '@app/simple-api-state/use-api';
 import { ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
+const ID = ValidationFieldNames.SAKSBEHANDLER;
+
 export const Tildeling = () => {
   const { overstyringer } = useRegistrering();
   const { saksbehandlerIdent } = overstyringer;
-  const label = useFieldName(ValidationFieldNames.SAKSBEHANDLER);
+  const canEdit = useCanEdit();
+  const label = useFieldName(ID);
+  const error = useValidationError(ID);
+  const saksbehandler = useSaksbehandler();
 
-  const error = useValidationError(ValidationFieldNames.SAKSBEHANDLER);
+  if (!canEdit) {
+    return <ReadOnlyText id={ID} label={label} value={saksbehandler?.navn ?? null} />;
+  }
 
   return (
     <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} $state={getState(saksbehandlerIdent, error)}>
@@ -48,8 +58,7 @@ export const Tildeling = () => {
 
 const useSaksbehandlereParams = (): ISaksbehandlerParams | typeof skipToken => {
   const { typeId, mulighet } = useMulighet();
-  const { overstyringer } = useRegistrering();
-  const { ytelseId } = overstyringer;
+  const ytelseId = useYtelseId();
 
   if (typeId === null || ytelseId === null || mulighet === undefined) {
     return skipToken;
@@ -75,8 +84,9 @@ const Content = () => {
   const { data } = useSaksbehandlere(params);
   const { id, overstyringer } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
-  const { ytelseId, saksbehandlerIdent } = overstyringer;
+  const { saksbehandlerIdent } = overstyringer;
   const [setSaksbehandlerIdent] = useSetSaksbehandlerIdentMutation();
+  const ytelseId = useYtelseId();
 
   if (typeId === null) {
     return (

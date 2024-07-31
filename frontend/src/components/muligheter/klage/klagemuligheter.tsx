@@ -1,7 +1,7 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { CardSmall } from '@app/components/card/card';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
@@ -11,25 +11,21 @@ import { ValidationErrorMessage } from '@app/components/validation-error-message
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetKlagemuligheterQuery } from '@app/redux/api/muligheter';
-import { Registrering, useSetMulighetMutation } from '@app/redux/api/registrering';
 import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Klagemulighet } from './klagemulighet';
 
 export const Klagemuligheter = () => {
-  const registrering = useRegistrering();
-  const { id, sakenGjelderValue, typeId, mulighet } = registrering;
-  const { data: klagemuligheter, isLoading, refetch } = useGetKlagemuligheterQuery(sakenGjelderValue ?? skipToken);
-  const [setMulighet] = useSetMulighetMutation();
+  const { sakenGjelderValue, typeId, mulighet } = useRegistrering();
+  const {
+    data: klagemuligheter,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetKlagemuligheterQuery(sakenGjelderValue ?? skipToken);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.VEDTAK);
-
-  useEffect(() => {
-    if (klagemuligheter === undefined && typeId === SaksTypeEnum.KLAGE) {
-      setIsExpanded(true);
-    }
-  }, [klagemuligheter, isLoading, typeId, mulighet, setMulighet, id]);
 
   if (typeId !== SaksTypeEnum.KLAGE) {
     return null;
@@ -49,8 +45,8 @@ export const Klagemuligheter = () => {
         <Button
           size="xsmall"
           variant="tertiary"
-          onClick={() => refetch()}
-          loading={isLoading}
+          onClick={refetch}
+          loading={isFetching}
           icon={<ArrowsCirclepathIcon aria-hidden />}
           title="Oppdater"
         />
@@ -68,7 +64,7 @@ export const Klagemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.VEDTAK} />
 
-      <Content registrering={registrering} klagemuligheter={klagemuligheter} isLoading={isLoading} />
+      <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
@@ -88,12 +84,11 @@ const StyledButton = styled(Button)`
 `;
 
 interface ContentProps {
-  registrering: Registrering;
   klagemuligheter: IKlagemulighet[] | undefined;
   isLoading: boolean;
 }
 
-const Content = ({ registrering, klagemuligheter, isLoading }: ContentProps) => {
+const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
     return (
       <Placeholder>
@@ -130,7 +125,7 @@ const Content = ({ registrering, klagemuligheter, isLoading }: ContentProps) => 
         </StyledTableHeader>
         <Table.Body>
           {klagemuligheter.map((klagemulighet) => (
-            <Klagemulighet key={klagemulighet.id} mulighet={klagemulighet} registrering={registrering} />
+            <Klagemulighet key={klagemulighet.id} klagemulighet={klagemulighet} />
           ))}
         </Table.Body>
       </Table>

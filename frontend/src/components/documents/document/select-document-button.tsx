@@ -2,8 +2,9 @@ import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetJournalpostIdMutation } from '@app/redux/api/registrering';
+import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
 import { IArkivertDocument } from '@app/types/dokument';
 import { GridArea, GridButton } from '../styled-grid-components';
 
@@ -16,7 +17,10 @@ interface Props {
 
 export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, alreadyUsed, dokument }: Props) => {
   const { id } = useRegistrering();
-  const [setJournalpostId] = useSetJournalpostIdMutation();
+  const [setJournalpostId, { isLoading }] = useSetJournalpostIdMutation({
+    fixedCacheKey: `${dokument.journalpostId}-${dokument.dokumentInfoId}`,
+  });
+  const canEdit = useCanEdit();
 
   const selectJournalpost = useCallback(
     (e: React.MouseEvent) => {
@@ -31,6 +35,10 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
     [dokument.journalpostId, harTilgangTilArkivvariant, id, setJournalpostId],
   );
 
+  if (!canEdit) {
+    return isSelected ? <CheckmarkCircleFillIconColored aria-label="Valgt" /> : null;
+  }
+
   return (
     <Tooltip content={getTitle(harTilgangTilArkivvariant, alreadyUsed)} placement="top">
       <GridButton
@@ -42,6 +50,7 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
         aria-pressed={isSelected}
         data-testid="select-document"
         $gridArea={GridArea.SELECT}
+        loading={isLoading}
       >
         {getText(harTilgangTilArkivvariant, isSelected)}
       </GridButton>

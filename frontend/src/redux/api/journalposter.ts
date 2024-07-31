@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { API_BASE_QUERY } from '@app/redux/api/common';
+import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
 import { IArkivertDocument } from '@app/types/dokument';
 
 interface JournalpostId {
@@ -7,13 +7,18 @@ interface JournalpostId {
   dokumentInfoId: string;
 }
 
+interface SetDokumenttittelParams extends JournalpostId {
+  sakenGjelderValue: string | null;
+  tittel: string;
+}
+
 export const arkiverteDokumenterApi = createApi({
   reducerPath: 'arkiverteDokumenterApi',
-  baseQuery: API_BASE_QUERY,
+  baseQuery: KABIN_API_BASE_QUERY,
   endpoints: (builder) => ({
     getArkiverteDokumenter: builder.query<{ dokumenter: IArkivertDocument[] }, string>({
       query: (idnummer) => ({
-        url: '/kabin-api/arkivertedokumenter?antall=50000',
+        url: '/arkivertedokumenter?antall=50000',
         method: 'POST',
         body: { idnummer },
       }),
@@ -27,23 +32,58 @@ export const arkiverteDokumenterApi = createApi({
         }
       },
     }),
+
     getArkivertDokument: builder.query<IArkivertDocument, string>({
-      query: (id) => `/kabin-api/arkivertedokumenter/${id}`, // TODO: Finnes ikke i backend. Hva trenger vi av data?
+      query: (id) => `/arkivertedokumenter/${id}`, // TODO: Finnes ikke i backend. Hva trenger vi av data?
     }),
-    setArkivertDokumentTitle: builder.mutation<{ tittel: string }, { tittel: string } & JournalpostId>({
+
+    setArkivertDokumentTitle: builder.mutation<{ tittel: string }, SetDokumenttittelParams>({
       query: ({ journalpostId, dokumentInfoId, tittel }) => ({
-        url: `/kabin-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/tittel`,
+        url: `/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/tittel`,
         method: 'PUT',
         body: { tittel },
       }),
-      // TODO: Optimistic update.
+      onQueryStarted: async (
+        { sakenGjelderValue, journalpostId, dokumentInfoId, tittel },
+        { dispatch, queryFulfilled },
+      ) => {
+        if (sakenGjelderValue === null) {
+          return;
+        }
+
+        const singlePatchResult = dispatch(
+          arkiverteDokumenterApi.util.updateQueryData('getArkivertDokument', journalpostId, (draft) => {
+            draft.tittel = tittel;
+          }),
+        );
+
+        const patchResult = dispatch(
+          arkiverteDokumenterApi.util.updateQueryData('getArkiverteDokumenter', sakenGjelderValue, (draft) => {
+            for (const dokument of draft.dokumenter) {
+              if (dokument.dokumentInfoId === dokumentInfoId) {
+                dokument.tittel = tittel;
+              } else {
+                // A document cannot be an attachment to itself.
+                for (const vedlegg of dokument.vedlegg) {
+                  if (vedlegg.dokumentInfoId === dokumentInfoId) {
+                    vedlegg.tittel = tittel;
+                  }
+                }
+              }
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          singlePatchResult.undo();
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });
 
-export const {
-  useGetArkiverteDokumenterQuery,
-  useLazyGetArkivertDokumentQuery,
-  useGetArkivertDokumentQuery,
-  useSetArkivertDokumentTitleMutation,
-} = arkiverteDokumenterApi;
+export const { useGetArkiverteDokumenterQuery, useGetArkivertDokumentQuery, useSetArkivertDokumentTitleMutation } =
+  arkiverteDokumenterApi;

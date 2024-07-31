@@ -1,8 +1,10 @@
-import { BodyShort, Button } from '@navikt/ds-react';
-import { useState } from 'react';
+import { Alert, Button } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useDeleteRegistreringMutation } from '@app/redux/api/registrering';
+import { useDeleteRegistreringMutation } from '@app/redux/api/registreringer/main';
 
 export const DeleteButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -29,15 +31,24 @@ export const DeleteButton = () => {
 
 const Confirm = ({ close }: { close: () => void }) => {
   const id = useRegistreringId();
+  const navigate = useNavigate();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(close, ref);
 
   const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id });
 
   return (
-    <Container>
-      <BodyShort>Er du sikker på at du vil slette denne registreringen?</BodyShort>
+    <Container ref={ref}>
+      <Alert size="small" inline variant="warning">
+        Er du sikker på at du vil slette denne registreringen?
+      </Alert>
       <Buttons>
         <Button
-          onClick={() => deleteRegistrering(id)}
+          onClick={async () => {
+            await deleteRegistrering(id).unwrap();
+            navigate('/');
+          }}
           size="small"
           variant="danger"
           disabled={isLoading}
@@ -61,6 +72,11 @@ const Buttons = styled.div`
 
 const Container = styled.section`
   position: absolute;
+  bottom: 100%;
+  background-color: var(--a-bg-default);
+  box-shadow: var(--a-shadow-medium);
+  padding: 8px;
+  width: 250px;
   display: flex;
   flex-direction: column;
   gap: 8px;
