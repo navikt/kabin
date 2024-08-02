@@ -7,14 +7,14 @@ import { IPart } from '@app/types/common';
 
 interface Props {
   fagsakId: string;
-  fagsystemId: string;
+  originalFagsystemId: string;
   sakenGjelder: IPart;
   title: string;
   vedtakDate: string | null;
   ytelseId: string;
 }
 
-export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, fagsystemId, fagsakId }: Props) => {
+export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, originalFagsystemId, fagsakId }: Props) => {
   const ytelse = useYtelseName(ytelseId);
 
   return (
@@ -31,7 +31,7 @@ export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, fagsystemI
         <Tag variant="alt3">{ytelse}</Tag>
       </InfoItem>
 
-      <Sak sak={{ fagsakId, fagsystemId }} />
+      <Sak sak={{ fagsakId, fagsystemId: originalFagsystemId }} />
     </StyledCard>
   );
 };

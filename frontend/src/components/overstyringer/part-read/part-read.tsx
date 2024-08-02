@@ -21,22 +21,18 @@ export const SakenGjelder = (props: Omit<PartReadProps, 'partField'>) => (
 export const PartRead = (props: PartReadProps) => {
   const canEdit = useCanEdit();
 
-  return <PartReadInternal {...props}>{canEdit ? <Actions {...props} /> : null}</PartReadInternal>;
+  return (
+    <PartReadInternal {...props} id={props.partField}>
+      {canEdit ? <Actions {...props} /> : null}
+    </PartReadInternal>
+  );
 };
 
 interface PartReadInternalProps extends Omit<PartReadProps, 'partField'> {
   children?: React.ReactNode;
 }
 
-const PartReadInternal = ({
-  label,
-  part,
-  icon,
-  children,
-  // partField,
-  error,
-  id,
-}: PartReadInternalProps) => (
+const PartReadInternal = ({ label, part, icon, children, error, id }: PartReadInternalProps) => (
   <StyledContainer $state={getState(part, error)} id={id}>
     {icon}
     <PartContent>

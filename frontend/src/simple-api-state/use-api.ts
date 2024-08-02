@@ -1,8 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { Method, WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
+import { Method } from '@app/simple-api-state/types';
 import { CalculateFristdatoParams } from '@app/types/calculate-frist';
 import { ISaksbehandler, SaksTypeEnum } from '@app/types/common';
-import { IGetOppgaverParams, IOppgave } from '@app/types/oppgave';
 import { IAnkestatus, IKlagestatus } from '@app/types/status';
 import { getStateFactory } from './state-factory';
 import { useSimpleApiState } from './use-simple-api-state';
@@ -64,17 +63,3 @@ const saksbehandlereState = getStateFactory<ISaksbehandlereResponse, void>(
 
 export const useSaksbehandlere = (params: ISaksbehandlerParams | typeof skipToken) =>
   useSimpleApiState(params === skipToken ? skipToken : saksbehandlereState({ path: '' }, params));
-
-const willCreateNewJournalpostState = getStateFactory<boolean>(`${KABIN_API_BASE_PATH}/willcreatenewjournalpost`, {
-  method: Method.POST,
-});
-
-export const useWillCreateNewJournalpost = (params: WillCreateNewJournalpostInput | typeof skipToken) =>
-  useSimpleApiState(params === skipToken ? skipToken : willCreateNewJournalpostState({}, { ...params }));
-
-const getOppgaverState = getStateFactory<IOppgave[], IGetOppgaverParams>(`${KABIN_API_BASE_PATH}/searchoppgave`, {
-  method: Method.POST,
-});
-
-export const useGetOppgaver = (params: IGetOppgaverParams | typeof skipToken) =>
-  useSimpleApiState(params === skipToken ? skipToken : getOppgaverState({}, { ...params }));

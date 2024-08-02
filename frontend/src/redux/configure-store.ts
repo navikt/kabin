@@ -1,12 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { muligheterApi } from '@app/redux/api/muligheter';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
-import { RootState, rootReducer } from './root';
+import { rootReducer } from './root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
@@ -24,8 +23,3 @@ export const reduxStore = configureStore({
       oppgaverApi.middleware,
     ]),
 });
-
-export type AppDispatch = typeof reduxStore.dispatch;
-
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

@@ -10,7 +10,7 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
-import { SourceId } from '@app/types/mulighet';
+import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const Ytelse = () => {
@@ -30,7 +30,7 @@ export const Ytelse = () => {
       return <LoadingYtelse />;
     }
 
-    if (mulighet.sourceId === SourceId.KABAL) {
+    if (mulighet.currentFagsystemId === FagsystemId.KABAL) {
       return <PredefinedYtelse ytelseId={mulighet.ytelseId} />;
     }
   }

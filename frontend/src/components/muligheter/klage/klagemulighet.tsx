@@ -19,7 +19,7 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
   const canEdit = useCanEdit();
   const temaName = useFullTemaNameFromId(klagemulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(klagemulighet.klageBehandlendeEnhet);
-  const fagsystemName = useFagsystemName(klagemulighet.fagsystemId);
+  const fagsystemName = useFagsystemName(klagemulighet.originalFagsystemId);
 
   const isSelected = mulighet?.id === klagemulighet.id;
 

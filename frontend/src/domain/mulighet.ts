@@ -15,7 +15,7 @@ export const compareMuligheter = <T extends Mulighet>(a: T | null, b: T | null):
     a.vedtakDate === b.vedtakDate &&
     a.sakenGjelder?.id === b.sakenGjelder.id &&
     a.fagsakId === b.fagsakId &&
-    a.fagsystemId === b.fagsystemId;
+    a.originalFagsystemId === b.originalFagsystemId;
 
   if (!baseEquals) {
     return false;

@@ -42,7 +42,7 @@ export const Oppgaver = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.OPPGAVE} />
 
-      <Table size="small" zebraStripes>
+      <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
         <TableHeaders />
         <Table.Body>
           {oppgaver.map((oppgave) => (

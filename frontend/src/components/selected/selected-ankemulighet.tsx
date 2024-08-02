@@ -27,10 +27,10 @@ interface RenderProps extends Props {
 }
 
 const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { ytelseId, vedtakDate, sakenGjelder, klager, fullmektig, fagsakId, fagsystemId } = mulighet;
+  const { ytelseId, vedtakDate, sakenGjelder, klager, fullmektig, fagsakId, originalFagsystemId } = mulighet;
 
   const ytelseName = useYtelseName(ytelseId);
-  const fagsystemName = useFagsystemName(fagsystemId);
+  const fagsystemName = useFagsystemName(originalFagsystemId);
 
   return (
     <Card>

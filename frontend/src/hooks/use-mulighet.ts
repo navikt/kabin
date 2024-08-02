@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useGetAnkemulighetQuery, useGetKlagemulighetQuery } from '@app/redux/api/muligheter';
+import { useGetAnkemuligheterQuery, useGetKlagemuligheterQuery } from '@app/redux/api/muligheter';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
@@ -20,14 +20,19 @@ interface NoneResult {
 }
 
 export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
-  const { id, typeId, mulighet } = useRegistrering();
+  const { sakenGjelderValue, typeId, mulighet } = useRegistrering();
 
   const hasMulighet = mulighet !== null;
+  const hasSakenGJelder = sakenGjelderValue !== null;
 
-  const { data: ankemulighet } = useGetAnkemulighetQuery(hasMulighet && typeId === SaksTypeEnum.ANKE ? id : skipToken);
+  const { ankemulighet } = useGetAnkemuligheterQuery(
+    hasMulighet && hasSakenGJelder && typeId === SaksTypeEnum.ANKE ? sakenGjelderValue : skipToken,
+    { selectFromResult: ({ data, ...rest }) => ({ ankemulighet: selectMulighet(data, mulighet?.id), ...rest }) },
+  );
 
-  const { data: klagemulighet } = useGetKlagemulighetQuery(
-    hasMulighet && typeId === SaksTypeEnum.KLAGE ? id : skipToken,
+  const { klagemulighet } = useGetKlagemuligheterQuery(
+    hasMulighet && hasSakenGJelder && typeId === SaksTypeEnum.KLAGE ? sakenGjelderValue : skipToken,
+    { selectFromResult: ({ data, ...rest }) => ({ klagemulighet: selectMulighet(data, mulighet?.id), ...rest }) },
   );
 
   if (typeId === SaksTypeEnum.ANKE) {
@@ -40,3 +45,9 @@ export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
 
   return { typeId, mulighet: undefined };
 };
+
+const selectMulighet = <T extends IKlagemulighet | IAnkemulighet>(
+  muligheter: T[] | undefined,
+  mulighetId: string | undefined,
+): T | undefined =>
+  mulighetId === undefined || muligheter === undefined ? undefined : muligheter.find((m) => m.id === mulighetId);

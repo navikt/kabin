@@ -1,17 +1,38 @@
-import { BodyShort, Button, Heading, Pagination, Skeleton, SortState, Table } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Pagination, Skeleton, SortState, Table, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
+import { SakenGjelderIcon } from '@app/components/overstyringer/icons';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useGetPartQuery } from '@app/redux/api/part';
 import { Registrering } from '@app/redux/api/registreringer/types';
+import { SaksTypeEnum } from '@app/types/common';
 import { TYPE_NAME } from '@app/types/mulighet';
 
 interface Props extends RegistreringerTableProps {
   heading: string;
 }
+
+const Type = ({ typeId }: { typeId: string | null }) => {
+  switch (typeId) {
+    case null:
+      return <i>Ikke satt</i>;
+    case SaksTypeEnum.KLAGE:
+      return (
+        <Tag variant="info" size="small">
+          Klage
+        </Tag>
+      );
+    case SaksTypeEnum.ANKE:
+      return (
+        <Tag variant="alt1" size="small">
+          Anke
+        </Tag>
+      );
+  }
+};
 
 const Headers = () => (
   <Table.Header>
@@ -121,26 +142,24 @@ const RegistreringerTable = ({ registreringer, isLoading }: RegistreringerTableP
   );
 };
 
-const Row = ({ registrering }: { registrering: Registrering }) => {
-  const { typeId } = registrering;
-
-  return (
-    <Table.Row>
-      <Table.DataCell>
-        <SakenGjelder id={registrering.sakenGjelderValue} />
-      </Table.DataCell>
-      <Table.DataCell>{typeId === null ? <i>Ikke satt</i> : TYPE_NAME[typeId]}</Table.DataCell>
-      <Table.DataCell>
-        <time dateTime={registrering.modified}>{isoDateTimeToPretty(registrering.modified)}</time>
-      </Table.DataCell>
-      <Table.DataCell>
-        <Button as={RouterLink} to={`/registrering/${registrering.id}`} size="small">
-          Åpne
-        </Button>
-      </Table.DataCell>
-    </Table.Row>
-  );
-};
+const Row = ({ registrering }: { registrering: Registrering }) => (
+  <Table.Row>
+    <Table.DataCell>
+      <SakenGjelder id={registrering.sakenGjelderValue} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <Type typeId={registrering.typeId} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <time dateTime={registrering.modified}>{isoDateTimeToPretty(registrering.modified)}</time>
+    </Table.DataCell>
+    <Table.DataCell>
+      <Button as={RouterLink} to={`/registrering/${registrering.id}`} size="small">
+        Åpne
+      </Button>
+    </Table.DataCell>
+  </Table.Row>
+);
 
 const SakenGjelder = ({ id }: { id: string | null }) => {
   const { data: part } = useGetPartQuery(id ?? skipToken);

@@ -1,7 +1,6 @@
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, Tag, ToggleGroup } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
@@ -15,11 +14,9 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
-import { WillCreateNewJournalpostInput } from '@app/simple-api-state/types';
-import { useWillCreateNewJournalpost } from '@app/simple-api-state/use-api';
-import { SaksTypeEnum, isType } from '@app/types/common';
+import { RegistreringType, SaksTypeEnum, isType } from '@app/types/common';
 
-const ReadOnlyType = ({ typeId }: { typeId: SaksTypeEnum | null }) => {
+const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
   switch (typeId) {
     case SaksTypeEnum.ANKE:
       return (
@@ -133,23 +130,10 @@ export const TypeInput = () => {
 };
 
 const WillCreateNewJournalpostInfo = () => {
+  const { willCreateNewJournalpost } = useRegistrering();
   const journalpostAndMulighet = useJournalpostAndMulighet();
 
-  const params = useMemo<WillCreateNewJournalpostInput | typeof skipToken>(() => {
-    if (journalpostAndMulighet === null) {
-      return skipToken;
-    }
-
-    const { journalpost, mulighet } = journalpostAndMulighet;
-    const { fagsakId, fagsystemId } = mulighet;
-    const { journalpostId } = journalpost;
-
-    return { journalpostId, fagsakId, fagsystemId };
-  }, [journalpostAndMulighet]);
-
-  const { data: willCreateNewJournalpost } = useWillCreateNewJournalpost(params);
-
-  if (willCreateNewJournalpost !== true || journalpostAndMulighet === null) {
+  if (!willCreateNewJournalpost || journalpostAndMulighet === null) {
     return null;
   }
 

@@ -3,7 +3,7 @@ import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { IGetOppgaverParams } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
-import { IAnkemulighet, IKlagemulighet, SourceId } from '@app/types/mulighet';
+import { FagsystemId, IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
 export const useParams = (): IGetOppgaverParams | typeof skipToken => {
   const { sakenGjelderValue } = useRegistrering();
@@ -33,7 +33,7 @@ export const oppgaverIsEnabled = (typeId: SaksTypeEnum, mulighet: IKlagemulighet
     return true;
   }
 
-  if (typeId === SaksTypeEnum.ANKE && mulighet.fagsystemId === SourceId.INFOTRYGD) {
+  if (typeId === SaksTypeEnum.ANKE && mulighet.originalFagsystemId === FagsystemId.INFOTRYGD) {
     return true;
   }
 

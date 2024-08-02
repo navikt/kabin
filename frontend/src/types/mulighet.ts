@@ -1,7 +1,7 @@
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 
-export enum SourceId {
+export enum FagsystemId {
   KABAL = '23',
   INFOTRYGD = '7',
 }
@@ -9,10 +9,10 @@ export enum SourceId {
 interface IBasemulighet {
   readonly id: string;
   readonly fagsakId: string;
-  readonly fagsystemId: string;
   readonly sakenGjelder: IPart;
   readonly temaId: string;
-  readonly sourceId: SourceId;
+  readonly originalFagsystemId: string;
+  readonly currentFagsystemId: FagsystemId;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
@@ -43,4 +43,5 @@ interface ExistingAnkebehandling {
 export const TYPE_NAME: Record<SaksTypeEnum, string> = {
   [SaksTypeEnum.KLAGE]: 'Klage',
   [SaksTypeEnum.ANKE]: 'Anke',
+  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
 };

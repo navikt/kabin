@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { SaksTypeEnum } from '@app/types/common';
+import { RegistreringType, SaksTypeEnum } from '@app/types/common';
 
 export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -78,7 +78,7 @@ const Buttons = styled.div`
   justify-content: space-between;
 `;
 
-const getText = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, sendSvarbrev: boolean) => {
+const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
   switch (type) {
     case SaksTypeEnum.ANKE: {
       if (sendSvarbrev) {
@@ -87,7 +87,12 @@ const getText = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, sendSvarbrev: boo
 
       return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av anken.';
     }
-    case SaksTypeEnum.KLAGE:
+    case SaksTypeEnum.KLAGE: {
+      if (sendSvarbrev) {
+        return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av klagen.';
+      }
+
       return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
+    }
   }
 };

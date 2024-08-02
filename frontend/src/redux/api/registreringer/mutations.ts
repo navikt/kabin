@@ -8,10 +8,13 @@ import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { SetMulighetResponse, SetTypeResponse } from '@app/redux/api/registreringer/response-types';
 import { DraftRegistrering } from '@app/redux/api/registreringer/types';
 import { updateDrafts } from '@app/redux/api/registreringer/updates';
+import { SaksTypeEnum } from '@app/types/common';
+import { FagsystemId } from '@app/types/mulighet';
 
 interface SetMulighetPayload {
   mulighetId: string;
-  fagsystemId: string;
+  originalFagsystemId: string;
+  currentFagsystemId: FagsystemId;
 }
 
 const mutationsSlice = registreringApi.injectEndpoints({
@@ -74,7 +77,11 @@ const mutationsSlice = registreringApi.injectEndpoints({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
-        body: { mulighetId: mulighet.id, fagsystemId: mulighet.fagsystemId } satisfies SetMulighetPayload,
+        body: {
+          mulighetId: mulighet.id,
+          originalFagsystemId: mulighet.originalFagsystemId,
+          currentFagsystemId: mulighet.currentFagsystemId,
+        } satisfies SetMulighetPayload,
       }),
       onQueryStarted: async ({ id, mulighet }, { dispatch, queryFulfilled }) => {
         const mulighetPatchResult = dispatch(
@@ -85,11 +92,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => ({
-            ...draft,
-            ...data,
-            mulighet: { id: data.mulighet.id, fagsystemId: data.mulighet.fagsystemId },
-          }));
+          updateDrafts(id, (draft) => ({ ...draft, ...data }));
         } catch (error) {
           mulighetPatchResult.undo();
         }
@@ -100,22 +103,32 @@ const mutationsSlice = registreringApi.injectEndpoints({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
-        body: { mulighetId: mulighet.id, fagsystemId: mulighet.fagsystemId } satisfies SetMulighetPayload,
+        body: {
+          mulighetId: mulighet.id,
+          originalFagsystemId: mulighet.originalFagsystemId,
+          currentFagsystemId: mulighet.currentFagsystemId,
+        } satisfies SetMulighetPayload,
       }),
       onQueryStarted: async ({ id, mulighet }, { dispatch, queryFulfilled }) => {
+        const undoList: (() => void)[] = [];
         const mulighetPatchResult = dispatch(muligheterApi.util.updateQueryData('getAnkemulighet', id, () => mulighet));
+        undoList.push(mulighetPatchResult.undo);
+
+        if (
+          mulighet.typeId === SaksTypeEnum.ANKE &&
+          mulighet.currentFagsystemId === FagsystemId.KABAL &&
+          mulighet.ytelseId !== null
+        ) {
+          undoList.push(updateDrafts(id, (draft) => ({ ...draft, ytelseId: mulighet.ytelseId })));
+        }
 
         // Optimistically updating `registrering.mulighet` will cause the application try to fetch the mulighet and fail because the PUT request is very slow.
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => ({
-            ...draft,
-            ...data,
-            mulighet: { id: data.mulighet.id, fagsystemId: data.mulighet.fagsystemId },
-          }));
+          updateDrafts(id, (draft) => ({ ...draft, ...data }));
         } catch (error) {
-          mulighetPatchResult.undo();
+          undoList.forEach((undo) => undo());
         }
       },
     }),

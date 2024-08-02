@@ -24,7 +24,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
   const [setAnkemulighet, { isLoading }] = useSetAnkemulighetMutation();
   const temaName = useFullTemaNameFromId(ankemulighet.temaId);
   const ytelseName = useYtelseName(ankemulighet.ytelseId);
-  const fagsystemName = useFagsystemName(ankemulighet.fagsystemId);
+  const fagsystemName = useFagsystemName(ankemulighet.originalFagsystemId);
   const canEdit = useCanEdit();
 
   const typeName = useMemo(() => {
@@ -73,7 +73,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     [isValid, mulighet, ankemulighet, setAnkemulighet, id],
   );
 
-  mulighet?.fagsystemId;
+  mulighet?.originalFagsystemId;
 
   const usedCount = ankemulighet.sourceOfExistingAnkebehandling.length;
 
@@ -105,7 +105,8 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
   );
 };
 
-const isSameMulighet = (a: MulighetId, b: MulighetId) => a.id === b.id && a.fagsystemId === b.fagsystemId;
+const isSameMulighet = (a: MulighetId, b: MulighetId) =>
+  a.id === b.id && a.originalFagsystemId === b.originalFagsystemId;
 
 const NowrapTag = styled(Tag)`
   white-space: nowrap;

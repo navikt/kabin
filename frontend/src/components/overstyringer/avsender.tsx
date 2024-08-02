@@ -60,5 +60,7 @@ const getKlagerLabel = (type: SaksTypeEnum) => {
       return 'Ankende part';
     case SaksTypeEnum.KLAGE:
       return 'Klager';
+    case SaksTypeEnum.ANKE_I_TR:
+      return 'Ankende part';
   }
 };

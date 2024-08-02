@@ -44,11 +44,12 @@ const RenderEditMottattNAV = ({ toDate }: Props) => {
 
   const parsedValue = useMemo(
     () =>
-      registrering === undefined || registrering.overstyringer.mottattVedtaksinstans === null
+      registrering.overstyringer.mottattVedtaksinstans === null
         ? undefined
         : parseISO(registrering.overstyringer.mottattVedtaksinstans),
     [registrering],
   );
+
   const parsedToDate = useMemo(() => (toDate === null ? undefined : parseISO(toDate)), [toDate]);
 
   const onChange = useCallback(
@@ -63,16 +64,14 @@ const RenderEditMottattNAV = ({ toDate }: Props) => {
   );
 
   return (
-    <div>
-      <Datepicker
-        label={LABEL}
-        onChange={onChange}
-        value={parsedValue}
-        size="small"
-        toDate={parsedToDate}
-        id={ID}
-        error={error}
-      />
-    </div>
+    <Datepicker
+      label={LABEL}
+      onChange={onChange}
+      value={parsedValue}
+      size="small"
+      toDate={parsedToDate}
+      id={ID}
+      error={error}
+    />
   );
 };

@@ -1,9 +1,9 @@
-import { SaksTypeEnum } from '@app/types/common';
+import { RegistreringType } from '@app/types/common';
 import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
 export interface SetTypeParams {
   id: string;
-  typeId: SaksTypeEnum;
+  typeId: RegistreringType | null;
 }
 
 export interface SetKlagemulighetParams {

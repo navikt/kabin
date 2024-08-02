@@ -111,7 +111,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
 
   return (
     <TableContainer $showShadow={klagemuligheter.length >= 3}>
-      <Table zebraStripes size="small">
+      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
         <StyledTableHeader>
           <Table.Row>
             <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>

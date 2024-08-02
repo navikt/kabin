@@ -114,12 +114,13 @@ export interface IPartId {
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
-  // ANKE_I_TR = '3',
+  ANKE_I_TR = '3',
 }
 
-const TYPES = Object.values(SaksTypeEnum);
+export type RegistreringType = SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
 
-export const isType = (type: string): type is SaksTypeEnum => TYPES.some((t) => t === type);
+export const isType = (type: string): type is RegistreringType =>
+  type === SaksTypeEnum.KLAGE || type === SaksTypeEnum.ANKE;
 
 export interface ISaksbehandler {
   navIdent: string;

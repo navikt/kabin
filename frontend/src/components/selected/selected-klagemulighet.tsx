@@ -27,11 +27,11 @@ interface RenderProps extends Props {
 }
 
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { id, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+  const { id, temaId, vedtakDate, fagsakId, originalFagsystemId, klageBehandlendeEnhet } = mulighet;
 
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
-  const fagsystemName = useFagsystemName(fagsystemId);
+  const fagsystemName = useFagsystemName(originalFagsystemId);
 
   return (
     <Card>
