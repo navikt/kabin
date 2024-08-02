@@ -1,5 +1,4 @@
-import { Recipient } from '@app/pages/create/app-context/types';
-import { Behandlingstid, Overstyringer } from '@app/redux/api/registreringer/types';
+import { Behandlingstid, Overstyringer, Receiver } from '@app/redux/api/registreringer/types';
 import { BaseResponse, OverstyringerResponse, SvarbrevResponse } from '@app/redux/api/types';
 import { IPart } from '@app/types/common';
 
@@ -19,7 +18,7 @@ export type SetOppgaveIdResponse = OverstyringerResponse<{ oppgaveId: number | n
 export type SetYtelseResponse = OverstyringerResponse<Pick<Overstyringer, 'ytelseId' | 'saksbehandlerIdent'>>;
 
 export type SetFullmektigResponse = OverstyringerResponse<{ fullmektig: IPart }> &
-  SvarbrevResponse<{ fullmektigFritekst: string; receivers: Recipient[] }>;
+  SvarbrevResponse<{ fullmektigFritekst: string; receivers: Receiver[] }>;
 
 export type SetBehandlingstidResponse = OverstyringerResponse<{
   behandlingstid: Behandlingstid;
@@ -29,7 +28,7 @@ export type SetBehandlingstidResponse = OverstyringerResponse<{
 export type SetAvsenderResponse = OverstyringerResponse<{ avsender: IPart | null }> &
   SvarbrevResponse<{
     fullmektigFritekst: string;
-    receivers: Recipient[];
+    receivers: Receiver[];
   }>;
 
 export interface SetKlagerResponse extends BaseResponse {

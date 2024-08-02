@@ -3,8 +3,8 @@ import { Button, Heading, HelpText } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
-import { useGetOppgaver } from '@app/simple-api-state/use-api';
 import { SaksTypeEnum } from '@app/types/common';
 import { useParams } from './hooks';
 
@@ -12,14 +12,16 @@ export const Header = () => {
   const { id, typeId, overstyringer } = useRegistrering();
   const [setOppgaveId] = useSetOppgaveIdMutation();
   const oppgaverParams = useParams();
-  const { isLoading, refetch } = useGetOppgaver(oppgaverParams);
+  // const { isLoading, refetch } = useGetOppgaver(oppgaverParams);
+  const { refetch, isLoading } = useGetOppgaverQuery(oppgaverParams);
 
   if (oppgaverParams === skipToken) {
     return null;
   }
 
   const onRefresh = async () => {
-    const oppgaver = await refetch();
+    // const oppgaver = await refetch();
+    const { data: oppgaver } = await refetch();
 
     if (oppgaver === undefined || oppgaver.find((o) => o.id === overstyringer.oppgaveId) === undefined) {
       setOppgaveId({ id, oppgaveId: null });

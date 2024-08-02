@@ -10,7 +10,6 @@ import { Actions, ActionsProps } from './actions';
 import { EnterEditModeCallback } from './types';
 
 export interface PartReadProps extends ActionsProps, EnterEditModeCallback {
-  // children?: React.ReactNode;
   error?: string;
   id?: string;
 }
@@ -50,7 +49,6 @@ const PartReadInternal = ({
       </PartTextContent>
 
       {children}
-      {/* <Actions {...rest} part={part} partField={partField} label={label} icon={icon} /> */}
     </PartContent>
   </StyledContainer>
 );

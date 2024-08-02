@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useMemo } from 'react';
 import { ReceiverType } from '@app/components/svarbrev/type-name';
 import { PartReceiver, PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { isNotNull } from '@app/functions/is-not';
@@ -16,56 +17,54 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
       : { sakenGjelderId: sakenGjelderValue, identifikator: sakenGjelderValue, ytelseId },
   );
 
-  if (sakenGjelder === undefined) {
-    return [];
-  }
+  return useMemo(() => {
+    if (sakenGjelder === undefined) {
+      return [];
+    }
 
-  const existingRecipients = svarbrev.receivers.map((r) => {
-    const typeList = [
-      r.id === klager?.id ? ReceiverType.KLAGER : null,
-      r.id === sakenGjelderValue ? ReceiverType.SAKEN_GJELDER : null,
-      r.id === fullmektig?.id ? ReceiverType.FULLMEKTIG : null,
-    ].filter(isNotNull);
+    const existingRecipients = svarbrev.receivers
+      .map((r) => {
+        const typeList = [
+          r.id === klager?.id ? ReceiverType.KLAGER : null,
+          r.id === sakenGjelderValue ? ReceiverType.SAKEN_GJELDER : null,
+          r.id === fullmektig?.id ? ReceiverType.FULLMEKTIG : null,
+        ].filter(isNotNull);
 
-    return { ...r, typeList };
-  });
+        if (typeList.length === 0) {
+          return null;
+        }
 
-  const suggestedRecipients = [
-    partToPartRecipient(klager, ReceiverType.KLAGER),
-    partToPartRecipient(sakenGjelder, ReceiverType.SAKEN_GJELDER),
-    partToPartRecipient(fullmektig, ReceiverType.FULLMEKTIG),
-  ]
-    .filter(isNotNull)
-    .filter((r) => !existingRecipients.some((er) => er.part.id === r.part.id))
-    .concat(existingRecipients)
-    .reduce<PartSuggestedReceiver[]>((acc, curr) => {
-      const found = acc.find(({ part }) => part.id === curr.part.id);
+        return { ...r, typeList };
+      })
+      .filter(isNotNull);
 
-      if (found === undefined) {
-        acc.push(curr);
+    return [
+      partToPartRecipient(klager, ReceiverType.KLAGER),
+      partToPartRecipient(sakenGjelder, ReceiverType.SAKEN_GJELDER),
+      partToPartRecipient(fullmektig, ReceiverType.FULLMEKTIG),
+    ]
+      .filter(isNotNull)
+      .concat(existingRecipients)
+      .reduce<PartSuggestedReceiver[]>((acc, curr) => {
+        const found = acc.find(({ part }) => part.id === curr.part.id);
+
+        if (found === undefined) {
+          acc.push(curr);
+
+          return acc;
+        }
+
+        found.typeList.push(...curr.typeList);
 
         return acc;
-      }
+      }, [])
+      .map((sm) => {
+        const recipient = existingRecipients.find((m) => m.part.id === sm.part.id);
 
-      found.typeList.push(...curr.typeList);
-
-      return acc;
-    }, []);
-  // .map((sm) => {
-  //   const recipient = existingRecipients.find((m) => m.part.id === sm.part.id);
-
-  //   return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
-  // });
-
-  const list = suggestedRecipients;
-
-  console.log('suggested recipients', list);
-
-  return list;
+        return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
+      });
+  }, [fullmektig, klager, sakenGjelder, sakenGjelderValue, svarbrev.receivers]);
 };
-
-// const EMPTY_RECIPIENTS_LIST: Recipient[] = [];
-// const EMPTY_BREVMOTTAKER_LIST: PartRecipient[] = [];
 
 const partToPartRecipient = (part: IPart | null, brevmottakerType: ReceiverType): PartSuggestedReceiver | null => {
   if (part === null) {

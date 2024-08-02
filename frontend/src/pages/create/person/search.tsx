@@ -25,35 +25,34 @@ export const PersonSearch = ({ onDone }: Props) => {
   const { data: person } = useGetPartQuery(search);
 
   const onSelect = useCallback(() => {
-    if (person !== undefined) {
-      setSakenGjelder({ id, sakenGjelderValue: person.id });
+    if (!isValid) {
+      return setError('Ugyldig ID-nummer');
     }
 
-    if (error !== undefined) {
+    if (person !== undefined) {
+      setSakenGjelder({ id, sakenGjelderValue: person.id });
       setError(undefined);
     }
 
     onDone();
-  }, [error, id, onDone, person, setSakenGjelder]);
+  }, [id, isValid, onDone, person, setSakenGjelder]);
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     ({ key }) => {
-      if (key === 'Escape') {
-        setRawSearch('');
-        onDone();
-
-        return;
+      switch (key) {
+        case 'Escape': {
+          setRawSearch('');
+          setError(undefined);
+          onDone();
+          break;
+        }
+        case 'Enter': {
+          onSelect();
+          break;
+        }
       }
-
-      if (key !== 'Enter') {
-        onSelect();
-
-        return;
-      }
-
-      setError(isValid ? undefined : 'Ugyldig ID-nummer');
     },
-    [isValid, onDone, onSelect],
+    [onDone, onSelect],
   );
 
   return (
@@ -88,6 +87,15 @@ export const PersonSearch = ({ onDone }: Props) => {
           >
             Velg
           </Button>
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={onDone}
+            loading={isSetting}
+            icon={<XMarkIcon role="presentation" aria-hidden />}
+          >
+            Avbryt
+          </Button>
         </>
       ) : null}
 
@@ -95,17 +103,7 @@ export const PersonSearch = ({ onDone }: Props) => {
         <Alert variant="info" size="small" inline>
           Velg person
         </Alert>
-      ) : (
-        <Button
-          size="small"
-          variant="secondary"
-          onClick={onDone}
-          loading={isSetting}
-          icon={<XMarkIcon role="presentation" aria-hidden />}
-        >
-          Avbryt
-        </Button>
-      )}
+      ) : null}
     </>
   );
 };

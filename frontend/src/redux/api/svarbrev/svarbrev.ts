@@ -100,7 +100,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
       }),
       onQueryStarted: async ({ id, receiver }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.receivers.push(receiver);
+          draft.svarbrev.receivers.push({ ...receiver, id: 'unknown' });
 
           return draft;
         });

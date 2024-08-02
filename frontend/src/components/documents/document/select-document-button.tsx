@@ -1,6 +1,7 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -36,7 +37,7 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
   );
 
   if (!canEdit) {
-    return isSelected ? <CheckmarkCircleFillIconColored aria-label="Valgt" /> : null;
+    return isSelected ? <ReadOnlyCheckmark aria-label="Valgt" fontSize={20} /> : null;
   }
 
   return (
@@ -89,3 +90,9 @@ const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
 
   return undefined;
 };
+
+const ReadOnlyCheckmark = styled(CheckmarkCircleFillIconColored)`
+  grid-area: ${GridArea.SELECT};
+  align-self: center;
+  justify-self: center;
+`;

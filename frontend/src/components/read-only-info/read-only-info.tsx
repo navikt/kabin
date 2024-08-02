@@ -16,15 +16,7 @@ export const ReadOnlyTime = ({ value, ...props }: TextProps) => (
 );
 
 export const ReadOnlyText = ({ value, ...props }: TextProps) => (
-  <ReadOnly {...props}>{value === null ? <i>Ikke satt</i> : value}</ReadOnly>
-);
-
-interface YtelseProps extends BaseProps {
-  ytelseId: string | null;
-}
-
-export const ReadOnlyYtelse = ({ ytelseId, ...props }: YtelseProps) => (
-  <ReadOnly {...props}>{ytelseId === null ? <i>Ikke satt</i> : <YtelseTag ytelseId={ytelseId} />}</ReadOnly>
+  <ReadOnly {...props}>{value ?? <i>Ikke satt</i>}</ReadOnly>
 );
 
 interface HjemlerProps extends BaseProps {

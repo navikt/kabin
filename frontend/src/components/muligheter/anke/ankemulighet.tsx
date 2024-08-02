@@ -78,7 +78,13 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
   const usedCount = ankemulighet.sourceOfExistingAnkebehandling.length;
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectAnke} $isValid={isValid} $isSelected={isSelected}>
+    <StyledTableRow
+      selected={isSelected}
+      onClick={selectAnke}
+      $isValid={isValid}
+      $isSelected={isSelected}
+      $clickable={canEdit}
+    >
       <Table.DataCell>{typeName}</Table.DataCell>
       <Table.DataCell>{ankemulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>
@@ -93,9 +99,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
         )}
       </Table.DataCell>
       <StyledButtonCell>
-        {canEdit ? (
-          <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
-        ) : null}
+        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
       </StyledButtonCell>
     </StyledTableRow>
   );

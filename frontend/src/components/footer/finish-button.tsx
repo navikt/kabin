@@ -1,12 +1,11 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { SaksTypeEnum } from '@app/types/common';
-// import { useCreateAnke } from './anke-hooks';
-// import { useCreateKlage } from './klage-hooks';
 
 export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -26,12 +25,10 @@ export const FinishButton = () => {
 };
 
 const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
-  // const [loading, setLoading] = useState(false);
-  // const { type, state, setErrors } = useContext(AppContext);
-  // const createAnkeCallback = useCreateAnke(setError);
-  // const createKlageCallback = useCreateKlage(setError);
   const { id, typeId, svarbrev } = useRegistrering();
   const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id });
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(closeConfirm, ref);
 
   if (typeId === null) {
     return null;
@@ -40,7 +37,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const text = getText(typeId, svarbrev?.send === true);
 
   return (
-    <StyledConfirm>
+    <StyledConfirm ref={ref}>
       <Alert size="small" variant="info" inline>
         {text}
       </Alert>

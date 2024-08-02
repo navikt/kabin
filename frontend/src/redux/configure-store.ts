@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { muligheterApi } from '@app/redux/api/muligheter';
+import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
@@ -20,6 +21,7 @@ export const reduxStore = configureStore({
       partApi.middleware,
       muligheterApi.middleware,
       svarbrevSettingsApi.middleware,
+      oppgaverApi.middleware,
     ]),
 });
 

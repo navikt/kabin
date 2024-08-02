@@ -35,7 +35,7 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected}>
+    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected} $clickable={canEdit}>
       <Table.DataCell>{klagemulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>{klagemulighet.id}</Table.DataCell>
       <Table.DataCell>{temaName}</Table.DataCell>

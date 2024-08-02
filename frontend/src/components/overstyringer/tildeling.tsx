@@ -34,7 +34,14 @@ export const Tildeling = () => {
   const saksbehandler = useSaksbehandler();
 
   if (!canEdit) {
-    return <ReadOnlyText id={ID} label={label} value={saksbehandler?.navn ?? null} />;
+    return (
+      <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} $state={getState(saksbehandlerIdent, error)}>
+        <StyledSaksbehandlerIcon aria-hidden />
+        <PartContent>
+          <ReadOnlyText id={ID} label={label} value={saksbehandler?.navn ?? null} />
+        </PartContent>
+      </StyledContainer>
+    );
   }
 
   return (

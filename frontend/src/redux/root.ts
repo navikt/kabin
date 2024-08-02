@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { muligheterApi } from '@app/redux/api/muligheter';
+import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   [partApi.reducerPath]: partApi.reducer,
   [muligheterApi.reducerPath]: muligheterApi.reducer,
   [svarbrevSettingsApi.reducerPath]: svarbrevSettingsApi.reducer,
+  [oppgaverApi.reducerPath]: oppgaverApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

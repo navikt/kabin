@@ -5,7 +5,7 @@ import { Card } from '@app/components/card/card';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useGetOppgaver } from '@app/simple-api-state/use-api';
+import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Header } from './header';
@@ -16,7 +16,7 @@ import { TableHeaders } from './table-headers';
 
 export const Oppgaver = () => {
   const oppgaverParams = useParams();
-  const { data: oppgaver, isLoading } = useGetOppgaver(oppgaverParams);
+  const { data: oppgaver, isLoading } = useGetOppgaverQuery(oppgaverParams);
   const error = useValidationError(ValidationFieldNames.OPPGAVE);
 
   if (oppgaverParams === skipToken) {

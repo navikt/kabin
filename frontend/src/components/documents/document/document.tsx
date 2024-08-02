@@ -5,7 +5,7 @@ import { ViewDocumentButton } from '@app/components/documents/document/view-docu
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { IArkivertDocument } from '@app/types/dokument';
 import { GridArea, GridTag, StyledField, StyledGrid } from '../styled-grid-components';
 import { AttachmentList } from './attachment-list';
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const Dokument = ({ dokument }: Props) => {
-  const { journalpost } = useJournalpost();
+  const registrering = useRegistrering();
   const {
     dokumentInfoId,
     journalpostId,
@@ -33,7 +33,7 @@ export const Dokument = ({ dokument }: Props) => {
 
   const temaName = useFullTemaNameFromId(temaId);
 
-  const isSelected = journalpost?.journalpostId === journalpostId;
+  const isSelected = registrering.journalpostId === journalpostId;
 
   const [viewDocument, isViewed] = useViewDocument({
     journalpostId,

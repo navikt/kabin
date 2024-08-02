@@ -12,20 +12,21 @@ interface Props extends Receiver {
   onChange: (recipient: Receiver) => void;
 }
 
-export const Options = ({ part, handling, overriddenAddress, onChange }: Props) => {
+export const Options = ({ part, handling, overriddenAddress, onChange, id }: Props) => {
   const onHandlingChange = useCallback(
-    (newHandling: string) => onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling) }),
-    [onChange, overriddenAddress, part],
+    (newHandling: string) => onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling), id }),
+    [id, onChange, overriddenAddress, part],
   );
 
   const onAddressChange = useCallback(
     (address: IAddress | null) =>
       onChange({
+        id,
         part,
         handling,
         overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
       }),
-    [handling, onChange, part],
+    [handling, id, onChange, part],
   );
 
   const showAddress = useMemo(() => {
