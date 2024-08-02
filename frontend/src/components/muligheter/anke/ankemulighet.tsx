@@ -31,14 +31,20 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     switch (ankemulighet.typeId) {
       case SaksTypeEnum.KLAGE:
         return (
-          <NowrapTag variant="info-filled" size="small">
+          <NowrapTag variant="info-moderate" size="small">
             Klage
           </NowrapTag>
         );
       case SaksTypeEnum.ANKE:
         return (
-          <NowrapTag variant="alt1-filled" size="small">
+          <NowrapTag variant="alt1-moderate" size="small">
             Anke
+          </NowrapTag>
+        );
+      case SaksTypeEnum.ANKE_I_TR:
+        return (
+          <NowrapTag variant="warning-moderate" size="small">
+            Anke i TR
           </NowrapTag>
         );
     }

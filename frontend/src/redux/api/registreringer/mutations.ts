@@ -1,4 +1,3 @@
-import { muligheterApi } from '@app/redux/api/muligheter';
 import {
   SetAnkemulisghetParams,
   SetKlagemulighetParams,
@@ -83,18 +82,18 @@ const mutationsSlice = registreringApi.injectEndpoints({
           currentFagsystemId: mulighet.currentFagsystemId,
         } satisfies SetMulighetPayload,
       }),
-      onQueryStarted: async ({ id, mulighet }, { dispatch, queryFulfilled }) => {
-        const mulighetPatchResult = dispatch(
-          muligheterApi.util.updateQueryData('getKlagemulighet', id, () => mulighet),
-        );
-
-        // Optimistically updating `registrering.mulighet` will cause the application try to fetch the mulighet and fail because the PUT request is very slow.
+      onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
+        const { currentFagsystemId, originalFagsystemId } = mulighet;
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          mulighet: { currentFagsystemId, originalFagsystemId, id: mulighet.id },
+        }));
 
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, (draft) => ({ ...draft, ...data }));
         } catch (error) {
-          mulighetPatchResult.undo();
+          undo();
         }
       },
     }),
@@ -109,26 +108,28 @@ const mutationsSlice = registreringApi.injectEndpoints({
           currentFagsystemId: mulighet.currentFagsystemId,
         } satisfies SetMulighetPayload,
       }),
-      onQueryStarted: async ({ id, mulighet }, { dispatch, queryFulfilled }) => {
-        const undoList: (() => void)[] = [];
-        const mulighetPatchResult = dispatch(muligheterApi.util.updateQueryData('getAnkemulighet', id, () => mulighet));
-        undoList.push(mulighetPatchResult.undo);
-
-        if (
+      onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
+        const shouldSetYtelseId =
           mulighet.typeId === SaksTypeEnum.ANKE &&
           mulighet.currentFagsystemId === FagsystemId.KABAL &&
-          mulighet.ytelseId !== null
-        ) {
-          undoList.push(updateDrafts(id, (draft) => ({ ...draft, ytelseId: mulighet.ytelseId })));
-        }
+          mulighet.ytelseId !== null;
 
-        // Optimistically updating `registrering.mulighet` will cause the application try to fetch the mulighet and fail because the PUT request is very slow.
+        const { currentFagsystemId, originalFagsystemId } = mulighet;
+
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          mulighet: { currentFagsystemId, originalFagsystemId, id: mulighet.id },
+          overstyringer: {
+            ...draft.overstyringer,
+            ytelseId: shouldSetYtelseId ? mulighet.ytelseId : draft.overstyringer.ytelseId,
+          },
+        }));
 
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, (draft) => ({ ...draft, ...data }));
         } catch (error) {
-          undoList.forEach((undo) => undo());
+          undo();
         }
       },
     }),
