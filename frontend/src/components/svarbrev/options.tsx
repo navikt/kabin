@@ -6,7 +6,7 @@ import { Address } from '@app/components/svarbrev/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { Receiver } from '@app/redux/api/registreringer/types';
 import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
 interface Props extends Receiver {
   onChange: (recipient: Receiver) => void;

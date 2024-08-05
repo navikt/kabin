@@ -4,7 +4,7 @@ import { useAddressLines } from '@app/components/svarbrev/address/use-address-li
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { Receiver } from '@app/redux/api/registreringer/types';
 import { Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
 const getHandlingLabel = (handling: HandlingEnum, utsendingskanal: Utsendingskanal) => {
   switch (handling) {

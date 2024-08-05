@@ -53,6 +53,7 @@ export const Row = ({
             variant="tertiary"
             onClick={() => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id })}
             icon={selected ? <CheckmarkCircleFillIconColored aria-hidden /> : null}
+            title={selected ? 'Valgt' : undefined}
           >
             {selected ? null : 'Velg'}
           </Button>

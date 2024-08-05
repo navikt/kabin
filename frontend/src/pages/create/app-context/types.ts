@@ -5,4 +5,4 @@ export interface SuggestedReceiver extends Omit<Receiver, 'id'> {
   id?: string;
 }
 
-export const isReceiver = (recipient: SuggestedReceiver): recipient is Receiver => recipient.id !== undefined;
+export const isReceiver = (receiver: SuggestedReceiver): receiver is Receiver => receiver.id !== undefined;

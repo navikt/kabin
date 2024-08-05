@@ -36,7 +36,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
       },
     }),
 
-    setJournalpostId: builder.mutation<DraftRegistrering, { id: string; journalpostId: string | null }>({
+    setJournalpostId: builder.mutation<DraftRegistrering, { id: string; journalpostId: string }>({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/journalpost-id`,
         method: 'PUT',

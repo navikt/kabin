@@ -1,12 +1,13 @@
-import { ExternalLinkIcon, HouseIcon } from '@navikt/aksel-icons';
+import { HouseIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
-import { NavLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
+import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { usePersonSearch } from '@app/components/search/hook';
 import { PersonSearch } from '@app/components/search/search';
-import { ENVIRONMENT } from '@app/environment';
+import { KABAL_URL } from '@app/constants';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
@@ -16,8 +17,6 @@ interface InfoProps {
   label: string;
   children: React.ReactNode;
 }
-
-const KABAL_URL = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.intern.dev.nav.no';
 
 export const InfoItem = ({ label, children }: InfoProps) => (
   <StyledInfo>
@@ -144,30 +143,20 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId }: St
         </Alert>
         <Inputs>
           <PersonSearch {...personSearch} label="Søk på nytt ID-nummer" />
-          <Button as={NavLink} to="/" variant="primary" size="small" icon={<HouseIcon aria-hidden />}>
+          <Button as={RouterLink} to="/" variant="primary" size="small" icon={<HouseIcon aria-hidden />}>
             Tilbake til forsiden
           </Button>
-          <Button
-            as={NavLink}
-            to={`${KABAL_URL}/sok`}
-            variant="secondary"
-            size="small"
-            target="_blank"
-            icon={<ExternalLinkIcon title="Ekstern lenke" />}
-          >
+          <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary" size="small">
             Åpne Kabal søk
-          </Button>
+          </ExternalLinkButton>
           {behandlingId === undefined ? null : (
-            <Button
-              as={NavLink}
-              to={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
+            <ExternalLinkButton
+              href={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
               variant="secondary"
               size="small"
-              target="_blank"
-              icon={<ExternalLinkIcon title="Ekstern lenke" />}
             >
               Åpne behandling i Kabal
-            </Button>
+            </ExternalLinkButton>
           )}
         </Inputs>
       </InfoPanel>
@@ -175,7 +164,7 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId }: St
   );
 };
 
-const StyledAlert = styled(Alert) <{ $gridArea: string }>`
+const StyledAlert = styled(Alert)<{ $gridArea: string }>`
   grid-area: ${({ $gridArea }) => $gridArea};
 `;
 

@@ -5,4 +5,5 @@ export const registreringApi = createApi({
   reducerPath: 'registreringApi',
   baseQuery: KABIN_API_BASE_QUERY,
   endpoints: () => ({}),
+  keepUnusedDataFor: 4 * 60 * 60 * 1000, // 4 hour
 });

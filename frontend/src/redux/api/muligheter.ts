@@ -23,4 +23,9 @@ export const muligheterApi = createApi({
   }),
 });
 
-export const { useGetAnkemuligheterQuery, useGetKlagemuligheterQuery } = muligheterApi;
+export const {
+  useGetAnkemuligheterQuery,
+  useGetKlagemuligheterQuery,
+  useLazyGetAnkemuligheterQuery,
+  useLazyGetKlagemuligheterQuery,
+} = muligheterApi;

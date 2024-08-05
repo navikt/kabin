@@ -1,67 +1,13 @@
-import { PlusIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Loader } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { Registreringer } from '@app/pages/index/registreringer';
-import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
-import {
-  useGetFerdigeRegistreringerQuery,
-  useGetUferdigeRegistreringerQuery,
-} from '@app/redux/api/registreringer/queries';
+import { Drafts } from '@app/pages/index/drafts/drafts';
+import { Finihed } from '@app/pages/index/finished/finished';
 
-export const IndexPage = () => {
-  const { data: uferdige, isLoading: isUferdigeLoading } = useGetUferdigeRegistreringerQuery();
-  const { data: ferdige, isLoading: isFerdigeLoading } = useGetFerdigeRegistreringerQuery();
-
-  if (isUferdigeLoading || isFerdigeLoading || uferdige === undefined || ferdige === undefined) {
-    return (
-      <PageWrapper>
-        <Heading level="1" size="medium" spacing>
-          Påbegynte registreringer
-        </Heading>
-
-        <CreateButton />
-
-        <Loader />
-
-        <Heading level="1" size="medium" spacing>
-          Ferdige registreringer
-        </Heading>
-
-        <Loader />
-      </PageWrapper>
-    );
-  }
-
-  return (
-    <PageWrapper>
-      <CreateButton />
-      <Registreringer registreringer={uferdige} isLoading={isUferdigeLoading} heading="Påbegynte registreringer" />
-      <Registreringer
-        registreringer={ferdige}
-        isLoading={isFerdigeLoading}
-        heading="Ferdige registreringer siste 30 dager"
-      />
-    </PageWrapper>
-  );
-};
-
-const CreateButton = () => {
-  const navigate = useNavigate();
-  const [create, { isLoading }] = useCreateRegistreringMutation();
-
-  const onClick = useCallback(async () => {
-    const { id } = await create().unwrap();
-    navigate(`/registrering/${id}`);
-  }, [create, navigate]);
-
-  return (
-    <Button onClick={onClick} loading={isLoading} icon={<PlusIcon aria-hidden role="presentation" />}>
-      Opprett ny registrering
-    </Button>
-  );
-};
+export const IndexPage = () => (
+  <PageWrapper>
+    <Drafts />
+    <Finihed />
+  </PageWrapper>
+);
 
 const PageWrapper = styled.main`
   overflow: hidden;

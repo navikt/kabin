@@ -11,7 +11,7 @@ import {
   useSetSvarbrevBehandlingstidMutation,
   useSetSvarbrevOverrideBehandlingstidMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SvarbrevSetting } from '@app/types/svarbrev-settings';
 
 const ID = 'svarbrev-frist';
@@ -29,7 +29,10 @@ export const EditVarsletFrist = ({ setting }: Props) => {
 
   if (!canEdit) {
     const { behandlingstid } = registrering.svarbrev;
-    const value = behandlingstid === null ? null : `${behandlingstid.units} ${behandlingstid.unitTypeId}`;
+    const value =
+      behandlingstid === null
+        ? null
+        : `${behandlingstid.units} ${BEHANDLINGSTID_UNIT_TYPE_NAMES[behandlingstid.unitTypeId]}`;
 
     return <ReadOnlyText label={LABEL} value={value} id={ID} />;
   }

@@ -15,7 +15,7 @@ export const queriesSlice = registreringApi.injectEndpoints({
         const { data } = await queryFulfilled;
 
         for (const registrering of data) {
-          dispatch(queriesSlice.util.updateQueryData('getRegistrering', registrering.id, () => registrering));
+          dispatch(queriesSlice.util.upsertQueryData('getRegistrering', registrering.id, registrering));
         }
       },
     }),
@@ -26,7 +26,7 @@ export const queriesSlice = registreringApi.injectEndpoints({
         const { data } = await queryFulfilled;
 
         for (const registrering of data) {
-          dispatch(queriesSlice.util.updateQueryData('getRegistrering', registrering.id, () => registrering));
+          dispatch(queriesSlice.util.upsertQueryData('getRegistrering', registrering.id, registrering));
         }
       },
     }),

@@ -12,7 +12,6 @@ export const Header = () => {
   const { id, typeId, overstyringer } = useRegistrering();
   const [setOppgaveId] = useSetOppgaveIdMutation();
   const oppgaverParams = useParams();
-  // const { isLoading, refetch } = useGetOppgaver(oppgaverParams);
   const { refetch, isLoading } = useGetOppgaverQuery(oppgaverParams);
 
   if (oppgaverParams === skipToken) {
@@ -20,12 +19,14 @@ export const Header = () => {
   }
 
   const onRefresh = async () => {
-    // const oppgaver = await refetch();
     const { data: oppgaver } = await refetch();
 
-    if (oppgaver === undefined || oppgaver.find((o) => o.id === overstyringer.oppgaveId) === undefined) {
-      setOppgaveId({ id, oppgaveId: null });
+    if (oppgaver === undefined || oppgaver.some((o) => o.id === overstyringer.oppgaveId)) {
+      return;
     }
+
+    // If selected oppgaveId is not in the list of oppgaver, reset oppgaveId.
+    setOppgaveId({ id, oppgaveId: null });
   };
 
   return (

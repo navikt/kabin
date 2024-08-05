@@ -1,4 +1,4 @@
-import { Skeleton } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { createContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
@@ -16,12 +16,7 @@ export const RegistreringLoader = ({ children }: Props) => {
   const { data, isLoading, isSuccess } = useGetRegistreringQuery(registreringId);
 
   if (isLoading) {
-    return (
-      <>
-        <Skeleton variant="rounded" height={32} width={300} />
-        <Skeleton variant="rounded" height={32} width={65} />
-      </>
-    );
+    return <Loader />;
   }
 
   if (!isSuccess) {

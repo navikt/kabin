@@ -57,7 +57,7 @@ const LoadedEditFrist = () => {
           </span>
         )}
 
-        <Fristdato units={units} unitType={unitType} />
+        <Fristdato />
       </Row>
     </Container>
   );

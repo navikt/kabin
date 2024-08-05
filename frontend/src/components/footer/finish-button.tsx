@@ -1,6 +1,7 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -27,6 +28,7 @@ export const FinishButton = () => {
 const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const { id, typeId, svarbrev } = useRegistrering();
   const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id });
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
 
@@ -47,7 +49,16 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
           size="small"
           icon={<CheckmarkIcon aria-hidden />}
           loading={isLoading}
-          onClick={() => finish(id)}
+          onClick={async () => {
+            const { behandlingId } = await finish(id).unwrap();
+
+            switch (typeId) {
+              case SaksTypeEnum.ANKE:
+                return navigate(`/anke/${behandlingId}/status`);
+              case SaksTypeEnum.KLAGE:
+                return navigate(`/klage/${behandlingId}/status`);
+            }
+          }}
           disabled={isLoading}
         >
           Bekreft

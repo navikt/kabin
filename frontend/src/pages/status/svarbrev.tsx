@@ -10,7 +10,7 @@ import { StyledCard } from '@app/pages/status/styled-components';
 import { Receiver } from '@app/redux/api/registreringer/types';
 import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
 import { IdType, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 import { SvarbrevStatus } from '@app/types/status';
 
 interface Props {

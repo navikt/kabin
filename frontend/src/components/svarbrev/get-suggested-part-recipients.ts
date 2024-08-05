@@ -6,7 +6,7 @@ import { isNotNull } from '@app/functions/is-not';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import { IPart } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
 export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiver)[] => {
   const { sakenGjelderValue, overstyringer, svarbrev } = useRegistrering();
@@ -25,9 +25,9 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
     const existingRecipients = svarbrev.receivers
       .map((r) => {
         const typeList = [
-          r.id === klager?.id ? ReceiverType.KLAGER : null,
-          r.id === sakenGjelderValue ? ReceiverType.SAKEN_GJELDER : null,
-          r.id === fullmektig?.id ? ReceiverType.FULLMEKTIG : null,
+          r.part.id === klager?.id ? ReceiverType.KLAGER : null,
+          r.part.id === sakenGjelderValue ? ReceiverType.SAKEN_GJELDER : null,
+          r.part.id === fullmektig?.id ? ReceiverType.FULLMEKTIG : null,
         ].filter(isNotNull);
 
         if (typeList.length === 0) {

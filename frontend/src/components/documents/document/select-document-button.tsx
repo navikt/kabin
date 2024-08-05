@@ -52,6 +52,7 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
         data-testid="select-document"
         $gridArea={GridArea.SELECT}
         loading={isLoading}
+        title={isSelected ? 'Valgt' : undefined}
       >
         {getText(harTilgangTilArkivvariant, isSelected)}
       </GridButton>

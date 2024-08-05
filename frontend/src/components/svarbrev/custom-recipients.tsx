@@ -15,7 +15,7 @@ import {
   useRemoveSvarbrevReceiverMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
 import { IdType } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
 interface Props {
   receivers: Receiver[];

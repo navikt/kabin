@@ -6,7 +6,7 @@ export enum HandlingEnum {
   CENTRAL_PRINT = 'CENTRAL_PRINT',
 }
 
-export interface ApiRecipient {
+export interface ApiReceiver {
   id: string;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;

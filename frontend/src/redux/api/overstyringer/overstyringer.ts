@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { addMonths, addWeeks, format } from 'date-fns';
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import {
   SetBehandlingstidParams,
@@ -23,6 +24,7 @@ import {
 } from '@app/redux/api/overstyringer/response-types';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { pessimisticOverstyringerUpdate, updateDrafts } from '@app/redux/api/registreringer/updates';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IPart } from '@app/types/common';
 
 interface UpdatePartPayload {
@@ -64,6 +66,24 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         const undo = updateDrafts(id, (draft) => {
           draft.overstyringer.mottattKlageinstans = mottattKlageinstans;
 
+          if (draft.overstyringer.behandlingstid === null) {
+            return draft;
+          }
+
+          if (draft.overstyringer.behandlingstid.unitTypeId === BehandlingstidUnitType.WEEKS) {
+            draft.overstyringer.calculatedFrist = format(
+              addWeeks(mottattKlageinstans, draft.overstyringer.behandlingstid.units),
+              'yyyy-MM-dd',
+            );
+
+            return draft;
+          }
+
+          draft.overstyringer.calculatedFrist = format(
+            addMonths(mottattKlageinstans, draft.overstyringer.behandlingstid.units),
+            'yyyy-MM-dd',
+          );
+
           return draft;
         });
 
@@ -84,6 +104,24 @@ const overstyringerSlice = registreringApi.injectEndpoints({
       onQueryStarted: async ({ id, ...body }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
           draft.overstyringer.behandlingstid = body;
+
+          if (draft.overstyringer.mottattKlageinstans === null) {
+            return draft;
+          }
+
+          if (body.unitTypeId === BehandlingstidUnitType.WEEKS) {
+            draft.overstyringer.calculatedFrist = format(
+              addWeeks(draft.overstyringer.mottattKlageinstans, body.units),
+              'yyyy-MM-dd',
+            );
+
+            return draft;
+          }
+
+          draft.overstyringer.calculatedFrist = format(
+            addMonths(draft.overstyringer.mottattKlageinstans, body.units),
+            'yyyy-MM-dd',
+          );
 
           return draft;
         });

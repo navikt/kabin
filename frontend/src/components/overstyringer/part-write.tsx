@@ -90,8 +90,6 @@ const PartWriteInternal = ({
     return null;
   }
 
-  // const setPart = (newPart: IPart | null) => setOverstyringer({ [partField]: newPart });
-
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
   const setPartAndClose = (p: IPart | null) => {

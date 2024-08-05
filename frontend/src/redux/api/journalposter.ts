@@ -27,14 +27,14 @@ export const arkiverteDokumenterApi = createApi({
 
         for (const dokument of data.dokumenter) {
           dispatch(
-            arkiverteDokumenterApi.util.updateQueryData('getArkivertDokument', dokument.dokumentInfoId, () => dokument),
+            arkiverteDokumenterApi.util.upsertQueryData('getArkivertDokument', dokument.journalpostId, dokument),
           );
         }
       },
     }),
 
     getArkivertDokument: builder.query<IArkivertDocument, string>({
-      query: (id) => `/arkivertedokumenter/${id}`, // TODO: Finnes ikke i backend. Hva trenger vi av data?
+      query: (id) => `/arkivertedokumenter/${id}`,
     }),
 
     setArkivertDokumentTitle: builder.mutation<{ tittel: string }, SetDokumenttittelParams>({
@@ -85,5 +85,10 @@ export const arkiverteDokumenterApi = createApi({
   }),
 });
 
-export const { useGetArkiverteDokumenterQuery, useGetArkivertDokumentQuery, useSetArkivertDokumentTitleMutation } =
-  arkiverteDokumenterApi;
+export const {
+  useGetArkiverteDokumenterQuery,
+  useLazyGetArkiverteDokumenterQuery,
+  usePrefetch,
+  useGetArkivertDokumentQuery,
+  useSetArkivertDokumentTitleMutation,
+} = arkiverteDokumenterApi;
