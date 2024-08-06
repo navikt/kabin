@@ -10,7 +10,7 @@ export const IndexPage = () => (
 );
 
 const PageWrapper = styled.main`
-  overflow: hidden;
+  overflow: auto;
   padding: 16px;
   display: flex;
   flex-direction: column;

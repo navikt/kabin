@@ -1,5 +1,6 @@
 import { Label, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
+import { isoDateToPretty } from '@app/domain/date';
 import { useHjemmelName, useYtelseName } from '@app/hooks/kodeverk';
 
 interface BaseProps {
@@ -12,7 +13,9 @@ interface TextProps extends BaseProps {
 }
 
 export const ReadOnlyTime = ({ value, ...props }: TextProps) => (
-  <ReadOnly {...props}>{value === null ? <i>Ikke satt</i> : <time dateTime={value}>{value}</time>}</ReadOnly>
+  <ReadOnly {...props}>
+    {value === null ? <i>Ikke satt</i> : <time dateTime={value}>{isoDateToPretty(value)}</time>}
+  </ReadOnly>
 );
 
 export const ReadOnlyText = ({ value, ...props }: TextProps) => (
@@ -39,12 +42,12 @@ interface ReadOnlyProps extends BaseProps {
   children: React.ReactNode;
 }
 
-export const ReadOnly = ({ id, label, children }: ReadOnlyProps) => (
+const ReadOnly = ({ id, label, children }: ReadOnlyProps) => (
   <StyledReadOnly>
     <Label size="small" htmlFor={id}>
       {label}
     </Label>
-    <span id={id}>{children}</span>
+    <div id={id}>{children}</div>
   </StyledReadOnly>
 );
 

@@ -8,13 +8,13 @@ import { getTypeNames } from '@app/components/svarbrev/type-name';
 import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { isReceiver } from '@app/pages/create/app-context/types';
-import { Receiver } from '@app/redux/api/registreringer/types';
 import {
   useAddSvarbrevReceiverMutation,
   useChangeSvarbrevReceiverMutation,
   useRemoveSvarbrevReceiverMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
-import { IdType } from '@app/types/common';
+import { IAddress, IdType } from '@app/types/common';
+import { HandlingEnum } from '@app/types/receiver';
 
 interface RecipientsProps {
   suggestedReceivers: PartSuggestedReceiver[];
@@ -26,7 +26,8 @@ export const SuggestedReceivers = ({ suggestedReceivers }: RecipientsProps) => {
   const [addReceiver] = useAddSvarbrevReceiverMutation();
   const [remove] = useRemoveSvarbrevReceiverMutation();
 
-  const onChange = (receiver: Receiver) => change({ id, receiver });
+  const onChange = (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) =>
+    change({ receiverId, id, handling, overriddenAddress });
 
   if (suggestedReceivers.length === 0) {
     return null;

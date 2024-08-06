@@ -1,7 +1,7 @@
-import { Button } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
-import { compareParts } from '@app/domain/part';
+import { formatId } from '@app/functions/format-id';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
   useSetAvsenderMutation,
@@ -10,9 +10,8 @@ import {
 } from '@app/redux/api/overstyringer/overstyringer';
 import { IPart } from '@app/types/common';
 
-interface Props extends ISetPart {
+interface Props extends ISetPart<IPart | null> {
   partField: BaseProps['partField'];
-  part: IPart | null;
   loading?: boolean;
 }
 
@@ -28,24 +27,29 @@ const SET_PART_HOOKS: Hooks = {
   [FieldNames.AVSENDER]: useSetAvsenderMutation,
 };
 
-export const SetPartButton = ({ part, defaultPart, partField, label, title, icon, loading }: Props) => {
-  const { id, typeId } = useRegistrering();
+export const SetPartButton = ({ defaultPart, partField, label, title, icon, loading }: Props) => {
+  const { id } = useRegistrering();
+
   const [setPart, { isLoading }] = SET_PART_HOOKS[partField]();
 
-  if (typeId === null || compareParts(defaultPart, part)) {
-    return null;
-  }
-
   return (
-    <Button
-      size="small"
-      variant="secondary"
-      title={title}
-      icon={icon}
-      onClick={() => setPart({ id, part: defaultPart })}
-      loading={isLoading || loading}
+    <Tooltip
+      content={
+        defaultPart === null
+          ? `Nullstill ${partField}`
+          : `${defaultPart.name ?? 'Ukjent navn'} (${formatId(defaultPart.id)})`
+      }
     >
-      {label}
-    </Button>
+      <Button
+        size="small"
+        variant="secondary"
+        title={title}
+        icon={icon}
+        onClick={() => setPart({ id, part: defaultPart })}
+        loading={isLoading || loading}
+      >
+        {label}
+      </Button>
+    </Tooltip>
   );
 };

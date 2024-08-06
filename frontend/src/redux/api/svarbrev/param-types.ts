@@ -1,5 +1,6 @@
 import { SuggestedReceiver } from '@app/pages/create/app-context/types';
-import { Receiver } from '../registreringer/types';
+import { IAddress } from '@app/types/common';
+import { HandlingEnum } from '@app/types/receiver';
 
 export interface SetSendParams {
   id: string;
@@ -13,7 +14,9 @@ export interface AddReceiverParams {
 
 export interface ChangeReceiverParams {
   id: string;
-  receiver: Receiver;
+  receiverId: string;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
 }
 
 export interface RemoveReceiverParams {

@@ -20,19 +20,19 @@ const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
   switch (typeId) {
     case SaksTypeEnum.ANKE:
       return (
-        <Tag variant="alt1" size="small">
+        <Tag variant="alt1" size="medium">
           Anke
         </Tag>
       );
     case SaksTypeEnum.KLAGE:
       return (
-        <Tag variant="info" size="small">
+        <Tag variant="info" size="medium">
           Klage
         </Tag>
       );
     case null:
       return (
-        <Tag variant="info" size="small">
+        <Tag variant="info" size="medium">
           Ingen sakstype valgt
         </Tag>
       );

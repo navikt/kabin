@@ -56,7 +56,7 @@ export const Svarbrev = () => (
 );
 
 const SvarbrevInput = () => {
-  const { sakenGjelderValue, overstyringer, typeId, svarbrev } = useRegistrering();
+  const { sakenGjelderValue, typeId, svarbrev } = useRegistrering();
   const ytelseId = useYtelseId();
   const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
@@ -66,8 +66,6 @@ const SvarbrevInput = () => {
       ? skipToken
       : { identifikator: sakenGjelderValue, sakenGjelderId: sakenGjelderValue, ytelseId };
   const { data: sakenGjelder } = useGetPartWithUtsendingskanalQuery(params);
-
-  const { fullmektig, klager } = overstyringer;
 
   if (sakenGjelder === undefined) {
     return <Loader title="Laster..." />;

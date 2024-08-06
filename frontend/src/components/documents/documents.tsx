@@ -8,6 +8,7 @@ import { DocumentTable } from '@app/components/documents/document-table';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
@@ -22,8 +23,13 @@ export const Dokumenter = () => {
     isFetching,
     refetch,
   } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
+  const canEdit = useCanEdit();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const error = useValidationError(ValidationFieldNames.JOURNALPOST_ID);
+
+  if (!canEdit) {
+    return <SelectedDocument />;
+  }
 
   if (!isExpanded && journalpostId !== null) {
     return <SelectedDocument onClick={() => setIsExpanded(true)} />;

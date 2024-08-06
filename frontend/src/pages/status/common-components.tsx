@@ -58,6 +58,7 @@ interface SakProps {
 
 export const Sak = ({ sak }: SakProps) => {
   const fagsystemName = useFagsystemName(sak?.fagsystemId);
+  console.log(sak);
 
   return (
     <StyledSak>

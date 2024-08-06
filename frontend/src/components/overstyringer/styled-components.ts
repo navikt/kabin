@@ -72,9 +72,9 @@ export const PartTextContent = styled.div`
 export const PartActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   gap: 8px;
-  justify-content: left;
+  justify-content: right;
   justify-self: end;
   flex-shrink: 0;
   flex-grow: 0;

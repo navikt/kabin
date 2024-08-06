@@ -7,9 +7,9 @@ import { getSakspartName } from '@app/domain/name';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { PartContent, PartTextContent, StyledContainer, StyledPartName, getState } from '../styled-components';
 import { Actions, ActionsProps } from './actions';
-import { EnterEditModeCallback } from './types';
+import { EnterSearchModeCallback } from './types';
 
-export interface PartReadProps extends ActionsProps, EnterEditModeCallback {
+export interface PartReadProps extends ActionsProps, EnterSearchModeCallback {
   error?: string;
   id?: string;
 }

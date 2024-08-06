@@ -1,8 +1,6 @@
 /* eslint-disable max-lines */
 import { formatISO } from 'date-fns';
-import { json } from 'react-router';
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import { queriesSlice } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { Behandlingstid } from '@app/redux/api/registreringer/types';
 import { updateDrafts } from '@app/redux/api/registreringer/updates';
@@ -121,19 +119,18 @@ const svarbrevSlice = registreringApi.injectEndpoints({
       },
     }),
     changeSvarbrevReceiver: builder.mutation<ReceiverResponse, ChangeReceiverParams>({
-      query: ({ id, receiver }) => ({
-        url: `/registreringer/${id}/svarbrev/receivers/${receiver.id}`,
+      query: ({ id, receiverId, ...body }) => ({
+        url: `/registreringer/${id}/svarbrev/receivers/${receiverId}`,
         method: 'PUT',
-        body: receiver,
+        body,
       }),
-      onQueryStarted: async ({ id, receiver }, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, receiverId, handling, overriddenAddress }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
           for (const r of draft.svarbrev.receivers) {
-            if (r.part.id === receiver.part.id) {
+            if (r.part.id === receiverId) {
               // Lokal/sentral utskrift switch breaks without destructure
-              r.part = { ...receiver.part };
-              r.handling = receiver.handling;
-              r.overriddenAddress = receiver.overriddenAddress;
+              r.handling = handling;
+              r.overriddenAddress = overriddenAddress;
               break;
             }
           }

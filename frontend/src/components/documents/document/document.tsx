@@ -59,7 +59,7 @@ export const Dokument = ({ dokument }: Props) => {
         $showViewed={isViewed && !isSelected}
         onMouseDown={viewDocument}
       >
-        <TitleContainer>
+        <TitleContainer aria-label="Dokumenttittel">
           {canExpand ? <StyledExpandButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} /> : null}
           <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={title} />
         </TitleContainer>

@@ -8,23 +8,24 @@ import { getTypeNames } from '@app/components/svarbrev/type-name';
 import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { isReceiver } from '@app/pages/create/app-context/types';
-import { Receiver } from '@app/redux/api/registreringer/types';
 import { useChangeSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
-import { IdType } from '@app/types/common';
+import { IAddress, IdType } from '@app/types/common';
+import { HandlingEnum } from '@app/types/receiver';
 
 interface Props {
   receiver: PartSuggestedReceiver;
 }
 
 export const SingleReceiver = ({ receiver: singleReceiver }: Props) => {
-  const { part, handling, overriddenAddress, typeList } = singleReceiver;
+  const { part, typeList } = singleReceiver;
   const isPerson = part.type === IdType.FNR;
   const { id, svarbrev } = useRegistrering();
   const [changeRecipient] = useChangeSvarbrevReceiverMutation();
 
   const isAdded = isReceiver(singleReceiver) && svarbrev.receivers.some((r) => r.id === singleReceiver.id);
 
-  const onChange = (receiver: Receiver) => changeRecipient({ id, receiver });
+  const onChange = (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) =>
+    changeRecipient({ receiverId, id, handling, overriddenAddress });
 
   return (
     <section>

@@ -3,16 +3,18 @@ import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { CardSmall } from '@app/components/card/card';
+import { Card, CardSmall } from '@app/components/card/card';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useGetAnkemuligheterQuery } from '@app/redux/api/muligheter';
+import { useGetAnkemuligheterQuery, useGetRegistreringAnkemulighetQuery } from '@app/redux/api/muligheter';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -20,6 +22,33 @@ import { Warning } from '../common/warning';
 import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
+  const canEdit = useCanEdit();
+
+  if (canEdit) {
+    return <EditableAnkemuligheter />;
+  }
+
+  return <ReadOnlyAnkemulighet />;
+};
+
+const ReadOnlyAnkemulighet = () => {
+  const id = useRegistreringId();
+  const { data, isLoading } = useGetRegistreringAnkemulighetQuery(id);
+
+  return (
+    <Card>
+      <Header>
+        <Heading level="1" size="small">
+          Vedtaket klagen gjelder
+        </Heading>
+      </Header>
+
+      <Content ankemuligheter={data === undefined ? undefined : [data]} isLoading={isLoading} />
+    </Card>
+  );
+};
+
+const EditableAnkemuligheter = () => {
   const { sakenGjelderValue } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();

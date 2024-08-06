@@ -20,6 +20,12 @@ export const muligheterApi = createApi({
         body: { idnummer },
       }),
     }),
+    getRegistreringKlagemulighet: builder.query<IKlagemulighet, string>({
+      query: (id) => `/registreringer/${id}/klagemulighet`,
+    }),
+    getRegistreringAnkemulighet: builder.query<IAnkemulighet, string>({
+      query: (id) => `/registreringer/${id}/ankemulighet`,
+    }),
   }),
 });
 
@@ -28,4 +34,6 @@ export const {
   useGetKlagemuligheterQuery,
   useLazyGetAnkemuligheterQuery,
   useLazyGetKlagemuligheterQuery,
+  useGetRegistreringKlagemulighetQuery,
+  useGetRegistreringAnkemulighetQuery,
 } = muligheterApi;

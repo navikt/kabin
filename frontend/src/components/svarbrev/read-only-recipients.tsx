@@ -1,49 +1,92 @@
-import { List, ListItem } from '@navikt/ds-react/List';
-import { ReadOnly } from '@app/components/read-only-info/read-only-info';
+import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { useAddressLines } from '@app/components/svarbrev/address/use-address-lines';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { Receiver } from '@app/redux/api/registreringer/types';
-import { Utsendingskanal } from '@app/types/common';
+import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
-const getHandlingLabel = (handling: HandlingEnum, utsendingskanal: Utsendingskanal) => {
+const getHandlingLabel = (handling: HandlingEnum.LOCAL_PRINT | HandlingEnum.CENTRAL_PRINT) => {
   switch (handling) {
-    case HandlingEnum.AUTO:
-      return Utsendingskanal[utsendingskanal];
     case HandlingEnum.CENTRAL_PRINT:
-      return 'Sentral utskrift';
+      return UTSENDINGSKANAL[Utsendingskanal.SENTRAL_UTSKRIFT];
     case HandlingEnum.LOCAL_PRINT:
-      return 'Lokal utskrift';
+      return UTSENDINGSKANAL[Utsendingskanal.LOKAL_UTSKRIFT];
   }
 };
 
-const ReadOnlyRecipient = ({ recipient }: { recipient: Receiver }) => {
-  const handling = getHandlingLabel(recipient.handling, recipient.part.utsendingskanal);
-  const label = `${recipient.part.name} (${handling})`;
-  const addressLines = useAddressLines(recipient.overriddenAddress);
+const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
+  const { handling } = receiver;
 
-  if (addressLines.length === 0) {
-    return <ListItem>{label}</ListItem>;
-  }
+  const isAutoHandling = handling === HandlingEnum.AUTO;
+  const channelLabel = isAutoHandling ? UTSENDINGSKANAL[receiver.part.utsendingskanal] : getHandlingLabel(handling);
+
+  const addressIsOverridden = receiver.overriddenAddress !== null;
+  const addressLines = useAddressLines(addressIsOverridden ? receiver.overriddenAddress : receiver.part.address);
 
   return (
-    <ListItem>
-      {label}
-      <span>{addressLines.join(' ,')}</span>
-    </ListItem>
+    <li>
+      <Box
+        background="surface-neutral-subtle"
+        padding="0"
+        borderRadius="medium"
+        borderColor="border-default"
+        borderWidth="1"
+      >
+        <Box padding="2">
+          <VStack gap="2" align="start">
+            <Label as={Heading} level="1" size="small">
+              {receiver.part.name}
+            </Label>
+
+            <Tooltip content={isAutoHandling ? 'Standardkanal' : 'Manuelt overstyrt kanal'}>
+              <Tag variant={isAutoHandling ? 'info' : 'warning'} size="small">
+                {channelLabel}
+              </Tag>
+            </Tooltip>
+          </VStack>
+        </Box>
+
+        {addressLines.length === 0 ? null : (
+          <Tooltip content={addressIsOverridden ? 'Manuelt overstyrt addresse' : 'Standardadresse'}>
+            <Box
+              background={addressIsOverridden ? 'surface-warning-subtle' : undefined}
+              padding="2"
+              borderRadius="medium"
+              borderColor="border-default"
+              borderWidth="0"
+            >
+              {addressLines.map((l) => (
+                <div key={l}>{l}</div>
+              ))}
+            </Box>
+          </Tooltip>
+        )}
+      </Box>
+    </li>
   );
 };
 
 export const ReadOnlyReceivers = () => {
   const { svarbrev } = useRegistrering();
 
-  const list = svarbrev.receivers.map((r) => <ReadOnlyRecipient key={r.id} recipient={r} />);
+  const list = svarbrev.receivers.map((r) => <ReadOnlyReceiver key={r.id} receiver={r} />);
 
   return (
-    <ReadOnly label={list.length === 1 ? 'Mottaker' : 'Mottakere'} id="svarbrevmottakere">
-      <List size="small" style={{ marginTop: 0 }}>
-        {list}
-      </List>
-    </ReadOnly>
+    <section>
+      <Label as={Heading} level="1" size="small" spacing>
+        {list.length === 1 ? 'Mottaker' : 'Mottakere'}
+      </Label>
+      <StyledList>{list}</StyledList>
+    </section>
   );
 };
+
+const StyledList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+`;

@@ -1,12 +1,12 @@
 import { IPart } from '@app/types/common';
 
-export interface ISetPart {
+export interface ISetPart<T extends IPart | null = IPart> {
   label: string;
   title: string;
-  defaultPart: IPart | null;
+  defaultPart: T;
   icon?: React.ReactNode;
 }
 
-export interface EnterEditModeCallback {
-  enterEditMode?: () => void;
+export interface EnterSearchModeCallback {
+  enterSearchMode?: () => void;
 }

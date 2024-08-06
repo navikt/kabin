@@ -1,4 +1,4 @@
-import { Search } from '@navikt/ds-react';
+import { Alert, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useMemo, useState } from 'react';
@@ -21,11 +21,11 @@ import { PartContent, States, StyledContainer } from './styled-components';
 import { BaseProps, FieldNames } from './types';
 
 interface Props extends BaseProps {
-  exitEditMode: () => void;
+  exitSearchMode: () => void;
   error?: string;
 }
 
-export const PartWrite = (props: Props) => {
+export const PartSearch = (props: Props) => {
   const setAvsender = useSetAvsenderMutation();
   const setFullmektig = useSetFullmektigMutation();
   const setKlager = useSetKlagerMutation();
@@ -46,7 +46,7 @@ export const PartWrite = (props: Props) => {
 
   const setPart = (part: IPart | null) => set({ id, part });
 
-  return <PartWriteInternal {...props} setPart={setPart} isSaving={isLoading} />;
+  return <PartSearchInternal {...props} setPart={setPart} isSaving={isLoading} />;
 };
 
 interface InternalProps extends Props {
@@ -54,17 +54,18 @@ interface InternalProps extends Props {
   isSaving: boolean;
 }
 
-const PartWriteInternal = ({
+const PartSearchInternal = ({
   part,
   partField,
   label,
-  exitEditMode,
+  exitSearchMode,
   icon,
   error: validationError,
   setPart,
   isSaving,
+  excludedPartIds = [],
 }: InternalProps) => {
-  const { typeId, mulighet } = useMulighet();
+  const { mulighet } = useMulighet();
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
@@ -86,15 +87,11 @@ const PartWriteInternal = ({
 
   const { data, isLoading } = useGetPartWithUtsendingskanalQuery(searchParams);
 
-  if (typeId === null) {
-    return null;
-  }
-
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
   const setPartAndClose = (p: IPart | null) => {
     setPart(p);
-    exitEditMode();
+    exitSearchMode();
   };
 
   const onChange = (value: string) => {
@@ -104,7 +101,7 @@ const PartWriteInternal = ({
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
     if (key === 'Escape') {
-      exitEditMode();
+      exitSearchMode();
 
       return;
     }
@@ -119,6 +116,8 @@ const PartWriteInternal = ({
       setPartAndClose(data);
     }
   };
+
+  const isPartInvalid = data !== undefined && excludedPartIds.includes(data.id);
 
   return (
     <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>
@@ -139,10 +138,17 @@ const PartWriteInternal = ({
             id={partField}
           />
         </StyledPartSearch>
+
+        {isPartInvalid ? (
+          <Alert variant="warning" size="small" inline>
+            Er du sikker på at du har valgt riktig?
+          </Alert>
+        ) : null}
+
         <SearchResult
           isLoading={isLoading}
           setPart={setPartAndClose}
-          dismiss={exitEditMode}
+          dismiss={exitSearchMode}
           data={data}
           label={label}
           searchString={search}

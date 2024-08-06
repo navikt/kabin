@@ -1,8 +1,9 @@
-import { Alert, BodyLong, Table } from '@navikt/ds-react';
+import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
@@ -15,6 +16,58 @@ import { SkeletonTable } from './skeleton-table';
 import { TableHeaders } from './table-headers';
 
 export const Oppgaver = () => {
+  const canEdit = useCanEdit();
+
+  if (canEdit) {
+    return <EditableOppgaver />;
+  }
+
+  return <ReadOnlyOppgaver />;
+};
+
+const ReadOnlyOppgaver = () => {
+  const { overstyringer } = useRegistrering();
+  const { oppgaveId } = overstyringer;
+  const oppgaverParams = useParams();
+  const { oppgave, isLoading } = useGetOppgaverQuery(oppgaveId === null ? skipToken : oppgaverParams, {
+    selectFromResult: ({ data, ...rest }) => ({ oppgave: data?.find((o) => o.id === oppgaveId), ...rest }),
+  });
+
+  if (oppgaveId === null) {
+    return (
+      <Card>
+        <Heading level="2" size="small">
+          Gosys-oppgave
+        </Heading>
+
+        <Alert variant="info" size="small" inline>
+          Ingen Gosys-oppgave valgt
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (isLoading || oppgave === undefined) {
+    return <SkeletonTable />;
+  }
+
+  return (
+    <Card>
+      <Heading level="2" size="small">
+        Gosys-oppgave
+      </Heading>
+
+      <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
+        <TableHeaders />
+        <Table.Body>
+          <Row {...oppgave} />
+        </Table.Body>
+      </Table>
+    </Card>
+  );
+};
+
+const EditableOppgaver = () => {
   const oppgaverParams = useParams();
   const { data: oppgaver, isLoading } = useGetOppgaverQuery(oppgaverParams);
   const error = useValidationError(ValidationFieldNames.OPPGAVE);

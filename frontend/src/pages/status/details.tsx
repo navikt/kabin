@@ -25,7 +25,7 @@ export const StatusDetails = ({ id, status }: Props) => {
     tildeltSaksbehandler,
     svarbrev,
     fagsakId,
-    originalFagsystemId,
+    fagsystemId,
     sakenGjelder,
     vedtakDate,
     ytelseId,
@@ -65,7 +65,7 @@ export const StatusDetails = ({ id, status }: Props) => {
       <Mulighet
         title={mulighetTitle}
         fagsakId={fagsakId}
-        originalFagsystemId={originalFagsystemId}
+        fagsystemId={fagsystemId}
         sakenGjelder={sakenGjelder}
         vedtakDate={vedtakDate}
         ytelseId={ytelseId}

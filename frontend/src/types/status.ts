@@ -5,7 +5,7 @@ import { IArkivertDocument } from './dokument';
 
 interface IBaseStatus {
   fagsakId: string;
-  originalFagsystemId: string;
+  fagsystemId: string;
   /** Date */
   frist: string;
   fullmektig: IPart | null;

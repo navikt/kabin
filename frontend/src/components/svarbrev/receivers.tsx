@@ -1,3 +1,4 @@
+import { styled } from 'styled-components';
 import { CustomReceivers } from '@app/components/svarbrev/custom-recipients';
 import { useSuggestedBrevmottakere } from '@app/components/svarbrev/get-suggested-part-recipients';
 import { ReadOnlyReceivers } from '@app/components/svarbrev/read-only-recipients';
@@ -20,7 +21,7 @@ export const Receivers = () => {
   const onlyOneRecipient = suggestedReceivers.length === 1 && customRecipients.length === 0 && receiver !== undefined;
 
   return (
-    <>
+    <Content>
       {onlyOneRecipient ? (
         <SingleReceiver receiver={receiver} />
       ) : (
@@ -28,6 +29,12 @@ export const Receivers = () => {
       )}
 
       <CustomReceivers receivers={customRecipients} />
-    </>
+    </Content>
   );
 };
+
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+`;

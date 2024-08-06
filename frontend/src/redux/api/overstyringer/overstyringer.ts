@@ -181,7 +181,7 @@ const overstyringerSlice = registreringApi.injectEndpoints({
       query: ({ id, part }) => ({
         url: `/registreringer/${id}/overstyringer/fullmektig`,
         method: 'PUT',
-        body: part === null ? null : { type: part.type, id: part.id },
+        body: { fullmektig: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
@@ -202,7 +202,7 @@ const overstyringerSlice = registreringApi.injectEndpoints({
       query: ({ id, part }) => ({
         url: `/registreringer/${id}/overstyringer/klager`,
         method: 'PUT',
-        body: part === null ? null : { type: part.type, id: part.id },
+        body: { klager: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
@@ -222,7 +222,7 @@ const overstyringerSlice = registreringApi.injectEndpoints({
       query: ({ id, part }) => ({
         url: `/registreringer/${id}/overstyringer/avsender`,
         method: 'PUT',
-        body: part === null ? null : { type: part.type, id: part.id },
+        body: { avsender: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { AdminPage } from '@app/pages/admin';
 import { CreatePage } from '@app/pages/create/create';
@@ -23,6 +23,8 @@ export const Router = () => (
       <Route element={<ProtectedRoute roles={[Role.KABAL_ADMIN]} />}>
         <Route path="/admin" element={<AdminPage />} />
       </Route>
+
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   </Suspense>
 );

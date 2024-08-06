@@ -1,4 +1,4 @@
-import { DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
@@ -16,15 +16,19 @@ import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshje
 import { Tildeling } from '@app/components/overstyringer/tildeling';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { avsenderMottakerToPart } from '@app/domain/converters';
+import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
+import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { IPart, SaksTypeEnum } from '@app/types/common';
+import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
 import { Part } from './part';
 import { SakenGjelder } from './part-read/part-read';
+import { ISetPart } from './part-read/types';
 import { FieldNames } from './types';
 
 interface Props {
@@ -33,9 +37,10 @@ interface Props {
 }
 
 export const Overstyringer = ({ title, klagerLabel }: Props) => {
-  const { overstyringer } = useRegistrering();
+  const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { typeId, mulighet } = useMulighet();
+  const { journalpost } = useJournalpost();
   const ytelseId = useYtelseId();
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
@@ -50,6 +55,69 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
       </CardLarge>
     );
   }
+
+  const sakenGjelderOption: ISetPart<IPart> = {
+    label: 'Saken gjelder',
+    defaultPart: mulighet.sakenGjelder,
+    title: 'Saken gjelder',
+    icon: <SakenGjelderIcon aria-hidden />,
+  };
+
+  const klaegerOption: ISetPart<IPart | null> = {
+    label: klagerLabel,
+    defaultPart: klager,
+    title: klagerLabel,
+    icon: <StyledKlagerIcon aria-hidden />,
+  };
+
+  const fullmekitgOption: ISetPart<IPart | null> = {
+    label: 'Fullmektig',
+    defaultPart: fullmektig,
+    title: 'Fullmektig',
+    icon: <StyledFullmektigIcon aria-hidden />,
+  };
+
+  const mulighetFullmektig: ISetPart<IPart> | null =
+    typeId === SaksTypeEnum.ANKE && mulighet.fullmektig !== null
+      ? {
+          label: 'Fullmektig fra mulighet',
+          defaultPart: mulighet.fullmektig,
+          title: 'Fullmektig fra mulighet',
+          icon: <StyledFullmektigIcon aria-hidden />,
+        }
+      : null;
+
+  const avsenderOption: ISetPart<IPart | null> = {
+    label: 'Avsender',
+    defaultPart: avsenderMottakerToPart(avsender),
+    title: 'Avsender',
+    icon: <AvsenderIcon aria-hidden />,
+  };
+
+  const journalpostAvsenderOption: ISetPart<IPart | null> | null =
+    journalpost?.avsenderMottaker?.id === avsender?.id
+      ? null
+      : {
+          label: 'Journalpostavsender',
+          defaultPart:
+            journalpost !== undefined &&
+            journalpost.journalposttype === JournalposttypeEnum.INNGAAENDE &&
+            journalpost.avsenderMottaker !== null &&
+            avsenderIsPart(journalpost.avsenderMottaker)
+              ? avsenderMottakerToPart(journalpost.avsenderMottaker)
+              : null,
+          title: 'Journalpostavsender',
+          icon: <ArchiveIcon aria-hidden />,
+        };
+
+  const options: ISetPart[] = [
+    sakenGjelderOption,
+    klaegerOption,
+    fullmekitgOption,
+    mulighetFullmektig,
+    avsenderOption,
+    journalpostAvsenderOption,
+  ].filter((o): o is ISetPart => o !== null && o.defaultPart !== null);
 
   return (
     <CardLarge title={title}>
@@ -77,39 +145,28 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
               label="Saken gjelder"
               icon={<StyledSakenGjelderIcon aria-hidden />}
             />
+
             <Part
               partField={FieldNames.KLAGER}
               part={klager}
               label={klagerLabel}
               icon={<StyledKlagerIcon aria-hidden />}
               error={klagerError}
-              options={[
-                {
-                  label: 'Saken gjelder',
-                  defaultPart: mulighet.sakenGjelder,
-                  title: 'Saken gjelder',
-                  icon: <SakenGjelderIcon aria-hidden />,
-                },
-              ]}
+              options={options}
             />
+
             <Part
               partField={FieldNames.FULLMEKTIG}
               part={fullmektig}
               label="Fullmektig"
               icon={<StyledFullmektigIcon aria-hidden />}
-              required={false}
+              optional
               error={fullmektigError}
-              options={[
-                {
-                  label: 'Avsender',
-                  defaultPart: avsenderMottakerToPart(avsender),
-                  title: 'Avsender',
-                  icon: <AvsenderIcon aria-hidden />,
-                },
-              ]}
+              excludedPartIds={[sakenGjelderValue]}
+              options={options}
             />
 
-            <Avsender />
+            <Avsender options={options} />
 
             <Tildeling />
           </Content>

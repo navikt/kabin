@@ -21,9 +21,7 @@ export const InternalSvarbrevInput = ({ setting }: Props) => (
 
       <EditVarsletFrist setting={setting} />
 
-      <Content>
-        <Receivers />
-      </Content>
+      <Receivers />
     </Card>
 
     <Card title="Forhåndsvisning av svarbrev">
@@ -36,10 +34,4 @@ const Row = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 8px;
-`;
-
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
 `;

@@ -9,24 +9,18 @@ import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
 interface Props extends Receiver {
-  onChange: (recipient: Receiver) => void;
+  onChange: (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) => void;
 }
 
 export const Options = ({ part, handling, overriddenAddress, onChange, id }: Props) => {
   const onHandlingChange = useCallback(
-    (newHandling: string) => onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling), id }),
-    [id, onChange, overriddenAddress, part],
+    (newHandling: string) => onChange(id, ensureIsHandling(newHandling), overriddenAddress),
+    [id, onChange, overriddenAddress],
   );
 
   const onAddressChange = useCallback(
-    (address: IAddress | null) =>
-      onChange({
-        id,
-        part,
-        handling,
-        overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
-      }),
-    [handling, id, onChange, part],
+    (address: IAddress | null) => onChange(id, handling, areAddressesEqual(address, part.address) ? null : address),
+    [handling, id, onChange, part.address],
   );
 
   const showAddress = useMemo(() => {

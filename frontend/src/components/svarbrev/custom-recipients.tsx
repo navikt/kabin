@@ -14,14 +14,11 @@ import {
   useChangeSvarbrevReceiverMutation,
   useRemoveSvarbrevReceiverMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
-import { IdType } from '@app/types/common';
+import { IAddress, IdType } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
 interface Props {
   receivers: Receiver[];
-  // addRecipients: (recipients: Recipient[]) => void;
-  // removeRecipients: (ids: string[]) => void;
-  // changeRecipient: (recipient: Recipient) => void;
 }
 
 export const CustomReceivers = ({ receivers }: Props) => {
@@ -52,10 +49,11 @@ interface ReceiversProps {
 
 const Receivers = ({ receivers }: ReceiversProps) => {
   const registreringId = useRegistreringId();
-  const [remove] = useRemoveSvarbrevReceiverMutation();
+  const [remove, { isLoading: isRemoving }] = useRemoveSvarbrevReceiverMutation();
   const [change] = useChangeSvarbrevReceiverMutation();
 
-  const onChange = (recipient: Receiver) => change({ id: recipient.part.id, receiver: recipient });
+  const onChange = (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) =>
+    change({ receiverId, id: registreringId, handling, overriddenAddress });
 
   if (receivers.length === 0) {
     return null;
@@ -77,7 +75,8 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                       variant="tertiary-neutral"
                       title="Fjern"
                       icon={<TrashIcon color="var(--a-surface-danger)" aria-hidden />}
-                      onClick={() => remove({ id: registreringId, receiverId: part.id })}
+                      onClick={() => remove({ id: registreringId, receiverId: id })}
+                      loading={isRemoving}
                     />
                   </Tooltip>
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>

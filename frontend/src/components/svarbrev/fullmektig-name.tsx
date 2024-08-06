@@ -17,10 +17,6 @@ export const SetFullmektig = () => {
   const [setName] = useSetSvarbrevFullmektigFritekstMutation();
   const canEdit = useCanEdit();
 
-  if (!canEdit) {
-    return <ReadOnlyText label={LABEL} value={svarbrev.fullmektigFritekst} id={ID} />;
-  }
-
   useEffect(() => {
     if (svarbrev.fullmektigFritekst === localName) {
       return;
@@ -34,6 +30,10 @@ export const SetFullmektig = () => {
       clearTimeout(timeout);
     };
   }, [id, localName, setName, svarbrev.fullmektigFritekst, svarbrev.title]);
+
+  if (!canEdit) {
+    return <ReadOnlyText label={LABEL} value={svarbrev.fullmektigFritekst} id={ID} />;
+  }
 
   return (
     <StyledTextField

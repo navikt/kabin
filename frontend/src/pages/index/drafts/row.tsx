@@ -25,9 +25,9 @@ export const DraftRow = ({ registrering }: { registrering: DraftRegistrering }) 
       return;
     }
 
-    prefetchDocuments(sakenGjelderValue);
-    prefetchKlagemuligheter(sakenGjelderValue);
-    prefetchAnkemuligheter(sakenGjelderValue);
+    prefetchDocuments(sakenGjelderValue, true);
+    prefetchKlagemuligheter(sakenGjelderValue, true);
+    prefetchAnkemuligheter(sakenGjelderValue, true);
   }, [prefetchAnkemuligheter, prefetchDocuments, prefetchKlagemuligheter, sakenGjelderValue]);
 
   return (

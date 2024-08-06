@@ -94,7 +94,7 @@ export const ColumnHeaders = ({
       >
         Fjern filtere
       </StyledButton>
-      <StyledGrid as="section">
+      <StyledGrid as="section" aria-label="Journalpostfiltere">
         <GridSearch
           $gridArea={GridArea.TITLE}
           label="Tittel/journalpost-ID"
