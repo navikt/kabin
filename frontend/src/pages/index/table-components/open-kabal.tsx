@@ -1,3 +1,1 @@
-export const OpenKabal = () => {
-  
-};
+export const OpenKabal = () => {};

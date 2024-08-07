@@ -8,14 +8,14 @@ export const muligheterApi = createApi({
   endpoints: (builder) => ({
     getAnkemuligheter: builder.query<IAnkemulighet[], string>({
       query: (idnummer) => ({
-        url: `/ankemuligheter?antall=50000`,
+        url: `/ankemuligheter`,
         method: 'POST',
         body: { idnummer },
       }),
     }),
     getKlagemuligheter: builder.query<IKlagemulighet[], string>({
       query: (idnummer) => ({
-        url: `/klagemuligheter?antall=50000`,
+        url: `/klagemuligheter`,
         method: 'POST',
         body: { idnummer },
       }),

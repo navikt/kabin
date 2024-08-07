@@ -4,7 +4,7 @@ import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
 
 interface Props {

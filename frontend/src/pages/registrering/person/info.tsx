@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import { PersonDetails } from '@app/pages/create/person/details';
+import { PersonDetails } from '@app/pages/registrering/person/details';
 import { useGetPartQuery } from '@app/redux/api/part';
 
 interface PersonInfoProps {

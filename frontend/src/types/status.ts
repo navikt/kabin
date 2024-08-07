@@ -20,6 +20,10 @@ interface IBaseStatus {
   varsletFrist: string | null;
   varsletFristUnits: number | null;
   varsletFristUnitTypeId: BehandlingstidUnitType | null;
+  /** When the registrering was finished.
+   * @type {string} DateTime
+   */
+  finished: string;
 }
 
 export interface SvarbrevStatus {

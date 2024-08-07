@@ -1,12 +1,12 @@
 import { styled } from 'styled-components';
 import { DeleteButton } from '@app/components/footer/delete-button';
 import { FinishButton } from '@app/components/footer/finish-button';
-import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const Footer = () => {
-  const id = useRegistreringId();
+  const { id } = useRegistrering();
   const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: id });
 
   return (
@@ -26,7 +26,7 @@ const Buttons = styled.div`
 `;
 
 interface IStyleProps {
-  $hasError: boolean;
+  $hasError?: boolean;
 }
 
 const StyledFooter = styled.div<IStyleProps>`
@@ -43,6 +43,6 @@ const StyledFooter = styled.div<IStyleProps>`
   align-items: center;
   align-content: center;
   z-index: 1;
-  border-top: 1px solid ${({ $hasError }) => ($hasError ? '#d47b00' : '#368da8')};
-  background-color: ${({ $hasError }) => ($hasError ? '#ffe9cc' : '#e0f5fb')};
+  border-top: 1px solid ${({ $hasError }) => ($hasError === true ? '#d47b00' : '#368da8')};
+  background-color: ${({ $hasError }) => ($hasError === true ? '#ffe9cc' : '#e0f5fb')};
 `;

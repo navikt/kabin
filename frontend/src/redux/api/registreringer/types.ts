@@ -28,6 +28,7 @@ export interface DraftRegistrering extends BaseRegistrering {
 }
 
 export interface FinishingRegistrering extends BaseRegistrering {
+  typeId: RegistreringType; // Samme type-IDer som i Kodeverket.
   /** When the registration was finished.
    * @type: DateTime
    */
@@ -36,6 +37,7 @@ export interface FinishingRegistrering extends BaseRegistrering {
 }
 
 export interface FinishedRegistrering extends BaseRegistrering {
+  typeId: RegistreringType; // Samme type-IDer som i Kodeverket.
   /** When the registration was finished.
    * @type: DateTime
    */
@@ -44,6 +46,9 @@ export interface FinishedRegistrering extends BaseRegistrering {
 }
 
 export type Registrering = DraftRegistrering | FinishingRegistrering | FinishedRegistrering;
+
+export const isDraftRegistrering = (registrering: Registrering): registrering is DraftRegistrering =>
+  registrering.finished === null;
 
 export interface Behandlingstid {
   units: number;

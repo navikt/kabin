@@ -28,8 +28,6 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
       e.stopPropagation();
 
       if (!isLoading && mulighet?.id !== klagemulighet.id) {
-        console.log('setKlagemulighet', { id, mulighetId: klagemulighet.id });
-
         setKlagemulighet({ id, mulighet: klagemulighet });
       }
     },

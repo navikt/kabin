@@ -4,8 +4,10 @@ import { muligheterApi } from '@app/redux/api/muligheter';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
+import { saksbehandlereApi } from '@app/redux/api/saksbehandlere';
+import { statusApi } from '@app/redux/api/status';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
-import { rootReducer } from './root';
+import { rootReducer } from '@app/redux/root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
@@ -21,5 +23,7 @@ export const reduxStore = configureStore({
       muligheterApi.middleware,
       svarbrevSettingsApi.middleware,
       oppgaverApi.middleware,
+      saksbehandlereApi.middleware,
+      statusApi.middleware,
     ]),
 });

@@ -1,5 +1,5 @@
 import { Heading, Skeleton, Table } from '@navikt/ds-react';
-import { CreateButton } from '@app/pages/index/drafts/create-button';
+import { CreateRegistreringButton } from '@app/components/create-registrering-button/create-registrering-button';
 import { DraftsHeaders } from '@app/pages/index/drafts/headers';
 import { DraftsTable } from '@app/pages/index/drafts/table';
 import { Container } from '@app/pages/index/styled-components';
@@ -11,7 +11,7 @@ export const Drafts = () => (
       Påbegynte registreringer
     </Heading>
 
-    <CreateButton />
+    <CreateRegistreringButton />
 
     <Rows />
   </Container>

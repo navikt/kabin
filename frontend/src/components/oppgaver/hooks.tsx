@@ -24,7 +24,7 @@ export const useParams = (): IGetOppgaverParams | typeof skipToken => {
   return { identifikator: sakenGjelderValue };
 };
 
-export const oppgaverIsEnabled = (typeId: SaksTypeEnum, mulighet: IKlagemulighet | IAnkemulighet | undefined) => {
+const oppgaverIsEnabled = (typeId: SaksTypeEnum, mulighet: IKlagemulighet | IAnkemulighet | undefined) => {
   if (mulighet === undefined) {
     return false;
   }

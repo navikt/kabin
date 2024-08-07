@@ -4,6 +4,8 @@ import { muligheterApi } from '@app/redux/api/muligheter';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
+import { saksbehandlereApi } from '@app/redux/api/saksbehandlere';
+import { statusApi } from '@app/redux/api/status';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
 
 export const rootReducer = combineReducers({
@@ -13,6 +15,9 @@ export const rootReducer = combineReducers({
   [muligheterApi.reducerPath]: muligheterApi.reducer,
   [svarbrevSettingsApi.reducerPath]: svarbrevSettingsApi.reducer,
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,
+  [saksbehandlereApi.reducerPath]: saksbehandlereApi.reducer,
+  [statusApi.reducerPath]: statusApi.reducer,
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export type RootState = ReturnType<typeof rootReducer>;

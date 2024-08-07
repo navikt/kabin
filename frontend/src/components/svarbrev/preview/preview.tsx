@@ -8,6 +8,7 @@ import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { defaultString } from '@app/functions/empty-string';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { SaksTypeEnum } from '@app/types/common';
 
@@ -75,7 +76,7 @@ const useUrl = () => {
         varsletBehandlingstidUnitTypeId:
           svarbrev.behandlingstid?.unitTypeId ?? svarbrevSetting.behandlingstidUnitTypeId,
         fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? null),
-        title: svarbrev.title,
+        title: svarbrev.title ?? DEFAULT_SVARBREV_NAME,
         customText: svarbrev.customText,
         typeId,
         klager: klager?.id ?? null,

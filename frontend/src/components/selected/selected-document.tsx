@@ -8,7 +8,7 @@ import { Journalposttype } from '@app/components/journalposttype/journalposttype
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 
 interface Props {

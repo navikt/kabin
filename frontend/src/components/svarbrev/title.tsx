@@ -25,9 +25,7 @@ export const SetTitle = () => {
       setTitle({ id, title: localTitle });
     }, 500);
 
-    return () => {
-      clearTimeout(timeout);
-    };
+    return () => clearTimeout(timeout);
   }, [id, localTitle, setTitle, svarbrev.title]);
 
   if (!canEdit) {

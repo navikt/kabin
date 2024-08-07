@@ -13,12 +13,6 @@ export interface IValidationSection {
   properties: IValidationError[];
 }
 
-export interface IApiValidationResponse {
-  status: number;
-  title: string;
-  sections: IValidationSection[];
-}
-
 export enum ValidationFieldNames {
   MOTTATT_KLAGEINSTANS = 'mottattKlageinstans',
   MOTTATT_VEDTAKSINSTANS = 'mottattVedtaksinstans',

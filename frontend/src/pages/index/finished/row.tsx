@@ -11,10 +11,10 @@ import { FinishedRegistrering, FinishingRegistrering } from '@app/redux/api/regi
 import { SaksTypeEnum } from '@app/types/common';
 
 export const FinishedRow = ({ registrering }: { registrering: FinishedRegistrering | FinishingRegistrering }) => {
-  const path = `/registrering/${registrering.id}`;
-
-  const { sakenGjelderValue, typeId, created, finished, overstyringer } = registrering;
+  const { id, sakenGjelderValue, typeId, overstyringer, created, finished } = registrering;
   const { ytelseId } = overstyringer;
+
+  const path = `/registrering/${id}`;
 
   return (
     <TableRow path={path}>

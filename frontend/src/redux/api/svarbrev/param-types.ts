@@ -1,4 +1,4 @@
-import { SuggestedReceiver } from '@app/pages/create/app-context/types';
+import { SuggestedReceiver } from '@app/pages/registrering/app-context/types';
 import { IAddress } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 

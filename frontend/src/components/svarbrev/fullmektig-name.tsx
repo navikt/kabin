@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { defaultString } from '@app/functions/empty-string';
@@ -11,29 +11,39 @@ const ID = 'svarbrev-fullmektig-name';
 const LABEL = 'Navn på fullmektig i brevet';
 
 export const SetFullmektig = () => {
-  const { id, overstyringer, svarbrev } = useRegistrering();
-  const { fullmektig } = overstyringer;
-  const [localName, setLocalName] = useState(svarbrev.fullmektigFritekst ?? fullmektig?.name ?? '');
-  const [setName] = useSetSvarbrevFullmektigFritekstMutation();
+  const { id, svarbrev } = useRegistrering();
+  const [setFullmektigFritekst] = useSetSvarbrevFullmektigFritekstMutation();
   const canEdit = useCanEdit();
 
-  useEffect(() => {
-    if (svarbrev.fullmektigFritekst === localName) {
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      setName({ id, fullmektigFritekst: localName });
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [id, localName, setName, svarbrev.fullmektigFritekst, svarbrev.title]);
+  const onChange = useCallback(
+    (fullmektigFritekst: string) => setFullmektigFritekst({ id, fullmektigFritekst }),
+    [id, setFullmektigFritekst],
+  );
 
   if (!canEdit) {
     return <ReadOnlyText label={LABEL} value={svarbrev.fullmektigFritekst} id={ID} />;
   }
+
+  return <DebouncedTextField onChange={onChange} />;
+};
+
+interface DebouncedTextFieldProps {
+  onChange: (value: string) => void;
+}
+
+const DebouncedTextField = ({ onChange }: DebouncedTextFieldProps) => {
+  const { overstyringer, svarbrev } = useRegistrering();
+  const { fullmektig } = overstyringer;
+  const defaultValue = fullmektig?.name ?? '';
+  const [value, setValue] = useState(defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? ''));
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [onChange, value]);
 
   return (
     <StyledTextField
@@ -41,10 +51,10 @@ export const SetFullmektig = () => {
       id={ID}
       htmlSize={45}
       size="small"
-      placeholder={fullmektig?.name ?? undefined}
-      value={localName}
-      onBlur={({ target }) => setLocalName(defaultString(target.value, fullmektig?.name ?? null) ?? '')}
-      onChange={({ target }) => setLocalName(target.value)}
+      placeholder={defaultValue}
+      value={value}
+      onBlur={({ target }) => setValue(defaultString(target.value, defaultValue))}
+      onChange={({ target }) => setValue(target.value)}
       autoComplete="off"
     />
   );

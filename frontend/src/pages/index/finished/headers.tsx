@@ -9,7 +9,9 @@ export const FinishedHeaders = () => (
         Type
       </Table.ColumnHeader>
 
-      <Table.HeaderCell>Ytelse</Table.HeaderCell>
+      <Table.ColumnHeader sortKey="ytelseId" sortable>
+        Ytelse
+      </Table.ColumnHeader>
 
       <Table.ColumnHeader sortKey="created" sortable>
         Opprettet

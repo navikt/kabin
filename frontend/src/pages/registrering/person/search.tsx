@@ -5,7 +5,7 @@ import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { PersonDetails } from '@app/pages/create/person/details';
+import { PersonDetails } from '@app/pages/registrering/person/details';
 import { useGetPartQuery } from '@app/redux/api/part';
 import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 

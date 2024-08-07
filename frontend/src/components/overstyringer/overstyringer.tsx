@@ -13,7 +13,7 @@ import {
   StyledSakenGjelderIcon,
 } from '@app/components/overstyringer/icons';
 import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshjemler';
-import { Tildeling } from '@app/components/overstyringer/tildeling';
+import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';

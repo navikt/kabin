@@ -11,7 +11,15 @@ export const SakenGjelder = ({ id }: Props) => {
   const { data: part } = useGetPartQuery(id ?? skipToken);
 
   if (id === null) {
-    return <i>Ingen</i>;
+    return (
+      <>
+        <Table.DataCell>
+          <i>Ingen</i>
+        </Table.DataCell>
+
+        <Table.DataCell />
+      </>
+    );
   }
 
   return (
@@ -39,6 +47,7 @@ export const SakenGjelder = ({ id }: Props) => {
               onKeyUp={(e) => e.stopPropagation()}
             />
           </Table.DataCell>
+
           <Table.DataCell>
             <CopyPartIdButton id={id} />
           </Table.DataCell>

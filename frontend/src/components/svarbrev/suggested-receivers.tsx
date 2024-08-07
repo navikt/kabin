@@ -7,7 +7,7 @@ import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svar
 import { getTypeNames } from '@app/components/svarbrev/type-name';
 import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { isReceiver } from '@app/pages/create/app-context/types';
+import { isReceiver } from '@app/pages/registrering/app-context/types';
 import {
   useAddSvarbrevReceiverMutation,
   useChangeSvarbrevReceiverMutation,

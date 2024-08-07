@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 
 interface Props {
   url: string;

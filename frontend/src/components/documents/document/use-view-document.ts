@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { compareDocuments } from '@app/domain/document';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { KABIN_API_BASE_PATH } from '@app/simple-api-state/use-api';
 
 interface Props {

@@ -16,7 +16,7 @@ export const RegistreringLoader = ({ children }: Props) => {
   const { data, isLoading, isSuccess } = useGetRegistreringQuery(registreringId);
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader size="3xlarge" title="Laster registrering..." />;
   }
 
   if (!isSuccess) {

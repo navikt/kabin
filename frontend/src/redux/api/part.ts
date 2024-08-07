@@ -24,4 +24,4 @@ export const partApi = createApi({
   }),
 });
 
-export const { useGetPartQuery, useGetPartWithUtsendingskanalQuery } = partApi;
+export const { useLazyGetPartQuery, useGetPartQuery, useGetPartWithUtsendingskanalQuery } = partApi;

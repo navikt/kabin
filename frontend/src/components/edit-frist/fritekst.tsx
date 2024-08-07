@@ -1,4 +1,5 @@
 import { TextField, ToggleGroup } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
@@ -7,9 +8,18 @@ import {
 } from '@app/redux/api/svarbrev/svarbrev';
 
 export const Fritekst = () => {
+  const { id, svarbrev } = useRegistrering();
+  const [value, setValue] = useState<string>(svarbrev.customText ?? '');
   const [override] = useSetSvarbrevOverrideCustomTextMutation();
   const [setCustomText] = useSetSvarbrevCustomTextMutation();
-  const { id, svarbrev } = useRegistrering();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCustomText({ id, customText: value });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [id, setCustomText, value]);
 
   return (
     <>
@@ -27,8 +37,8 @@ export const Fritekst = () => {
         size="small"
         label="Fritekst"
         disabled={!svarbrev.overrideCustomText}
-        value={svarbrev.customText ?? ''}
-        onChange={({ target }) => setCustomText({ id, customText: target.value })}
+        value={value}
+        onChange={({ target }) => setValue(target.value)}
       />
     </>
   );

@@ -18,7 +18,7 @@ export const arkiverteDokumenterApi = createApi({
   endpoints: (builder) => ({
     getArkiverteDokumenter: builder.query<{ dokumenter: IArkivertDocument[] }, string>({
       query: (idnummer) => ({
-        url: '/arkivertedokumenter?antall=50000',
+        url: '/arkivertedokumenter',
         method: 'POST',
         body: { idnummer },
       }),
@@ -88,7 +88,6 @@ export const arkiverteDokumenterApi = createApi({
 export const {
   useGetArkiverteDokumenterQuery,
   useLazyGetArkiverteDokumenterQuery,
-  usePrefetch,
   useGetArkivertDokumentQuery,
   useSetArkivertDokumentTitleMutation,
 } = arkiverteDokumenterApi;

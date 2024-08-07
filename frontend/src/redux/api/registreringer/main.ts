@@ -1,4 +1,5 @@
 import { formatISO } from 'date-fns';
+import { CreateRegistreringParams, FinishRegistreringParams } from '@app/redux/api/registreringer/param-types';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import {
   DraftRegistrering,
@@ -19,10 +20,11 @@ import { FerdigstiltRegistreringResponse } from './response-types';
 
 const mainSlice = registreringApi.injectEndpoints({
   endpoints: (builder) => ({
-    createRegistrering: builder.mutation<DraftRegistrering, void>({
-      query: () => ({
+    createRegistrering: builder.mutation<DraftRegistrering, CreateRegistreringParams>({
+      query: (body) => ({
         url: '/registreringer',
         method: 'POST',
+        body,
       }),
       onQueryStarted: async (_, { queryFulfilled }) => {
         const { data } = await queryFulfilled;
@@ -44,16 +46,17 @@ const mainSlice = registreringApi.injectEndpoints({
       },
     }),
 
-    finishRegistrering: builder.mutation<FerdigstiltRegistreringResponse, string>({
-      query: (id) => ({
+    finishRegistrering: builder.mutation<FerdigstiltRegistreringResponse, FinishRegistreringParams>({
+      query: ({ id }) => ({
         url: `/registreringer/${id}/ferdigstill`,
         method: 'POST',
       }),
-      onQueryStarted: async (id, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, typeId }, { queryFulfilled }) => {
         const now = formatISO(new Date());
 
         const optimisticUpdate: UpdateFn<Registrering, FinishingRegistrering | FinishedRegistrering> = (draft) => ({
           ...draft,
+          typeId,
           finished: now,
           modified: now,
         });
@@ -65,7 +68,7 @@ const mainSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, ...data });
+          const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, typeId, ...data });
 
           updateRegistrering(id, update);
           removeUferdigRegistrering(id);
