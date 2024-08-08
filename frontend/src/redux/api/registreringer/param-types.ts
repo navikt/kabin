@@ -28,5 +28,8 @@ export interface SearchPartWithUtsendingskanalParams {
 
 export interface FinishRegistreringParams {
   id: string;
+  sakenGjelderValue: string;
+  journalpostId: string;
   typeId: RegistreringType;
+  mulighet: string;
 }

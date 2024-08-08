@@ -1,6 +1,5 @@
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IAddress, IPart, RegistreringType } from '@app/types/common';
-import { FagsystemId } from '@app/types/mulighet';
 import { HandlingEnum } from '@app/types/receiver';
 
 export interface BaseRegistrering {
@@ -8,7 +7,7 @@ export interface BaseRegistrering {
   sakenGjelderValue: string | null;
   journalpostId: string | null;
   typeId: RegistreringType | null; // Samme type-IDer som i Kodeverket.
-  mulighet: MulighetId | null;
+  mulighet: string | null;
   willCreateNewJournalpost: boolean;
   overstyringer: Overstyringer;
   svarbrev: Svarbrev;
@@ -28,7 +27,10 @@ export interface DraftRegistrering extends BaseRegistrering {
 }
 
 export interface FinishedRegistrering extends BaseRegistrering {
+  sakenGjelderValue: string;
+  journalpostId: string;
   typeId: RegistreringType; // Samme type-IDer som i Kodeverket.
+  mulighet: string;
   /** When the registration was finished.
    * @type: DateTime
    */
@@ -66,7 +68,7 @@ export interface Svarbrev {
   send: boolean | null;
   overrideBehandlingstid: boolean;
   behandlingstid: Behandlingstid | null;
-  calculatedFrypiist: string | null;
+  calculatedFrist: string | null;
   fullmektigFritekst: string | null;
   receivers: Receiver[];
   title: string; // default DEFAULT_SVARBREV_NAME
@@ -77,12 +79,6 @@ export interface Svarbrev {
 export interface Receiver {
   id: string;
   part: IPart;
-  handling: HandlingEnum;
+  handling: HandlingEnum | null;
   overriddenAddress: IAddress | null;
-}
-
-export interface MulighetId {
-  id: string;
-  originalFagsystemId: string;
-  currentFagsystemId: FagsystemId;
 }

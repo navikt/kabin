@@ -8,12 +8,3 @@ export const useJournalpost = () => {
 
   return { journalpost: data, ...rest };
 };
-
-// export const useJournalpost = () => {
-//   const { journalpostId } = useRegistrering();
-//   const { journalpost, ...rest } = useGetArkiverteDokumenterQuery(journalpostId ?? skipToken, {
-//     selectFromResult: ({ data }) => ({ journalpost: data?.dokumenter.find((d) => d.journalpostId === journalpostId) }),
-//   });
-
-//   return { journalpost, ...rest };
-// };

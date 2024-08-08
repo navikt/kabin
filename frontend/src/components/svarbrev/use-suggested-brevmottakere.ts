@@ -22,7 +22,7 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
       return [];
     }
 
-    const existingRecipients = svarbrev.receivers
+    const existing = svarbrev.receivers
       .map((r) => {
         const typeList = [
           r.part.id === klager?.id ? ReceiverType.KLAGER : null,
@@ -44,7 +44,7 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
       partToPartRecipient(fullmektig, ReceiverType.FULLMEKTIG),
     ]
       .filter(isNotNull)
-      .concat(existingRecipients)
+      .concat(existing)
       .reduce<PartSuggestedReceiver[]>((acc, curr) => {
         const found = acc.find(({ part }) => part.id === curr.part.id);
 
@@ -59,7 +59,7 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
         return acc;
       }, [])
       .map((sm) => {
-        const recipient = existingRecipients.find((m) => m.part.id === sm.part.id);
+        const recipient = existing.find((m) => m.part.id === sm.part.id);
 
         return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
       });

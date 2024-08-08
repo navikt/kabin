@@ -15,6 +15,7 @@ interface SetDokumenttittelParams extends JournalpostId {
 export const arkiverteDokumenterApi = createApi({
   reducerPath: 'arkiverteDokumenterApi',
   baseQuery: KABIN_API_BASE_QUERY,
+  keepUnusedDataFor: 60 * 60 * 1, // 1 hour
   endpoints: (builder) => ({
     getArkiverteDokumenter: builder.query<{ dokumenter: IArkivertDocument[] }, string>({
       query: (idnummer) => ({
@@ -34,6 +35,7 @@ export const arkiverteDokumenterApi = createApi({
     }),
 
     getArkivertDokument: builder.query<IArkivertDocument, string>({
+      keepUnusedDataFor: Infinity,
       query: (id) => `/arkivertedokumenter/${id}`,
     }),
 

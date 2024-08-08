@@ -73,6 +73,7 @@ export const PersonSearch = ({ onDone }: Props) => {
         autoCorrect="off"
         autoCapitalize="off"
         autoSave="off"
+        id="sakengjelder"
       />
 
       {isValid && search !== skipToken ? (

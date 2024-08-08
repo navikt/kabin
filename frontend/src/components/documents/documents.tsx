@@ -1,10 +1,11 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { CardMedium } from '@app/components/card/card';
 import { DocumentTable } from '@app/components/documents/document-table';
+import { LoadingDocuments } from '@app/components/documents/loading-documents';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedDocument } from '@app/components/selected/selected-document';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -36,7 +37,7 @@ export const Dokumenter = () => {
   }
 
   return (
-    <CardMedium labelledBy="documents-heading">
+    <CardMedium labelledBy="documents-heading" id="documents">
       <Header>
         <Heading size="small" level="1" id="documents-heading">
           Velg journalpost
@@ -78,11 +79,7 @@ interface ContentProps {
 
 const Content = ({ dokumenter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return (
-      <Placeholder>
-        <Loader size="3xlarge" title="Laster..." />
-      </Placeholder>
-    );
+    return <LoadingDocuments />;
   }
 
   if (dokumenter === undefined) {

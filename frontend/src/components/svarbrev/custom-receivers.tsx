@@ -4,17 +4,13 @@ import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { receiverStyle } from '@app/components/svarbrev/address/layout';
-import { Options } from '@app/components/svarbrev/options';
 import { EditPart } from '@app/components/svarbrev/part/edit-part';
-import { StyledBrevmottaker, StyledRecipientContent } from '@app/components/svarbrev/styled-components';
+import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-optons-warning';
+import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/styled-components';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { Receiver } from '@app/redux/api/registreringer/types';
-import {
-  useAddSvarbrevReceiverMutation,
-  useChangeSvarbrevReceiverMutation,
-  useRemoveSvarbrevReceiverMutation,
-} from '@app/redux/api/svarbrev/svarbrev';
-import { IAddress, IdType } from '@app/types/common';
+import { useAddSvarbrevReceiverMutation, useRemoveSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
+import { IdType } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
 interface Props {
@@ -23,19 +19,17 @@ interface Props {
 
 export const CustomReceivers = ({ receivers }: Props) => {
   const id = useRegistreringId();
-  const [addRecipient] = useAddSvarbrevReceiverMutation();
+  const [add] = useAddSvarbrevReceiverMutation();
 
   return (
     <section>
-      <Label size="small" htmlFor="extra-recipients">
+      <Label size="small" htmlFor="extra-receivers">
         Ekstra mottakere
       </Label>
       <EditPart
         isLoading={false}
-        id="extra-recipients"
-        onChange={(part) =>
-          addRecipient({ id, receiver: { part, handling: HandlingEnum.AUTO, overriddenAddress: null } })
-        }
+        id="extra-receivers"
+        onChange={(part) => add({ id, receiver: { part, handling: HandlingEnum.AUTO, overriddenAddress: null } })}
         buttonText="Legg til mottaker"
       />
       <Receivers receivers={receivers} />
@@ -50,10 +44,6 @@ interface ReceiversProps {
 const Receivers = ({ receivers }: ReceiversProps) => {
   const registreringId = useRegistreringId();
   const [remove, { isLoading: isRemoving }] = useRemoveSvarbrevReceiverMutation();
-  const [change] = useChangeSvarbrevReceiverMutation();
-
-  const onChange = (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) =>
-    change({ receiverId, id: registreringId, handling, overriddenAddress });
 
   if (receivers.length === 0) {
     return null;
@@ -66,7 +56,7 @@ const Receivers = ({ receivers }: ReceiversProps) => {
 
         return (
           <StyledReceiver key={part.id} aria-label={part.name ?? part.id}>
-            <StyledRecipientContent>
+            <StyledReceiverContent>
               <StyledBrevmottaker>
                 <StyledReceiverInnerContent>
                   <Tooltip content="Fjern mottaker">
@@ -89,14 +79,8 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                   <PartStatusList statusList={part.statusList} />
                 </StyledReceiverInnerContent>
               </StyledBrevmottaker>
-            </StyledRecipientContent>
-            <Options
-              part={part}
-              handling={handling}
-              overriddenAddress={overriddenAddress}
-              onChange={onChange}
-              id={id}
-            />
+            </StyledReceiverContent>
+            <ShowOptionsOrWarning part={part} handling={handling} overriddenAddress={overriddenAddress} />
           </StyledReceiver>
         );
       })}

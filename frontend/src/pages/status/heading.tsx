@@ -11,7 +11,7 @@ interface StatusHeadingProps {
   headingText: string;
   alertText: string;
   type: SaksTypeEnum;
-  behandlingId: string | null;
+  behandlingId: string;
   registreringId: string;
 }
 
@@ -38,18 +38,19 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
       >
         Tilbake til forsiden
       </Button>
+
       <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary" size="small">
         Åpne Kabal søk
       </ExternalLinkButton>
-      {behandlingId === null ? null : (
-        <ExternalLinkButton
-          href={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
-          variant="secondary"
-          size="small"
-        >
-          Åpne behandling i Kabal
-        </ExternalLinkButton>
-      )}
+
+      <ExternalLinkButton
+        href={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
+        variant="secondary"
+        size="small"
+      >
+        Åpne behandling i Kabal
+      </ExternalLinkButton>
+
       <Button
         as={RouterLink}
         to={`/registrering/${registreringId}`}

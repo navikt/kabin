@@ -25,8 +25,8 @@ export const Svarbrev = ({ svarbrev, id }: Props) => (
       <Section aria-labelledby="svarbrevinfo-mottakere">
         <Label id="svarbrevinfo-mottakere">Mottakere</Label>
         <StyledList>
-          {svarbrev.receivers.map((recipient) => (
-            <Part key={recipient.part.id} {...recipient} />
+          {svarbrev.receivers.map((receiver) => (
+            <Part key={receiver.part.id} {...receiver} />
           ))}
         </StyledList>
       </Section>
@@ -81,7 +81,7 @@ const Part = ({ part, overriddenAddress, handling }: Receiver) => {
   );
 };
 
-const getUtsendingskanal = (handling: HandlingEnum, defaultUtsendingskanal: Utsendingskanal) => {
+const getUtsendingskanal = (handling: HandlingEnum | null, defaultUtsendingskanal: Utsendingskanal) => {
   switch (handling) {
     case HandlingEnum.AUTO:
       return UTSENDINGSKANAL[defaultUtsendingskanal];
@@ -89,6 +89,8 @@ const getUtsendingskanal = (handling: HandlingEnum, defaultUtsendingskanal: Utse
       return UTSENDINGSKANAL[Utsendingskanal.SENTRAL_UTSKRIFT];
     case HandlingEnum.LOCAL_PRINT:
       return UTSENDINGSKANAL[Utsendingskanal.LOKAL_UTSKRIFT];
+    case null:
+      return 'Ikke tilgjengelig';
   }
 };
 

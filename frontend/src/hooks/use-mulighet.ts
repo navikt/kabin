@@ -27,12 +27,12 @@ export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
 
   const { ankemulighet } = useGetAnkemuligheterQuery(
     hasMulighet && hasSakenGJelder && typeId === SaksTypeEnum.ANKE ? sakenGjelderValue : skipToken,
-    { selectFromResult: ({ data, ...rest }) => ({ ankemulighet: selectMulighet(data, mulighet?.id), ...rest }) },
+    { selectFromResult: ({ data, ...rest }) => ({ ankemulighet: selectMulighet(data, mulighet), ...rest }) },
   );
 
   const { klagemulighet } = useGetKlagemuligheterQuery(
     hasMulighet && hasSakenGJelder && typeId === SaksTypeEnum.KLAGE ? sakenGjelderValue : skipToken,
-    { selectFromResult: ({ data, ...rest }) => ({ klagemulighet: selectMulighet(data, mulighet?.id), ...rest }) },
+    { selectFromResult: ({ data, ...rest }) => ({ klagemulighet: selectMulighet(data, mulighet), ...rest }) },
   );
 
   if (typeId === SaksTypeEnum.ANKE) {
@@ -48,6 +48,6 @@ export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
 
 const selectMulighet = <T extends IKlagemulighet | IAnkemulighet>(
   muligheter: T[] | undefined,
-  mulighetId: string | undefined,
+  mulighetId: string | null,
 ): T | undefined =>
-  mulighetId === undefined || muligheter === undefined ? undefined : muligheter.find((m) => m.id === mulighetId);
+  mulighetId === null || muligheter === undefined ? undefined : muligheter.find((m) => m.id === mulighetId);

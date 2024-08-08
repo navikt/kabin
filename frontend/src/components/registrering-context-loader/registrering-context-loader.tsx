@@ -25,7 +25,11 @@ const RegistreringLoader = ({ children }: Props) => {
   const { data, isLoading, isSuccess } = useGetRegistreringQuery(registreringId);
 
   if (isLoading) {
-    return <Loader size="3xlarge" title="Laster registrering..." />;
+    return (
+      <LoaderWrapper>
+        <Loader size="3xlarge" title="Laster registrering..." />;
+      </LoaderWrapper>
+    );
   }
 
   if (!isSuccess) {
@@ -42,4 +46,9 @@ const PageWrapper = styled.div`
   align-items: center;
   width: 100%;
   overflow: auto;
+`;
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  height: 100%;
 `;

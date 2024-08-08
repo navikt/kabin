@@ -1,10 +1,11 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
 import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
+import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
@@ -126,11 +127,7 @@ interface ContentProps {
 
 const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return (
-      <Placeholder>
-        <Loader size="3xlarge" title="Laster..." />
-      </Placeholder>
-    );
+    return <LoadingAnkeMuligheter />;
   }
 
   if (ankemuligheter === undefined) {

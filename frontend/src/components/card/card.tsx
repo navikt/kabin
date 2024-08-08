@@ -4,34 +4,35 @@ import { styled } from 'styled-components';
 interface Props extends CardContentProps {
   className?: string;
   labelledBy?: string;
+  id?: string;
 }
 
-export const Card = ({ className, labelledBy, ...cardContentProps }: Props) => (
-  <StyledCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
+export const Card = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
+  <StyledCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
     <CardContent {...cardContentProps} />
   </StyledCard>
 );
 
-export const CardSmall = ({ className, labelledBy, ...cardContentProps }: Props) => (
-  <StyledSmallCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
+export const CardSmall = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
+  <StyledSmallCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
     <CardContent {...cardContentProps} />
   </StyledSmallCard>
 );
 
-export const CardMedium = ({ className, labelledBy, ...cardContentProps }: Props) => (
-  <StyledMediumCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
+export const CardMedium = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
+  <StyledMediumCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
     <CardContent {...cardContentProps} />
   </StyledMediumCard>
 );
 
-export const CardLarge = ({ className, labelledBy, ...cardContentProps }: Props) => (
-  <StyledLargeCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
+export const CardLarge = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
+  <StyledLargeCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
     <CardContent {...cardContentProps} />
   </StyledLargeCard>
 );
 
-export const CardFullHeight = ({ className, labelledBy, ...cardContentProps }: Props) => (
-  <StyledFullHeightCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy}>
+export const CardFullHeight = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
+  <StyledFullHeightCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
     <CardContent {...cardContentProps} />
   </StyledFullHeightCard>
 );

@@ -2,21 +2,27 @@
 import { formatISO } from 'date-fns';
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import { Behandlingstid } from '@app/redux/api/registreringer/types';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/updates';
 import {
   AddReceiverParams,
   ChangeReceiverParams,
   RemoveReceiverParams,
+  SetCustomTextParams,
   SetOverrideCustomTextParams,
   SetSendParams,
+  SetSvarbrevBehandlingstidParams,
+  SetSvarbrevOverrideBehandlingstidParams,
+  SetSvarbrevTitleParams,
 } from '@app/redux/api/svarbrev/param-types';
 import {
   ReceiverResponse,
-  SetCustomTextResponse,
   SetOverrideCustomTextResponse,
-  SetSendResponse,
-  SetTitleResponse,
+  SetSvarbrevBehandlingstidResponse,
+  SetSvarbrevCustomTextResponse,
+  SetSvarbrevFullmektigFritekst,
+  SetSvarbrevOverrideBehandlingstidResponse,
+  SetSvarbrevSendResponse,
+  SetSvarbrevTitleResponse,
 } from '@app/redux/api/svarbrev/response-types';
 
 export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
@@ -24,7 +30,7 @@ export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
 const svarbrevSlice = registreringApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    setSvarbrevSend: builder.mutation<SetSendResponse, SetSendParams>({
+    setSvarbrevSend: builder.mutation<SetSvarbrevSendResponse, SetSendParams>({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/send`,
         method: 'PUT',
@@ -41,7 +47,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setSvarbrevBehandlingstid: builder.mutation<void, { id: string } & Behandlingstid>({
+    setSvarbrevBehandlingstid: builder.mutation<SetSvarbrevBehandlingstidResponse, SetSvarbrevBehandlingstidParams>({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/behandlingstid`,
         method: 'PUT',
@@ -51,14 +57,17 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, behandlingstid } }));
 
         try {
-          await queryFulfilled;
-          // TODO: Backend should return modified date and side-effects.
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
       },
     }),
-    setSvarbrevFullmektigFritekst: builder.mutation<void, { id: string; fullmektigFritekst: string | null }>({
+    setSvarbrevFullmektigFritekst: builder.mutation<
+      SetSvarbrevFullmektigFritekst,
+      { id: string; fullmektigFritekst: string | null }
+    >({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/fullmektig-fritekst`,
         method: 'PUT',
@@ -68,8 +77,8 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, fullmektigFritekst } }));
 
         try {
-          await queryFulfilled;
-          // TODO: Backend should return modified date and side-effects.
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -143,7 +152,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setSvarbrevTitle: builder.mutation<SetTitleResponse, { id: string; title: string }>({
+    setSvarbrevTitle: builder.mutation<SetSvarbrevTitleResponse, SetSvarbrevTitleParams>({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/title`,
         method: 'PUT',
@@ -164,7 +173,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setSvarbrevCustomText: builder.mutation<SetCustomTextResponse, { id: string; customText: string }>({
+    setSvarbrevCustomText: builder.mutation<SetSvarbrevCustomTextResponse, SetCustomTextParams>({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/custom-text`,
         method: 'PUT',
@@ -181,7 +190,10 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setSvarbrevOverrideBehandlingstid: builder.mutation<void, { id: string; overrideBehandlingstid: boolean }>({
+    setSvarbrevOverrideBehandlingstid: builder.mutation<
+      SetSvarbrevOverrideBehandlingstidResponse,
+      SetSvarbrevOverrideBehandlingstidParams
+    >({
       query: ({ id, ...body }) => ({
         url: `/registreringer/${id}/svarbrev/override-behandlingstid`,
         method: 'PUT',
@@ -194,8 +206,8 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }));
 
         try {
-          await queryFulfilled;
-          // TODO: Backend should return modified date and side-effects.
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }

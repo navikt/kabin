@@ -12,9 +12,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 
 interface SetMulighetPayload {
-  mulighetId: string;
-  originalFagsystemId: string;
-  currentFagsystemId: FagsystemId;
+  id: string;
 }
 
 const mutationsSlice = registreringApi.injectEndpoints({
@@ -78,17 +76,12 @@ const mutationsSlice = registreringApi.injectEndpoints({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
-        body: {
-          mulighetId: mulighet.id,
-          originalFagsystemId: mulighet.originalFagsystemId,
-          currentFagsystemId: mulighet.currentFagsystemId,
-        } satisfies SetMulighetPayload,
+        body: { id: mulighet.id } satisfies SetMulighetPayload,
       }),
       onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
-        const { currentFagsystemId, originalFagsystemId } = mulighet;
         const undo = updateDrafts(id, (draft) => ({
           ...draft,
-          mulighet: { currentFagsystemId, originalFagsystemId, id: mulighet.id },
+          mulighet: mulighet.id,
         }));
 
         try {
@@ -104,11 +97,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
-        body: {
-          mulighetId: mulighet.id,
-          originalFagsystemId: mulighet.originalFagsystemId,
-          currentFagsystemId: mulighet.currentFagsystemId,
-        } satisfies SetMulighetPayload,
+        body: { id: mulighet.id } satisfies SetMulighetPayload,
       }),
       onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
         const shouldSetYtelseId =
@@ -116,11 +105,9 @@ const mutationsSlice = registreringApi.injectEndpoints({
           mulighet.currentFagsystemId === FagsystemId.KABAL &&
           mulighet.ytelseId !== null;
 
-        const { currentFagsystemId, originalFagsystemId } = mulighet;
-
         const undo = updateDrafts(id, (draft) => ({
           ...draft,
-          mulighet: { currentFagsystemId, originalFagsystemId, id: mulighet.id },
+          mulighet: mulighet.id,
           overstyringer: {
             ...draft.overstyringer,
             ytelseId: shouldSetYtelseId ? mulighet.ytelseId : draft.overstyringer.ytelseId,

@@ -48,10 +48,10 @@ const mainSlice = registreringApi.injectEndpoints({
         url: `/registreringer/${id}/ferdigstill`,
         method: 'POST',
       }),
-      onQueryStarted: async ({ id, typeId }, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, ...rest }, { queryFulfilled }) => {
         const { data } = await queryFulfilled;
 
-        const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, typeId, ...data });
+        const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, ...rest, ...data });
 
         updateRegistrering(id, update);
         removeUferdigRegistrering(id);

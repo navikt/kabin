@@ -1,9 +1,9 @@
 import { styled } from 'styled-components';
-import { CustomReceivers } from '@app/components/svarbrev/custom-recipients';
-import { useSuggestedBrevmottakere } from '@app/components/svarbrev/get-suggested-part-recipients';
-import { ReadOnlyReceivers } from '@app/components/svarbrev/read-only-recipients';
+import { CustomReceivers } from '@app/components/svarbrev/custom-receivers';
+import { ReadOnlyReceivers } from '@app/components/svarbrev/read-only-receivers';
 import { SingleReceiver } from '@app/components/svarbrev/single-receiver';
 import { SuggestedReceivers } from '@app/components/svarbrev/suggested-receivers';
+import { useSuggestedBrevmottakere } from '@app/components/svarbrev/use-suggested-brevmottakere';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 
@@ -16,19 +16,19 @@ export const Receivers = () => {
     return <ReadOnlyReceivers />;
   }
 
-  const customRecipients = svarbrev.receivers.filter((m) => suggestedReceivers.every((s) => s.part.id !== m.part.id));
+  const customReceivers = svarbrev.receivers.filter((m) => suggestedReceivers.every((s) => s.part.id !== m.part.id));
   const [receiver] = suggestedReceivers;
-  const onlyOneRecipient = suggestedReceivers.length === 1 && customRecipients.length === 0 && receiver !== undefined;
+  const onlyOneReceiver = suggestedReceivers.length === 1 && customReceivers.length === 0 && receiver !== undefined;
 
   return (
     <Content>
-      {onlyOneRecipient ? (
+      {onlyOneReceiver ? (
         <SingleReceiver receiver={receiver} />
       ) : (
         <SuggestedReceivers suggestedReceivers={suggestedReceivers} />
       )}
 
-      <CustomReceivers receivers={customRecipients} />
+      <CustomReceivers receivers={customReceivers} />
     </Content>
   );
 };

@@ -10,7 +10,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
-import { MulighetId } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet } from '@app/types/mulighet';
 
@@ -50,7 +49,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     }
   }, [ankemulighet.typeId]);
 
-  const isSelected = mulighet?.id === ankemulighet.id;
+  const isSelected = mulighet === ankemulighet.id;
 
   const isValid = useMemo(() => {
     if (journalpost === undefined) {
@@ -72,7 +71,7 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
         return;
       }
 
-      if (mulighet === null || !isSameMulighet(mulighet, ankemulighet)) {
+      if (mulighet === null || mulighet !== ankemulighet.id) {
         setAnkemulighet({ id, mulighet: ankemulighet });
       }
     },
@@ -108,9 +107,6 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     </StyledTableRow>
   );
 };
-
-const isSameMulighet = (a: MulighetId, b: MulighetId) =>
-  a.id === b.id && a.originalFagsystemId === b.originalFagsystemId;
 
 const NowrapTag = styled(Tag)`
   white-space: nowrap;

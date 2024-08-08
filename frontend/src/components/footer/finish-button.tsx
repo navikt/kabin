@@ -1,5 +1,5 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorSummary } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -38,7 +38,7 @@ export const FinishButton = () => {
 
 const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const navigate = useNavigate();
-  const { id, typeId, svarbrev } = useRegistrering();
+  const { id, typeId, journalpostId, mulighet, sakenGjelderValue, svarbrev } = useRegistrering();
   const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
@@ -49,10 +49,27 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
 
   const text = getText(typeId, svarbrev?.send === true);
 
+  const disabled = journalpostId === null || mulighet === null || sakenGjelderValue === null;
+
   return (
     <StyledConfirm ref={ref}>
       <Alert size="small" variant="info" inline>
-        {text}
+        <BodyShort size="small" spacing>
+          {text}
+        </BodyShort>
+        {disabled ? (
+          <ErrorSummary size="small" heading="Følgende må fylles ut først">
+            {sakenGjelderValue === null ? (
+              <ErrorSummary.Item href="#sakengjelder">Du må velge en person.</ErrorSummary.Item>
+            ) : null}
+            {journalpostId === null ? (
+              <ErrorSummary.Item href="#documents">Du må velge en journalpost.</ErrorSummary.Item>
+            ) : null}
+            {mulighet === null ? (
+              <ErrorSummary.Item href="#mulighet">Du må velge en mulighet.</ErrorSummary.Item>
+            ) : null}
+          </ErrorSummary>
+        ) : null}
       </Alert>
       <Buttons>
         <Button
@@ -61,10 +78,14 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
           icon={<CheckmarkIcon aria-hidden />}
           loading={isLoading}
           onClick={async () => {
-            await finish({ id, typeId }).unwrap();
+            if (disabled) {
+              return;
+            }
+
+            await finish({ id, typeId, journalpostId, mulighet, sakenGjelderValue }).unwrap();
             navigate(`/registrering/${id}/status`, { replace: true });
           }}
-          disabled={isLoading}
+          disabled={disabled}
         >
           Bekreft
         </Button>
@@ -82,7 +103,7 @@ const StyledConfirm = styled.div`
   border-radius: 4px;
   position: absolute;
   padding: var(--a-spacing-4);
-  width: 300px;
+  width: 400px;
   bottom: 100%;
   display: flex;
   flex-direction: column;

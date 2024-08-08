@@ -6,12 +6,16 @@ import { Receiver } from '@app/redux/api/registreringer/types';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
-const getHandlingLabel = (handling: HandlingEnum.LOCAL_PRINT | HandlingEnum.CENTRAL_PRINT) => {
+const getHandlingLabel = (handling: HandlingEnum | null, utsendingskanal: Utsendingskanal) => {
   switch (handling) {
+    case HandlingEnum.AUTO:
+      return UTSENDINGSKANAL[utsendingskanal];
     case HandlingEnum.CENTRAL_PRINT:
       return UTSENDINGSKANAL[Utsendingskanal.SENTRAL_UTSKRIFT];
     case HandlingEnum.LOCAL_PRINT:
       return UTSENDINGSKANAL[Utsendingskanal.LOKAL_UTSKRIFT];
+    case null:
+      return 'Ikke tilgjengelig';
   }
 };
 
@@ -19,7 +23,7 @@ const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
   const { handling } = receiver;
 
   const isAutoHandling = handling === HandlingEnum.AUTO;
-  const channelLabel = isAutoHandling ? UTSENDINGSKANAL[receiver.part.utsendingskanal] : getHandlingLabel(handling);
+  const channelLabel = getHandlingLabel(handling, receiver.part.utsendingskanal);
 
   const addressIsOverridden = receiver.overriddenAddress !== null;
   const addressLines = useAddressLines(addressIsOverridden ? receiver.overriddenAddress : receiver.part.address);

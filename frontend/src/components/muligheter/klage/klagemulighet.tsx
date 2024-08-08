@@ -21,17 +21,17 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
   const vedtaksenhetName = useVedtaksenhetName(klagemulighet.klageBehandlendeEnhet);
   const fagsystemName = useFagsystemName(klagemulighet.originalFagsystemId);
 
-  const isSelected = mulighet?.id === klagemulighet.id;
+  const isSelected = mulighet === klagemulighet.id;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (!isLoading && mulighet?.id !== klagemulighet.id) {
+      if (!isLoading && mulighet !== klagemulighet.id) {
         setKlagemulighet({ id, mulighet: klagemulighet });
       }
     },
-    [isLoading, klagemulighet, id, mulighet?.id, setKlagemulighet],
+    [isLoading, klagemulighet, id, mulighet, setKlagemulighet],
   );
 
   return (

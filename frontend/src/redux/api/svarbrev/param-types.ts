@@ -1,4 +1,5 @@
 import { SuggestedReceiver } from '@app/pages/registrering/app-context/types';
+import { Behandlingstid } from '@app/redux/api/registreringer/types';
 import { IAddress } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
@@ -24,7 +25,24 @@ export interface RemoveReceiverParams {
   receiverId: string;
 }
 
+export interface SetSvarbrevTitleParams {
+  id: string;
+  title: string;
+}
+
+export type SetSvarbrevBehandlingstidParams = { id: string } & Behandlingstid;
+
 export interface SetOverrideCustomTextParams {
   id: string;
   overrideCustomText: boolean;
+}
+
+export interface SetCustomTextParams {
+  id: string;
+  customText: string;
+}
+
+export interface SetSvarbrevOverrideBehandlingstidParams {
+  id: string;
+  overrideBehandlingstid: boolean;
 }

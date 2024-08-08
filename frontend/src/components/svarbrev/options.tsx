@@ -8,7 +8,11 @@ import { Receiver } from '@app/redux/api/registreringer/types';
 import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 
-interface Props extends Receiver {
+interface Props {
+  part: Receiver['part'];
+  id: Receiver['id'];
+  overriddenAddress: Receiver['overriddenAddress'];
+  handling: HandlingEnum;
   onChange: (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) => void;
 }
 
