@@ -7,15 +7,15 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetLatestYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overstyringer';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 
 const ID = ValidationFieldNames.HJEMMEL_ID_LIST;
 
 export const Innsendingshjemler = () => {
   const { id, typeId, overstyringer } = useRegistrering();
-  const { data = [] } = useLatestYtelser();
+  const { data = [] } = useGetLatestYtelserQuery();
   const { hjemmelIdList } = overstyringer;
   const [setHjemmelIdList] = useSetHjemmelIdListMutation();
   const canEdit = useCanEdit();

@@ -2,6 +2,11 @@ import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
+import { Header } from '@app/components/oppgaver/header';
+import { useParams } from '@app/components/oppgaver/hooks';
+import { Row } from '@app/components/oppgaver/row';
+import { SkeletonTable } from '@app/components/oppgaver/skeleton-table';
+import { TableHeaders } from '@app/components/oppgaver/table-headers';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -9,11 +14,6 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Header } from './header';
-import { useParams } from './hooks';
-import { Row } from './row';
-import { SkeletonTable } from './skeleton-table';
-import { TableHeaders } from './table-headers';
 
 export const Oppgaver = () => {
   const canEdit = useCanEdit();

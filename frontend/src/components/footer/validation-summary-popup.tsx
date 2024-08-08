@@ -5,13 +5,13 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
+import { StyledHeader, ValidationSummary } from '@app/components/footer/validation-summary';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { StyledHeader, ValidationSummary } from './validation-summary';
 
 export const ValidationSummaryPopup = () => {
   const id = useRegistreringId();
-  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: id });
+  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
 
   const hasError = error !== undefined;
   const [isOpen, setIsOpen] = useState(hasError);

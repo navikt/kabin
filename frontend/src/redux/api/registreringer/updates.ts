@@ -1,9 +1,9 @@
 import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
 import { queriesSlice } from '@app/redux/api/registreringer/queries';
+import { RegistreringTagType } from '@app/redux/api/registreringer/registrering';
 import {
   DraftRegistrering,
   FinishedRegistrering,
-  FinishingRegistrering,
   Overstyringer,
   Registrering,
   Svarbrev,
@@ -29,8 +29,11 @@ export const updateDrafts = (id: string, update: UpdateFn<DraftRegistrering>): (
 export const updateRegistrering = (id: string, update: UpdateFn<Registrering>) =>
   reduxStore.dispatch(queriesSlice.util.updateQueryData('getRegistrering', id, update));
 
-export const setRegistrering = (id: string, data: Registrering | undefined) =>
-  reduxStore.dispatch(queriesSlice.util.updateQueryData('getRegistrering', id, () => data));
+export const removeRegistrering = (id: string) =>
+  reduxStore.dispatch(queriesSlice.util.invalidateTags([{ id, type: RegistreringTagType.REGISTRERING }]));
+
+export const setRegistrering = (id: string, data: Registrering) =>
+  reduxStore.dispatch(queriesSlice.util.upsertQueryData('getRegistrering', id, data));
 
 // Uferdig registrering
 
@@ -57,10 +60,7 @@ export const removeUferdigRegistrering = (id: string) =>
 
 // Ferdig registrering
 
-export const updateFerdigRegistrering = (
-  id: string,
-  update: UpdateFn<FinishedRegistrering | FinishingRegistrering, FinishedRegistrering | FinishingRegistrering>,
-) =>
+export const updateFerdigRegistrering = (id: string, update: UpdateFn<FinishedRegistrering, FinishedRegistrering>) =>
   reduxStore.dispatch(
     queriesSlice.util.updateQueryData('getFerdigeRegistreringer', undefined, (draft) =>
       draft.map((d) => (d.id === id ? update(d) : d)),
@@ -74,30 +74,15 @@ export const removeFerdigRegistrering = (id: string) =>
     ),
   );
 
-export const pessimisticOverstyringerUpdate = (
-  id: string,
-  modified: string,
-  overstyringer: Partial<Overstyringer>,
-  svarbrev: Partial<Svarbrev> = {},
-) =>
+interface PartialDraftRegistrering extends Partial<Omit<DraftRegistrering, 'overstyringer' | 'svarbrev'>> {
+  overstyringer?: Partial<Overstyringer>;
+  svarbrev?: Partial<Svarbrev>;
+}
+
+export const pessimisticUpdate = (id: string, response: PartialDraftRegistrering = {}) =>
   updateDrafts(id, (draft) => ({
     ...draft,
-    overstyringer: { ...draft.overstyringer, ...overstyringer },
-    svarbrev: { ...draft.svarbrev, ...svarbrev },
-    modified,
+    ...response,
+    overstyringer: { ...draft.overstyringer, ...response.overstyringer },
+    svarbrev: { ...draft.svarbrev, ...response.svarbrev },
   }));
-
-// reduxStore.dispatch(
-//   queriesSlice.util.updateQueryData('getRegistrering', id, (draft) => {
-//     if (isDraftRegistrering(draft)) {
-//       return {
-//         ...draft,
-//         overstyringer: { ...draft.overstyringer, ...overstyringer },
-//         svarbrev: { ...draft.svarbrev, ...svarbrev },
-//         modified,
-//       };
-//     }
-
-//     return draft;
-//   }),
-// );

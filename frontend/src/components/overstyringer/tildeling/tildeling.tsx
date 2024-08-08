@@ -8,6 +8,7 @@ import {
   StyledContainer,
   getState,
 } from '@app/components/overstyringer/styled-components';
+import { Content, useSaksbehandler, useSaksbehandlereParams } from '@app/components/overstyringer/tildeling/content';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -19,7 +20,6 @@ import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/o
 import { useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Content, useSaksbehandler, useSaksbehandlereParams } from './content';
 
 const ID = ValidationFieldNames.SAKSBEHANDLER;
 

@@ -15,4 +15,4 @@ export const statusApi = createApi({
   }),
 });
 
-export const { useGetKlageStatusQuery, useGetAnkeStatusQuery } = statusApi;
+export const { useGetKlageStatusQuery, useGetAnkeStatusQuery, usePrefetch } = statusApi;

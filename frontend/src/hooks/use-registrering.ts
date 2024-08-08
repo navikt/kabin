@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { RegistreringContext } from '@app/pages/registrering/registrering-context';
+import { RegistreringContext } from '@app/components/registrering-context-loader/registrering-context-loader';
 
 export const useRegistrering = () => {
   const registrering = useContext(RegistreringContext);

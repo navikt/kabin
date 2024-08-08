@@ -1,7 +1,7 @@
 import { Skeleton, Table } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
-import { Header } from './header';
-import { TableHeaders } from './table-headers';
+import { Header } from '@app/components/oppgaver/header';
+import { TableHeaders } from '@app/components/oppgaver/table-headers';
 
 export const SkeletonTable = () => (
   <Card>

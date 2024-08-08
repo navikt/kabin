@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
+import { DocumentTitle } from '@app/components/documents/document/document-title';
 import { EditableLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logiske-vedlegg-list';
 import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
+import { useViewDocument } from '@app/components/documents/document/use-view-document';
+import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
 import { IArkivertDocument, IVedlegg } from '@app/types/dokument';
-import { DocumentTitle } from './document-title';
-import { useViewDocument } from './use-view-document';
-import { ViewDocumentButton } from './view-document-button';
 
 interface Props {
   dokument: IArkivertDocument;

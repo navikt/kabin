@@ -21,6 +21,10 @@ export const NewRegistrering = () => {
       size="small"
       variant="simple"
       htmlSize={22}
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
+      spellCheck={false}
       onChange={async (value: string) => {
         const cleaned = value.replaceAll(' ', '');
         const isValid = idnr(cleaned).status === 'valid';

@@ -9,7 +9,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
-import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 
@@ -56,39 +55,33 @@ export const Svarbrev = () => (
 );
 
 const SvarbrevInput = () => {
-  const { sakenGjelderValue, typeId, svarbrev } = useRegistrering();
+  const { typeId, svarbrev, mulighet } = useRegistrering();
   const ytelseId = useYtelseId();
   const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
   );
-  const params =
-    sakenGjelderValue === null || ytelseId === null
-      ? skipToken
-      : { identifikator: sakenGjelderValue, sakenGjelderId: sakenGjelderValue, ytelseId };
-  const { data: sakenGjelder } = useGetPartWithUtsendingskanalQuery(params);
 
-  if (sakenGjelder === undefined) {
-    return <Loader title="Laster..." />;
+  if (typeId === null || svarbrev.send !== true) {
+    return null;
   }
 
-  if (typeId === null) {
-    return null;
+  if (mulighet === null) {
+    return (
+      <Card title="Svarbrev">
+        <Placeholder>
+          <EnvelopeOpenIcon aria-hidden />
+        </Placeholder>
+      </Card>
+    );
   }
 
   if (ytelseId === null) {
     return (
-      <>
-        <Row>
-          <Alert variant="info" size="small" inline>
-            Velg ytelse
-          </Alert>
-        </Row>
-        <Card title="Svarbrev">
-          <Placeholder>
-            <EnvelopeOpenIcon aria-hidden />
-          </Placeholder>
-        </Card>
-      </>
+      <Row>
+        <Alert variant="info" size="small" inline>
+          Velg ytelse
+        </Alert>
+      </Row>
     );
   }
 

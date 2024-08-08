@@ -10,7 +10,8 @@ export const DeleteButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const id = useRegistreringId();
 
-  const [, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id });
+  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: id + 'delete' });
+  const [, { isLoading: isFinishing }] = useDeleteRegistreringMutation({ fixedCacheKey: id + 'finish' });
 
   return (
     <DeleteContainer>
@@ -18,8 +19,8 @@ export const DeleteButton = () => {
         onClick={() => setShowConfirm(!showConfirm)}
         size="small"
         variant="danger"
-        disabled={isLoading}
-        loading={isLoading}
+        disabled={isDeleting || isFinishing}
+        loading={isDeleting}
       >
         Slett registrering
       </Button>
@@ -36,7 +37,7 @@ const Confirm = ({ close }: { close: () => void }) => {
 
   useOnClickOutside(close, ref);
 
-  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id });
+  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: id + 'delete' });
 
   return (
     <Container ref={ref}>

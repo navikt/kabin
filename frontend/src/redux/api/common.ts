@@ -44,7 +44,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
       return result;
     },
     {
-      maxRetries: 10,
+      maxRetries: 3,
       backoff: (attempt) => new Promise((resolve) => setTimeout(resolve, 1000 * attempt)),
     },
   );
@@ -52,13 +52,14 @@ const staggeredBaseQuery = (baseUrl: string) => {
 
 const API_PATH = '/api';
 
-export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
-
-const KABIN_API_BASE_PATH = '/api/kabin-api';
+export const KABIN_API_BASE_PATH = `${API_PATH}/kabin-api`;
 export const KABIN_API_BASE_QUERY = staggeredBaseQuery(KABIN_API_BASE_PATH);
 
-const KABAL_API_BASE_PATH = '/api/kabal-api';
+export const KABAL_API_BASE_PATH = `${API_PATH}/kabal-api`;
 export const KABAL_API_BASE_QUERY = staggeredBaseQuery(KABAL_API_BASE_PATH);
 
-const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
+export const INNSTILLINGER_BASE_PATH = `${API_PATH}/kabal-innstillinger`;
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PATH);
+
+const KODEVERK_BASE_PATH = `${API_PATH}/klage-kodeverk-api/kodeverk`;
+export const KODEVERK_BASE_QUERY = staggeredBaseQuery(KODEVERK_BASE_PATH);

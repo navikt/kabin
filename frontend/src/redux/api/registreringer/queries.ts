@@ -1,15 +1,12 @@
+import { IS_LOCALHOST } from '@app/redux/api/common';
 import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
-import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import {
-  DraftRegistrering,
-  FinishedRegistrering,
-  FinishingRegistrering,
-  Registrering,
-} from '@app/redux/api/registreringer/types';
+import { RegistreringTagType, registreringApi } from '@app/redux/api/registreringer/registrering';
+import { DraftRegistrering, FinishedRegistrering, Registrering } from '@app/redux/api/registreringer/types';
 
 export const queriesSlice = registreringApi.injectEndpoints({
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getFerdigeRegistreringer: builder.query<(FinishedRegistrering | FinishingRegistrering)[], void>({
+    getFerdigeRegistreringer: builder.query<FinishedRegistrering[], void>({
       query: () => `/registreringer/ferdige?sidenDager=30`,
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
@@ -33,6 +30,7 @@ export const queriesSlice = registreringApi.injectEndpoints({
 
     getRegistrering: builder.query<Registrering, string>({
       query: (id) => `/registreringer/${id}`,
+      providesTags: (_, __, id) => [{ id, type: RegistreringTagType.REGISTRERING }],
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 

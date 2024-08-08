@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { API_BASE_QUERY } from '@app/redux/api/common';
+import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
 import { IOppgave } from '@app/types/oppgave';
 
 export interface IGetOppgaverParams {
@@ -9,11 +9,11 @@ export interface IGetOppgaverParams {
 
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
-  baseQuery: API_BASE_QUERY,
+  baseQuery: KABIN_API_BASE_QUERY,
   endpoints: (builder) => ({
     getOppgaver: builder.query<IOppgave[], IGetOppgaverParams>({
       query: (body) => ({
-        url: '/kabin-api/searchoppgave',
+        url: '/searchoppgave',
         method: 'POST',
         body,
       }),

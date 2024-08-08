@@ -1,21 +1,20 @@
 import { Alert } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { StatusHeading } from '@app/pages/status/common-components';
 import { StatusDetails } from '@app/pages/status/details';
+import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
-import { FinishedRegistrering, FinishingRegistrering } from '@app/redux/api/registreringer/types';
+import { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 import { useGetAnkeStatusQuery } from '@app/redux/api/status';
 import { IAnkestatus } from '@app/types/status';
 
 interface Props {
-  registrering: FinishedRegistrering | FinishingRegistrering;
+  registrering: FinishedRegistrering;
 }
 
 export const AnkeStatusPage = ({ registrering }: Props) => {
   const { id, typeId, behandlingId, finished } = registrering;
-  const { data, isLoading, isError } = useGetAnkeStatusQuery(behandlingId ?? skipToken);
+  const { data, isLoading, isError } = useGetAnkeStatusQuery(behandlingId);
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
@@ -25,6 +24,7 @@ export const AnkeStatusPage = ({ registrering }: Props) => {
         headingText="Anke opprettet"
         type={typeId}
         behandlingId={behandlingId}
+        registreringId={id}
       />
       <Container>
         <AnkeDetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />

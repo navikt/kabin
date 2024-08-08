@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
+import { kodeverkApi } from '@app/redux/api/kodeverk';
 import { muligheterApi } from '@app/redux/api/muligheter';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
@@ -24,6 +25,7 @@ export const reduxStore = configureStore({
       svarbrevSettingsApi.middleware,
       oppgaverApi.middleware,
       saksbehandlereApi.middleware,
+      kodeverkApi.middleware,
       statusApi.middleware,
     ]),
 });

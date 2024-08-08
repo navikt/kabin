@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
+import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedKlagemulighet } from '@app/components/selected/selected-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -16,7 +17,6 @@ import { useGetKlagemuligheterQuery, useGetRegistreringKlagemulighetQuery } from
 import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Klagemulighet } from './klagemulighet';
 
 export const Klagemuligheter = () => {
   const canEdit = useCanEdit();

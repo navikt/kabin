@@ -79,8 +79,6 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
     [isValid, mulighet, ankemulighet, setAnkemulighet, id],
   );
 
-  mulighet?.originalFagsystemId;
-
   const usedCount = ankemulighet.sourceOfExistingAnkebehandling.length;
 
   return (

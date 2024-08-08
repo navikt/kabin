@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditFrist } from '@app/components/overstyringer/edit-frist';
+import { EditMottattKlageinstans } from '@app/components/overstyringer/edit-mottatt-klageinstans';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';
 import {
   AvsenderIcon,
@@ -13,7 +14,11 @@ import {
   StyledSakenGjelderIcon,
 } from '@app/components/overstyringer/icons';
 import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshjemler';
+import { Part } from '@app/components/overstyringer/part';
+import { SakenGjelder } from '@app/components/overstyringer/part-read/part-read';
+import { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
+import { FieldNames } from '@app/components/overstyringer/types';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
@@ -25,11 +30,6 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
-import { EditMottattKlageinstans } from './edit-mottatt-klageinstans';
-import { Part } from './part';
-import { SakenGjelder } from './part-read/part-read';
-import { ISetPart } from './part-read/types';
-import { FieldNames } from './types';
 
 interface Props {
   title: string;

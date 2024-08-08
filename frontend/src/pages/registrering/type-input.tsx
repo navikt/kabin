@@ -78,7 +78,7 @@ export const TypeSelect = () => {
   // Without `key` TogglegGroup will remember last non-undefined value when undefined.
   return (
     <Row>
-      <ToggleGroup onChange={onChange} value={value} size="small" key={value === undefined ? 'none' : 'some'}>
+      <ToggleGroup onChange={onChange} value={value ?? 'none'} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
       </ToggleGroup>

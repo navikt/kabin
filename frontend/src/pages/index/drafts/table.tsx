@@ -2,9 +2,9 @@ import { BodyShort, Pagination, SortState, Table } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { DraftsHeaders } from '@app/pages/index/drafts/headers';
 import { DraftRow } from '@app/pages/index/drafts/row';
+import { ROWS_PER_PAGE, useSort } from '@app/pages/index/drafts/use-sort';
 import { TableAndPagination } from '@app/pages/index/styled-components';
 import { DraftRegistrering } from '@app/redux/api/registreringer/types';
-import { ROWS_PER_PAGE, useSort } from './use-sort';
 
 interface RegistreringerTableProps {
   registreringer: DraftRegistrering[];

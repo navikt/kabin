@@ -2,48 +2,12 @@ import { styled } from 'styled-components';
 import { DocumentViewer } from '@app/components/document-viewer/document-viewer';
 import { Dokumenter } from '@app/components/documents/documents';
 import { Footer } from '@app/components/footer/footer';
-import { useRegistrering } from '@app/hooks/use-registrering';
 import { DocumentViewerContextState } from '@app/pages/registrering/document-viewer-context';
 import { Person } from '@app/pages/registrering/person/person';
-import { RegistreringLoader } from '@app/pages/registrering/registrering-context';
 import { TypeInput, TypeSelect } from '@app/pages/registrering/type-input';
-import { AnkeStatusPage } from '@app/pages/status/anke-status';
-import { KlageStatusPage } from '@app/pages/status/klage-status';
-import { isDraftRegistrering } from '@app/redux/api/registreringer/types';
-import { SaksTypeEnum } from '@app/types/common';
 
 export const RegistreringPage = () => (
-  <PageWrapper>
-    <RegistreringLoader>
-      <DocumentViewerContextState>
-        <Content />
-      </DocumentViewerContextState>
-    </RegistreringLoader>
-  </PageWrapper>
-);
-
-const Content = () => {
-  const registrering = useRegistrering();
-
-  if (isDraftRegistrering(registrering)) {
-    return <Create />;
-  }
-
-  if (registrering.typeId === SaksTypeEnum.KLAGE) {
-    return <KlageStatusPage registrering={registrering} />;
-  }
-
-  if (registrering.typeId === SaksTypeEnum.ANKE) {
-    return <AnkeStatusPage registrering={registrering} />;
-  }
-
-  console.error('Unknown sakstype for finished registrering', registrering.typeId);
-
-  return null;
-};
-
-const Create = () => (
-  <>
+  <DocumentViewerContextState>
     <StyledMain>
       <Person />
       <LeftColumn>
@@ -56,17 +20,8 @@ const Create = () => (
       </RightColumn>
     </StyledMain>
     <Footer />
-  </>
+  </DocumentViewerContextState>
 );
-
-const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: center;
-  width: 100%;
-  overflow: auto;
-`;
 
 const StyledMain = styled.main`
   display: grid;

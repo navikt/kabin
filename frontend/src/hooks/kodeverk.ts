@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import {
-  useFagsystemer,
-  useHjemlerMap,
-  useSimpleYtelser,
-  useTema,
-  useVedtaksenheter,
-} from '@app/simple-api-state/use-kodeverk';
+  useGetFagsystemerQuery,
+  useGetHjemlerMapQuery,
+  useGetSimpleYtelserQuery,
+  useGetTemaQuery,
+  useGetVedtaksenheterQuery,
+} from '@app/redux/api/kodeverk';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
-  const { data, isLoading } = useTema();
+  const { data, isLoading } = useGetTemaQuery();
 
   if (isLoading || data === undefined) {
     return 'Laster...';
@@ -22,7 +22,7 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
 };
 
 export const useTemaName = (temaId?: string | null): [string | undefined, boolean] => {
-  const { data, isLoading } = useTema();
+  const { data, isLoading } = useGetTemaQuery();
 
   return useMemo(() => {
     if (isLoading || data === undefined) {
@@ -34,7 +34,7 @@ export const useTemaName = (temaId?: string | null): [string | undefined, boolea
 };
 
 export const useYtelseName = (ytelseId?: string | null): string => {
-  const { data } = useSimpleYtelser();
+  const { data } = useGetSimpleYtelserQuery();
 
   return useMemo(() => {
     if (data === undefined) {
@@ -46,7 +46,7 @@ export const useYtelseName = (ytelseId?: string | null): string => {
 };
 
 export const useVedtaksenhetName = (vedtaksenhetId?: string | null): string => {
-  const { data } = useVedtaksenheter();
+  const { data } = useGetVedtaksenheterQuery();
 
   return useMemo(() => {
     if (data === undefined) {
@@ -58,7 +58,7 @@ export const useVedtaksenhetName = (vedtaksenhetId?: string | null): string => {
 };
 
 export const useFagsystemName = (fagsystemId?: string | null): string => {
-  const { data } = useFagsystemer();
+  const { data } = useGetFagsystemerQuery();
 
   return useMemo(() => {
     if (data === undefined) {
@@ -70,7 +70,7 @@ export const useFagsystemName = (fagsystemId?: string | null): string => {
 };
 
 export const useHjemmelName = (hjemmelId: string): string => {
-  const { data = {} } = useHjemlerMap();
+  const { data = {} } = useGetHjemlerMapQuery();
 
   if (data === undefined) {
     return '';

@@ -1,4 +1,5 @@
-import { arkiverteDokumenterApi } from './journalposter';
+import { IS_LOCALHOST } from '@app/redux/api/common';
+import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 
 interface AddLogiskVedleggParams {
   dokumentInfoId: string;
@@ -25,6 +26,7 @@ interface LogiskVedleggResponse {
 }
 
 const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     addLogiskVedlegg: builder.mutation<LogiskVedleggResponse, AddLogiskVedleggParams>({
       query: ({ dokumentInfoId, ...body }) => ({

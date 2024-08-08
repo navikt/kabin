@@ -3,7 +3,7 @@ import { formatISO } from 'date-fns';
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { Behandlingstid } from '@app/redux/api/registreringer/types';
-import { updateDrafts } from '@app/redux/api/registreringer/updates';
+import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/updates';
 import {
   AddReceiverParams,
   ChangeReceiverParams,
@@ -22,7 +22,7 @@ import {
 export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
 
 const svarbrevSlice = registreringApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST ? true : 'throw',
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setSvarbrevSend: builder.mutation<SetSendResponse, SetSendParams>({
       query: ({ id, ...body }) => ({
@@ -31,20 +31,11 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, send }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.send = send;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, send } }));
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.send = data.svarbrev.send;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -57,11 +48,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, ...behandlingstid }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.behandlingstid = behandlingstid;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, behandlingstid } }));
 
         try {
           await queryFulfilled;
@@ -78,11 +65,7 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, fullmektigFritekst }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.fullmektigFritekst = fullmektigFritekst;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, fullmektigFritekst } }));
 
         try {
           await queryFulfilled;
@@ -100,19 +83,16 @@ const svarbrevSlice = registreringApi.injectEndpoints({
       }),
       onQueryStarted: async ({ id, receiver }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.receivers.push({ ...receiver, id: 'unknown' });
+          const receivers = [...draft.svarbrev.receivers, { ...receiver, id: 'unknown' }].toSorted((a, b) =>
+            (a.part.name ?? '').localeCompare(b.part.name ?? ''),
+          );
 
-          return draft;
+          return { ...draft, svarbrev: { ...draft.svarbrev, receivers } };
         });
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.receivers = data.svarbrev.receivers;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -126,26 +106,16 @@ const svarbrevSlice = registreringApi.injectEndpoints({
       }),
       onQueryStarted: async ({ id, receiverId, handling, overriddenAddress }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
-          for (const r of draft.svarbrev.receivers) {
-            if (r.part.id === receiverId) {
-              // Lokal/sentral utskrift switch breaks without destructure
-              r.handling = handling;
-              r.overriddenAddress = overriddenAddress;
-              break;
-            }
-          }
+          const receivers = draft.svarbrev.receivers.map((r) =>
+            r.id === receiverId ? { ...r, handling, overriddenAddress } : r,
+          );
 
-          return draft;
+          return { ...draft, svarbrev: { ...draft.svarbrev, receivers } };
         });
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.receivers = data.svarbrev.receivers;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -157,20 +127,17 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         method: 'DELETE',
       }),
       onQueryStarted: async ({ id, receiverId }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.receivers = draft.svarbrev.receivers.filter((r) => r.part.id !== receiverId);
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          svarbrev: {
+            ...draft.svarbrev,
+            receivers: draft.svarbrev.receivers.filter((r) => r.id !== receiverId),
+          },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.receivers = data.svarbrev.receivers;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -183,21 +150,15 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, title }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.title = title.trim().length === 0 ? DEFAULT_SVARBREV_NAME : title;
-          draft.modified = formatISO(new Date());
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          svarbrev: { ...draft.svarbrev, title: title.trim().length === 0 ? DEFAULT_SVARBREV_NAME : title },
+          modified: formatISO(new Date()),
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.title = data.svarbrev.title;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -210,20 +171,11 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, customText }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.customText = customText;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, customText } }));
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.customText = data.svarbrev.customText;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -236,11 +188,10 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, overrideBehandlingstid }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.overrideBehandlingstid = overrideBehandlingstid;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          svarbrev: { ...draft.svarbrev, overrideBehandlingstid },
+        }));
 
         try {
           await queryFulfilled;
@@ -257,20 +208,11 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, overrideCustomText }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.svarbrev.overrideCustomText = overrideCustomText;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, svarbrev: { ...draft.svarbrev, overrideCustomText } }));
 
         try {
           const { data } = await queryFulfilled;
-          updateDrafts(id, (draft) => {
-            draft.modified = data.modified;
-            draft.svarbrev.overrideCustomText = data.svarbrev.overrideCustomText;
-
-            return draft;
-          });
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }

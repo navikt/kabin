@@ -1,13 +1,12 @@
 import { SortState } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
 import {
   DraftRegistrering,
   FinishedRegistrering,
-  FinishingRegistrering,
   Overstyringer,
   Registrering,
 } from '@app/redux/api/registreringer/types';
-import { useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { TYPE_NAME } from '@app/types/mulighet';
@@ -21,12 +20,12 @@ type SortProp =
 const isSortProp = (key: string): key is SortProp =>
   ['typeId', 'modified', 'created', 'ytelseId', 'finished'].includes(key);
 
-export const useSort = <T extends DraftRegistrering | FinishedRegistrering | FinishingRegistrering>(
+export const useSort = <T extends DraftRegistrering | FinishedRegistrering>(
   registreringer: T[],
   sort: SortState | undefined,
   page: number,
 ): T[] => {
-  const { data: ytelser = [] } = useSimpleYtelser();
+  const { data: ytelser = [] } = useGetSimpleYtelserQuery();
 
   return useMemo(
     () =>

@@ -106,11 +106,6 @@ export type ISimplePart = Omit<IPart, 'address' | 'utsendingskanal' | 'language'
 
 export const PART_TYPES = Object.values(IdType);
 
-export interface IPartId {
-  type: IdType | AvsenderMottakerType;
-  id: string;
-}
-
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',

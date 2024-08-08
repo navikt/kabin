@@ -2,8 +2,8 @@ import { Tag } from '@navikt/ds-react';
 import { addMonths, differenceInDays, differenceInMonths, isEqual, isValid } from 'date-fns';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
+import { InfoItem, Time } from '@app/pages/status/common-components';
 import { monthUnit, weekUnit } from '@app/pages/status/helpers';
-import { InfoItem, Time } from './common-components';
 
 interface Props {
   label: string;

@@ -1,15 +1,10 @@
-import { HouseIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
-import { Link as RouterLink } from 'react-router-dom';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
-import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { KABAL_URL } from '@app/constants';
 import { useFagsystemName } from '@app/hooks/kodeverk';
-import { NewRegistrering } from '@app/pages/status/new-registrering';
 import { StyledPart } from '@app/pages/status/styled-components';
-import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
+import { IPart, ISaksbehandler } from '@app/types/common';
 import { ISak } from '@app/types/dokument';
 
 interface InfoProps {
@@ -117,67 +112,3 @@ export const NavEmployee = ({ title, employee }: NavEmployeeProps) => (
     )}
   </InfoItem>
 );
-
-interface StatusHeadingProps {
-  headingText: string;
-  alertText: string;
-  type: SaksTypeEnum;
-  behandlingId: string | null;
-}
-
-export const StatusHeading = ({ headingText, alertText, type, behandlingId }: StatusHeadingProps) => (
-  <Container>
-    <Alert variant="success">
-      <Heading level="1" size="medium">
-        {headingText}
-      </Heading>
-    </Alert>
-
-    <Alert variant="info" inline>
-      {alertText}
-    </Alert>
-
-    <Inputs>
-      <NewRegistrering />
-      <Button as={RouterLink} to="/" variant="secondary" size="small" icon={<HouseIcon aria-hidden />}>
-        Tilbake til forsiden
-      </Button>
-      <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary" size="small">
-        Åpne Kabal søk
-      </ExternalLinkButton>
-      {behandlingId === null ? null : (
-        <ExternalLinkButton
-          href={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
-          variant="secondary"
-          size="small"
-        >
-          Åpne behandling i Kabal
-        </ExternalLinkButton>
-      )}
-    </Inputs>
-  </Container>
-);
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  width: 1000px;
-  margin: 0 auto;
-  padding: 12px;
-  margin-bottom: 24px;
-  background-color: var(--a-bg-default);
-  position: sticky;
-  top: -110px;
-  z-index: 1;
-  box-shadow: var(--a-shadow-small);
-  border-radius: var(--a-border-radius-medium);
-`;
-
-const Inputs = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  column-gap: 8px;
-  width: 100%;
-`;

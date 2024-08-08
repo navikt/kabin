@@ -7,17 +7,19 @@ import { OpenButton } from '@app/pages/index/table-components/open';
 import { SakenGjelder } from '@app/pages/index/table-components/saken-gjelder';
 import { Type } from '@app/pages/index/table-components/type';
 import { Ytelse } from '@app/pages/index/table-components/ytelse';
-import { FinishedRegistrering, FinishingRegistrering } from '@app/redux/api/registreringer/types';
+import { FinishedRegistrering } from '@app/redux/api/registreringer/types';
+import { usePrefetch } from '@app/redux/api/status';
 import { SaksTypeEnum } from '@app/types/common';
 
-export const FinishedRow = ({ registrering }: { registrering: FinishedRegistrering | FinishingRegistrering }) => {
-  const { id, sakenGjelderValue, typeId, overstyringer, created, finished } = registrering;
+export const FinishedRow = ({ registrering }: { registrering: FinishedRegistrering }) => {
+  const { id, sakenGjelderValue, typeId, overstyringer, created, finished, behandlingId } = registrering;
+  const prefetchStatus = usePrefetch(typeId === SaksTypeEnum.KLAGE ? 'getKlageStatus' : 'getAnkeStatus');
   const { ytelseId } = overstyringer;
 
-  const path = `/registrering/${id}`;
+  const path = `/registrering/${id}/status`;
 
   return (
-    <TableRow path={path}>
+    <TableRow path={path} onMouseEnter={() => prefetchStatus(behandlingId)}>
       <SakenGjelder id={sakenGjelderValue} />
 
       <Table.DataCell>
@@ -37,7 +39,7 @@ export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreri
       </Table.DataCell>
 
       <Table.DataCell>
-        <OpenButton path={path} />
+        <OpenButton path={path}>Status</OpenButton>
       </Table.DataCell>
 
       <Table.DataCell>
@@ -47,12 +49,11 @@ export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreri
   );
 };
 
-const OpenKabal = ({ typeId, behandlingId }: FinishedRegistrering | FinishingRegistrering) => (
+const OpenKabal = ({ typeId, behandlingId }: FinishedRegistrering) => (
   <ExternalLinkButton
     href={`${KABAL_URL}/${typeId === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
     variant="secondary"
     size="small"
-    loading={behandlingId === null}
   >
     Åpne behandling i Kabal
   </ExternalLinkButton>

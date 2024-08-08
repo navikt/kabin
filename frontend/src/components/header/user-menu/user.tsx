@@ -2,7 +2,7 @@ import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { UserDropdown } from './dropdown';
+import { UserDropdown } from '@app/components/header/user-menu/dropdown';
 
 export const User = () => {
   const { user } = useContext(StaticDataContext);

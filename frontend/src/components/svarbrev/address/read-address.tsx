@@ -2,9 +2,9 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
 import { AddressState, Container, Row } from '@app/components/svarbrev/address/layout';
 import { Addresses } from '@app/components/svarbrev/address/types';
+import { useAddressLines } from '@app/components/svarbrev/address/use-address-lines';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { IPart } from '@app/types/common';
-import { useAddressLines } from './use-address-lines';
 
 interface Props extends Addresses {
   part: IPart;

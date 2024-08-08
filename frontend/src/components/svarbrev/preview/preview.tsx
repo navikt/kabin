@@ -1,3 +1,4 @@
+import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
@@ -13,7 +14,16 @@ import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { SaksTypeEnum } from '@app/types/common';
 
 export const Preview = () => {
+  const { overstyringer } = useRegistrering();
   const loaders = useUrl();
+
+  if (overstyringer.mottattKlageinstans === null) {
+    return (
+      <Alert variant="info" size="small" inline>
+        Velg mottatt klageinstans først.
+      </Alert>
+    );
+  }
 
   const rendered: PdfLoader[] = [];
 

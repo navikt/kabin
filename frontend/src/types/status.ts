@@ -1,7 +1,7 @@
 import { Receiver } from '@app/redux/api/registreringer/types';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
-import { IArkivertDocument } from './dokument';
+import { IArkivertDocument } from '@app/types/dokument';
 
 interface IBaseStatus {
   fagsakId: string;

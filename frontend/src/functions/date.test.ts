@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { isDateAfter, isDateAfterOrEqual, isDateBefore, isDateBeforeOrEqual, isDateEqual } from './date';
+import { isDateAfter, isDateAfterOrEqual, isDateBefore, isDateBeforeOrEqual, isDateEqual } from '@app/functions/date';
 
 describe('isDate', () => {
   it('before', () => {

@@ -1,6 +1,6 @@
 import { Detail, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { toast } from '../store';
+import { toast } from '@app/components/toast/store';
 
 export const apiErrorToast = (res: Response, url: string) => {
   const message = (

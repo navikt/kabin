@@ -23,7 +23,7 @@ import {
   SetYtelseResponse,
 } from '@app/redux/api/overstyringer/response-types';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import { pessimisticOverstyringerUpdate, updateDrafts } from '@app/redux/api/registreringer/updates';
+import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/updates';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IPart } from '@app/types/common';
 
@@ -33,7 +33,7 @@ interface UpdatePartPayload {
 }
 
 const overstyringerSlice = registreringApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST ? true : 'throw',
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setMottattVedtaksinstans: builder.mutation<SetMottattVedtaksintansResponse, SetMottattVedtaksintansParams>({
       query: ({ id, ...body }) => ({
@@ -42,15 +42,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, mottattVedtaksinstans }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.mottattVedtaksinstans = mottattVedtaksinstans;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, mottattVedtaksinstans },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -64,32 +63,21 @@ const overstyringerSlice = registreringApi.injectEndpoints({
       }),
       onQueryStarted: async ({ id, mottattKlageinstans }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.mottattKlageinstans = mottattKlageinstans;
-
           if (draft.overstyringer.behandlingstid === null) {
-            return draft;
+            return { ...draft, overstyringer: { ...draft.overstyringer, calculatedFrist: null, mottattKlageinstans } };
           }
 
-          if (draft.overstyringer.behandlingstid.unitTypeId === BehandlingstidUnitType.WEEKS) {
-            draft.overstyringer.calculatedFrist = format(
-              addWeeks(mottattKlageinstans, draft.overstyringer.behandlingstid.units),
-              'yyyy-MM-dd',
-            );
+          const calculatedFrist =
+            draft.overstyringer.behandlingstid.unitTypeId === BehandlingstidUnitType.WEEKS
+              ? format(addWeeks(mottattKlageinstans, draft.overstyringer.behandlingstid.units), 'yyyy-MM-dd')
+              : format(addMonths(mottattKlageinstans, draft.overstyringer.behandlingstid.units), 'yyyy-MM-dd');
 
-            return draft;
-          }
-
-          draft.overstyringer.calculatedFrist = format(
-            addMonths(mottattKlageinstans, draft.overstyringer.behandlingstid.units),
-            'yyyy-MM-dd',
-          );
-
-          return draft;
+          return { ...draft, overstyringer: { ...draft.overstyringer, calculatedFrist, mottattKlageinstans } };
         });
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -101,34 +89,23 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      onQueryStarted: async ({ id, ...body }, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, ...behandlingstid }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.behandlingstid = body;
-
           if (draft.overstyringer.mottattKlageinstans === null) {
-            return draft;
+            return { ...draft, overstyringer: { ...draft.overstyringer, calculatedFrist: null, behandlingstid } };
           }
 
-          if (body.unitTypeId === BehandlingstidUnitType.WEEKS) {
-            draft.overstyringer.calculatedFrist = format(
-              addWeeks(draft.overstyringer.mottattKlageinstans, body.units),
-              'yyyy-MM-dd',
-            );
+          const calculatedFrist =
+            behandlingstid.unitTypeId === BehandlingstidUnitType.WEEKS
+              ? format(addWeeks(draft.overstyringer.mottattKlageinstans, behandlingstid.units), 'yyyy-MM-dd')
+              : format(addMonths(draft.overstyringer.mottattKlageinstans, behandlingstid.units), 'yyyy-MM-dd');
 
-            return draft;
-          }
-
-          draft.overstyringer.calculatedFrist = format(
-            addMonths(draft.overstyringer.mottattKlageinstans, body.units),
-            'yyyy-MM-dd',
-          );
-
-          return draft;
+          return { ...draft, overstyringer: { ...draft.overstyringer, calculatedFrist, behandlingstid } };
         });
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -141,15 +118,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, hjemmelIdList }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.hjemmelIdList = hjemmelIdList;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, hjemmelIdList },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -162,16 +138,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, ytelseId }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.ytelseId = ytelseId;
-          draft.overstyringer.saksbehandlerIdent = null;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, ytelseId, saksbehandlerIdent: null },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -184,15 +158,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body: { fullmektig: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.fullmektig = part;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, fullmektig: part },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer, data.svarbrev);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -205,14 +178,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body: { klager: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.klager = part;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, klager: part },
+        }));
 
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -225,15 +198,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body: { avsender: part },
       }),
       onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.avsender = part;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, avsender: part },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer, data.svarbrev);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -246,15 +218,14 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, saksbehandlerIdent }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.saksbehandlerIdent = saksbehandlerIdent;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, saksbehandlerIdent },
+        }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }
@@ -267,15 +238,11 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ id, oppgaveId }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => {
-          draft.overstyringer.oppgaveId = oppgaveId;
-
-          return draft;
-        });
+        const undo = updateDrafts(id, (draft) => ({ ...draft, overstyringer: { ...draft.overstyringer, oppgaveId } }));
 
         try {
           const { data } = await queryFulfilled;
-          pessimisticOverstyringerUpdate(id, data.modified, data.overstyringer);
+          pessimisticUpdate(id, data);
         } catch {
           undo();
         }

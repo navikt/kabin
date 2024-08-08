@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { AttachmentList } from '@app/components/documents/document/attachment-list';
+import { AvsenderMottakerNotatforer } from '@app/components/documents/document/avsender-mottaker-notatforer';
+import { DocumentTitle } from '@app/components/documents/document/document-title';
+import { StyledExpandButton } from '@app/components/documents/document/expand-button';
+import { SelectDocumentButton } from '@app/components/documents/document/select-document-button';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
+import { GridArea, GridTag, StyledField, StyledGrid } from '@app/components/documents/styled-grid-components';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { IArkivertDocument } from '@app/types/dokument';
-import { GridArea, GridTag, StyledField, StyledGrid } from '../styled-grid-components';
-import { AttachmentList } from './attachment-list';
-import { AvsenderMottakerNotatforer } from './avsender-mottaker-notatforer';
-import { DocumentTitle } from './document-title';
-import { StyledExpandButton } from './expand-button';
-import { SelectDocumentButton } from './select-document-button';
 
 interface Props {
   dokument: IArkivertDocument;

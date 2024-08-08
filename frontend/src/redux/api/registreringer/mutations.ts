@@ -1,3 +1,4 @@
+import { IS_LOCALHOST } from '@app/redux/api/common';
 import {
   SetAnkemulisghetParams,
   SetKlagemulighetParams,
@@ -17,6 +18,7 @@ interface SetMulighetPayload {
 }
 
 const mutationsSlice = registreringApi.injectEndpoints({
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setSakenGjelder: builder.mutation<DraftRegistrering, { id: string; sakenGjelderValue: string }>({
       query: ({ id, ...body }) => ({
@@ -30,7 +32,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, () => data);
-        } catch (error) {
+        } catch {
           undo();
         }
       },
@@ -48,7 +50,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, () => data);
-        } catch (error) {
+        } catch {
           undo();
         }
       },
@@ -66,7 +68,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, (draft) => ({ ...draft, ...data }));
-        } catch (error) {
+        } catch {
           undo();
         }
       },
@@ -92,7 +94,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, (draft) => ({ ...draft, ...data }));
-        } catch (error) {
+        } catch {
           undo();
         }
       },
@@ -128,7 +130,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           updateDrafts(id, (draft) => ({ ...draft, ...data }));
-        } catch (error) {
+        } catch {
           undo();
         }
       },

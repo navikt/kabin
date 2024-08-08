@@ -7,8 +7,8 @@ import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetTemaYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyringer';
-import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -91,7 +91,7 @@ const CustomYtelse = () => {
   const { mulighet } = useMulighet();
   const [setYtelseId] = useSetYtelseIdMutation();
   const tema = mulighet?.temaId ?? skipToken;
-  const { data: ytelser = [] } = useTemaYtelser(tema);
+  const { data: ytelser = [] } = useGetTemaYtelserQuery(tema);
 
   const error = useValidationError(ValidationFieldNames.YTELSE_ID);
 

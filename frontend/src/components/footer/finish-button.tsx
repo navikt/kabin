@@ -1,21 +1,33 @@
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { RegistreringType, SaksTypeEnum } from '@app/types/common';
 
 export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
+  const id = useRegistreringId();
+  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
+  const [, { isLoading: isDeleting }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'delete' });
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
   const closeConfirm = () => setShowConfirm(false);
 
   return (
     <>
-      <Button onClick={toggleConfirm} size="small" icon={<CheckmarkIcon aria-hidden />} variant="primary">
+      <Button
+        onClick={toggleConfirm}
+        size="small"
+        icon={<CheckmarkIcon aria-hidden />}
+        variant="primary"
+        disabled={isFinishing || isDeleting}
+        loading={isFinishing}
+      >
         Fullfør
       </Button>
 
@@ -25,8 +37,9 @@ export const FinishButton = () => {
 };
 
 const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
+  const navigate = useNavigate();
   const { id, typeId, svarbrev } = useRegistrering();
-  const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id });
+  const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
 
@@ -47,7 +60,10 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
           size="small"
           icon={<CheckmarkIcon aria-hidden />}
           loading={isLoading}
-          onClick={() => finish({ id, typeId })}
+          onClick={async () => {
+            await finish({ id, typeId }).unwrap();
+            navigate(`/registrering/${id}/status`, { replace: true });
+          }}
           disabled={isLoading}
         >
           Bekreft

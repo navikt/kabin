@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
+import { kodeverkApi } from '@app/redux/api/kodeverk';
 import { muligheterApi } from '@app/redux/api/muligheter';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   [svarbrevSettingsApi.reducerPath]: svarbrevSettingsApi.reducer,
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,
   [saksbehandlereApi.reducerPath]: saksbehandlereApi.reducer,
+  [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [statusApi.reducerPath]: statusApi.reducer,
 });
 

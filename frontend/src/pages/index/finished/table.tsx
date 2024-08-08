@@ -4,10 +4,10 @@ import { ROWS_PER_PAGE, useSort } from '@app/pages/index/drafts/use-sort';
 import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedRow } from '@app/pages/index/finished/row';
 import { TableAndPagination } from '@app/pages/index/styled-components';
-import { FinishedRegistrering, FinishingRegistrering } from '@app/redux/api/registreringer/types';
+import { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 
 interface RegistreringerTableProps {
-  registreringer: (FinishedRegistrering | FinishingRegistrering)[];
+  registreringer: FinishedRegistrering[];
 }
 
 export const FinishedTable = ({ registreringer }: RegistreringerTableProps) => {

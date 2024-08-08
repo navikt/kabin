@@ -3,11 +3,11 @@ import { Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { GridArea, GridButton } from '@app/components/documents/styled-grid-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
 import { IArkivertDocument } from '@app/types/dokument';
-import { GridArea, GridButton } from '../styled-grid-components';
 
 interface Props {
   isSelected: boolean;
@@ -82,7 +82,7 @@ const getText = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
 
 const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
   if (!harTilgangTilArkivvariant) {
-    return <CircleSlashIcon />;
+    return <CircleSlashIcon aria-hidden role="presentation" />;
   }
 
   if (isSelected) {

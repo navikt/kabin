@@ -46,7 +46,11 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
-        isChanged ? onSaveClick() : exitEditMode();
+        if (isChanged) {
+          onSaveClick();
+        } else {
+          exitEditMode();
+        }
       }
 
       if (e.key === 'Escape') {
@@ -76,7 +80,12 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
           icon={<CheckmarkIcon title="Lagre" />}
           onClick={(e) => {
             e.stopPropagation();
-            isChanged ? onSaveClick() : exitEditMode();
+
+            if (isChanged) {
+              onSaveClick();
+            } else {
+              exitEditMode();
+            }
           }}
           onMouseDown={(e) => e.stopPropagation()}
           loading={isLoading}

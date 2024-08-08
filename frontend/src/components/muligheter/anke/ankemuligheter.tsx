@@ -4,7 +4,9 @@ import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
+import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
+import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -18,8 +20,6 @@ import { useGetAnkemuligheterQuery, useGetRegistreringAnkemulighetQuery } from '
 import { SaksTypeEnum } from '@app/types/common';
 import { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Warning } from '../common/warning';
-import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
   const canEdit = useCanEdit();

@@ -6,6 +6,8 @@ import {
   InformationSquareFillIconColored,
   XMarkOctagonFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
+import { SLIDE_DURATION, TOAST_TIMEOUT } from '@app/components/toast/constants';
+import { Message } from '@app/components/toast/store';
 import {
   BaseToastStyle,
   Container,
@@ -13,9 +15,7 @@ import {
   StyledCloseButton,
   TimedToastStyle,
 } from '@app/components/toast/styled-components';
-import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
-import { Message } from './store';
-import { ToastType } from './types';
+import { ToastType } from '@app/components/toast/types';
 
 export const CLOSE_TOAST_EVENT_TYPE = 'close-toast';
 

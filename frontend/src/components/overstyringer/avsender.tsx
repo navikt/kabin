@@ -1,12 +1,12 @@
 import { StyledAvsenderIcon } from '@app/components/overstyringer/icons';
+import { Part } from '@app/components/overstyringer/part';
+import { ISetPart } from '@app/components/overstyringer/part-read/types';
+import { FieldNames } from '@app/components/overstyringer/types';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Part } from './part';
-import { ISetPart } from './part-read/types';
-import { FieldNames } from './types';
 
 interface Props {
   options: ISetPart[] | undefined;

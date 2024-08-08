@@ -1,24 +1,21 @@
-import { formatISO } from 'date-fns';
+import { IS_LOCALHOST } from '@app/redux/api/common';
 import { CreateRegistreringParams, FinishRegistreringParams } from '@app/redux/api/registreringer/param-types';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import {
-  DraftRegistrering,
-  FinishedRegistrering,
-  FinishingRegistrering,
-  Registrering,
-} from '@app/redux/api/registreringer/types';
+import { FerdigstiltRegistreringResponse } from '@app/redux/api/registreringer/response-types';
+import { DraftRegistrering, FinishedRegistrering, Registrering } from '@app/redux/api/registreringer/types';
 import {
   UpdateFn,
   removeFerdigRegistrering,
+  removeRegistrering,
   removeUferdigRegistrering,
   setRegistrering,
   setUferdigRegistrering,
   updateFerdigRegistrering,
   updateRegistrering,
 } from '@app/redux/api/registreringer/updates';
-import { FerdigstiltRegistreringResponse } from './response-types';
 
 const mainSlice = registreringApi.injectEndpoints({
+  overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     createRegistrering: builder.mutation<DraftRegistrering, CreateRegistreringParams>({
       query: (body) => ({
@@ -40,7 +37,7 @@ const mainSlice = registreringApi.injectEndpoints({
       }),
       onQueryStarted: async (id, { queryFulfilled }) => {
         await queryFulfilled;
-        setRegistrering(id, undefined);
+        removeRegistrering(id);
         removeUferdigRegistrering(id);
         removeFerdigRegistrering(id);
       },
@@ -52,32 +49,13 @@ const mainSlice = registreringApi.injectEndpoints({
         method: 'POST',
       }),
       onQueryStarted: async ({ id, typeId }, { queryFulfilled }) => {
-        const now = formatISO(new Date());
+        const { data } = await queryFulfilled;
 
-        const optimisticUpdate: UpdateFn<Registrering, FinishingRegistrering | FinishedRegistrering> = (draft) => ({
-          ...draft,
-          typeId,
-          finished: now,
-          modified: now,
-        });
+        const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, typeId, ...data });
 
-        const patchResult = updateRegistrering(id, optimisticUpdate);
-        const unfinishedPatchResult = removeUferdigRegistrering(id);
-        const finishedPatchResult = updateFerdigRegistrering(id, optimisticUpdate);
-
-        try {
-          const { data } = await queryFulfilled;
-
-          const update: UpdateFn<Registrering, FinishedRegistrering> = (draft) => ({ ...draft, typeId, ...data });
-
-          updateRegistrering(id, update);
-          removeUferdigRegistrering(id);
-          updateFerdigRegistrering(id, update);
-        } catch (error) {
-          patchResult.undo();
-          unfinishedPatchResult.undo();
-          finishedPatchResult.undo();
-        }
+        updateRegistrering(id, update);
+        removeUferdigRegistrering(id);
+        updateFerdigRegistrering(id, update);
       },
     }),
   }),
