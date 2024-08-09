@@ -4,8 +4,8 @@ import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { Header } from '@app/components/oppgaver/header';
 import { useParams } from '@app/components/oppgaver/hooks';
+import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
 import { Row } from '@app/components/oppgaver/row';
-import { SkeletonTable } from '@app/components/oppgaver/skeleton-table';
 import { TableHeaders } from '@app/components/oppgaver/table-headers';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -48,7 +48,7 @@ const ReadOnlyOppgaver = () => {
   }
 
   if (isLoading || oppgave === undefined) {
-    return <SkeletonTable />;
+    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
   }
 
   return (
@@ -77,7 +77,7 @@ const EditableOppgaver = () => {
   }
 
   if (isLoading) {
-    return <SkeletonTable />;
+    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
   }
 
   if (oppgaver === undefined || oppgaver.length === 0) {

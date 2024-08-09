@@ -3,7 +3,13 @@ import { Skeleton, Table } from '@navikt/ds-react';
 const LoadingRow = () => (
   <Table.Row>
     <Table.DataCell>
-      <Skeleton height={32} width={200} />
+      <Skeleton height={32} width={180} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <Skeleton height={32} width={120} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <Skeleton height={32} width={100} />
     </Table.DataCell>
     <Table.DataCell>
       <Skeleton height={32} width={150} />
@@ -12,16 +18,10 @@ const LoadingRow = () => (
       <Skeleton height={32} width={100} />
     </Table.DataCell>
     <Table.DataCell>
-      <Skeleton height={32} width={150} />
+      <Skeleton height={32} width={24} />
     </Table.DataCell>
     <Table.DataCell>
-      <Skeleton height={32} width={100} />
-    </Table.DataCell>
-    <Table.DataCell>
-      <Skeleton height={32} width={30} />
-    </Table.DataCell>
-    <Table.DataCell>
-      <Skeleton height={32} width={30} />
+      <Skeleton height={32} width={24} />
     </Table.DataCell>
     <Table.DataCell>
       <Skeleton height={32} width={50} />

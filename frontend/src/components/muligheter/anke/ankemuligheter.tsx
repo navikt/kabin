@@ -6,7 +6,8 @@ import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
 import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
 import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
-import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
+import { TableHeaders } from '@app/components/muligheter/anke/table-headers';
+import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
@@ -127,7 +128,11 @@ interface ContentProps {
 
 const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return <LoadingAnkeMuligheter />;
+    return (
+      <LoadingAnkeMuligheter>
+        <TableHeaders />
+      </LoadingAnkeMuligheter>
+    );
   }
 
   if (ankemuligheter === undefined) {
@@ -145,18 +150,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   return (
     <TableContainer $showShadow={ankemuligheter.length >= 3}>
       <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
-        <StyledTableHeader>
-          <Table.Row>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
-            <Table.HeaderCell>Tema</Table.HeaderCell>
-            <Table.HeaderCell>Ytelse</Table.HeaderCell>
-            <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-            <Table.HeaderCell>Fagsystem</Table.HeaderCell>
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-          </Table.Row>
-        </StyledTableHeader>
+        <TableHeaders />
         <Table.Body>
           {ankemuligheter.map((ankemulighet) => (
             <Ankemulighet key={ankemulighet.id} ankemulighet={ankemulighet} />

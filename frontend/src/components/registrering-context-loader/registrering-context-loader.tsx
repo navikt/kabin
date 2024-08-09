@@ -1,7 +1,7 @@
-import { Loader } from '@navikt/ds-react';
 import { createContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { LoadingRegistrering } from '@app/components/loading-registrering/loading-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
 import { Registrering } from '@app/redux/api/registreringer/types';
@@ -25,11 +25,7 @@ const RegistreringLoader = ({ children }: Props) => {
   const { data, isLoading, isSuccess } = useGetRegistreringQuery(registreringId);
 
   if (isLoading) {
-    return (
-      <LoaderWrapper>
-        <Loader size="3xlarge" title="Laster registrering..." />;
-      </LoaderWrapper>
-    );
+    return <LoadingRegistrering />;
   }
 
   if (!isSuccess) {
@@ -46,9 +42,4 @@ const PageWrapper = styled.div`
   align-items: center;
   width: 100%;
   overflow: auto;
-`;
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  height: 100%;
 `;

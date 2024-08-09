@@ -1,13 +1,16 @@
 import { Skeleton, Table } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
-import { Header } from '@app/components/oppgaver/header';
-import { TableHeaders } from '@app/components/oppgaver/table-headers';
 
-export const SkeletonTable = () => (
+interface Props {
+  header?: React.ReactNode;
+  tableHeaders?: React.ReactNode;
+}
+
+export const LoadingOppgaver = ({ header, tableHeaders }: Props) => (
   <Card>
-    <Header />
+    {header}
     <Table size="small">
-      <TableHeaders />
+      {tableHeaders}
       <Table.Body>
         <Table.Row>
           <Table.DataCell>
