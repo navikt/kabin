@@ -1,12 +1,11 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -14,13 +13,13 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { typeId, mulighet } = useMulighet();
 
-  if (type !== Type.KLAGE || state.mulighet === null) {
+  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined) {
     return null;
   }
 
-  return <RenderKlagemulighet mulighet={state.mulighet} onClick={onClick} />;
+  return <RenderKlagemulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
@@ -28,11 +27,11 @@ interface RenderProps extends Props {
 }
 
 const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { id, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+  const { id, temaId, vedtakDate, fagsakId, originalFagsystemId, klageBehandlendeEnhet } = mulighet;
 
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
-  const fagsystemName = useFagsystemName(fagsystemId);
+  const fagsystemName = useFagsystemName(originalFagsystemId);
 
   return (
     <Card>

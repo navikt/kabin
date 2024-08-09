@@ -1,6 +1,7 @@
-import { Recipient } from '@app/pages/create/app-context/types';
+import { Receiver } from '@app/redux/api/registreringer/types';
+import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
-import { IArkivertDocument } from './dokument';
+import { IArkivertDocument } from '@app/types/dokument';
 
 interface IBaseStatus {
   fagsakId: string;
@@ -17,12 +18,18 @@ interface IBaseStatus {
   tildeltSaksbehandler: ISaksbehandler | null;
   /** Date */
   varsletFrist: string | null;
+  varsletFristUnits: number | null;
+  varsletFristUnitTypeId: BehandlingstidUnitType | null;
+  /** When the registrering was finished.
+   * @type {string} DateTime
+   */
+  finished: string;
 }
 
 export interface SvarbrevStatus {
   dokumentUnderArbeidId: string;
   title: string;
-  receivers: Recipient[];
+  receivers: Receiver[];
 }
 
 export interface IAnkestatus extends IBaseStatus {

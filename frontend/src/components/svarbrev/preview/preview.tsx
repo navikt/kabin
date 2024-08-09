@@ -1,33 +1,29 @@
-import { useContext, useEffect, useState } from 'react';
+import { Alert } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
 import { PDF_ASPECT_RATIO } from '@app/components/svarbrev/preview/constants';
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { defaultString } from '@app/functions/empty-string';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import {
-  DEFAULT_SVARBREV_NAME,
-  IAnkeOverstyringer,
-  IKlageOverstyringer,
-  Svarbrev,
-  TYPE_TO_SAKSTYPE,
-  Type,
-} from '@app/pages/create/app-context/types';
-import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
-import { skipToken } from '@app/types/common';
-import { IAnkeMulighet, IKlagemulighet } from '@app/types/mulighet';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
+import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
+import { SaksTypeEnum } from '@app/types/common';
 
-interface Props {
-  mulighet: IAnkeMulighet | IKlagemulighet;
-  overstyringer: IAnkeOverstyringer | IKlageOverstyringer;
-  svarbrev: Svarbrev;
-  journalpostId: string;
-}
+export const Preview = () => {
+  const { overstyringer } = useRegistrering();
+  const loaders = useUrl();
 
-export const Preview = (props: Props) => {
-  const loaders = useUrl(props);
+  if (overstyringer.mottattKlageinstans === null) {
+    return (
+      <Alert variant="info" size="small" inline>
+        Velg mottatt klageinstans først.
+      </Alert>
+    );
+  }
 
   const rendered: PdfLoader[] = [];
 
@@ -57,36 +53,46 @@ const PdfContainer = styled.div`
   background-color: white;
 `;
 
-const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
-  const { type, state } = useContext(AppContext);
-  const { data: svarbrevSettings } = useSvarbrevSettings(overstyringer.ytelseId ?? skipToken);
+const useUrl = () => {
+  const { svarbrev, overstyringer } = useRegistrering();
+  const { typeId, mulighet } = useMulighet();
+
+  const selectedYtelseId = overstyringer.ytelseId;
+  const { mottattKlageinstans, fullmektig, klager } = overstyringer;
+
+  const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
+    typeId === null || selectedYtelseId === null ? skipToken : { ytelseId: selectedYtelseId, typeId },
+  );
 
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
   const ytelseId: string | null =
-    (type === Type.ANKE ? (overstyringer.ytelseId ?? state.mulighet?.ytelseId) : overstyringer.ytelseId) ?? null;
-
-  const settings = getSvarbrevSettings(svarbrevSettings, type);
+    (typeId === SaksTypeEnum.ANKE ? (selectedYtelseId ?? mulighet?.ytelseId) : selectedYtelseId) ?? null;
 
   useEffect(() => {
-    const mk = overstyringer.mottattKlageinstans;
-
-    if (mk === null || ytelseId === null || type === Type.NONE || settings === null) {
+    if (
+      mottattKlageinstans === null ||
+      ytelseId === null ||
+      typeId === null ||
+      svarbrevSetting === undefined ||
+      mulighet === undefined
+    ) {
       return;
     }
 
     const timeout = setTimeout(async () => {
       const loader = PDF_MANAGER.load({
-        varsletBehandlingstidUnits: svarbrev.varsletBehandlingstidUnits ?? settings.behandlingstidUnits,
-        varsletBehandlingstidUnitType: svarbrev.varsletBehandlingstidUnitType ?? settings.behandlingstidUnitType,
-        fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, overstyringer.fullmektig?.name ?? null),
-        title: defaultString(svarbrev.title, DEFAULT_SVARBREV_NAME),
+        varsletBehandlingstidUnits: svarbrev.behandlingstid?.units ?? svarbrevSetting.behandlingstidUnits,
+        varsletBehandlingstidUnitTypeId:
+          svarbrev.behandlingstid?.unitTypeId ?? svarbrevSetting.behandlingstidUnitTypeId,
+        fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? null),
+        title: svarbrev.title ?? DEFAULT_SVARBREV_NAME,
         customText: svarbrev.customText,
-        typeId: TYPE_TO_SAKSTYPE[type],
-        klager: overstyringer.klager?.id ?? null,
+        typeId,
+        klager: klager?.id ?? null,
         sakenGjelder: mulighet.sakenGjelder.id,
         ytelseId,
-        mottattKlageinstans: mk,
+        mottattKlageinstans,
       });
 
       setLoaders((loaderList) =>
@@ -95,20 +101,7 @@ const useUrl = ({ mulighet, overstyringer, svarbrev }: Props) => {
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [
-    mulighet.sakenGjelder.id,
-    overstyringer.fullmektig?.name,
-    overstyringer.klager?.id,
-    overstyringer.mottattKlageinstans,
-    settings,
-    svarbrev.customText,
-    svarbrev.fullmektigFritekst,
-    svarbrev.title,
-    svarbrev.varsletBehandlingstidUnitType,
-    svarbrev.varsletBehandlingstidUnits,
-    type,
-    ytelseId,
-  ]);
+  }, [fullmektig?.name, klager?.id, mottattKlageinstans, mulighet, svarbrevSetting, svarbrev, typeId, ytelseId]);
 
   useEffect(() => () => PDF_MANAGER.clear(), []);
 

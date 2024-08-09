@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNames.KLAGER>, string> = {
@@ -18,13 +17,14 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
   [ValidationFieldNames.ENHET]: 'Enhet',
   [ValidationFieldNames.VEDTAK]: 'Vedtak',
   [ValidationFieldNames.OPPGAVE]: 'Gosys-oppgave',
+  [ValidationFieldNames.SVARBREV_INPUT]: 'Svarbrev',
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {
-  const { type } = useContext(AppContext);
+  const { typeId } = useRegistrering();
 
   if (field === ValidationFieldNames.KLAGER) {
-    if (type === Type.ANKE) {
+    if (typeId === SaksTypeEnum.ANKE) {
       return 'Ankende part';
     }
 

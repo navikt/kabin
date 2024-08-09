@@ -4,28 +4,27 @@ import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { Address } from '@app/components/svarbrev/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { Recipient } from '@app/pages/create/app-context/types';
+import { Receiver } from '@app/redux/api/registreringer/types';
 import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
-interface Props extends Recipient {
-  onChange: (recipient: Recipient) => void;
+interface Props {
+  part: Receiver['part'];
+  id: Receiver['id'];
+  overriddenAddress: Receiver['overriddenAddress'];
+  handling: HandlingEnum;
+  onChange: (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) => void;
 }
 
-export const Options = ({ part, handling, overriddenAddress, onChange }: Props) => {
+export const Options = ({ part, handling, overriddenAddress, onChange, id }: Props) => {
   const onHandlingChange = useCallback(
-    (newHandling: string) => onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling) }),
-    [onChange, overriddenAddress, part],
+    (newHandling: string) => onChange(id, ensureIsHandling(newHandling), overriddenAddress),
+    [id, onChange, overriddenAddress],
   );
 
   const onAddressChange = useCallback(
-    (address: IAddress | null) =>
-      onChange({
-        part,
-        handling,
-        overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
-      }),
-    [handling, onChange, part],
+    (address: IAddress | null) => onChange(id, handling, areAddressesEqual(address, part.address) ? null : address),
+    [handling, id, onChange, part.address],
   );
 
   const showAddress = useMemo(() => {

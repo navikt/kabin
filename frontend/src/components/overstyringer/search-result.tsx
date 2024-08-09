@@ -15,12 +15,13 @@ interface Props {
   dismiss?: () => void;
   searchString: string;
   isValid: boolean;
+  isSaving: boolean;
 }
 
-export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, isValid }: Props) => {
+export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, isValid, isSaving }: Props) => {
   if (isLoading) {
     return (
-      <Render variant="alt3" onDismiss={dismiss}>
+      <Render variant="alt3" isSaving={isSaving} onDismiss={dismiss}>
         <Loader size="medium" /> Søker...
       </Render>
     );
@@ -28,7 +29,13 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (typeof data !== 'undefined') {
     return (
-      <Render variant="alt3" onConfirm={() => setPart(data)} onDismiss={dismiss} statusList={data.statusList}>
+      <Render
+        variant="alt3"
+        onConfirm={() => setPart(data)}
+        isSaving={isSaving}
+        onDismiss={dismiss}
+        statusList={data.statusList}
+      >
         <Icon part={data} /> {getSakspartName(data)}
       </Render>
     );
@@ -36,7 +43,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (searchString.length === 0) {
     return (
-      <Render variant="alt3" onDismiss={dismiss}>
+      <Render variant="alt3" isSaving={isSaving} onDismiss={dismiss}>
         Søk etter person eller virksomhet
       </Render>
     );
@@ -44,14 +51,14 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (!isValid) {
     return (
-      <Render variant="warning" onDismiss={dismiss}>
+      <Render variant="warning" isSaving={isSaving} onDismiss={dismiss}>
         Ugyldig ID-nummer
       </Render>
     );
   }
 
   return (
-    <Render variant="warning" onDismiss={dismiss}>
+    <Render variant="warning" isSaving={isSaving} onDismiss={dismiss}>
       Ingen treff på &quot;{formatId(searchString)}&quot;
     </Render>
   );
@@ -63,9 +70,10 @@ interface RenderProps {
   children: React.ReactNode;
   onConfirm?: () => void;
   onDismiss?: () => void;
+  isSaving: boolean;
 }
 
-const Render = ({ children, variant, statusList, onConfirm, onDismiss }: RenderProps) => {
+const Render = ({ children, variant, statusList, onConfirm, onDismiss, isSaving }: RenderProps) => {
   const accept =
     onConfirm === undefined ? null : (
       <CustomButton
@@ -74,6 +82,8 @@ const Render = ({ children, variant, statusList, onConfirm, onDismiss }: RenderP
         label="Bruk"
         keys={['enter']}
         variant="primary"
+        disabled={isSaving}
+        loading={isSaving}
       />
     );
 
@@ -102,17 +112,16 @@ const Render = ({ children, variant, statusList, onConfirm, onDismiss }: RenderP
   );
 };
 
-interface CustomButtonProps {
+interface CustomButtonProps extends ButtonProps {
   label: string;
   onClick: () => void;
   icon: React.ReactNode;
   keys: string[];
-  variant?: ButtonProps['variant'];
 }
 
-const CustomButton = ({ label, icon, keys, onClick, variant }: CustomButtonProps) => (
+const CustomButton = ({ label, keys, ...props }: CustomButtonProps) => (
   <Tooltip content={label} keys={keys}>
-    <Button size="small" variant={variant} onClick={onClick} icon={icon} title={label}>
+    <Button {...props} size="small" title={label}>
       {label}
     </Button>
   </Tooltip>

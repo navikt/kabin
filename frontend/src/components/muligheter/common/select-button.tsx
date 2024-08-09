@@ -1,15 +1,27 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 
 interface Props {
   isSelected: boolean;
   select: (e: React.MouseEvent) => void;
   isValid: boolean;
+  isLoading: boolean;
 }
 
-export const SelectMulighet = ({ isSelected, select, isValid }: Props) => {
+export const SelectMulighet = ({ isSelected, select, isValid, isLoading }: Props) => {
   const [icon, buttonText, title] = useButtonProps(isSelected, isValid);
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    return isSelected ? (
+      <CheckmarkContainer>
+        <ReadOnlyCheckmark aria-label="Valgt" fontSize={20} />{' '}
+      </CheckmarkContainer>
+    ) : null;
+  }
 
   return (
     <Button
@@ -20,6 +32,7 @@ export const SelectMulighet = ({ isSelected, select, isValid }: Props) => {
       onClick={select}
       disabled={!isValid}
       data-testid="select-ankemulighet"
+      loading={isLoading}
     >
       {buttonText}
     </Button>
@@ -44,3 +57,14 @@ const useButtonProps = (
     'Vedtaksdato kan ikke være etter dato for valgt journalpost',
   ];
 };
+
+const ReadOnlyCheckmark = styled(CheckmarkCircleFillIconColored)`
+  align-self: center;
+  justify-self: center;
+`;
+
+const CheckmarkContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

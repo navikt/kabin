@@ -21,7 +21,7 @@ export const StyledPart = styled(BodyShort)`
 export const DataContainer = styled.section`
   width: 1000px;
   display: grid;
-  grid-template-areas: 'title title' 'info info' 'journalpost case' 'svarbrev-metadata mulighet' 'svarbrev-pdf svarbrev-pdf';
+  grid-template-areas: 'journalpost case' 'svarbrev-metadata mulighet' 'svarbrev-pdf svarbrev-pdf';
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(4, min-content);
   gap: 24px;
@@ -38,13 +38,4 @@ export const LoadingContainer = styled.div`
 
 export const StyledLoader = styled(Loader)`
   align-self: center;
-`;
-
-export const PageWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-top: 32px;
-  padding-bottom: 32px;
-  background: var(--a-bg-subtle);
-  overflow: auto;
 `;

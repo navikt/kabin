@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { ValidationFieldNames } from '@app/types/validation';
+import { IValidationSection, ValidationFieldNames } from '@app/types/validation';
 
 export const useValidationError = (field: ValidationFieldNames): string | undefined => {
-  const { errors } = useContext(AppContext);
+  const errors: IValidationSection[] = []; // TODO: Get errors from API.
 
   if (errors === null) {
     return undefined;

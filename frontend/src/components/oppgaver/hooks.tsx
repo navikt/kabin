@@ -1,43 +1,39 @@
-import { IAnkeState, IKlageState, Type } from '@app/pages/create/app-context/types';
-import { skipToken } from '@app/types/common';
-import { SourceId } from '@app/types/mulighet';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { IGetOppgaverParams } from '@app/redux/api/oppgaver';
+import { SaksTypeEnum } from '@app/types/common';
+import { FagsystemId, IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
-export const useParams = (
-  type: Type,
-  identifikator: string | typeof skipToken,
-  state: IKlageState | IAnkeState | null,
-) => {
-  if (identifikator === skipToken) {
+export const useParams = (): IGetOppgaverParams | typeof skipToken => {
+  const { sakenGjelderValue } = useRegistrering();
+  const { typeId, mulighet } = useMulighet();
+
+  if (typeId === null || sakenGjelderValue === null) {
     return skipToken;
   }
 
-  if (!oppgaverIsEnabled(type, state)) {
+  if (!oppgaverIsEnabled(typeId, mulighet)) {
     return skipToken;
   }
 
-  if (typeof state.mulighet.temaId === 'string') {
-    return { identifikator, temaId: state.mulighet.temaId };
+  if (mulighet !== undefined) {
+    return { identifikator: sakenGjelderValue, temaId: mulighet.temaId };
   }
 
-  return { identifikator };
+  return { identifikator: sakenGjelderValue };
 };
 
-type NonNullableMulighet = NonNullable<IKlageState['mulighet'] | IAnkeState['mulighet']>;
-
-type StateWithMulighet = (IKlageState | IAnkeState) & {
-  mulighet: NonNullableMulighet;
-};
-
-export const oppgaverIsEnabled = (type: Type, state: IKlageState | IAnkeState | null): state is StateWithMulighet => {
-  if (state === null || state.mulighet === null) {
+const oppgaverIsEnabled = (typeId: SaksTypeEnum, mulighet: IKlagemulighet | IAnkemulighet | undefined) => {
+  if (mulighet === undefined) {
     return false;
   }
 
-  if (type === Type.KLAGE) {
+  if (typeId === SaksTypeEnum.KLAGE) {
     return true;
   }
 
-  if (type === Type.ANKE && state.mulighet.fagsystemId === SourceId.INFOTRYGD) {
+  if (typeId === SaksTypeEnum.ANKE && mulighet.originalFagsystemId === FagsystemId.INFOTRYGD) {
     return true;
   }
 

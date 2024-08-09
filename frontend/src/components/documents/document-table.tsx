@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { ColumnHeaders } from '@app/components/documents/column-headers';
+import { Dokument } from '@app/components/documents/document/document';
+import { useFilteredDocuments } from '@app/components/documents/filter-helpers';
 import { DateRange } from '@app/types/common';
 import { IArkivertDocument } from '@app/types/dokument';
-import { ColumnHeaders } from './column-headers';
-import { Dokument } from './document/document';
-import { useFilteredDocuments } from './filter-helpers';
 
 interface Props {
   dokumenter: IArkivertDocument[];

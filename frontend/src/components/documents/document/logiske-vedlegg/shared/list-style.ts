@@ -21,7 +21,7 @@ export const LogiskeVedleggList = styled.ul<StyleProps>`
   align-items: center;
   width: fit-content;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
 `;
 
 export const LogiskeVedleggListItem = styled.li`

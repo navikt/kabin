@@ -1,37 +1,90 @@
-import { Alert, BodyLong, Table } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
+import { Header } from '@app/components/oppgaver/header';
+import { useParams } from '@app/components/oppgaver/hooks';
+import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
+import { Row } from '@app/components/oppgaver/row';
+import { TableHeaders } from '@app/components/oppgaver/table-headers';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { useGetOppgaver } from '@app/simple-api-state/use-api';
+import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Header } from './header';
-import { oppgaverIsEnabled, useParams } from './hooks';
-import { Row } from './row';
-import { SkeletonTable } from './skeleton-table';
-import { TableHeaders } from './table-headers';
 
 export const Oppgaver = () => {
-  const { fnr, type, state } = useContext(AppContext);
-  const { data: oppgaver, isLoading } = useGetOppgaver(useParams(type, fnr, state));
+  const canEdit = useCanEdit();
+
+  if (canEdit) {
+    return <EditableOppgaver />;
+  }
+
+  return <ReadOnlyOppgaver />;
+};
+
+const ReadOnlyOppgaver = () => {
+  const { overstyringer } = useRegistrering();
+  const { oppgaveId } = overstyringer;
+  const oppgaverParams = useParams();
+  const { oppgave, isLoading } = useGetOppgaverQuery(oppgaveId === null ? skipToken : oppgaverParams, {
+    selectFromResult: ({ data, ...rest }) => ({ oppgave: data?.find((o) => o.id === oppgaveId), ...rest }),
+  });
+
+  if (oppgaveId === null) {
+    return (
+      <Card>
+        <Heading level="2" size="small">
+          Gosys-oppgave
+        </Heading>
+
+        <Alert variant="info" size="small" inline>
+          Ingen Gosys-oppgave valgt
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (isLoading || oppgave === undefined) {
+    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
+  }
+
+  return (
+    <Card>
+      <Heading level="2" size="small">
+        Gosys-oppgave
+      </Heading>
+
+      <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
+        <TableHeaders />
+        <Table.Body>
+          <Row {...oppgave} />
+        </Table.Body>
+      </Table>
+    </Card>
+  );
+};
+
+const EditableOppgaver = () => {
+  const oppgaverParams = useParams();
+  const { data: oppgaver, isLoading } = useGetOppgaverQuery(oppgaverParams);
   const error = useValidationError(ValidationFieldNames.OPPGAVE);
 
-  if (!oppgaverIsEnabled(type, state)) {
+  if (oppgaverParams === skipToken) {
     return null;
   }
 
   if (isLoading) {
-    return <SkeletonTable />;
+    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
   }
 
   if (oppgaver === undefined || oppgaver.length === 0) {
     return (
       <Card>
         <Header />
-        <ErrorMessage type={type} />
+        <ErrorMessage />
       </Card>
     );
   }
@@ -42,7 +95,7 @@ export const Oppgaver = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.OPPGAVE} />
 
-      <Table size="small" zebraStripes>
+      <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
         <TableHeaders />
         <Table.Body>
           {oppgaver.map((oppgave) => (
@@ -70,8 +123,10 @@ const Contact = () => (
   </BodyLong>
 );
 
-const ErrorMessage = ({ type }: { type: Type }) => {
-  if (type === Type.KLAGE) {
+const ErrorMessage = () => {
+  const { typeId } = useRegistrering();
+
+  if (typeId === SaksTypeEnum.KLAGE) {
     return (
       <StyledAlert variant="warning" size="small">
         <BodyLong>
@@ -83,7 +138,7 @@ const ErrorMessage = ({ type }: { type: Type }) => {
     );
   }
 
-  if (type === Type.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE) {
     return (
       <StyledAlert variant="warning" size="small">
         <BodyLong>

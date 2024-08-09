@@ -1,58 +1,43 @@
 import { Heading, Label } from '@navikt/ds-react';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import {
-  IAnkeState,
-  IAnkeStateUpdate,
-  IKlageState,
-  IKlageStateUpdate,
-  Type,
-  UpdateFn,
-} from '@app/pages/create/app-context/types';
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
 
 export const EditFrist = () => {
-  const { type, state, updateState } = useContext(AppContext);
+  const { typeId } = useRegistrering();
 
-  if (type === Type.NONE) {
+  if (typeId === null) {
     return null;
   }
 
-  return <LoadedEditFrist state={state} updateState={updateState} />;
+  return <LoadedEditFrist />;
 };
 
-interface LoadedEditFristProps {
-  state: IKlageState | IAnkeState;
-  updateState: UpdateFn<IKlageStateUpdate, IKlageState> | UpdateFn<IAnkeStateUpdate, IAnkeState>;
-}
+const LoadedEditFrist = () => {
+  const { id, overstyringer } = useRegistrering();
+  const { behandlingstid } = overstyringer;
+  const [setBehandlingstid] = useSetBehandlingstidMutation();
+  const canEdit = useCanEdit();
 
-const LoadedEditFrist = ({ updateState, state }: LoadedEditFristProps) => {
-  const [units, setUnits] = useState(12);
-  const [unitType, setUnitType] = useState(BehandlingstidUnitType.WEEKS);
+  const onUnitChange = useCallback(
+    (units: number) =>
+      setBehandlingstid({ id, units, unitTypeId: behandlingstid?.unitTypeId ?? BehandlingstidUnitType.WEEKS }),
+    [behandlingstid?.unitTypeId, id, setBehandlingstid],
+  );
 
-  useEffect(() => {
-    if (units === state.overstyringer.behandlingstidUnits && unitType === state.overstyringer.behandlingstidUnitType) {
-      return;
-    }
+  const onUnitTypeChange = useCallback(
+    (unitTypeId: BehandlingstidUnitType) => setBehandlingstid({ id, units: behandlingstid?.units ?? 12, unitTypeId }),
+    [behandlingstid?.units, id, setBehandlingstid],
+  );
 
-    const timeout = setTimeout(() => {
-      updateState({ overstyringer: { behandlingstidUnits: units, behandlingstidUnitType: unitType } });
-    }, 100);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [
-    state.overstyringer.behandlingstidUnitType,
-    state.overstyringer.behandlingstidUnits,
-    unitType,
-    units,
-    updateState,
-  ]);
+  const units = behandlingstid?.units ?? 12;
+  const unitType = behandlingstid?.unitTypeId ?? BehandlingstidUnitType.WEEKS;
 
   return (
     <Container aria-labelledby="fristIKabal">
@@ -61,11 +46,18 @@ const LoadedEditFrist = ({ updateState, state }: LoadedEditFristProps) => {
       </Label>
 
       <Row>
-        <Units label="Antall" value={units} onChange={setUnits} />
+        {canEdit ? (
+          <>
+            <Units label="Antall" value={units} onChange={onUnitChange} />
+            <UnitType value={unitType} onChange={onUnitTypeChange} />
+          </>
+        ) : (
+          <span>
+            {units} {BEHANDLINGSTID_UNIT_TYPE_NAMES[unitType]}
+          </span>
+        )}
 
-        <UnitType value={unitType} onChange={setUnitType} />
-
-        <Fristdato units={units} unitType={unitType} />
+        <Fristdato />
       </Row>
     </Container>
   );

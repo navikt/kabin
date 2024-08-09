@@ -1,5 +1,3 @@
-export const skipToken = Symbol('skipToken');
-
 export enum Utsendingskanal {
   SENTRAL_UTSKRIFT = 'SENTRAL_UTSKRIFT',
   SDP = 'SDP',
@@ -68,44 +66,17 @@ export enum PartStatusEnum {
 }
 
 export type IPersonStatus =
-  | {
-      status: PartStatusEnum.DEAD;
-      date: string;
-    }
-  | {
-      status: PartStatusEnum.EGEN_ANSATT;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.VERGEMAAL;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.FULLMAKT;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.FORTROLIG;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.STRENGT_FORTROLIG;
-      date: null;
-    }
-  | {
-      status: PartStatusEnum.RESERVERT_I_KRR;
-      date: null;
-    };
+  | { status: PartStatusEnum.DEAD; date: string }
+  | { status: PartStatusEnum.EGEN_ANSATT; date: null }
+  | { status: PartStatusEnum.VERGEMAAL; date: null }
+  | { status: PartStatusEnum.FULLMAKT; date: null }
+  | { status: PartStatusEnum.FORTROLIG; date: null }
+  | { status: PartStatusEnum.STRENGT_FORTROLIG; date: null }
+  | { status: PartStatusEnum.RESERVERT_I_KRR; date: null };
 
 export type IOrganizationStatus =
-  | {
-      status: PartStatusEnum.DELETED;
-      date: string;
-    }
-  | {
-      status: PartStatusEnum.DELT_ANSVAR;
-      date: null;
-    };
+  | { status: PartStatusEnum.DELETED; date: string }
+  | { status: PartStatusEnum.DELT_ANSVAR; date: null };
 
 interface IPersonPart extends IPartBase {
   type: IdType.FNR;
@@ -135,15 +106,16 @@ export type ISimplePart = Omit<IPart, 'address' | 'utsendingskanal' | 'language'
 
 export const PART_TYPES = Object.values(IdType);
 
-export interface IPartId {
-  type: IdType | AvsenderMottakerType;
-  id: string;
-}
-
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
+  ANKE_I_TR = '3',
 }
+
+export type RegistreringType = SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
+
+export const isType = (type: string): type is RegistreringType =>
+  type === SaksTypeEnum.KLAGE || type === SaksTypeEnum.ANKE;
 
 export interface ISaksbehandler {
   navIdent: string;

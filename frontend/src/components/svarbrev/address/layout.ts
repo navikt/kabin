@@ -28,7 +28,7 @@ const getBackgroundColor = (state: AddressState) => {
   }
 };
 
-export const recipientStyle = css`
+export const receiverStyle = css`
   display: flex;
   flex-direction: column;
   border: 1px solid var(--a-border-subtle);
@@ -42,8 +42,8 @@ export const recipientStyle = css`
   }
 `;
 
-export const StyledRecipient = styled.section`
-  ${recipientStyle}
+export const StyledReceiver = styled.section`
+  ${receiverStyle}
 `;
 
 export const Row = styled.div`

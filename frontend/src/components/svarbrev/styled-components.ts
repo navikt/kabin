@@ -11,7 +11,7 @@ export const StyledBrevmottaker = styled.div`
   min-height: 32px;
 `;
 
-export const StyledRecipientContent = styled.div`
+export const StyledReceiverContent = styled.div`
   display: flex;
   flex-direction: row;
   gap: 4px;

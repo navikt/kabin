@@ -1,31 +1,32 @@
-import { EditButton } from '@app/components/overstyringer/common/edit-button';
 import { RemovePartButton } from '@app/components/overstyringer/part-read/remove-part';
-import { ResetPartButton } from '@app/components/overstyringer/part-read/reset-part';
+import { SearchPartButton } from '@app/components/overstyringer/part-read/search-part-button';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
-import { EnterEditModeCallback, ISetPart } from '@app/components/overstyringer/part-read/types';
-import { PartActionsContainer } from '../styled-components';
-import { BaseProps } from '../types';
+import { EnterSearchModeCallback, ISetPart } from '@app/components/overstyringer/part-read/types';
+import { PartActionsContainer } from '@app/components/overstyringer/styled-components';
+import { BaseProps } from '@app/components/overstyringer/types';
 
 export interface ActionsProps extends BaseProps {
   options?: ISetPart[];
-  required?: boolean;
+  optional?: boolean;
 }
 
 export const Actions = ({
   part,
   partField,
-  enterEditMode,
+  enterSearchMode,
   options = [],
-  required = true,
-}: ActionsProps & EnterEditModeCallback) => (
+  excludedPartIds = [],
+  optional = false,
+}: ActionsProps & EnterSearchModeCallback) => (
   <PartActionsContainer>
-    {options
-      .filter((props) => props.defaultPart !== null)
-      .map((props) => (
-        <SetPartButton key={props.label} {...props} part={part} partField={partField} />
-      ))}
-    <ResetPartButton partField={partField} part={part} />
-    {required ? null : <RemovePartButton partField={partField} part={part} />}
-    <EditButton enterEditMode={enterEditMode} />
+    {options.reduce<React.ReactNode[]>((list, p) => {
+      if (p.defaultPart.id === part?.id || excludedPartIds.includes(p.defaultPart.id)) {
+        return list;
+      }
+
+      return [...list, <SetPartButton key={p.label} {...p} partField={partField} />];
+    }, [])}
+    {!optional || part === null ? null : <RemovePartButton partField={partField} />}
+    <SearchPartButton enterSearchMode={enterSearchMode} />
   </PartActionsContainer>
 );

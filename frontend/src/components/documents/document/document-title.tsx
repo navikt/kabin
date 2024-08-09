@@ -2,8 +2,8 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
-import { EditTitle } from './edit-document-title';
+import { EditTitle } from '@app/components/documents/document/edit-document-title';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 
 interface Props {
   journalpostId: string;

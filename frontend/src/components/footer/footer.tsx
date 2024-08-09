@@ -1,44 +1,57 @@
-import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
-import { Confirm } from './confirm';
-import { ValidationSummaryPopup } from './validation-summary-popup';
-
-type FooterErrors = IApiValidationResponse | IValidationSection | IApiErrorReponse | Error;
+import { DeleteButton } from '@app/components/footer/delete-button';
+import { FinishButton } from '@app/components/footer/finish-button';
+import { ValidationSummaryPopup } from '@app/components/footer/validation-summary-popup';
+import { useIsOwner } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 
 export const Footer = () => {
-  const [error, setError] = useState<FooterErrors | undefined>();
-  const { state } = useContext(AppContext);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const isOwner = useIsOwner();
+  const { id, finished } = useRegistrering();
+  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
 
-  const toggleConfirm = () => setShowConfirm(!showConfirm);
-  const closeConfirm = () => setShowConfirm(false);
+  const isFinished = finished !== null;
+
+  if (!isOwner) {
+    return (
+      <StyledFooter $isFinished={isFinished}>
+        <Buttons>{isFinished ? <StatusButton /> : null}</Buttons>
+      </StyledFooter>
+    );
+  }
 
   return (
-    <StyledFooter $hasError={error !== undefined}>
-      <Button
-        onClick={toggleConfirm}
-        size="small"
-        icon={<CheckmarkIcon aria-hidden />}
-        variant="primary"
-        disabled={state === null}
-      >
-        Fullfør
-      </Button>
-
-      <Confirm show={showConfirm} setError={setError} closeConfirm={closeConfirm} />
-
-      <ValidationSummaryPopup error={error} />
+    <StyledFooter $hasError={isError} $isFinished={isFinished}>
+      <Buttons>
+        {isFinished ? <StatusButton /> : <FinishButton />}
+        {isFinished ? null : <DeleteButton />}
+      </Buttons>
+      <ValidationSummaryPopup />
     </StyledFooter>
   );
 };
 
+const StatusButton = () => {
+  const { id } = useRegistrering();
+
+  return (
+    <Button as={RouterLink} size="small" variant="primary" to={`/registrering/${id}/status`}>
+      Status
+    </Button>
+  );
+};
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
 interface IStyleProps {
-  $hasError: boolean;
+  $hasError?: boolean;
+  $isFinished: boolean;
 }
 
 const StyledFooter = styled.div<IStyleProps>`
@@ -55,6 +68,31 @@ const StyledFooter = styled.div<IStyleProps>`
   align-items: center;
   align-content: center;
   z-index: 1;
-  border-top: 1px solid ${({ $hasError }) => ($hasError ? '#d47b00' : '#368da8')};
-  background-color: ${({ $hasError }) => ($hasError ? '#ffe9cc' : '#e0f5fb')};
+
+  border-top: 1px solid ${({ $hasError, $isFinished }) => getBorderColor($hasError, $isFinished)};
+  background-color: ${({ $hasError, $isFinished }) => getBackgroundColor($hasError, $isFinished)};
 `;
+
+const getBackgroundColor = (hasError: boolean = false, isFinished: boolean) => {
+  if (hasError) {
+    return 'var(--a-surface-warning-subtle)';
+  }
+
+  if (isFinished) {
+    return 'var(--a-surface-success-subtle)';
+  }
+
+  return 'var(--a-surface-action-subtle)';
+};
+
+const getBorderColor = (hasError: boolean = false, isFinished: boolean) => {
+  if (hasError) {
+    return 'var(--a-border-warning)';
+  }
+
+  if (isFinished) {
+    return 'var(--a-border-success)';
+  }
+
+  return 'var(--a-border-action)';
+};

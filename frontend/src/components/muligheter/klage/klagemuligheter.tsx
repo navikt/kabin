@@ -1,60 +1,68 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
-import { useContext, useEffect, useState } from 'react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
-import { CardSmall } from '@app/components/card/card';
+import { Card, CardSmall } from '@app/components/card/card';
 import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
+import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedKlagemulighet } from '@app/components/selected/selected-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { useKlagemuligheter } from '@app/simple-api-state/use-api';
+import { useGetKlagemuligheterQuery, useGetRegistreringKlagemulighetQuery } from '@app/redux/api/muligheter';
+import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Klagemulighet } from './klagemulighet';
 
 export const Klagemuligheter = () => {
-  const { type, state, updateState, fnr } = useContext(AppContext);
+  const canEdit = useCanEdit();
 
-  const { data: klagemuligheter, isLoading, refetch } = useKlagemuligheter(fnr);
+  if (canEdit) {
+    return <EditableKlagemuligheter />;
+  }
+
+  return <ReadOnlyKlagemulighet />;
+};
+
+const ReadOnlyKlagemulighet = () => {
+  const id = useRegistreringId();
+  const { data, isLoading } = useGetRegistreringKlagemulighetQuery(id);
+
+  return (
+    <Card>
+      <Header>
+        <Heading level="1" size="small">
+          Vedtaket klagen gjelder
+        </Heading>
+      </Header>
+
+      <Content klagemuligheter={data === undefined ? undefined : [data]} isLoading={isLoading} />
+    </Card>
+  );
+};
+
+const EditableKlagemuligheter = () => {
+  const { sakenGjelderValue, typeId, mulighet } = useRegistrering();
+  const {
+    data: klagemuligheter,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetKlagemuligheterQuery(sakenGjelderValue ?? skipToken);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.VEDTAK);
 
-  useEffect(() => {
-    if (typeof klagemuligheter === 'undefined' && type === Type.KLAGE) {
-      setIsExpanded(true);
-
-      if (state.mulighet !== null) {
-        updateState({ mulighet: null });
-      }
-    }
-  }, [klagemuligheter, isLoading, type, updateState, state?.mulighet]);
-
-  if (type !== Type.KLAGE) {
+  if (typeId !== SaksTypeEnum.KLAGE) {
     return null;
   }
 
-  if (!isExpanded && state.mulighet !== null) {
+  if (!isExpanded && mulighet !== null) {
     return <SelectedKlagemulighet onClick={() => setIsExpanded(true)} />;
   }
-
-  const onRefresh = async () => {
-    const updated = await refetch();
-
-    if (updated === undefined) {
-      return;
-    }
-
-    const { mulighet } = state;
-
-    if (mulighet === null) {
-      return;
-    }
-
-    updateState({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
-  };
 
   return (
     <CardSmall>
@@ -66,13 +74,13 @@ export const Klagemuligheter = () => {
         <Button
           size="xsmall"
           variant="tertiary"
-          onClick={onRefresh}
-          loading={isLoading}
+          onClick={refetch}
+          loading={isFetching}
           icon={<ArrowsCirclepathIcon aria-hidden />}
           title="Oppdater"
         />
 
-        {state.mulighet === null ? null : (
+        {mulighet === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"
@@ -132,7 +140,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
 
   return (
     <TableContainer $showShadow={klagemuligheter.length >= 3}>
-      <Table zebraStripes size="small">
+      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Klagemuligheter">
         <StyledTableHeader>
           <Table.Row>
             <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
@@ -146,7 +154,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
         </StyledTableHeader>
         <Table.Body>
           {klagemuligheter.map((klagemulighet) => (
-            <Klagemulighet key={klagemulighet.id} mulighet={klagemulighet} />
+            <Klagemulighet key={klagemulighet.id} klagemulighet={klagemulighet} />
           ))}
         </Table.Body>
       </Table>

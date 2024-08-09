@@ -1,65 +1,97 @@
-import { Search } from '@navikt/ds-react';
+import { Alert, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import { useContext, useMemo, useState } from 'react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+import { SearchResult } from '@app/components/overstyringer/search-result';
+import { PartContent, States, StyledContainer } from '@app/components/overstyringer/styled-components';
+import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { SearchPartWithAddressParams, useSearchPartWithAddress } from '@app/simple-api-state/use-api';
-import { IPart, skipToken } from '@app/types/common';
-import { SearchResult } from './search-result';
-import { PartContent, States, StyledContainer } from './styled-components';
-import { BaseProps } from './types';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import {
+  useSetAvsenderMutation,
+  useSetFullmektigMutation,
+  useSetKlagerMutation,
+} from '@app/redux/api/overstyringer/overstyringer';
+import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
+import { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
+import { IPart } from '@app/types/common';
 
-interface InternalProps {
-  exitEditMode: () => void;
+interface Props extends BaseProps {
+  exitSearchMode: () => void;
   error?: string;
 }
 
-export type PartWriteProps = BaseProps;
+export const PartSearch = (props: Props) => {
+  const setAvsender = useSetAvsenderMutation();
+  const setFullmektig = useSetFullmektigMutation();
+  const setKlager = useSetKlagerMutation();
+  const id = useRegistreringId();
 
-export const PartWrite = ({
+  const mutation = useMemo(() => {
+    switch (props.partField) {
+      case FieldNames.AVSENDER:
+        return setAvsender;
+      case FieldNames.FULLMEKTIG:
+        return setFullmektig;
+      case FieldNames.KLAGER:
+        return setKlager;
+    }
+  }, [props.partField, setAvsender, setFullmektig, setKlager]);
+
+  const [set, { isLoading }] = mutation;
+
+  const setPart = (part: IPart | null) => set({ id, part });
+
+  return <PartSearchInternal {...props} setPart={setPart} isSaving={isLoading} />;
+};
+
+interface InternalProps extends Props {
+  setPart: (part: IPart | null) => void;
+  isSaving: boolean;
+}
+
+const PartSearchInternal = ({
   part,
   partField,
   label,
-  exitEditMode,
+  exitSearchMode,
   icon,
   error: validationError,
-}: PartWriteProps & InternalProps) => {
-  const { type, updateState } = useContext(AppContext);
+  setPart,
+  isSaving,
+  excludedPartIds = [],
+}: InternalProps) => {
+  const { mulighet } = useMulighet();
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
-  const { state } = useContext(AppContext);
+  const ytelseId = useYtelseId();
 
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
-  const searchParams = useMemo<SearchPartWithAddressParams | typeof skipToken>(() => {
-    if (!isValid || state === null || state.mulighet === null || state.overstyringer.ytelseId === null) {
+  const searchParams = useMemo<SearchPartWithUtsendingskanalParams | typeof skipToken>(() => {
+    if (!isValid || mulighet === undefined || ytelseId === null) {
       return skipToken;
     }
 
     return {
       identifikator: search,
-      sakenGjelderId: state.mulighet.sakenGjelder.id,
-      ytelseId: state.overstyringer.ytelseId,
+      sakenGjelderId: mulighet.sakenGjelder.id,
+      ytelseId,
     };
-  }, [isValid, state, search]);
+  }, [isValid, mulighet, ytelseId, search]);
 
-  const { data, isLoading } = useSearchPartWithAddress(searchParams);
-
-  if (type === Type.NONE) {
-    return null;
-  }
-
-  const setPart = (newPart: IPart | null) => updateState({ overstyringer: { [partField]: newPart } });
+  const { data, isLoading } = useGetPartWithUtsendingskanalQuery(searchParams);
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
   const setPartAndClose = (p: IPart | null) => {
     setPart(p);
-    exitEditMode();
+    exitSearchMode();
   };
 
   const onChange = (value: string) => {
@@ -69,7 +101,7 @@ export const PartWrite = ({
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
     if (key === 'Escape') {
-      exitEditMode();
+      exitSearchMode();
 
       return;
     }
@@ -84,6 +116,8 @@ export const PartWrite = ({
       setPartAndClose(data);
     }
   };
+
+  const isPartInvalid = data !== undefined && excludedPartIds.includes(data.id);
 
   return (
     <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>
@@ -104,14 +138,22 @@ export const PartWrite = ({
             id={partField}
           />
         </StyledPartSearch>
+
+        {isPartInvalid ? (
+          <Alert variant="warning" size="small" inline>
+            Er du sikker på at du har valgt riktig?
+          </Alert>
+        ) : null}
+
         <SearchResult
           isLoading={isLoading}
           setPart={setPartAndClose}
-          dismiss={exitEditMode}
+          dismiss={exitSearchMode}
           data={data}
           label={label}
           searchString={search}
           isValid={isValid}
+          isSaving={isSaving}
         />
       </PartContent>
       <ValidationErrorMessage error={validationError} />

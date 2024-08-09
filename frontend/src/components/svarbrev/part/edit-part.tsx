@@ -1,11 +1,11 @@
 import { Search, Tag } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { Lookup } from '@app/components/svarbrev/part/lookup';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
 import { IPart } from '@app/types/common';
-import { Lookup } from './lookup';
 
 interface EditPartProps {
   onChange: (part: IPart) => void;
@@ -17,13 +17,13 @@ interface EditPartProps {
 }
 
 export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
-  const { state } = useContext(AppContext);
+  const { mulighet } = useMulighet();
   const [rawValue, setRawValue] = useState('');
   const [error, setError] = useState<string>();
   const [search, { data, isLoading: isSearching, isFetching, isError, reset }] = useSearchPartWithUtsendingslkanal();
 
-  const sakenGjelderId = state?.mulighet?.sakenGjelder.id;
-  const ytelseId = state?.mulighet?.temaId;
+  const sakenGjelderId = mulighet?.sakenGjelder.id;
+  const ytelseId = mulighet?.temaId;
 
   const onClick = () => {
     const [value, inputError] = cleanAndValidate(rawValue);

@@ -1,57 +1,75 @@
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Loader, Table } from '@navikt/ds-react';
-import { useContext, useEffect, useState } from 'react';
+import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
-import { CardSmall } from '@app/components/card/card';
-import { StyledTableHeader, TableContainer } from '@app/components/muligheter/common/styled-components';
+import { Card, CardSmall } from '@app/components/card/card';
+import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
+import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
+import { TableHeaders } from '@app/components/muligheter/anke/table-headers';
+import { TableContainer } from '@app/components/muligheter/common/styled-components';
+import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { useAnkemuligheter } from '@app/simple-api-state/use-api';
-import { IAnkeMulighet } from '@app/types/mulighet';
+import { useGetAnkemuligheterQuery, useGetRegistreringAnkemulighetQuery } from '@app/redux/api/muligheter';
+import { SaksTypeEnum } from '@app/types/common';
+import { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Warning } from '../common/warning';
-import { Ankemulighet } from './ankemulighet';
 
 export const Ankemuligheter = () => {
-  const { type, state, updateState, fnr, journalpost } = useContext(AppContext);
-  const { data: ankemuligheter, isLoading, refetch } = useAnkemuligheter(fnr);
+  const canEdit = useCanEdit();
+
+  if (canEdit) {
+    return <EditableAnkemuligheter />;
+  }
+
+  return <ReadOnlyAnkemulighet />;
+};
+
+const ReadOnlyAnkemulighet = () => {
+  const id = useRegistreringId();
+  const { data, isLoading } = useGetRegistreringAnkemulighetQuery(id);
+
+  return (
+    <Card>
+      <Header>
+        <Heading level="1" size="small">
+          Vedtaket klagen gjelder
+        </Heading>
+      </Header>
+
+      <Content ankemuligheter={data === undefined ? undefined : [data]} isLoading={isLoading} />
+    </Card>
+  );
+};
+
+const EditableAnkemuligheter = () => {
+  const { sakenGjelderValue } = useRegistrering();
+  const { typeId, mulighet } = useMulighet();
+  const { journalpost } = useJournalpost();
+  const {
+    data: ankemuligheter,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetAnkemuligheterQuery(sakenGjelderValue ?? skipToken);
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
-  useEffect(() => {
-    if (typeof ankemuligheter === 'undefined' && type === Type.ANKE && state.mulighet !== null) {
-      setIsExpanded(true);
-      updateState({ mulighet: null });
-    }
-  }, [ankemuligheter, isLoading, state?.mulighet, type, updateState]);
-
-  if (type !== Type.ANKE) {
+  if (typeId !== SaksTypeEnum.ANKE) {
     return null;
   }
 
-  if (!isExpanded && state.mulighet !== null) {
+  if (!isExpanded && mulighet !== null) {
     return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
   }
-
-  const onRefresh = async () => {
-    const updated = await refetch();
-
-    if (updated === undefined) {
-      return;
-    }
-
-    const { mulighet } = state;
-
-    if (mulighet === null) {
-      return;
-    }
-
-    updateState({ mulighet: updated.find((a) => a.id === mulighet.id) ?? null });
-  };
 
   return (
     <CardSmall>
@@ -63,13 +81,13 @@ export const Ankemuligheter = () => {
         <Button
           size="xsmall"
           variant="tertiary"
-          onClick={onRefresh}
-          loading={isLoading}
+          onClick={refetch}
+          loading={isFetching}
           icon={<ArrowsCirclepathIcon aria-hidden />}
           title="Oppdater"
         />
 
-        {state.mulighet === null ? null : (
+        {mulighet === null ? null : (
           <StyledButton
             size="small"
             variant="tertiary-neutral"
@@ -82,7 +100,7 @@ export const Ankemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={state.mulighet?.vedtakDate} />
+      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
       <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
     </CardSmall>
@@ -104,16 +122,16 @@ const StyledButton = styled(Button)`
 `;
 
 interface ContentProps {
-  ankemuligheter: IAnkeMulighet[] | undefined;
+  ankemuligheter: IAnkemulighet[] | undefined;
   isLoading: boolean;
 }
 
 const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
     return (
-      <Placeholder>
-        <Loader size="3xlarge" title="Laster..." />
-      </Placeholder>
+      <LoadingAnkeMuligheter>
+        <TableHeaders />
+      </LoadingAnkeMuligheter>
     );
   }
 
@@ -132,21 +150,10 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   return (
     <TableContainer $showShadow={ankemuligheter.length >= 3}>
       <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
-        <StyledTableHeader>
-          <Table.Row>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>
-            <Table.HeaderCell>Tema</Table.HeaderCell>
-            <Table.HeaderCell>Ytelse</Table.HeaderCell>
-            <Table.HeaderCell>Vedtaksdato</Table.HeaderCell>
-            <Table.HeaderCell>Fagsystem</Table.HeaderCell>
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-          </Table.Row>
-        </StyledTableHeader>
+        <TableHeaders />
         <Table.Body>
           {ankemuligheter.map((ankemulighet) => (
-            <Ankemulighet key={ankemulighet.id} mulighet={ankemulighet} />
+            <Ankemulighet key={ankemulighet.id} ankemulighet={ankemulighet} />
           ))}
         </Table.Body>
       </Table>

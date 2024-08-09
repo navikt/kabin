@@ -12,7 +12,17 @@ export const CopyPartIdButton = ({ id, size = 'small' }: Props) => {
     return null;
   }
 
-  return <StyledCopyButton copyText={id} size={size} title="Kopier" text={formatId(id)} />;
+  return (
+    <StyledCopyButton
+      copyText={id}
+      size={size}
+      title="Kopier"
+      text={formatId(id)}
+      onClick={(e) => e.stopPropagation()}
+      onKeyUp={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+    />
+  );
 };
 
 export const StyledCopyButton = styled(CopyButton)`

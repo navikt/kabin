@@ -1,63 +1,35 @@
-import { useContext } from 'react';
-import { FullmektigIcon, KlagerIcon, SakenGjelderIcon, StyledAvsenderIcon } from '@app/components/overstyringer/icons';
+import { StyledAvsenderIcon } from '@app/components/overstyringer/icons';
+import { Part } from '@app/components/overstyringer/part';
+import { ISetPart } from '@app/components/overstyringer/part-read/types';
+import { FieldNames } from '@app/components/overstyringer/types';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Part } from './part';
-import { FieldNames } from './types';
 
-export const Avsender = () => {
-  const { type, state, journalpost } = useContext(AppContext);
+interface Props {
+  options: ISetPart[] | undefined;
+}
+
+export const Avsender = ({ options }: Props) => {
+  const { overstyringer } = useRegistrering();
+  const { avsender } = overstyringer;
+  const { journalpost } = useJournalpost();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
 
-  if (type === Type.NONE || state.mulighet === null) {
-    return null;
-  }
-
-  const { overstyringer, mulighet } = state;
-
-  if (journalpost === null || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
+  if (journalpost === undefined || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
     return null;
   }
 
   return (
     <Part
       partField={FieldNames.AVSENDER}
-      part={overstyringer.avsender}
+      part={avsender}
       label="Avsender"
       icon={<StyledAvsenderIcon aria-hidden />}
       error={error}
-      options={[
-        {
-          label: 'Saken gjelder',
-          defaultPart: mulighet.sakenGjelder,
-          title: 'Saken gjelder',
-          icon: <SakenGjelderIcon aria-hidden />,
-        },
-        {
-          label: getKlagerLabel(type),
-          defaultPart: overstyringer.klager,
-          title: getKlagerLabel(type),
-          icon: <KlagerIcon aria-hidden />,
-        },
-        {
-          label: 'Fullmektig',
-          defaultPart: overstyringer.fullmektig,
-          title: 'Fullmektig',
-          icon: <FullmektigIcon aria-hidden />,
-        },
-      ]}
+      options={options}
     />
   );
-};
-
-const getKlagerLabel = (type: Type.ANKE | Type.KLAGE) => {
-  switch (type) {
-    case Type.ANKE:
-      return 'Ankende part';
-    case Type.KLAGE:
-      return 'Klager';
-  }
 };
