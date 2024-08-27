@@ -1,32 +1,38 @@
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HelpText } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { useGetOppgaver } from '@app/simple-api-state/use-api';
-import { oppgaverIsEnabled, useParams } from './hooks';
+import { useParams } from '@app/components/oppgaver/hooks';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
+import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { SaksTypeEnum } from '@app/types/common';
 
 export const Header = () => {
-  const { fnr, type, state, updateState } = useContext(AppContext);
-  const { isLoading, refetch } = useGetOppgaver(useParams(type, fnr, state));
+  const { id, typeId, overstyringer } = useRegistrering();
+  const [setOppgaveId] = useSetOppgaveIdMutation();
+  const oppgaverParams = useParams();
+  const { refetch, isLoading } = useGetOppgaverQuery(oppgaverParams);
 
-  if (type === Type.NONE || !oppgaverIsEnabled(type, state)) {
+  if (oppgaverParams === skipToken) {
     return null;
   }
 
   const onRefresh = async () => {
-    const data = await refetch();
+    const { data: oppgaver } = await refetch();
 
-    if (data === undefined || data.find(({ id }) => id === state.overstyringer.oppgaveId) === undefined) {
-      updateState({ overstyringer: { oppgaveId: null } });
+    if (oppgaver === undefined || oppgaver.some((o) => o.id === overstyringer.oppgaveId)) {
+      return;
     }
+
+    // If selected oppgaveId is not in the list of oppgaver, reset oppgaveId.
+    setOppgaveId({ id, oppgaveId: null });
   };
 
   return (
     <StyledHeading level="2" size="small">
       Velg oppgave i Gosys
-      <OppgaveHelpText type={type} />
+      <OppgaveHelpText typeId={typeId} />
       <Button
         size="xsmall"
         variant="tertiary"
@@ -39,8 +45,8 @@ export const Header = () => {
   );
 };
 
-const OppgaveHelpText = ({ type }: { type: Type }) => {
-  if (type === Type.KLAGE) {
+const OppgaveHelpText = ({ typeId }: { typeId: SaksTypeEnum | null }) => {
+  if (typeId === SaksTypeEnum.KLAGE) {
     return (
       <HelpText>
         Du må velge oppgave i Gosys. Dersom klagesaken ikke har en oppgave i Gosys, må du opprette en. Kabal bruker
@@ -49,7 +55,7 @@ const OppgaveHelpText = ({ type }: { type: Type }) => {
     );
   }
 
-  if (type === Type.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE) {
     return (
       <HelpText>
         Du må velge oppgave i Gosys. Dersom ankesaken ikke har en oppgave i Gosys, må du opprette en. Kabal bruker denne

@@ -44,7 +44,7 @@ export const StyledContainer = styled.section<ContainerProps>`
   border: 1px solid ${({ $state }) => (BORDER_COLORS[$state] ? BORDER_COLORS[$state] : 'var(--a-gray-400)')};
   padding: 16px;
   border-radius: 4px;
-  min-height: 165px;
+  min-height: 178px;
 `;
 
 export const StyledPartName = styled(BodyShort)`
@@ -72,9 +72,9 @@ export const PartTextContent = styled.div`
 export const PartActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   gap: 8px;
-  justify-content: left;
+  justify-content: right;
   justify-self: end;
   flex-shrink: 0;
   flex-grow: 0;

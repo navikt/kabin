@@ -1,16 +1,18 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort } from '@navikt/ds-react';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { IApiErrorReponse, isApiError, isValidationSection } from '@app/components/footer/error-type-guard';
-import { IApiValidationResponse, IValidationSection } from '@app/types/validation';
-import { StyledHeader, ValidationSummary } from './validation-summary';
+import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
+import { StyledHeader, ValidationSummary } from '@app/components/footer/validation-summary';
+import { useRegistreringId } from '@app/hooks/use-registrering-id';
+import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 
-interface Props {
-  error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error | undefined;
-}
+export const ValidationSummaryPopup = () => {
+  const id = useRegistreringId();
+  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
 
-export const ValidationSummaryPopup = ({ error }: Props) => {
   const hasError = error !== undefined;
   const [isOpen, setIsOpen] = useState(hasError);
 
@@ -38,44 +40,52 @@ export const ValidationSummaryPopup = ({ error }: Props) => {
           </StyledAlertStripeText>
         </Alert>
       </StyledButton>
-      {isOpen && (
+      {isOpen ? (
         <StyledPopup>
           <StyledIconButton onClick={toggleOpen}>
             <Icon />
           </StyledIconButton>
           <RenderError error={error} />
         </StyledPopup>
-      )}
+      ) : null}
     </>
   );
 };
 
-const RenderError = ({ error }: { error: IApiValidationResponse | IValidationSection | IApiErrorReponse | Error }) => {
-  if (error instanceof Error) {
+const isSerializedError = (error: FetchBaseQueryError | SerializedError): error is SerializedError => 'name' in error;
+
+const RenderError = ({ error }: { error: FetchBaseQueryError | SerializedError }) => {
+  if (isSerializedError(error)) {
     return (
-      <Alert variant="warning">
-        <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
+      <Alert variant="error">
+        <StyledHeader>Ukjent feil: {error.name}</StyledHeader>
         <BodyShort style={{ wordBreak: 'break-word' }}>{error.message}</BodyShort>
       </Alert>
     );
   }
 
-  if (isApiError(error)) {
+  const { data } = error;
+
+  if (isValidationResponse(data)) {
+    return <ValidationSummary sections={data.sections} />;
+  }
+
+  if (isApiError(data)) {
     return (
       <Alert variant="warning">
         <StyledHeader>Kan ikke fullføre registrering.</StyledHeader>
         <BodyShort style={{ wordBreak: 'break-word' }}>
-          {error.status} - {error.detail}
+          {data.status} - {data.detail}
         </BodyShort>
       </Alert>
     );
   }
 
-  if (isValidationSection(error)) {
-    return <ValidationSummary sections={[error]} />;
+  if (isValidationSection(data)) {
+    return <ValidationSummary sections={[data]} />;
   }
 
-  return <ValidationSummary sections={error.sections} />;
+  return <Alert variant="error">Ukjent feil</Alert>;
 };
 
 const StyledAlertStripeText = styled.div`

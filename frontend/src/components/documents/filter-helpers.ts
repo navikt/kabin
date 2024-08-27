@@ -2,7 +2,7 @@ import { isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
-import { useKlageenheter, useVedtaksenheter } from '@app/simple-api-state/use-kodeverk';
+import { useGetKlageenheterQuery, useGetVedtaksenheterQuery } from '@app/redux/api/kodeverk';
 import { AvsenderMottakerType, DateRange } from '@app/types/common';
 import { IArkivertDocument, IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
 
@@ -15,8 +15,8 @@ const NONE = 'NONE';
 const UNKNOWN = 'UNKNOWN';
 
 export const useAvsenderMottakerNoteurOptions = (documents: IArkivertDocument[]): IOption<string>[] => {
-  const { data: klageenheter = [] } = useKlageenheter();
-  const { data: vedtaksenheter = [] } = useVedtaksenheter();
+  const { data: klageenheter = [] } = useGetKlageenheterQuery();
+  const { data: vedtaksenheter = [] } = useGetVedtaksenheterQuery();
 
   return useMemo(
     () =>

@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
+import { Button, Heading, Table, Tag } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
@@ -7,18 +7,18 @@ import { formatAvsenderMottaker } from '@app/components/documents/avsender-motta
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { DocumentViewerContext } from '@app/pages/create/document-viewer-context';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 
 interface Props {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const SelectedDocument = ({ onClick }: Props) => {
-  const { journalpost } = useContext(AppContext);
+  const { journalpost } = useJournalpost();
 
-  if (journalpost === null) {
+  if (journalpost === undefined) {
     return null;
   }
 
@@ -40,46 +40,54 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
         <Heading size="small" level="1">
           Valgt journalpost
         </Heading>
-        <Button
-          size="small"
-          variant="tertiary-neutral"
-          onClick={onClick}
-          icon={<ChevronDownIcon aria-hidden />}
-          title="Vis alle journalposter"
-        />
+        {onClick === undefined ? null : (
+          <Button
+            size="small"
+            variant="tertiary-neutral"
+            onClick={onClick}
+            icon={<ChevronDownIcon aria-hidden />}
+            title="Vis alle journalposter"
+          />
+        )}
       </Header>
-      <DocumentLine>
-        <Column>
-          <StyledLabel size="small">Tittel</StyledLabel>
-          <Detail>{tittel}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Antall vedlegg</StyledLabel>
-          <Detail>{vedlegg.length}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Tema</StyledLabel>
-          <StyledTag variant="alt3" size="small" title={temaName}>
-            <Ellipsis>{temaName}</Ellipsis>
-          </StyledTag>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Dato</StyledLabel>
-          <Detail as="time" dateTime={datoOpprettet}>
-            {isoDateTimeToPrettyDate(datoOpprettet) ?? ''}
-          </Detail>
-        </Column>
-        <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
-        <Column>
-          <StyledLabel size="small">Saks-ID</StyledLabel>
-          <Detail>{sak?.fagsakId ?? 'Ingen'}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Type</StyledLabel>
-          <Journalposttype journalposttype={journalposttype} />
-        </Column>
-        <ViewDocumentButton dokument={dokument} />
-      </DocumentLine>
+
+      <Table zebraStripes size="small">
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Tittel</Table.HeaderCell>
+            <Table.HeaderCell>Antall vedlegg</Table.HeaderCell>
+            <Table.HeaderCell>Tema</Table.HeaderCell>
+            <Table.HeaderCell>Dato</Table.HeaderCell>
+            <Table.HeaderCell>{getAvsenderMottakerTitle(journalposttype)}</Table.HeaderCell>
+            <Table.HeaderCell>Saks-ID</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          <Table.Row>
+            <Table.DataCell>{tittel}</Table.DataCell>
+            <Table.DataCell>{vedlegg.length}</Table.DataCell>
+            <Table.DataCell>
+              <StyledTag variant="alt3" size="small" title={temaName}>
+                <Ellipsis>{temaName}</Ellipsis>
+              </StyledTag>
+            </Table.DataCell>
+            <Table.DataCell>
+              <time dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet) ?? ''}</time>
+            </Table.DataCell>
+            <Table.DataCell>{formatAvsenderMottaker(avsenderMottaker)}</Table.DataCell>
+            <Table.DataCell>{sak?.fagsakId ?? 'Ingen'}</Table.DataCell>
+            <Table.DataCell>
+              <Journalposttype journalposttype={journalposttype} />
+            </Table.DataCell>
+            <Table.DataCell>
+              <ViewDocumentButton dokument={dokument} />
+            </Table.DataCell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
     </Card>
   );
 };
@@ -91,35 +99,32 @@ interface VirewDocumentButtonProps {
 const ViewDocumentButton = ({ dokument }: VirewDocumentButtonProps) => {
   const { dokument: viewedDokument, viewDokument } = useContext(DocumentViewerContext);
 
-  if (
-    viewedDokument?.dokumentInfoId === dokument.dokumentInfoId &&
-    viewedDokument?.journalpostId === dokument.journalpostId
-  ) {
-    return null;
-  }
+  const isViewing =
+    viewedDokument !== null &&
+    viewedDokument.dokumentInfoId === dokument.dokumentInfoId &&
+    viewedDokument.journalpostId === dokument.journalpostId;
 
   return (
-    <Button size="small" onClick={() => viewDokument(dokument)}>
-      Se dokument
-    </Button>
+    <StyledButton size="small" onClick={() => viewDokument(isViewing ? null : dokument)}>
+      {isViewing ? 'Skjul dokument' : 'Vis dokument'}
+    </StyledButton>
   );
 };
 
-type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
+const StyledButton = styled(Button)`
+  margin-top: auto;
+  width: 135px;
+`;
 
-const AvsenderMottaker = ({ journalposttype, avsenderMottaker }: AvsenderMottakerProps) => {
-  if (journalposttype === JournalposttypeEnum.NOTAT) {
-    return null;
+const getAvsenderMottakerTitle = (journalposttype: JournalposttypeEnum) => {
+  switch (journalposttype) {
+    case JournalposttypeEnum.INNGAAENDE:
+      return 'Avsender';
+    case JournalposttypeEnum.UTGAAENDE:
+      return 'Mottaker';
+    case JournalposttypeEnum.NOTAT:
+      return null;
   }
-
-  const title = journalposttype === JournalposttypeEnum.INNGAAENDE ? 'Mottaker' : 'Avsender';
-
-  return (
-    <Column>
-      <Label size="small">{title}</Label>
-      <Detail>{formatAvsenderMottaker(avsenderMottaker)}</Detail>
-    </Column>
-  );
 };
 
 const Header = styled.div`
@@ -128,34 +133,12 @@ const Header = styled.div`
   justify-content: space-between;
 `;
 
-const DocumentLine = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  column-gap: 16px;
-  background-color: var(--a-blue-50);
-  border: 1px solid var(--a-blue-200);
-  padding: 16px;
-  border-radius: 4px;
-`;
-
 const Ellipsis = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
   width: 100%;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`;
-
-const StyledLabel = styled(Label)`
-  white-space: nowrap;
 `;
 
 const StyledTag = styled(Tag)`

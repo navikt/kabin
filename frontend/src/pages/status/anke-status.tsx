@@ -1,44 +1,56 @@
-import { useParams } from 'react-router-dom';
-import { StatusHeading } from '@app/pages/status/common-components';
+import { Alert } from '@navikt/ds-react';
+import { styled } from 'styled-components';
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { StatusDetails } from '@app/pages/status/details';
-import { DataContainer, LoadingContainer, PageWrapper, StyledLoader } from '@app/pages/status/styled-components';
-import { useAnkeStatus } from '@app/simple-api-state/use-api';
-import { SaksTypeEnum, skipToken } from '@app/types/common';
+import { StatusHeading } from '@app/pages/status/heading';
+import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
+import { FinishedRegistrering } from '@app/redux/api/registreringer/types';
+import { useGetAnkeStatusQuery } from '@app/redux/api/status';
 import { IAnkestatus } from '@app/types/status';
 
-interface AnkeStatusProps {
-  type: SaksTypeEnum.ANKE;
+interface Props {
+  registrering: FinishedRegistrering;
 }
 
-export const AnkeStatusPage = ({ type }: AnkeStatusProps) => {
-  const { id } = useParams();
-  const { data, isLoading } = useAnkeStatus(id === undefined ? skipToken : { id, type });
+export const AnkeStatusPage = ({ registrering }: Props) => {
+  const { id, typeId, behandlingId, finished } = registrering;
+  const { data, isLoading, isError } = useGetAnkeStatusQuery(behandlingId);
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
-    <PageWrapper>
+    <StyledMain>
+      <StatusHeading
+        alertText={`Anken ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(finished)}.`}
+        headingText="Anke opprettet"
+        type={typeId}
+        behandlingId={behandlingId}
+        registreringId={id}
+      />
       <Container>
-        <StatusHeading
-          alertText="Anken er nå registrert og klar for saksbehandling i Kabal"
-          headingText="Anke opprettet"
-          type={type}
-          behandlingId={id}
-        />
-        <AnkeDetailsLoader loading={isLoading} data={data} id={id} />
+        <AnkeDetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />
       </Container>
-    </PageWrapper>
+    </StyledMain>
   );
 };
+
+const StyledMain = styled.main`
+  padding-top: 16px;
+`;
 
 interface AnkeDetailsLoaderProps {
   data: IAnkestatus | undefined;
   id: string | undefined;
-  loading: boolean;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-const AnkeDetailsLoader = ({ loading, data, id }: AnkeDetailsLoaderProps) => {
-  if (loading || data === undefined || id === undefined) {
-    return <StyledLoader size="3xlarge" title="Laster..." />;
+const AnkeDetailsLoader = ({ isLoading, isError, data, id }: AnkeDetailsLoaderProps) => {
+  if (isError) {
+    return <Alert variant="error">Kunne ikke hente status</Alert>;
+  }
+
+  if (isLoading || data === undefined || id === undefined) {
+    return <StyledLoader size="3xlarge" title="Laster behandling..." />;
   }
 
   return <StatusDetails id={id} status={data} />;

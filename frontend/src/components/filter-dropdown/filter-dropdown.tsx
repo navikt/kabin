@@ -1,11 +1,11 @@
 import { Label } from '@navikt/ds-react';
 import { useId, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { Dropdown } from '@app/components/filter-dropdown/dropdown';
+import { BaseProps } from '@app/components/filter-dropdown/props';
+import { ToggleButton } from '@app/components/filter-dropdown/toggle-button';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Dropdown } from './dropdown';
-import { BaseProps } from './props';
-import { ToggleButton } from './toggle-button';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   fullWidth?: boolean;

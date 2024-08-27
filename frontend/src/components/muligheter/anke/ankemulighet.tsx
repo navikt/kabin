@@ -1,62 +1,44 @@
 import { Table, Tag } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
+import { useCallback, useMemo } from 'react';
+import { TypeName } from '@app/components/muligheter/anke/type-name';
+import { UsedCount } from '@app/components/muligheter/anke/used-count';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
+import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
-import { useFagsystemName, useFullTemaNameFromId, useYtelseName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { IAnkeMulighet, TypeId } from '@app/types/mulighet';
+import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
+import { IAnkemulighet } from '@app/types/mulighet';
 
 interface Props {
-  mulighet: IAnkeMulighet;
+  ankemulighet: IAnkemulighet;
 }
 
-export const Ankemulighet = ({ mulighet }: Props) => {
-  const { type, updateState, state, journalpost } = useContext(AppContext);
+export const Ankemulighet = ({ ankemulighet }: Props) => {
+  const { id, mulighet } = useRegistrering();
+  const { journalpost } = useJournalpost();
+  const [setAnkemulighet, { isLoading }] = useSetAnkemulighetMutation();
+  const temaName = useFullTemaNameFromId(ankemulighet.temaId);
+  const fagsystemName = useFagsystemName(ankemulighet.originalFagsystemId);
+  const canEdit = useCanEdit();
 
-  const temaName = useFullTemaNameFromId(mulighet.temaId);
-  const ytelseName = useYtelseName(mulighet.ytelseId);
-  const fagsystemName = useFagsystemName(mulighet.fagsystemId);
-
-  const typeName = useMemo(() => {
-    switch (mulighet.typeId) {
-      case TypeId.KLAGE:
-        return (
-          <NowrapTag variant="info-filled" size="small">
-            Klage
-          </NowrapTag>
-        );
-      case TypeId.ANKE:
-        return (
-          <NowrapTag variant="alt1-filled" size="small">
-            Anke
-          </NowrapTag>
-        );
-      case TypeId.ANKE_I_TR:
-        return (
-          <NowrapTag variant="alt3-filled" size="small">
-            Anke i TR
-          </NowrapTag>
-        );
-    }
-  }, [mulighet.typeId]);
-
-  const isSelected = type === Type.ANKE && state.mulighet?.id === mulighet.id;
+  const isSelected = mulighet?.id === ankemulighet.id;
 
   const isValid = useMemo(() => {
-    if (journalpost === null) {
+    if (journalpost === undefined) {
       return false;
     }
 
-    if (mulighet.vedtakDate === null) {
+    if (ankemulighet.vedtakDate === null) {
       return true;
     }
 
-    return !isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet);
-  }, [journalpost, mulighet.vedtakDate]);
+    return !isDateAfter(ankemulighet.vedtakDate, journalpost.datoOpprettet);
+  }, [journalpost, ankemulighet.vedtakDate]);
 
   const selectAnke = useCallback(
     (e: React.MouseEvent) => {
@@ -66,37 +48,43 @@ export const Ankemulighet = ({ mulighet }: Props) => {
         return;
       }
 
-      if (type === Type.ANKE && state.mulighet !== mulighet) {
-        updateState({ mulighet });
+      if (mulighet === null || mulighet?.id !== ankemulighet.id) {
+        setAnkemulighet({ id, mulighet: ankemulighet });
       }
     },
-    [isValid, mulighet, state?.mulighet, type, updateState],
+    [isValid, mulighet, ankemulighet, setAnkemulighet, id],
   );
 
-  const usedCount = mulighet.sourceOfExistingAnkebehandling.length;
+  const usedCount = ankemulighet.sourceOfExistingAnkebehandling.length;
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectAnke} $isValid={isValid} $isSelected={isSelected}>
-      <Table.DataCell>{typeName}</Table.DataCell>
-      <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
-      <Table.DataCell>{temaName}</Table.DataCell>
-      <Table.DataCell>{ytelseName}</Table.DataCell>
-      <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
+    <StyledTableRow
+      selected={isSelected}
+      onClick={selectAnke}
+      $isValid={isValid}
+      $isSelected={isSelected}
+      $clickable={canEdit}
+    >
+      <Table.DataCell>
+        <TypeName typeId={ankemulighet.typeId} />
+      </Table.DataCell>
+      <Table.DataCell>{ankemulighet.fagsakId}</Table.DataCell>
+      <Table.DataCell>
+        <Tag variant="alt3" size="small">
+          {temaName}
+        </Tag>
+      </Table.DataCell>
+      <Table.DataCell>
+        <YtelseTag ytelseId={ankemulighet.ytelseId} />
+      </Table.DataCell>
+      <Table.DataCell>{isoDateToPretty(ankemulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <Table.DataCell>
-        {usedCount === 0 ? null : (
-          <NowrapTag variant="warning" size="small">
-            Brukt til {usedCount} anke{usedCount > 1 ? 'r' : ''}
-          </NowrapTag>
-        )}
+        <UsedCount usedCount={usedCount} />
       </Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} />
+        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
       </StyledButtonCell>
     </StyledTableRow>
   );
 };
-
-const NowrapTag = styled(Tag)`
-  white-space: nowrap;
-`;

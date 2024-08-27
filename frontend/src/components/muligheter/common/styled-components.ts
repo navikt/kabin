@@ -28,8 +28,8 @@ export const StyledButtonCell = styled(Table.DataCell)`
   text-align: center;
 `;
 
-export const StyledTableRow = styled(Table.Row)<{ $isValid: boolean; $isSelected: boolean }>`
-  cursor: ${({ $isValid }) => ($isValid ? 'pointer' : 'default')};
+export const StyledTableRow = styled(Table.Row)<{ $isValid: boolean; $isSelected: boolean; $clickable: boolean }>`
+  cursor: ${({ $isValid, $clickable }) => ($isValid && $clickable ? 'pointer' : 'default')};
   background-color: ${({ $isValid, $isSelected }) =>
     !$isValid && $isSelected ? 'var(--a-surface-danger-subtle)' : 'none'};
   border-radius: 4px;

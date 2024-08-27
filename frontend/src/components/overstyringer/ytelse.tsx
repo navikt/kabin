@@ -1,126 +1,148 @@
-import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
-import { useContext, useEffect } from 'react';
+import { Alert, Heading, Select, Skeleton, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { styled } from 'styled-components';
-import { useYtelseName } from '@app/hooks/kodeverk';
-import { usePrevious } from '@app/hooks/use-previous';
+import { YtelseTag } from '@app/components/read-only-info/read-only-info';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { useTemaYtelser } from '@app/simple-api-state/use-kodeverk';
-import { skipToken } from '@app/types/common';
-import { IKodeverkSimpleValue } from '@app/types/kodeverk';
-import { SourceId } from '@app/types/mulighet';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetTemaYtelserQuery } from '@app/redux/api/kodeverk';
+import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { SaksTypeEnum } from '@app/types/common';
+import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
+
+const ID = ValidationFieldNames.YTELSE_ID;
+const HEADING_ID = 'ytelse-heading';
+
+export const Ytelse = () => {
+  const { typeId, mulighet } = useMulighet();
+  const canEdit = useCanEdit();
+
+  if (typeId === null) {
+    return null;
+  }
+
+  if (!canEdit) {
+    return <ReadOnly />;
+  }
+
+  if (typeId === SaksTypeEnum.ANKE) {
+    if (mulighet === undefined) {
+      return <LoadingYtelse />;
+    }
+
+    if (mulighet.currentFagsystemId === FagsystemId.KABAL) {
+      return <PredefinedYtelse ytelseId={mulighet.ytelseId} />;
+    }
+  }
+
+  return <CustomYtelse />;
+};
+
+const HEADING = (
+  <Heading level="1" size="xsmall" spacing id={HEADING_ID}>
+    Ytelse
+  </Heading>
+);
+
+const ReadOnly = () => {
+  const ytelseId = useYtelseId();
+
+  return (
+    <Container aria-labelledby={HEADING_ID}>
+      {HEADING}
+      {ytelseId === null ? (
+        <Tag variant="neutral" size="medium" data-testid={ID}>
+          Ikke satt
+        </Tag>
+      ) : (
+        <YtelseTag ytelseId={ytelseId} data-testid={ID} />
+      )}
+    </Container>
+  );
+};
+
+const LoadingYtelse = () => (
+  <Container aria-labelledby={HEADING_ID}>
+    {HEADING}
+    <Skeleton variant="rounded" width={500} height={32} />
+  </Container>
+);
+
+interface PredefinedYtelseProps {
+  ytelseId: string | null;
+}
+
+const PredefinedYtelse = ({ ytelseId }: PredefinedYtelseProps) => (
+  <Container aria-labelledby={HEADING_ID}>
+    {HEADING}
+    {ytelseId === null ? (
+      <Alert variant="error" size="small" inline data-testid={ID}>
+        Teknisk feil: Ytelse mangler. Kontakt Team Klage.
+      </Alert>
+    ) : (
+      <YtelseTag ytelseId={ytelseId} data-testid={ID} />
+    )}
+  </Container>
+);
+
+const CustomYtelse = () => {
+  const { id } = useRegistrering();
+  const ytelseId = useYtelseId();
+  const { mulighet } = useMulighet();
+  const [setYtelseId] = useSetYtelseIdMutation();
+  const tema = mulighet?.temaId ?? skipToken;
+  const { data: ytelser = [] } = useGetTemaYtelserQuery(tema);
+
+  const error = useValidationError(ID);
+
+  const [onlyYtelse] = ytelser;
+
+  if (ytelser.length === 1 && onlyYtelse !== undefined) {
+    return (
+      <Container aria-labelledby={HEADING_ID}>
+        {HEADING}
+        <YtelseTag ytelseId={onlyYtelse.id} data-testid={ID} />
+      </Container>
+    );
+  }
+
+  const options = ytelser.map((ytelse) => (
+    <option key={ytelse.id} value={ytelse.id}>
+      {ytelse.navn}
+    </option>
+  ));
+
+  return (
+    <Container aria-labelledby={HEADING_ID}>
+      {HEADING}
+      <StyledSelect
+        error={error}
+        label="Ytelse"
+        hideLabel
+        size="small"
+        onChange={({ target }) => setYtelseId({ id, ytelseId: target.value })}
+        value={ytelseId ?? NONE_SELECTED}
+        id={ValidationFieldNames.YTELSE_ID}
+      >
+        <NoneOption value={ytelseId} />
+        {options}
+      </StyledSelect>
+    </Container>
+  );
+};
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
 const NoneOption = ({ value }: { value: string | null | undefined }) =>
   value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
 
-export const Ytelse = () => {
-  const { state, updateState, type } = useContext(AppContext);
-  const tema = state?.mulighet?.temaId ?? skipToken;
-  const { data = [], isLoading, isUninitialized } = useTemaYtelser(tema);
-
-  const prevData = usePrevious(data);
-
-  const error = useValidationError(ValidationFieldNames.YTELSE_ID);
-
-  useEffect(() => {
-    const [first] = data;
-
-    if (
-      type === Type.NONE ||
-      isUninitialized ||
-      isLoading ||
-      data.length !== 1 ||
-      first === undefined ||
-      first.id === state.overstyringer.ytelseId ||
-      areEqual(prevData, data)
-    ) {
-      return;
-    }
-
-    updateState({ overstyringer: { ytelseId: first.id, hjemmelIdList: [] } });
-  }, [data, isLoading, isUninitialized, state, prevData, type, updateState]);
-
-  if (type === Type.NONE) {
-    return null;
-  }
-
-  if (type === Type.ANKE && state.mulighet !== null && state.mulighet.sourceId === SourceId.KABAL) {
-    return (
-      <ReadOnlyContainer>
-        <Heading level="1" size="xsmall" spacing>
-          Ytelse
-        </Heading>
-        {state.mulighet.ytelseId === null ? (
-          <Alert variant="error" size="small" inline>
-            Teknisk feil: Ytelse mangler. Kontakt Team Klage.
-          </Alert>
-        ) : (
-          <YtelseTag ytelseId={state.mulighet.ytelseId} />
-        )}
-      </ReadOnlyContainer>
-    );
-  }
-
-  const options = data.map(({ id, navn }) => (
-    <option key={id} value={id}>
-      {navn}
-    </option>
-  ));
-
-  return (
-    <StyledSelect
-      error={error}
-      label="Ytelse"
-      size="small"
-      onChange={({ target }) => updateState({ overstyringer: { ytelseId: target.value, hjemmelIdList: [] } })}
-      value={state.overstyringer.ytelseId ?? NONE_SELECTED}
-      id={ValidationFieldNames.YTELSE_ID}
-      $gridColumn={1}
-    >
-      <NoneOption value={state.overstyringer.ytelseId} />
-      {options}
-    </StyledSelect>
-  );
-};
-
-interface ElementProps {
-  $gridColumn: number;
-}
-
-const StyledSelect = styled(Select)<ElementProps>`
-  grid-column: ${({ $gridColumn }) => $gridColumn};
+const StyledSelect = styled(Select)`
+  height: 32px;
 `;
 
-interface IYtelseTagProps {
-  ytelseId: string;
-}
-
-const YtelseTag = ({ ytelseId }: IYtelseTagProps) => {
-  const ytelseName = useYtelseName(ytelseId);
-
-  return (
-    <Tag variant="info" size="medium" title="Hentet fra kildesystem">
-      {ytelseName}
-    </Tag>
-  );
-};
-
-const ReadOnlyContainer = styled.section`
+const Container = styled.section`
   grid-column: 1;
 `;
-
-const areEqual = (prev: IKodeverkSimpleValue[] | undefined, current: IKodeverkSimpleValue[]) => {
-  if (prev === undefined) {
-    return false;
-  }
-
-  if (prev.length !== current.length) {
-    return false;
-  }
-
-  return prev.every(({ id }) => current.some((c) => c.id === id));
-};

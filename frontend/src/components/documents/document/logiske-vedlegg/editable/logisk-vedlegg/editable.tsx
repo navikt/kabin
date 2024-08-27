@@ -3,11 +3,9 @@ import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
-import {
-  useDeleteLogiskVedlegg,
-  useUpdateLogiskVedlegg,
-} from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/use-logiske-vedlegg';
 import { ReadOnlyTag } from '@app/components/documents/document/logiske-vedlegg/shared/vedlegg-style';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useDeleteLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux/api/logiske-vedlegg';
 import { LogiskVedlegg } from '@app/types/dokument';
 
 interface Props {
@@ -18,8 +16,9 @@ interface Props {
 }
 
 export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVedlegg, temaId }: Props) => {
-  const [update, { isLoading: isUpdating }] = useUpdateLogiskVedlegg(dokumentInfoId);
-  const [remove, { isLoading: isRemoving }] = useDeleteLogiskVedlegg(dokumentInfoId);
+  const { sakenGjelderValue } = useRegistrering();
+  const [update, { isLoading: isUpdating }] = useUpdateLogiskVedleggMutation({ fixedCacheKey: dokumentInfoId });
+  const [remove, { isLoading: isRemoving }] = useDeleteLogiskVedleggMutation({ fixedCacheKey: dokumentInfoId });
   const [isEditing, setIsEditing] = useState(false);
   const editButtonRef = useRef<HTMLButtonElement>(null);
   const removeButtonRef = useRef<HTMLButtonElement>(null);
@@ -31,14 +30,20 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
   const onClose = useCallback(() => setIsEditing(false), [setIsEditing]);
 
+  const { logiskVedleggId } = logiskVedlegg;
+
+  if (sakenGjelderValue === null) {
+    return null;
+  }
+
   if (isEditing) {
     return (
       <EditLogiskVedlegg
         initialValue={logiskVedlegg.tittel}
         logiskeVedlegg={logiskeVedlegg}
         onClose={onClose}
-        onDone={(tittel) => update({ tittel, logiskVedleggId: logiskVedlegg.logiskVedleggId })}
-        onDelete={() => remove(logiskVedlegg.logiskVedleggId)}
+        onDone={(tittel) => update({ sakenGjelderValue, dokumentInfoId, logiskVedleggId, tittel })}
+        onDelete={() => remove({ sakenGjelderValue, dokumentInfoId, logiskVedleggId })}
         isLoading={isUpdating}
         placeholder="Endre"
         temaId={temaId}
@@ -87,7 +92,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
           <Button
             size="xsmall"
             variant="tertiary-neutral"
-            onClick={() => remove(logiskVedlegg.logiskVedleggId)}
+            onClick={() => remove({ sakenGjelderValue, dokumentInfoId, logiskVedleggId })}
             icon={<TrashIcon aria-hidden />}
             loading={isRemoving}
             ref={removeButtonRef}

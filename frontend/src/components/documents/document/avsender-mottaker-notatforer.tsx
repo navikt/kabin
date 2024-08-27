@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
+import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
+import { GridArea, StyledField } from '@app/components/documents/styled-grid-components';
+import { useGetKlageenheterQuery } from '@app/redux/api/kodeverk';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { formatAvsenderMottaker } from '../avsender-mottaker';
-import { GridArea, StyledField } from '../styled-grid-components';
 
 type AvsenderMottakerProps = Pick<
   IArkivertDocument,
@@ -15,7 +15,7 @@ export const AvsenderMottakerNotatforer = ({
   journalfortAvNavn,
   journalfoerendeEnhet,
 }: AvsenderMottakerProps) => {
-  const { data: enheter } = useKlageenheter();
+  const { data: enheter } = useGetKlageenheterQuery();
   const enhetNavn = useMemo(
     () => enheter?.find((enhet) => enhet.id === journalfoerendeEnhet)?.navn,
     [enheter, journalfoerendeEnhet],

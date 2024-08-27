@@ -5,12 +5,12 @@ import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
 import { PDF_ASPECT_RATIO, PDF_PARAMS } from '@app/components/svarbrev/preview/constants';
-import { Recipient } from '@app/pages/create/app-context/types';
 import { InfoItem } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
-import { KABAL_API_BASE_PATH } from '@app/simple-api-state/use-api';
+import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
+import { Receiver } from '@app/redux/api/registreringer/types';
 import { IdType, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 import { SvarbrevStatus } from '@app/types/status';
 
 interface Props {
@@ -25,8 +25,8 @@ export const Svarbrev = ({ svarbrev, id }: Props) => (
       <Section aria-labelledby="svarbrevinfo-mottakere">
         <Label id="svarbrevinfo-mottakere">Mottakere</Label>
         <StyledList>
-          {svarbrev.receivers.map((recipient) => (
-            <Part key={recipient.part.id} {...recipient} />
+          {svarbrev.receivers.map((receiver) => (
+            <Part key={receiver.part.id} {...receiver} />
           ))}
         </StyledList>
       </Section>
@@ -54,7 +54,7 @@ const StyledPdf = styled.object`
   aspect-ratio: ${PDF_ASPECT_RATIO};
 `;
 
-const Part = ({ part, overriddenAddress, handling }: Recipient) => {
+const Part = ({ part, overriddenAddress, handling }: Receiver) => {
   const isPerson = part.type === IdType.FNR;
 
   return (
@@ -81,7 +81,7 @@ const Part = ({ part, overriddenAddress, handling }: Recipient) => {
   );
 };
 
-const getUtsendingskanal = (handling: HandlingEnum, defaultUtsendingskanal: Utsendingskanal) => {
+const getUtsendingskanal = (handling: HandlingEnum | null, defaultUtsendingskanal: Utsendingskanal) => {
   switch (handling) {
     case HandlingEnum.AUTO:
       return UTSENDINGSKANAL[defaultUtsendingskanal];
@@ -89,6 +89,8 @@ const getUtsendingskanal = (handling: HandlingEnum, defaultUtsendingskanal: Utse
       return UTSENDINGSKANAL[Utsendingskanal.SENTRAL_UTSKRIFT];
     case HandlingEnum.LOCAL_PRINT:
       return UTSENDINGSKANAL[Utsendingskanal.LOKAL_UTSKRIFT];
+    case null:
+      return 'Ikke tilgjengelig';
   }
 };
 

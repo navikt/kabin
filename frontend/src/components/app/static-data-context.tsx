@@ -58,11 +58,11 @@ export const StaticDataLoader = ({ children }: Props) => {
   );
 
   if (userData === null) {
-    return <AppLoader text="Laster bruker..." />;
+    return <AppLoader text="Laster bruker ..." />;
   }
 
   if (countryCodeList.length === 0) {
-    return <AppLoader text="Laster..." />;
+    return <AppLoader text="Laster ..." />;
   }
 
   return (

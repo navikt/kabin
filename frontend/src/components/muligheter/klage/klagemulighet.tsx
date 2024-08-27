@@ -1,47 +1,52 @@
-import { Table } from '@navikt/ds-react';
-import { useCallback, useContext } from 'react';
+import { Table, Tag } from '@navikt/ds-react';
+import { useCallback } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetKlagemulighetMutation } from '@app/redux/api/registreringer/mutations';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
-  mulighet: IKlagemulighet;
+  klagemulighet: IKlagemulighet;
 }
 
-export const Klagemulighet = ({ mulighet }: Props) => {
-  const { type, updateState, state } = useContext(AppContext);
+export const Klagemulighet = ({ klagemulighet }: Props) => {
+  const { id, mulighet } = useRegistrering();
+  const [setKlagemulighet, { isLoading }] = useSetKlagemulighetMutation();
+  const canEdit = useCanEdit();
+  const temaName = useFullTemaNameFromId(klagemulighet.temaId);
+  const vedtaksenhetName = useVedtaksenhetName(klagemulighet.klageBehandlendeEnhet);
+  const fagsystemName = useFagsystemName(klagemulighet.originalFagsystemId);
 
-  const temaName = useFullTemaNameFromId(mulighet.temaId);
-  const vedtaksenhetName = useVedtaksenhetName(mulighet.klageBehandlendeEnhet);
-  const fagsystemName = useFagsystemName(mulighet.fagsystemId);
-
-  const isSelected = type === Type.KLAGE && state.mulighet?.id === mulighet.id;
+  const isSelected = mulighet?.id === klagemulighet.id;
 
   const selectKlage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (type === Type.KLAGE && state.mulighet !== mulighet) {
-        updateState({ mulighet });
+      if (!isLoading && mulighet?.id !== klagemulighet.id) {
+        setKlagemulighet({ id, mulighet: klagemulighet });
       }
     },
-    [mulighet, state?.mulighet, type, updateState],
+    [isLoading, klagemulighet, id, mulighet, setKlagemulighet],
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected}>
-      <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
-      <Table.DataCell>{mulighet.id}</Table.DataCell>
-      <Table.DataCell>{temaName}</Table.DataCell>
-      <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? ''}</Table.DataCell>
+    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected} $clickable={canEdit}>
+      <Table.DataCell>{klagemulighet.fagsakId}</Table.DataCell>
+      <Table.DataCell>
+        <Tag variant="alt3" size="small">
+          {temaName}
+        </Tag>
+      </Table.DataCell>
+      <Table.DataCell>{isoDateToPretty(klagemulighet.vedtakDate) ?? ''}</Table.DataCell>
       <Table.DataCell>{vedtaksenhetName}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectKlage} isValid />
+        {canEdit ? <SelectMulighet isSelected={isSelected} select={selectKlage} isValid isLoading={isLoading} /> : null}
       </StyledButtonCell>
     </StyledTableRow>
   );

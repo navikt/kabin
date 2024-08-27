@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
+import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
-import { fuzzySearch } from './fuzzy-search';
 
 const TEXT = 'the quick brown fox jumps over the lazy dog';
 describe('fuzzy search', () => {

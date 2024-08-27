@@ -1,36 +1,46 @@
 import { parseISO } from 'date-fns';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Datepicker } from '@app/components/date-picker/date-picker';
+import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
 import { FORMAT } from '@app/domain/date-formats';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { IAnkeState, IKlageState, Type } from '@app/pages/create/app-context/types';
-import { IArkivertDocument } from '@app/types/dokument';
+import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
-export const EditMottattKlageinstans = () => {
-  const { type, state, journalpost } = useContext(AppContext);
+const ID = ValidationFieldNames.MOTTATT_KLAGEINSTANS;
+const LABEL = FIELD_NAMES[ID];
 
-  switch (type) {
-    case Type.KLAGE:
-      return <Klage state={state} journalpost={journalpost} />;
-    case Type.ANKE:
-      return <Anke state={state} journalpost={journalpost} />;
-    case Type.NONE:
-      return <RenderEditMottattNAV value={undefined} fromDate={undefined} toDate={undefined} />;
+export const EditMottattKlageinstans = () => {
+  const { typeId, overstyringer } = useRegistrering();
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    return <ReadOnlyTime id={ID} label={LABEL} value={overstyringer.mottattKlageinstans} />;
+  }
+
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
+      return <Klage />;
+    case SaksTypeEnum.ANKE:
+      return <Anke />;
+    case null:
+      return <RenderEditMottattNAV />;
   }
 };
 
-interface KlageProps {
-  state: IKlageState;
-  journalpost: IArkivertDocument | null;
-}
+const Klage = () => {
+  const { overstyringer } = useRegistrering();
+  const { journalpost } = useJournalpost();
+  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
-const Klage = ({ state, journalpost }: KlageProps) => {
-  const selectedDate = getSelectedDate(state);
-
-  const fromDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const fromDate =
+    journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   const toDate = useMemo(() => {
     const now = new Date();
@@ -42,57 +52,55 @@ const Klage = ({ state, journalpost }: KlageProps) => {
   return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
-interface AnkeProps {
-  state: IAnkeState;
-  journalpost: IArkivertDocument | null;
-}
+const Anke = () => {
+  const { overstyringer } = useRegistrering();
+  const { journalpost } = useJournalpost();
+  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
-const Anke = ({ state, journalpost }: AnkeProps) => {
-  const selectedDate = getSelectedDate(state);
+  const { mulighet } = useMulighet();
 
-  const fromDate =
-    state.mulighet === null || state.mulighet.vedtakDate === null ? undefined : parseISO(state.mulighet.vedtakDate);
+  const fromDate = mulighet === undefined || mulighet.vedtakDate === null ? undefined : parseISO(mulighet.vedtakDate);
 
-  const toDate = journalpost === null ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const toDate =
+    journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
-const getSelectedDate = (state: IKlageState | IAnkeState) =>
-  state.overstyringer.mottattKlageinstans === null ? undefined : parseISO(state.overstyringer.mottattKlageinstans);
+const getSelectedDate = (mottattKlageinstans: string | null) =>
+  mottattKlageinstans === null ? undefined : parseISO(mottattKlageinstans);
 
 interface Props {
-  value: Date | undefined;
-  toDate: Date | undefined;
-  fromDate: Date | undefined;
+  value?: Date;
+  toDate?: Date;
+  fromDate?: Date;
 }
 
 const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
-  const { type, updateState } = useContext(AppContext);
-  const error = useValidationError(ValidationFieldNames.MOTTATT_KLAGEINSTANS);
+  const { id } = useRegistrering();
+  const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
+  const error = useValidationError(ID);
 
   const onChange = useCallback(
     (mottattKlageinstans: string | null) => {
-      if (type === Type.NONE) {
+      if (mottattKlageinstans === null) {
         return;
       }
-      updateState({ overstyringer: { mottattKlageinstans } });
+      setMottattKlageinstans({ id, mottattKlageinstans });
     },
-    [type, updateState],
+    [id, setMottattKlageinstans],
   );
 
   return (
-    <div>
-      <Datepicker
-        label={FIELD_NAMES[ValidationFieldNames.MOTTATT_KLAGEINSTANS]}
-        onChange={onChange}
-        value={value}
-        size="small"
-        toDate={toDate}
-        fromDate={fromDate}
-        id={ValidationFieldNames.MOTTATT_KLAGEINSTANS}
-        error={error}
-      />
-    </div>
+    <Datepicker
+      label={LABEL}
+      onChange={onChange}
+      value={value}
+      size="small"
+      toDate={toDate}
+      fromDate={fromDate}
+      id={ValidationFieldNames.MOTTATT_KLAGEINSTANS}
+      error={error}
+    />
   );
 };

@@ -67,7 +67,7 @@ const Container = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
-  z-index: 1;
+  z-index: 2;
   max-height: 200px;
   overflow-y: auto;
   max-width: 400px;
