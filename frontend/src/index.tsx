@@ -1,6 +1,6 @@
 import '@navikt/ds-css';
 import { createRoot } from 'react-dom/client';
-import { App } from './components/app/app';
+import { App } from '@app/components/app/app';
 
 const container = document.getElementById('app');
 

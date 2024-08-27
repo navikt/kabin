@@ -3,7 +3,7 @@ import { EditAddress } from '@app/components/svarbrev/address/edit-address';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
 import { Addresses } from '@app/components/svarbrev/address/types';
 import { IAddress, IPart } from '@app/types/common';
-import { HandlingEnum } from '@app/types/recipient';
+import { HandlingEnum } from '@app/types/receiver';
 
 interface Props extends Addresses {
   part: IPart;

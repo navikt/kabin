@@ -24,13 +24,11 @@ export const StyledSakenGjelderIcon = styled(SakenGjelderIcon)`
   ${iconCss}
 `;
 
-export const KlagerIcon = PersonGroupIcon;
-export const StyledKlagerIcon = styled(KlagerIcon)`
+export const StyledKlagerIcon = styled(PersonGroupIcon)`
   ${iconCss}
 `;
 
-export const FullmektigIcon = ParagraphIcon;
-export const StyledFullmektigIcon = styled(FullmektigIcon)`
+export const StyledFullmektigIcon = styled(ParagraphIcon)`
   ${iconCss}
 `;
 

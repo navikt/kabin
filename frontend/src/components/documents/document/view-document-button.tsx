@@ -1,7 +1,7 @@
 import { GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { useViewDocument } from './use-view-document';
+import { useViewDocument } from '@app/components/documents/document/use-view-document';
 
 interface Props {
   journalpostId: string;
@@ -25,7 +25,13 @@ export const ViewDocumentButton = (props: Props) => {
         onMouseDown={viewDocument}
         aria-pressed={isViewed}
         aria-controls="document-viewer"
-        icon={isViewed ? <GlassesFillIcon /> : <GlassesIcon />}
+        icon={
+          isViewed ? (
+            <GlassesFillIcon aria-hidden role="presentation" />
+          ) : (
+            <GlassesIcon aria-hidden role="presentation" />
+          )
+        }
       />
     </Tooltip>
   );

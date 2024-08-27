@@ -40,4 +40,5 @@ const DetailLabel = styled.span`
 
 const StyledCode = styled.code`
   font-size: 12px;
+  line-break: anywhere;
 `;

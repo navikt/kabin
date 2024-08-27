@@ -15,7 +15,6 @@ export const VersionToast = ({ isRequired = false }: Props) => (
       <BodyShort size="small">Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
     ) : (
       <>
-        <Warning size="small">Ikke-fullførte saker blir nullstilt ved oppdatering.</Warning>
         <Warning size="small">Gjør gjerne saken ferdig før du oppdaterer.</Warning>
 
         <Button

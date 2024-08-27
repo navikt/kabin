@@ -2,12 +2,12 @@ import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { IAvsenderMottaker, IPart, ISimplePart, IdType } from '@app/types/common';
 
 export const getSakspartName = (
-  sakspart: IPart | ISimplePart | IAvsenderMottaker | null,
-  defaultValue: string | null = '-',
-): string | null => (sakspart === null ? defaultValue : sakspart.name);
+  sakspart: IPart | ISimplePart | IAvsenderMottaker | undefined | null,
+  defaultValue: string | undefined | null = '-',
+): string | null => (sakspart === undefined || sakspart === null ? defaultValue : sakspart.name);
 
-const getSakspartId = (sakspart: IPart | ISimplePart | null): string | null => {
-  if (sakspart === null) {
+const getSakspartId = (sakspart: IPart | ISimplePart | undefined | null): string | null => {
+  if (sakspart === undefined || sakspart === null) {
     return null;
   }
 
@@ -22,7 +22,7 @@ const getSakspartId = (sakspart: IPart | ISimplePart | null): string | null => {
   return null;
 };
 
-export const getSakspartNameAndId = (sakspart: IPart | ISimplePart | null): string | null => {
+export const getSakspartNameAndId = (sakspart: IPart | ISimplePart | undefined | null): string | null => {
   const partName = getSakspartName(sakspart);
   const partId = getSakspartId(sakspart);
 

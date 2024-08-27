@@ -2,13 +2,13 @@ import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
+import { DateFilter } from '@app/components/documents/date-filter';
+import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from '@app/components/documents/filter-helpers';
+import { GridArea, GridSearch, StyledGrid } from '@app/components/documents/styled-grid-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
-import { useTema } from '@app/simple-api-state/use-kodeverk';
+import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import { DateRange } from '@app/types/common';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { DateFilter } from './date-filter';
-import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from './filter-helpers';
-import { GridArea, GridSearch, StyledGrid } from './styled-grid-components';
 
 const EMPTY_LIST: [] = [];
 
@@ -49,7 +49,7 @@ export const ColumnHeaders = ({
   setSelectedTemaer,
   setSelectedTypes,
 }: Props) => {
-  const { data: allTemaer } = useTema();
+  const { data: allTemaer } = useGetTemaQuery();
 
   const temaOptions = useMemo(
     () => (allTemaer === undefined ? EMPTY_LIST : allTemaer.map((t) => ({ value: t.id, label: t.beskrivelse }))),
@@ -60,6 +60,7 @@ export const ColumnHeaders = ({
   const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
 
   const resetFilters = () => {
+    setSearch('');
     setSelectedTemaer([]);
     setSelectedTypes([]);
     setSelectedAvsenderMottakere([]);
@@ -69,12 +70,14 @@ export const ColumnHeaders = ({
 
   const resetFiltersDisabled = useMemo(
     () =>
+      search.length === 0 &&
       selectedTemaer.length === 0 &&
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
       selectedDateRange === undefined,
     [
+      search.length,
       selectedAvsenderMottakere.length,
       selectedDateRange,
       selectedSaksIds.length,
@@ -94,7 +97,7 @@ export const ColumnHeaders = ({
       >
         Fjern filtere
       </StyledButton>
-      <StyledGrid as="section">
+      <StyledGrid as="section" aria-label="Journalpostfiltere">
         <GridSearch
           $gridArea={GridArea.TITLE}
           label="Tittel/journalpost-ID"

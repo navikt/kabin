@@ -1,119 +1,103 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
+import { Button, Heading, Tag } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
-import { isoDateTimeToPrettyDate } from '@app/domain/date';
-import { getSakspartName } from '@app/domain/name';
-import { useFagsystemName, useYtelseName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
-import { IAnkeMulighet } from '@app/types/mulighet';
+import { TypeName } from '@app/components/muligheter/anke/type-name';
+import { UsedCount } from '@app/components/muligheter/anke/used-count';
+import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/styled-components';
+import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
+import { isoDateToPretty } from '@app/domain/date';
+import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { SaksTypeEnum } from '@app/types/common';
+import { IAnkemulighet } from '@app/types/mulighet';
 
 interface Props {
   onClick: () => void;
 }
 
 export const SelectedAnkemulighet = ({ onClick }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { typeId, mulighet } = useMulighet();
 
-  if (type !== Type.ANKE || state.mulighet === null) {
+  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
     return null;
   }
 
-  return <RenderAnkemulighet mulighet={state.mulighet} onClick={onClick} />;
+  return <RenderAnkemulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
-  mulighet: IAnkeMulighet;
+  mulighet: IAnkemulighet;
 }
 
-const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { ytelseId, vedtakDate, sakenGjelder, klager, fullmektig, fagsakId, fagsystemId } = mulighet;
+const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => (
+  <Card>
+    <Header>
+      <Heading size="small" level="1">
+        Valgt vedtak
+      </Heading>
+      <Button
+        size="small"
+        title="Vis alle ankemuligheter"
+        onClick={onClick}
+        icon={<ChevronDownIcon aria-hidden />}
+        variant="tertiary-neutral"
+      />
+    </Header>
+    <SelectedAnkemulighetBody {...mulighet} />
+  </Card>
+);
 
-  const ytelseName = useYtelseName(ytelseId);
-  const fagsystemName = useFagsystemName(fagsystemId);
+export const SelectedAnkemulighetBody = (mulighet: IAnkemulighet) => {
+  const { ytelseId, vedtakDate, fagsakId, originalFagsystemId, typeId, temaId, sourceOfExistingAnkebehandling } =
+    mulighet;
+
+  const fagsystemName = useFagsystemName(originalFagsystemId);
+  const temaName = useFullTemaNameFromId(temaId);
 
   return (
-    <Card>
-      <Header>
-        <Heading size="small" level="1">
-          Valgt vedtak
-        </Heading>
-        <Button
-          size="small"
-          title="Vis alle ankemuligheter"
-          onClick={onClick}
-          icon={<ChevronDownIcon aria-hidden />}
-          variant="tertiary-neutral"
-        />
-      </Header>
-      <Ankemulighet>
-        <Column>
-          <StyledLabel size="small">Ytelse</StyledLabel>
-          <Tag size="small" variant="alt3">
-            {ytelseName}
-          </Tag>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Dato</StyledLabel>
-          {vedtakDate === null ? (
-            'Ukjent'
-          ) : (
-            <Detail as="time" dateTime={vedtakDate}>
-              {isoDateTimeToPrettyDate(vedtakDate) ?? vedtakDate}
-            </Detail>
-          )}
-        </Column>
-        <Column>
-          <StyledLabel size="small">Saken gjelder</StyledLabel>
-          <Detail>{getSakspartName(sakenGjelder)}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Klager</StyledLabel>
-          <Detail>{getSakspartName(klager)}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Fullmektig</StyledLabel>
-          <Detail>{getSakspartName(fullmektig)}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Fagsak-ID</StyledLabel>
-          <Detail>{fagsakId}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Fagsystem</StyledLabel>
-          <Detail>{fagsystemName}</Detail>
-        </Column>
-      </Ankemulighet>
-    </Card>
+    <TableWrapper>
+      <StyledTable>
+        <Thead>
+          <tr>
+            <th>Type</th>
+            <th>Fagsak-ID</th>
+            <th>Tema</th>
+            <th>Ytelse</th>
+            <th>Vedtaksdato</th>
+            <th>Fagsystem</th>
+            <th />
+          </tr>
+        </Thead>
+        <tbody>
+          <tr>
+            <td>
+              <TypeName typeId={typeId} />
+            </td>
+            <td>{fagsakId}</td>
+            <td>
+              <Tag size="small" variant="alt3">
+                {temaName}
+              </Tag>
+            </td>
+            <td>
+              <YtelseTag ytelseId={ytelseId} />
+            </td>
+            <td>
+              {vedtakDate === null ? (
+                'Ukjent'
+              ) : (
+                <time dateTime={vedtakDate}>{isoDateToPretty(vedtakDate) ?? vedtakDate}</time>
+              )}
+            </td>
+            <td>{fagsystemName}</td>
+            {sourceOfExistingAnkebehandling.length === 0 ? null : (
+              <td>
+                <UsedCount usedCount={sourceOfExistingAnkebehandling.length} />
+              </td>
+            )}
+          </tr>
+        </tbody>
+      </StyledTable>
+    </TableWrapper>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const Ankemulighet = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: 16px;
-  background-color: var(--a-blue-50);
-  border: 1px solid var(--a-blue-200);
-  padding: 16px;
-  border-radius: 4px;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`;
-
-const StyledLabel = styled(Label)`
-  white-space: nowrap;
-`;

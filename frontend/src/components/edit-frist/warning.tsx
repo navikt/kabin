@@ -1,50 +1,47 @@
 import { Alert } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
-import { useContext } from 'react';
-import { getSvarbrevSettings } from '@app/components/edit-frist/get-svarbrev-settings';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { useSvarbrevSettings } from '@app/simple-api-state/use-api';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { skipToken } from '@app/types/common';
+import { SaksTypeEnum } from '@app/types/common';
 
 interface Props {
-  behandlingstidUnitType: BehandlingstidUnitType;
-  behandlingstidUnits: number;
+  unitTypeId: BehandlingstidUnitType;
+  units: number;
 }
 
-export const Warning = ({ behandlingstidUnitType, behandlingstidUnits }: Props) => {
-  const { state, type } = useContext(AppContext);
-  const { data } = useSvarbrevSettings(state?.overstyringer.ytelseId ?? skipToken);
+export const Warning = ({ unitTypeId, units }: Props) => {
+  const ytelseId = useYtelseId();
+  const { typeId, mulighet } = useMulighet();
+  const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
+    typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
+  );
 
-  if (state === null) {
+  if (typeId === null || svarbrevSetting === undefined || typeId === SaksTypeEnum.KLAGE || mulighet === undefined) {
     return;
   }
 
-  const { mottattKlageinstans } = state.overstyringer;
+  const { vedtakDate } = mulighet;
 
-  if (mottattKlageinstans === null) {
+  if (vedtakDate === null) {
     return null;
   }
 
-  const svarbrevSettings = getSvarbrevSettings(data, type);
-
-  if (svarbrevSettings === null) {
-    return;
-  }
-
-  const mottattKlageinstansDate = parseISO(mottattKlageinstans);
+  const mottattKlageinstansDate = parseISO(vedtakDate);
 
   if (!isValid(mottattKlageinstansDate)) {
     return null;
   }
 
-  const overstyringUnits = behandlingstidUnits ?? svarbrevSettings.behandlingstidUnits;
-  const overstyringUnitType = behandlingstidUnitType ?? svarbrevSettings.behandlingstidUnitType;
+  const overstyringUnits = units ?? svarbrevSetting.behandlingstidUnits;
+  const overstyringUnitType = unitTypeId ?? svarbrevSetting.behandlingstidUnitTypeId;
 
   const overstyringFristdato = getFristDate(overstyringUnits, overstyringUnitType, mottattKlageinstansDate);
   const svarbrevFristdato = getFristDate(
-    svarbrevSettings.behandlingstidUnits,
-    svarbrevSettings.behandlingstidUnitType,
+    svarbrevSetting.behandlingstidUnits,
+    svarbrevSetting.behandlingstidUnitTypeId,
     mottattKlageinstansDate,
   );
 

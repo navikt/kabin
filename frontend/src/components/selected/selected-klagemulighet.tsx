@@ -1,12 +1,11 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Heading, Label, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
+import { Button, Detail, Heading, Tag } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
+import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import { AppContext } from '@app/pages/create/app-context/app-context';
-import { Type } from '@app/pages/create/app-context/types';
+import { useMulighet } from '@app/hooks/use-mulighet';
+import { SaksTypeEnum } from '@app/types/common';
 import { IKlagemulighet } from '@app/types/mulighet';
 
 interface Props {
@@ -14,98 +13,75 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { type, state } = useContext(AppContext);
+  const { typeId, mulighet } = useMulighet();
 
-  if (type !== Type.KLAGE || state.mulighet === null) {
+  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined) {
     return null;
   }
 
-  return <RenderKlagemulighet mulighet={state.mulighet} onClick={onClick} />;
+  return <RenderKlagemulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
   mulighet: IKlagemulighet;
 }
 
-const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => {
-  const { id, temaId, vedtakDate, fagsakId, fagsystemId, klageBehandlendeEnhet } = mulighet;
+const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => (
+  <Card>
+    <Header>
+      <Heading size="small" level="1">
+        Valgt klagemulighet
+      </Heading>
+      <Button
+        size="small"
+        title="Vis alle klagemuligheter"
+        onClick={onClick}
+        icon={<ChevronDownIcon aria-hidden />}
+        variant="tertiary-neutral"
+      />
+    </Header>
+
+    <SelectedKlagemulighetBody {...mulighet} />
+  </Card>
+);
+
+export const SelectedKlagemulighetBody = (mulighet: IKlagemulighet) => {
+  const { temaId, vedtakDate, fagsakId, originalFagsystemId, klageBehandlendeEnhet } = mulighet;
 
   const temaName = useFullTemaNameFromId(temaId);
   const vedtaksenhetName = useVedtaksenhetName(klageBehandlendeEnhet);
-  const fagsystemName = useFagsystemName(fagsystemId);
+  const fagsystemName = useFagsystemName(originalFagsystemId);
 
   return (
-    <Card>
-      <Header>
-        <Heading size="small" level="1">
-          Valgt klagemulighet
-        </Heading>
-        <Button
-          size="small"
-          title="Vis alle klagemuligheter"
-          onClick={onClick}
-          icon={<ChevronDownIcon aria-hidden />}
-          variant="tertiary-neutral"
-        />
-      </Header>
-      <Klagemulighet>
-        <Column>
-          <StyledLabel size="small">Saks-Id</StyledLabel>
-          <Detail>{id}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Tema</StyledLabel>
-          <Tag size="small" variant="alt3">
-            {temaName}
-          </Tag>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Dato</StyledLabel>
-          <Detail as="time" dateTime={vedtakDate}>
-            {isoDateToPretty(vedtakDate) ?? vedtakDate}
-          </Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Behandlende enhet</StyledLabel>
-          <Detail>{vedtaksenhetName}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Fagsak-ID</StyledLabel>
-          <Detail>{fagsakId}</Detail>
-        </Column>
-        <Column>
-          <StyledLabel size="small">Fagsystem</StyledLabel>
-          <Detail>{fagsystemName}</Detail>
-        </Column>
-      </Klagemulighet>
-    </Card>
+    <TableWrapper>
+      <StyledTable>
+        <Thead>
+          <tr>
+            <th>Fagsak-ID</th>
+            <th>Tema</th>
+            <th>Vedtak/innstilling</th>
+            <th>Behandlende enhet</th>
+            <th>Fagsystem</th>
+          </tr>
+        </Thead>
+        <tbody>
+          <tr>
+            <td>{fagsakId}</td>
+            <td>
+              <Tag size="small" variant="alt3">
+                {temaName}
+              </Tag>
+            </td>
+            <td>
+              <Detail as="time" dateTime={vedtakDate}>
+                {isoDateToPretty(vedtakDate) ?? vedtakDate}
+              </Detail>
+            </td>
+            <td>{vedtaksenhetName}</td>
+            <td>{fagsystemName}</td>
+          </tr>
+        </tbody>
+      </StyledTable>
+    </TableWrapper>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const Klagemulighet = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: 16px;
-  background-color: var(--a-blue-50);
-  border: 1px solid var(--a-blue-200);
-  padding: 16px;
-  border-radius: 4px;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`;
-
-const StyledLabel = styled(Label)`
-  white-space: nowrap;
-`;

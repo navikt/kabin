@@ -1,23 +1,23 @@
-export enum RecipientType {
+export enum ReceiverType {
   KLAGER = '1',
   SAKEN_GJELDER = '2',
   FULLMEKTIG = '3',
 }
 
-const getTypeName = (type: RecipientType): string => {
+const getTypeName = (type: ReceiverType): string => {
   switch (type) {
-    case RecipientType.KLAGER:
+    case ReceiverType.KLAGER:
       return 'Ankende part';
-    case RecipientType.FULLMEKTIG:
+    case ReceiverType.FULLMEKTIG:
       return 'Fullmektig';
-    case RecipientType.SAKEN_GJELDER:
+    case ReceiverType.SAKEN_GJELDER:
       return 'Saken gjelder';
     default:
       return '';
   }
 };
 
-export const getTypeNames = (types: RecipientType[]): string => {
+export const getTypeNames = (types: ReceiverType[]): string => {
   const [first, second, third] = types;
 
   if (first === undefined) {

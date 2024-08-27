@@ -4,9 +4,9 @@ import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logis
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { InfoItem, Part, Sak, Time } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { InfoItem, Part, Sak, Time } from './common-components';
 
 interface JournalpostProps {
   title: string;

@@ -1,34 +1,34 @@
-import { IPart, ISaksbehandler } from '@app/types/common';
+import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { Ytelse } from '@app/types/ytelse';
 
-export enum SourceId {
+export enum FagsystemId {
   KABAL = '23',
   INFOTRYGD = '7',
 }
 
 interface IBasemulighet {
-  id: string;
-  fagsakId: string;
-  fagsystemId: string;
-  sakenGjelder: IPart;
-  temaId: string;
-  sourceId: SourceId;
+  readonly id: string;
+  readonly fagsakId: string;
+  readonly sakenGjelder: IPart;
+  readonly temaId: string;
+  readonly originalFagsystemId: string;
+  readonly currentFagsystemId: FagsystemId;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
-  klageBehandlendeEnhet: string;
-  vedtakDate: string;
+  readonly klageBehandlendeEnhet: string;
+  readonly vedtakDate: string;
 }
 
-export interface IAnkeMulighet extends IBasemulighet {
-  ytelseId: Ytelse | null;
-  hjemmelIdList: string[];
-  klager: IPart;
-  fullmektig: IPart | null;
-  previousSaksbehandler: ISaksbehandler | null;
-  vedtakDate: string | null;
-  typeId: TypeId;
-  sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
+export interface IAnkemulighet extends IBasemulighet {
+  readonly ytelseId: Ytelse | null;
+  readonly hjemmelIdList: string[];
+  readonly klager: IPart;
+  readonly fullmektig: IPart | null;
+  readonly previousSaksbehandler: ISaksbehandler | null;
+  readonly vedtakDate: string | null;
+  readonly typeId: SaksTypeEnum;
+  readonly sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
 }
 
 interface ExistingAnkebehandling {
@@ -40,8 +40,8 @@ interface ExistingAnkebehandling {
   completed: string | null;
 }
 
-export enum TypeId {
-  KLAGE = '1',
-  ANKE = '2',
-  ANKE_I_TR = '3',
-}
+export const TYPE_NAME: Record<SaksTypeEnum, string> = {
+  [SaksTypeEnum.KLAGE]: 'Klage',
+  [SaksTypeEnum.ANKE]: 'Anke',
+  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
+};

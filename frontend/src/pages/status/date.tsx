@@ -1,28 +1,28 @@
 import { Tag } from '@navikt/ds-react';
-import { addMonths, differenceInDays, differenceInMonths, isEqual, parseISO } from 'date-fns';
+import { addMonths, differenceInDays, differenceInMonths, isEqual, isValid } from 'date-fns';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { InfoItem, Time } from './common-components';
+import { InfoItem, Time } from '@app/pages/status/common-components';
+import { monthUnit, weekUnit } from '@app/pages/status/helpers';
 
 interface Props {
-  title: string;
+  label: string;
   date: string | null;
-  base?: Date;
+  children?: string;
 }
 
-export const DateInfoItem = ({ date, base, title }: Props) => {
+export const DateInfoItem = ({ date, label, children }: Props) => {
   if (date === null) {
-    return <InfoItem label={title}>Ikke satt</InfoItem>;
+    return <InfoItem label={label}>Ikke satt</InfoItem>;
   }
 
   return (
-    <InfoItem label={title}>
+    <InfoItem label={label}>
       <Row>
         <Time dateTime={date}>{isoDateToPretty(date) ?? date}</Time>
-
-        {base === undefined ? null : (
+        {children === undefined ? null : (
           <Tag variant="neutral" size="small">
-            {getDifference(base, parseISO(date))}
+            {children}
           </Tag>
         )}
       </Row>
@@ -30,7 +30,11 @@ export const DateInfoItem = ({ date, base, title }: Props) => {
   );
 };
 
-const getDifference = (from: Date, to: Date): string => {
+export const getDifference = (from: Date, to: Date): string => {
+  if (!isValid(from) || !isValid(to)) {
+    return 'Ugyldig dato';
+  }
+
   const months = getMonthsDiff(from, to);
   const weeks = getWeeksDiff(from, to);
 
@@ -44,9 +48,6 @@ const getDifference = (from: Date, to: Date): string => {
 
   return `${weeks} ${weekUnit(weeks)} eller ${months} ${monthUnit(months)}`;
 };
-
-const weekUnit = (weeks: number) => (weeks === 1 ? 'uke' : 'uker');
-const monthUnit = (months: number) => (months === 1 ? 'måned' : 'måneder');
 
 const getMonthsDiff = (from: Date, to: Date) => {
   const months = differenceInMonths(to, from);

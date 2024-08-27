@@ -1,10 +1,13 @@
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { AppContext } from '@app/pages/create/app-context/app-context';
+import { GridArea, GridButton } from '@app/components/documents/styled-grid-components';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
 import { IArkivertDocument } from '@app/types/dokument';
-import { GridArea, GridButton } from '../styled-grid-components';
 
 interface Props {
   isSelected: boolean;
@@ -14,20 +17,28 @@ interface Props {
 }
 
 export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, alreadyUsed, dokument }: Props) => {
-  const { setJournalpost } = useContext(AppContext);
+  const { id } = useRegistrering();
+  const [setJournalpostId, { isLoading }] = useSetJournalpostIdMutation({
+    fixedCacheKey: `${dokument.journalpostId}-${dokument.dokumentInfoId}`,
+  });
+  const canEdit = useCanEdit();
 
   const selectJournalpost = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (e.button !== 0) {
+      if (e.button !== 0 || !harTilgangTilArkivvariant) {
         return;
       }
 
-      setJournalpost(harTilgangTilArkivvariant ? dokument : null);
+      setJournalpostId({ id, journalpostId: dokument.journalpostId });
     },
-    [dokument, harTilgangTilArkivvariant, setJournalpost],
+    [dokument.journalpostId, harTilgangTilArkivvariant, id, setJournalpostId],
   );
+
+  if (!canEdit) {
+    return isSelected ? <ReadOnlyCheckmark aria-label="Valgt" fontSize={20} /> : null;
+  }
 
   return (
     <Tooltip content={getTitle(harTilgangTilArkivvariant, alreadyUsed)} placement="top">
@@ -40,6 +51,8 @@ export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, al
         aria-pressed={isSelected}
         data-testid="select-document"
         $gridArea={GridArea.SELECT}
+        loading={isLoading}
+        title={isSelected ? 'Valgt' : undefined}
       >
         {getText(harTilgangTilArkivvariant, isSelected)}
       </GridButton>
@@ -69,7 +82,7 @@ const getText = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
 
 const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
   if (!harTilgangTilArkivvariant) {
-    return <CircleSlashIcon />;
+    return <CircleSlashIcon aria-hidden role="presentation" />;
   }
 
   if (isSelected) {
@@ -78,3 +91,9 @@ const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
 
   return undefined;
 };
+
+const ReadOnlyCheckmark = styled(CheckmarkCircleFillIconColored)`
+  grid-area: ${GridArea.SELECT};
+  align-self: center;
+  justify-self: center;
+`;

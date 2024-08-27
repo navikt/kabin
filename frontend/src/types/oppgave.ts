@@ -14,8 +14,3 @@ export interface IOppgave {
   tilordnetRessurs: string | null;
   fristFerdigstillelse: string | null;
 }
-
-export interface IGetOppgaverParams {
-  identifikator: string;
-  temaId?: string;
-}

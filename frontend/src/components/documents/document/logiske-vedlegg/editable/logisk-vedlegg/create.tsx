@@ -1,5 +1,6 @@
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
-import { useAddLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/use-logiske-vedlegg';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useAddLogiskVedleggMutation } from '@app/redux/api/logiske-vedlegg';
 import { LogiskVedlegg } from '@app/types/dokument';
 
 interface Props {
@@ -10,12 +11,17 @@ interface Props {
 }
 
 export const CreateLogiskVedlegg = ({ dokumentInfoId, logiskeVedlegg, onClose, temaId }: Props) => {
-  const [add, { isLoading }] = useAddLogiskVedlegg(dokumentInfoId);
+  const { sakenGjelderValue } = useRegistrering();
+  const [add, { isLoading }] = useAddLogiskVedleggMutation({ fixedCacheKey: dokumentInfoId });
+
+  if (sakenGjelderValue === null) {
+    return null;
+  }
 
   return (
     <EditLogiskVedlegg
       onClose={onClose}
-      onDone={add}
+      onDone={(tittel) => add({ sakenGjelderValue, dokumentInfoId, tittel })}
       logiskeVedlegg={logiskeVedlegg}
       isLoading={isLoading}
       placeholder="Legg til"
