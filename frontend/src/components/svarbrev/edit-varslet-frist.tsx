@@ -1,4 +1,3 @@
-import { ToggleGroup } from '@navikt/ds-react';
 import { Fritekst } from '@app/components/edit-frist/fritekst';
 import { Container, TopRow } from '@app/components/edit-frist/styled-components';
 import { UnitType } from '@app/components/edit-frist/unit-type';
@@ -11,8 +10,9 @@ import {
   useSetSvarbrevBehandlingstidMutation,
   useSetSvarbrevOverrideBehandlingstidMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
-import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/calculate-frist';
+import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import { ToggleGroup } from '@navikt/ds-react';
 
 const ID = 'svarbrev-frist';
 const LABEL = 'Frist i svarbrev';

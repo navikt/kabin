@@ -1,11 +1,11 @@
-import { TextField } from '@navikt/ds-react';
-import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { defaultString } from '@app/functions/empty-string';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetSvarbrevFullmektigFritekstMutation } from '@app/redux/api/svarbrev/svarbrev';
+import { TextField } from '@navikt/ds-react';
+import { useCallback, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 const ID = 'svarbrev-fullmektig-name';
 const LABEL = 'Navn på fullmektig i brevet';

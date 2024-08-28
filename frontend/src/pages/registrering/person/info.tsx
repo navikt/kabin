@@ -1,6 +1,6 @@
-import { Loader } from '@navikt/ds-react';
 import { PersonDetails } from '@app/pages/registrering/person/details';
 import { useGetPartQuery } from '@app/redux/api/part';
+import { Loader } from '@navikt/ds-react';
 
 interface PersonInfoProps {
   sakenGjelderValue: string;

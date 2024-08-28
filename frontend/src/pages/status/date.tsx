@@ -1,9 +1,9 @@
-import { Tag } from '@navikt/ds-react';
-import { addMonths, differenceInDays, differenceInMonths, isEqual, isValid } from 'date-fns';
-import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { InfoItem, Time } from '@app/pages/status/common-components';
 import { monthUnit, weekUnit } from '@app/pages/status/helpers';
+import { Tag } from '@navikt/ds-react';
+import { addMonths, differenceInDays, differenceInMonths, isEqual, isValid } from 'date-fns';
+import { styled } from 'styled-components';
 
 interface Props {
   label: string;
@@ -31,7 +31,7 @@ export const DateInfoItem = ({ date, label, children }: Props) => {
 };
 
 export const getDifference = (from: Date, to: Date): string => {
-  if (!isValid(from) || !isValid(to)) {
+  if (!(isValid(from) && isValid(to))) {
     return 'Ugyldig dato';
   }
 

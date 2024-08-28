@@ -1,11 +1,11 @@
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetPartQuery } from '@app/redux/api/part';
+import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { useRegistrering } from '@app/hooks/use-registrering';
-import { useGetPartQuery } from '@app/redux/api/part';
-import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 
 export const PersonSearch = () => {
   const { id, sakenGjelderValue } = useRegistrering();

@@ -1,8 +1,8 @@
-import { Loader, Tag, TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { getSakspartNameAndId } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import { ISimplePart } from '@app/types/common';
+import type { ISimplePart } from '@app/types/common';
+import { Loader, Tag, type TagProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   person: ISimplePart | undefined;

@@ -1,10 +1,10 @@
-import { Tooltip } from '@navikt/ds-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { EditTag } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/styled-components';
 import { Suggestions } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/suggestions-dropdown';
 import { useSuggestions } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/use-suggestions';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
+import { Tooltip } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   initialValue?: string;
@@ -38,7 +38,7 @@ export const EditLogiskVedlegg = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const setCaretAtEnd = useCallback(() => {
-    if (ref.current !== null && ref.current.isContentEditable) {
+    if (ref.current?.isContentEditable) {
       const selection = window.getSelection();
 
       if (selection !== null) {
@@ -144,7 +144,7 @@ export const EditLogiskVedlegg = ({
   );
 
   useEffect(() => {
-    setContent(activeIndex === -1 ? customValueRef.current : (suggestions[activeIndex] ?? customValueRef.current));
+    setContent(activeIndex === -1 ? customValueRef.current : suggestions[activeIndex] ?? customValueRef.current);
     setCaretAtEnd();
   }, [suggestions, activeIndex, setCaretAtEnd, setContent]);
 

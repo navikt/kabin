@@ -1,12 +1,12 @@
-import { FileTextIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { CardFullHeight } from '@app/components/card/card';
 import { DocumentTitle } from '@app/components/document-viewer/document-title';
 import { getDocumentUrl } from '@app/components/documents/document/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { DocumentViewerContext, IViewedDocument } from '@app/pages/registrering/document-viewer-context';
+import { DocumentViewerContext, type IViewedDocument } from '@app/pages/registrering/document-viewer-context';
+import { FileTextIcon } from '@navikt/aksel-icons';
+import { Loader } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 
 const DEFAULT_NAME = '<Mangler navn>';
 

@@ -1,7 +1,7 @@
-import { Label, Tag, TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHjemmelName, useYtelseName } from '@app/hooks/kodeverk';
+import { Label, Tag, type TagProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface BaseProps {
   id: string;

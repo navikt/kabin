@@ -1,6 +1,3 @@
-import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { Header } from '@app/components/oppgaver/header';
 import { useParams } from '@app/components/oppgaver/hooks';
@@ -14,6 +11,9 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
+import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { styled } from 'styled-components';
 
 export const Oppgaver = () => {
   const canEdit = useCanEdit();

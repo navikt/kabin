@@ -1,5 +1,5 @@
-import { Skeleton, Table } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
+import { Skeleton, Table } from '@navikt/ds-react';
 
 interface Props {
   header?: React.ReactNode;

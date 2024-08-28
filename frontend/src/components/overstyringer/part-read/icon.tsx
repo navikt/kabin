@@ -1,5 +1,5 @@
+import { type AvsenderMottakerType, IdType } from '@app/types/common';
 import { Buldings2Icon, PersonIcon, QuestionmarkIcon } from '@navikt/aksel-icons';
-import { AvsenderMottakerType, IdType } from '@app/types/common';
 
 interface Props {
   type?: IdType | AvsenderMottakerType | null;

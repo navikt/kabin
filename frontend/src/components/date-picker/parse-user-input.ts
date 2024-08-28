@@ -1,6 +1,6 @@
-import { addYears, format, isAfter, isBefore, isValid, parse, subYears } from 'date-fns';
 import { isDateParts, isEightChars, isFourChars, isSixChars } from '@app/components/date-picker/guards';
 import { PRETTY_FORMAT } from '@app/domain/date-formats';
+import { addYears, format, isAfter, isBefore, isValid, parse, subYears } from 'date-fns';
 
 const DELIMITERS = ['.', '-', '/'];
 

@@ -39,16 +39,16 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
 
         const patchResult = dispatch(
           arkiverteDokumenterApi.util.updateQueryData('getArkiverteDokumenter', sakenGjelderValue, (draft) => {
-            dokumentLoop: for (const dokument of draft.dokumenter) {
+            for (const dokument of draft.dokumenter) {
               if (dokument.dokumentInfoId === dokumentInfoId) {
                 dokument.logiskeVedlegg.push({ logiskVedleggId: fakeId, tittel });
-                continue dokumentLoop;
+                continue;
               }
 
-              vedleggLoop: for (const vedlegg of dokument.vedlegg) {
+              for (const vedlegg of dokument.vedlegg) {
                 if (vedlegg.dokumentInfoId === dokumentInfoId) {
                   vedlegg.logiskeVedlegg.push({ logiskVedleggId: fakeId, tittel });
-                  break vedleggLoop;
+                  break;
                 }
               }
             }
@@ -71,13 +71,13 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
 
                 vedleggLoop: for (const vedlegg of dokument.vedlegg) {
                   if (vedlegg.dokumentInfoId !== dokumentInfoId) {
-                    continue vedleggLoop;
+                    continue;
                   }
 
-                  logiskLoop: for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
+                  for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
                     if (logiskVedlegg.logiskVedleggId === fakeId) {
                       logiskVedlegg.logiskVedleggId = data.logiskVedleggId;
-                      break logiskLoop;
+                      break;
                       break vedleggLoop;
                     }
                   }
@@ -115,13 +115,13 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
 
               vedleggLoop: for (const vedlegg of dokument.vedlegg) {
                 if (vedlegg.dokumentInfoId !== dokumentInfoId) {
-                  continue vedleggLoop;
+                  continue;
                 }
 
-                logiskLoop: for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
+                for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
                   if (logiskVedlegg.logiskVedleggId === logiskVedleggId) {
                     logiskVedlegg.tittel = tittel;
-                    break logiskLoop;
+                    break;
                     break vedleggLoop;
                   }
                 }
@@ -146,16 +146,16 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
       onQueryStarted: async ({ dokumentInfoId, logiskVedleggId, sakenGjelderValue }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           arkiverteDokumenterApi.util.updateQueryData('getArkiverteDokumenter', sakenGjelderValue, (draft) => {
-            dokumentLoop: for (const dokument of draft.dokumenter) {
+            for (const dokument of draft.dokumenter) {
               if (dokument.dokumentInfoId === dokumentInfoId) {
                 dokument.logiskeVedlegg = dokument.logiskeVedlegg.filter((v) => v.logiskVedleggId !== logiskVedleggId);
-                continue dokumentLoop;
+                continue;
               }
 
-              vedleggLoop: for (const vedlegg of dokument.vedlegg) {
+              for (const vedlegg of dokument.vedlegg) {
                 if (vedlegg.dokumentInfoId === dokumentInfoId) {
                   vedlegg.logiskeVedlegg = vedlegg.logiskeVedlegg.filter((v) => v.logiskVedleggId !== logiskVedleggId);
-                  break vedleggLoop;
+                  break;
                 }
               }
             }

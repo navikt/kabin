@@ -1,6 +1,6 @@
 import { createSvarbrevUrl } from '@app/components/svarbrev/preview/create-url';
-import { ErrorListenerFn, UrlListenerFn } from '@app/components/svarbrev/preview/types';
-import { SvarbrevPreviewInput } from '@app/types/create';
+import type { ErrorListenerFn, UrlListenerFn } from '@app/components/svarbrev/preview/types';
+import type { SvarbrevPreviewInput } from '@app/types/create';
 
 export class PdfLoader {
   public url: string | null = null;

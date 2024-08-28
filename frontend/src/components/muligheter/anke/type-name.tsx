@@ -1,6 +1,6 @@
+import { SaksTypeEnum } from '@app/types/common';
 import { Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { SaksTypeEnum } from '@app/types/common';
 
 interface Props {
   typeId: SaksTypeEnum;

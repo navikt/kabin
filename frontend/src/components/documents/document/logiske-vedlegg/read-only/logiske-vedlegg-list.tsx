@@ -3,9 +3,9 @@ import {
   LogiskeVedleggList,
   LogiskeVedleggListItem,
   NoAttachmentsText,
-  StyleProps,
+  type StyleProps,
 } from '@app/components/documents/document/logiske-vedlegg/shared/list-style';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
 
 interface ReadOnlyProps extends StyleProps {
   logiskeVedlegg: LogiskVedlegg[];

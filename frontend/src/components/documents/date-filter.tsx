@@ -1,11 +1,11 @@
+import { PRETTY_FORMAT } from '@app/domain/date-formats';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import type { DateRange } from '@app/types/common';
 import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, DatePicker, DatePickerProps } from '@navikt/ds-react';
+import { BodyShort, Button, DatePicker, type DatePickerProps } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { PRETTY_FORMAT } from '@app/domain/date-formats';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { DateRange } from '@app/types/common';
 
 interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
   children: React.ReactNode;

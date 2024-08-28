@@ -1,6 +1,6 @@
 import { getHeaders } from '@app/headers';
 
-export const loadStaticData = async <T>(url: string, label: string, attempt: number = 0): Promise<T> => {
+export const loadStaticData = async <T>(url: string, label: string, attempt = 0): Promise<T> => {
   const res = await fetch(url, {
     method: 'GET',
     headers: getHeaders(),

@@ -1,4 +1,4 @@
-import { BaseRegistrering, Overstyringer, Svarbrev } from '@app/redux/api/registreringer/types';
+import type { BaseRegistrering, Overstyringer, Svarbrev } from '@app/redux/api/registreringer/types';
 
 export type BaseResponse = Pick<BaseRegistrering, 'id' | 'modified'>;
 

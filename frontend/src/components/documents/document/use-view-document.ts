@@ -1,7 +1,7 @@
-import { useCallback, useContext } from 'react';
 import { compareDocuments } from '@app/domain/document';
 import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { KABIN_API_BASE_PATH } from '@app/redux/api/common';
+import { useCallback, useContext } from 'react';
 
 interface Props {
   tittel: string | null;

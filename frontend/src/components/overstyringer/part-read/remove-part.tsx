@@ -1,6 +1,6 @@
-import { TrashIcon } from '@navikt/aksel-icons';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
-import { BaseProps } from '@app/components/overstyringer/types';
+import type { BaseProps } from '@app/components/overstyringer/types';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
   partField: BaseProps['partField'];

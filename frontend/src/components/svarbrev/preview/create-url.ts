@@ -1,10 +1,10 @@
 import { createSvarbrevPDF } from '@app/api/api';
-import { SvarbrevPreviewInput } from '@app/types/create';
+import type { SvarbrevPreviewInput } from '@app/types/create';
 
 export const createSvarbrevUrl = async (
   params: SvarbrevPreviewInput,
   abortController: AbortController,
-  retry: number = 0,
+  retry = 0,
 ): Promise<string> => {
   const res = await createSvarbrevPDF(params, abortController.signal);
 

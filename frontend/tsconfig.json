@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -19,20 +15,14 @@
     "jsx": "react-jsx",
     /* Linting */
     "strict": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     /* Paths */
     "baseUrl": "./src",
     "paths": {
-      "@app/*": [
-        "*"
-      ]
+      "@app/*": ["*"]
     },
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"]
 }

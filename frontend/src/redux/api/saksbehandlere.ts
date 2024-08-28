@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { INNSTILLINGER_BASE_QUERY } from '@app/redux/api/common';
-import { ISaksbehandler } from '@app/types/common';
+import type { ISaksbehandler } from '@app/types/common';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 interface ISaksbehandlereResponse {
   saksbehandlere: ISaksbehandler[];

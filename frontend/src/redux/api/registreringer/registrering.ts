@@ -1,5 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export enum RegistreringTagType {
   REGISTRERING = 'registrering',

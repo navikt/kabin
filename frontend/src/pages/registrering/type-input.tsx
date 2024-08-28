@@ -1,7 +1,3 @@
-import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
-import { Alert, Tag, ToggleGroup } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
@@ -14,7 +10,11 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
-import { RegistreringType, SaksTypeEnum, isType } from '@app/types/common';
+import { type RegistreringType, SaksTypeEnum, isType } from '@app/types/common';
+import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
+import { Alert, Tag, ToggleGroup } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 
 const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
   switch (typeId) {

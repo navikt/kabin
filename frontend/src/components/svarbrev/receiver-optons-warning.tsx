@@ -1,11 +1,11 @@
-import { BodyShort } from '@navikt/ds-react';
 import { Options } from '@app/components/svarbrev/options';
-import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
+import type { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { isReceiver } from '@app/pages/registrering/app-context/types';
 import { useChangeSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
-import { IAddress } from '@app/types/common';
-import { HandlingEnum } from '@app/types/receiver';
+import type { IAddress } from '@app/types/common';
+import type { HandlingEnum } from '@app/types/receiver';
+import { BodyShort } from '@navikt/ds-react';
 
 export const ShowOptionsOrWarning = (receiver: Omit<PartSuggestedReceiver, 'typeList'>) => {
   const { id, svarbrev } = useRegistrering();

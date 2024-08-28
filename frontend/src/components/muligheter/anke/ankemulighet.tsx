@@ -1,5 +1,3 @@
-import { Table, Tag } from '@navikt/ds-react';
-import { useCallback, useMemo } from 'react';
 import { TypeName } from '@app/components/muligheter/anke/type-name';
 import { UsedCount } from '@app/components/muligheter/anke/used-count';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
@@ -12,7 +10,9 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
-import { IAnkemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet } from '@app/types/mulighet';
+import { Table, Tag } from '@navikt/ds-react';
+import { useCallback, useMemo } from 'react';
 
 interface Props {
   ankemulighet: IAnkemulighet;

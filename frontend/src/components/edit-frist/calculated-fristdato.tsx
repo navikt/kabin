@@ -1,8 +1,8 @@
+import { isoDateToPretty } from '@app/domain/date';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { CalculatorIcon } from '@navikt/aksel-icons';
 import { BodyShort, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { isoDateToPretty } from '@app/domain/date';
-import { useRegistrering } from '@app/hooks/use-registrering';
 
 export const Fristdato = () => {
   const { overstyringer } = useRegistrering();

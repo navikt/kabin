@@ -1,5 +1,5 @@
-import { Tag } from '@navikt/ds-react';
 import { useYtelseName } from '@app/hooks/kodeverk';
+import { Tag } from '@navikt/ds-react';
 
 interface Props {
   ytelseId: string | null;

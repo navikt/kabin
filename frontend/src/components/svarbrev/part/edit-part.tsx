@@ -1,11 +1,11 @@
-import { Search, Tag } from '@navikt/ds-react';
-import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { Lookup } from '@app/components/svarbrev/part/lookup';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
+import { Search, Tag } from '@navikt/ds-react';
+import { useCallback, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface EditPartProps {
   onChange: (part: IPart) => void;

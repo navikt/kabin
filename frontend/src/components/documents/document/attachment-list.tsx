@@ -1,8 +1,8 @@
-import { styled } from 'styled-components';
 import { Attachment } from '@app/components/documents/document/attachment';
 import { EditableLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logiske-vedlegg-list';
 import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
-import { IArkivertDocument } from '@app/types/dokument';
+import type { IArkivertDocument } from '@app/types/dokument';
+import { styled } from 'styled-components';
 
 interface Props {
   dokument: IArkivertDocument;

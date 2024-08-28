@@ -1,12 +1,12 @@
+import { toast } from '@app/components/toast/store';
+import { PersonDetails } from '@app/pages/registrering/person/details';
+import { useGetPartQuery } from '@app/redux/api/part';
+import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { Loader, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
-import { toast } from '@app/components/toast/store';
-import { PersonDetails } from '@app/pages/registrering/person/details';
-import { useGetPartQuery } from '@app/redux/api/part';
-import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
 
 const LABEL = 'Opprett ny registrering';
 

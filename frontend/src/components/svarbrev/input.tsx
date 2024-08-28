@@ -1,11 +1,11 @@
-import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { EditVarsletFrist } from '@app/components/svarbrev/edit-varslet-frist';
 import { SetFullmektig } from '@app/components/svarbrev/fullmektig-name';
 import { Preview } from '@app/components/svarbrev/preview/preview';
 import { Receivers } from '@app/components/svarbrev/receivers';
 import { SetTitle } from '@app/components/svarbrev/title';
-import { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import { styled } from 'styled-components';
 
 interface Props {
   setting: SvarbrevSetting;

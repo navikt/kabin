@@ -1,8 +1,7 @@
-import { Mulighet } from '@app/pages/status/mulighet';
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { IAddress, IPart, RegistreringType } from '@app/types/common';
-import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
-import { HandlingEnum } from '@app/types/receiver';
+import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import type { IAddress, IPart, RegistreringType } from '@app/types/common';
+import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { HandlingEnum } from '@app/types/receiver';
 
 export interface Mulighet {
   id: string;

@@ -1,11 +1,11 @@
-import { BodyShort, Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
-import { IPart, ISaksbehandler } from '@app/types/common';
-import { ISak } from '@app/types/dokument';
+import type { IPart, ISaksbehandler } from '@app/types/common';
+import type { ISak } from '@app/types/dokument';
+import { BodyShort, Label } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface InfoProps {
   label: string;

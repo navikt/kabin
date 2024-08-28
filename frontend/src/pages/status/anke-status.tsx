@@ -1,12 +1,12 @@
-import { Alert } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
-import { FinishedRegistrering } from '@app/redux/api/registreringer/types';
+import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 import { useGetAnkeStatusQuery } from '@app/redux/api/status';
-import { IAnkestatus } from '@app/types/status';
+import type { IAnkestatus } from '@app/types/status';
+import { Alert } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   registrering: FinishedRegistrering;

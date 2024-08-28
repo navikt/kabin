@@ -1,7 +1,7 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_API_BASE_QUERY } from '@app/redux/api/common';
-import { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
-import { IPart, ISimplePart } from '@app/types/common';
+import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
+import type { IPart, ISimplePart } from '@app/types/common';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const partApi = createApi({
   reducerPath: 'partApi',

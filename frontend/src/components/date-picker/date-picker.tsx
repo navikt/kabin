@@ -1,10 +1,10 @@
-import { DateInputProps, DatePicker } from '@navikt/ds-react';
-import { format } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
 import { parseUserInput } from '@app/components/date-picker/parse-user-input';
 import { Warning } from '@app/components/date-picker/warning';
 import { prettyDateToISO } from '@app/domain/date';
 import { FORMAT, PRETTY_FORMAT } from '@app/domain/date-formats';
+import { type DateInputProps, DatePicker } from '@navikt/ds-react';
+import { format } from 'date-fns';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Props {
   centuryThreshold?: number;

@@ -1,6 +1,3 @@
-import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Label, Tag, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
@@ -8,10 +5,13 @@ import { PDF_ASPECT_RATIO, PDF_PARAMS } from '@app/components/svarbrev/preview/c
 import { InfoItem } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
-import { Receiver } from '@app/redux/api/registreringer/types';
+import type { Receiver } from '@app/redux/api/registreringer/types';
 import { IdType, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
-import { SvarbrevStatus } from '@app/types/status';
+import type { SvarbrevStatus } from '@app/types/status';
+import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
+import { Label, Tag, Tooltip } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   svarbrev: SvarbrevStatus;

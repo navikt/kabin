@@ -1,10 +1,10 @@
-import { SortState } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
-import { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
-import { SaksTypeEnum } from '@app/types/common';
-import { IKodeverkSimpleValue } from '@app/types/kodeverk';
+import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
+import type { SaksTypeEnum } from '@app/types/common';
+import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { TYPE_NAME } from '@app/types/mulighet';
+import type { SortState } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 export const ROWS_PER_PAGE = 10;
 
@@ -71,6 +71,6 @@ const getYtelseNames = (
   b: FinishedRegistreringListItem,
   ytelser: IKodeverkSimpleValue[],
 ): [string, string] => [
-  a.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === a.ytelseId)?.navn ?? ''),
-  b.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === b.ytelseId)?.navn ?? ''),
+  a.ytelseId === null ? 'Ingen' : ytelser.find((y) => y.id === a.ytelseId)?.navn ?? '',
+  b.ytelseId === null ? 'Ingen' : ytelser.find((y) => y.id === b.ytelseId)?.navn ?? '',
 ];

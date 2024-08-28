@@ -1,6 +1,6 @@
+import type { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { Detail, Heading } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 
 interface Props {
   error: IApiErrorReponse;

@@ -1,6 +1,6 @@
 import { StyledAvsenderIcon } from '@app/components/overstyringer/icons';
 import { Part } from '@app/components/overstyringer/part';
-import { ISetPart } from '@app/components/overstyringer/part-read/types';
+import type { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { FieldNames } from '@app/components/overstyringer/types';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';

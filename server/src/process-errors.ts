@@ -1,7 +1,7 @@
-import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
-import { getLogger } from '@app/logger';
-import { EmojiIcons, sendToSlack } from '@app/slack';
 import { isDeployed } from '@app/config/env';
+import { getLogger } from '@app/logger';
+import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
+import { EmojiIcons, sendToSlack } from '@app/slack';
 
 const log = getLogger('process-errors');
 
@@ -10,7 +10,7 @@ export const processErrors = () => {
     .on('unhandledRejection', (reason, promise) => {
       log.error({ error: reason, msg: `Process ${process.pid} received a unhandledRejection signal` });
 
-      promise.catch((error: unknown) => log.error({ error, msg: `Uncaught error` }));
+      promise.catch((error: unknown) => log.error({ error, msg: 'Uncaught error' }));
     })
     .on('uncaughtException', (error) =>
       log.error({ error, msg: `Process ${process.pid} received a uncaughtException signal` }),

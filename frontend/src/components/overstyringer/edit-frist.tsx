@@ -1,6 +1,3 @@
-import { Heading, Label } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
@@ -8,6 +5,9 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { Heading, Label } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 
 export const EditFrist = () => {
   const { typeId } = useRegistrering();

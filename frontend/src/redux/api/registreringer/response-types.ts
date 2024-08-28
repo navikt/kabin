@@ -1,6 +1,6 @@
-import { FinishedRegistrering, Mulighet, Overstyringer, Svarbrev } from '@app/redux/api/registreringer/types';
-import { BaseResponse } from '@app/redux/api/types';
-import { RegistreringType } from '@app/types/common';
+import type { FinishedRegistrering, Mulighet, Overstyringer, Svarbrev } from '@app/redux/api/registreringer/types';
+import type { BaseResponse } from '@app/redux/api/types';
+import type { RegistreringType } from '@app/types/common';
 
 export interface SetTypeResponse extends BaseResponse {
   typeId: RegistreringType | null;

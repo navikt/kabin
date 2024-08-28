@@ -1,5 +1,3 @@
-import { Table, Tag } from '@navikt/ds-react';
-import { useCallback } from 'react';
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
@@ -7,7 +5,9 @@ import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@a
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetKlagemulighetMutation } from '@app/redux/api/registreringer/mutations';
-import { IKlagemulighet } from '@app/types/mulighet';
+import type { IKlagemulighet } from '@app/types/mulighet';
+import { Table, Tag } from '@navikt/ds-react';
+import { useCallback } from 'react';
 
 interface Props {
   klagemulighet: IKlagemulighet;

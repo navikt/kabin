@@ -1,4 +1,4 @@
-import { IValidationSection, ValidationFieldNames } from '@app/types/validation';
+import type { IValidationSection, ValidationFieldNames } from '@app/types/validation';
 
 export const useValidationError = (field: ValidationFieldNames): string | undefined => {
   const errors: IValidationSection[] = []; // TODO: Get errors from API.

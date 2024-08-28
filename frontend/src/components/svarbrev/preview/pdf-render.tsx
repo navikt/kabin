@@ -1,9 +1,9 @@
+import { PDF_PARAMS } from '@app/components/svarbrev/preview/constants';
+import { ResponseError } from '@app/components/svarbrev/preview/create-url';
+import type { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { PDF_PARAMS } from '@app/components/svarbrev/preview/constants';
-import { ResponseError } from '@app/components/svarbrev/preview/create-url';
-import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 
 interface Props {
   loader: PdfLoader;

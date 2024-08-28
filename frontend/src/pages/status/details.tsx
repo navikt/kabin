@@ -1,4 +1,3 @@
-import { parseISO } from 'date-fns';
 import { NavEmployee, Part } from '@app/pages/status/common-components';
 import { DateInfoItem, getDifference } from '@app/pages/status/date';
 import { getDuration } from '@app/pages/status/duration';
@@ -7,7 +6,8 @@ import { Mulighet } from '@app/pages/status/mulighet';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { SaksTypeEnum } from '@app/types/common';
-import { IAnkestatus, IKlagestatus } from '@app/types/status';
+import type { IAnkestatus, IKlagestatus } from '@app/types/status';
+import { parseISO } from 'date-fns';
 
 interface Props {
   id: string;

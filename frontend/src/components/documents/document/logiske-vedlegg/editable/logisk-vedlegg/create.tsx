@@ -1,7 +1,7 @@
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useAddLogiskVedleggMutation } from '@app/redux/api/logiske-vedlegg';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
 
 interface Props {
   dokumentInfoId: string;

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
 import { EditAddress } from '@app/components/svarbrev/address/edit-address';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
-import { Addresses } from '@app/components/svarbrev/address/types';
-import { IAddress, IPart } from '@app/types/common';
+import type { Addresses } from '@app/components/svarbrev/address/types';
+import type { IAddress, IPart } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
+import { useEffect, useState } from 'react';
 
 interface Props extends Addresses {
   part: IPart;

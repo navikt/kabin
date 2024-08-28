@@ -1,9 +1,9 @@
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { PersonInfo } from '@app/pages/registrering/person/info';
 import { PersonSearch } from '@app/pages/registrering/person/search';
+import { Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const Person = () => {
   const registrering = useRegistrering();

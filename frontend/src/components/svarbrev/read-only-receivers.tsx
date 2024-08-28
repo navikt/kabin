@@ -1,10 +1,10 @@
-import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useAddressLines } from '@app/components/svarbrev/address/use-address-lines';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { Receiver } from '@app/redux/api/registreringer/types';
+import type { Receiver } from '@app/redux/api/registreringer/types';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
+import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 const getHandlingLabel = (handling: HandlingEnum | null, utsendingskanal: Utsendingskanal) => {
   switch (handling) {

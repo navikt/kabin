@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
-import { IOppgave } from '@app/types/oppgave';
+import type { IOppgave } from '@app/types/oppgave';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export interface IGetOppgaverParams {
   identifikator: string;

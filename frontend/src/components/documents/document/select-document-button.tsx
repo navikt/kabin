@@ -1,13 +1,13 @@
-import { CircleSlashIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { GridArea, GridButton } from '@app/components/documents/styled-grid-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
-import { IArkivertDocument } from '@app/types/dokument';
+import type { IArkivertDocument } from '@app/types/dokument';
+import { CircleSlashIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   isSelected: boolean;

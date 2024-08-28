@@ -1,6 +1,3 @@
-import { Alert, Heading, Select, Skeleton, Tag } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { YtelseTag } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -12,6 +9,9 @@ import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyring
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
+import { Alert, Heading, Select, Skeleton, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { styled } from 'styled-components';
 
 const ID = ValidationFieldNames.YTELSE_ID;
 const HEADING_ID = 'ytelse-heading';

@@ -1,5 +1,5 @@
-import { Tag } from '@navikt/ds-react';
 import { SaksTypeEnum } from '@app/types/common';
+import { Tag } from '@navikt/ds-react';
 
 export const Type = ({ typeId }: { typeId: string | null }) => {
   switch (typeId) {

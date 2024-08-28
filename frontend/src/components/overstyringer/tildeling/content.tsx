@@ -1,12 +1,12 @@
-import { Alert, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/overstyringer';
-import { ISaksbehandlereParams, useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
-import { ISaksbehandler } from '@app/types/common';
+import { type ISaksbehandlereParams, useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
+import type { ISaksbehandler } from '@app/types/common';
+import { Alert, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 export const Content = () => {
   const saksbehandler = useSaksbehandler();

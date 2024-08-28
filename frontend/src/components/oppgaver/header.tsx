@@ -1,12 +1,12 @@
-import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HelpText } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { useParams } from '@app/components/oppgaver/hooks';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
+import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
+import { Button, Heading, HelpText } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { styled } from 'styled-components';
 
 export const Header = () => {
   const { id, typeId, overstyringer } = useRegistrering();

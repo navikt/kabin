@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   useGetFagsystemerQuery,
   useGetHjemlerMapQuery,
@@ -6,6 +5,7 @@ import {
   useGetTemaQuery,
   useGetVedtaksenheterQuery,
 } from '@app/redux/api/kodeverk';
+import { useMemo } from 'react';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
   const { data, isLoading } = useGetTemaQuery();

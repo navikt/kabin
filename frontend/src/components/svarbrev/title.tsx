@@ -1,11 +1,11 @@
-import { TextField } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { defaultString } from '@app/functions/empty-string';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { DEFAULT_SVARBREV_NAME, useSetSvarbrevTitleMutation } from '@app/redux/api/svarbrev/svarbrev';
+import { TextField } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 const ID = 'svarbrev-dokumentnavn';
 const LABEL = 'Dokumentnavn';

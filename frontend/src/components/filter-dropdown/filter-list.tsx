@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { Filter } from '@app/components/filter-dropdown/option';
-import { BaseProps } from '@app/components/filter-dropdown/props';
+import type { BaseProps } from '@app/components/filter-dropdown/props';
+import { styled } from 'styled-components';
 
 export const FilterList = <T extends string>({ selected, options, focused, onChange }: BaseProps<T>) => {
   const setSelected = (value: T, active: boolean) => {

@@ -1,6 +1,3 @@
-import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Label, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { receiverStyle } from '@app/components/svarbrev/address/layout';
@@ -8,10 +5,13 @@ import { EditPart } from '@app/components/svarbrev/part/edit-part';
 import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-optons-warning';
 import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/styled-components';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { Receiver } from '@app/redux/api/registreringer/types';
+import type { Receiver } from '@app/redux/api/registreringer/types';
 import { useAddSvarbrevReceiverMutation, useRemoveSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { IdType } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
+import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, Label, Tooltip } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   receivers: Receiver[];

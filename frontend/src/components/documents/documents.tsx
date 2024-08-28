@@ -1,8 +1,3 @@
-import { ArrowsCirclepathIcon, ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { CardMedium } from '@app/components/card/card';
 import { DocumentTable } from '@app/components/documents/document-table';
 import { LoadingDocuments } from '@app/components/documents/loading-documents';
@@ -13,8 +8,13 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
-import { IArkivertDocument } from '@app/types/dokument';
+import type { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
+import { ArrowsCirclepathIcon, ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Dokumenter = () => {
   const { sakenGjelderValue, journalpostId } = useRegistrering();

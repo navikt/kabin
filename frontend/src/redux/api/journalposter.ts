@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
-import { IArkivertDocument } from '@app/types/dokument';
+import type { IArkivertDocument } from '@app/types/dokument';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 interface JournalpostId {
   journalpostId: string;
@@ -35,7 +35,7 @@ export const arkiverteDokumenterApi = createApi({
     }),
 
     getArkivertDokument: builder.query<IArkivertDocument, string>({
-      keepUnusedDataFor: Infinity,
+      keepUnusedDataFor: Number.POSITIVE_INFINITY,
       query: (id) => `/arkivertedokumenter/${id}`,
     }),
 

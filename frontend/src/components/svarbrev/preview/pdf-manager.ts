@@ -1,5 +1,5 @@
 import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
-import { SvarbrevPreviewInput } from '@app/types/create';
+import type { SvarbrevPreviewInput } from '@app/types/create';
 
 class PdfManager {
   private cache: Map<string, PdfLoader> = new Map();

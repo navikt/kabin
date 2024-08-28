@@ -1,6 +1,3 @@
-import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditFrist } from '@app/components/overstyringer/edit-frist';
@@ -17,7 +14,7 @@ import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshje
 import { MottattDateError } from '@app/components/overstyringer/mottatt-date-error';
 import { Part } from '@app/components/overstyringer/part';
 import { SakenGjelder } from '@app/components/overstyringer/part-read/part-read';
-import { ISetPart } from '@app/components/overstyringer/part-read/types';
+import type { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
 import { FieldNames } from '@app/components/overstyringer/types';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
@@ -28,9 +25,12 @@ import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
-import { IPart, SaksTypeEnum } from '@app/types/common';
+import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
+import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { Label } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   title: string;
