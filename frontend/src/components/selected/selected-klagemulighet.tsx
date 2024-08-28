@@ -1,12 +1,12 @@
-import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Heading, Tag } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
 import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import { IKlagemulighet } from '@app/types/mulighet';
+import type { IKlagemulighet } from '@app/types/mulighet';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Button, Detail, Heading, Tag } from '@navikt/ds-react';
 
 interface Props {
   onClick: () => void;

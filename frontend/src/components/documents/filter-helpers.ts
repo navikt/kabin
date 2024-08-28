@@ -1,10 +1,10 @@
-import { isWithinInterval, parseISO } from 'date-fns';
-import { useMemo } from 'react';
 import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
 import { useGetKlageenheterQuery, useGetVedtaksenheterQuery } from '@app/redux/api/kodeverk';
-import { AvsenderMottakerType, DateRange } from '@app/types/common';
-import { IArkivertDocument, IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
+import { AvsenderMottakerType, type DateRange } from '@app/types/common';
+import { type IArkivertDocument, type IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
+import { isWithinInterval, parseISO } from 'date-fns';
+import { useMemo } from 'react';
 
 interface IOption<T> {
   value: T;
@@ -137,7 +137,7 @@ export const useFilteredDocuments = (
           selectedAvsenderMottakere.includes(
             avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
           )) &&
-        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : (sak.fagsakId ?? UNKNOWN))) &&
+        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
         (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)),
     );
 

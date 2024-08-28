@@ -1,6 +1,6 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useContext } from 'react';
 
 export const useIsOwner = () => {
   const { createdBy } = useRegistrering();

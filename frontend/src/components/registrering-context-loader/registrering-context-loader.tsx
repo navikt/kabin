@@ -1,11 +1,11 @@
-import { createContext } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { LoadingRegistrering } from '@app/components/loading-registrering/loading-registrering';
 import { LoadingStatus } from '@app/components/loading-status/loading-status';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
-import { Registrering } from '@app/redux/api/registreringer/types';
+import type { Registrering } from '@app/redux/api/registreringer/types';
+import { createContext } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 export const RegistreringContext = createContext<Registrering>({} as Registrering);
 

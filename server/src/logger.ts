@@ -1,4 +1,4 @@
-const VERSION = process.env['VERSION'] ?? 'unknown';
+const VERSION = process.env.VERSION ?? 'unknown';
 
 const LOGGERS: Map<string, Logger> = new Map();
 
@@ -22,23 +22,23 @@ export interface AnyObject {
 
 type LogArgs =
   | {
-    msg?: string;
-    trace_id?: string;
-    span_id?: string;
-    client_version?: string;
-    tab_id?: string;
-    error: Error | unknown;
-    data?: SerializableValue;
-  }
+      msg?: string;
+      trace_id?: string;
+      span_id?: string;
+      client_version?: string;
+      tab_id?: string;
+      error: Error | unknown;
+      data?: SerializableValue;
+    }
   | {
-    msg: string;
-    trace_id?: string;
-    span_id?: string;
-    client_version?: string;
-    tab_id?: string;
-    error?: Error | unknown;
-    data?: SerializableValue;
-  };
+      msg: string;
+      trace_id?: string;
+      span_id?: string;
+      client_version?: string;
+      tab_id?: string;
+      error?: Error | unknown;
+      data?: SerializableValue;
+    };
 
 interface Logger {
   debug: (args: LogArgs) => void;

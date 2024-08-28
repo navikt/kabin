@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { FilterList } from '@app/components/filter-dropdown/filter-list';
 import { Header } from '@app/components/filter-dropdown/header';
-import { BaseProps, DropdownProps } from '@app/components/filter-dropdown/props';
+import type { BaseProps, DropdownProps } from '@app/components/filter-dropdown/props';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 

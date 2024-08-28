@@ -1,4 +1,4 @@
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
 
 export interface ISetPart<T extends IPart | null = IPart> {
   label: string;

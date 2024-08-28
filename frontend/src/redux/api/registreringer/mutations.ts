@@ -1,13 +1,13 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import {
+import type {
   SetAnkemulisghetParams,
   SetKlagemulighetParams,
   SetTypeParams,
 } from '@app/redux/api/registreringer/param-types';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import { SetMulighetResponse, SetTypeResponse } from '@app/redux/api/registreringer/response-types';
-import { DraftRegistrering } from '@app/redux/api/registreringer/types';
+import type { SetMulighetResponse, SetTypeResponse } from '@app/redux/api/registreringer/response-types';
+import type { DraftRegistrering } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 

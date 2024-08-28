@@ -1,15 +1,15 @@
-import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Checkbox, CheckboxGroup, Tooltip } from '@navikt/ds-react';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { StyledReceiver } from '@app/components/svarbrev/address/layout';
 import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-optons-warning';
 import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/styled-components';
 import { getTypeNames } from '@app/components/svarbrev/type-name';
-import { PartSuggestedReceiver } from '@app/components/svarbrev/types';
+import type { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { isReceiver } from '@app/pages/registrering/app-context/types';
 import { useAddSvarbrevReceiverMutation, useRemoveSvarbrevReceiverMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { IdType } from '@app/types/common';
+import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
+import { Checkbox, CheckboxGroup, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   suggestedReceivers: PartSuggestedReceiver[];

@@ -1,12 +1,12 @@
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useMemo } from 'react';
 import { ReceiverType } from '@app/components/svarbrev/type-name';
-import { PartReceiver, PartSuggestedReceiver } from '@app/components/svarbrev/types';
+import type { PartReceiver, PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { isNotNull } from '@app/functions/is-not';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useMemo } from 'react';
 
 export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiver)[] => {
   const { sakenGjelderValue, overstyringer, svarbrev } = useRegistrering();

@@ -1,4 +1,4 @@
-import { Receiver } from '@app/redux/api/registreringer/types';
+import type { Receiver } from '@app/redux/api/registreringer/types';
 
 // TODO: Move to appropriate place.
 export interface SuggestedReceiver extends Omit<Receiver, 'id'> {

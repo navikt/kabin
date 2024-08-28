@@ -1,12 +1,12 @@
-import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
-import { IOppgave } from '@app/types/oppgave';
+import type { IOppgave } from '@app/types/oppgave';
+import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const Row = ({
   id,

@@ -1,14 +1,14 @@
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { DateFilter } from '@app/components/documents/date-filter';
 import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from '@app/components/documents/filter-helpers';
 import { GridArea, GridSearch, StyledGrid } from '@app/components/documents/styled-grid-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
-import { DateRange } from '@app/types/common';
-import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import type { DateRange } from '@app/types/common';
+import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 
 const EMPTY_LIST: [] = [];
 

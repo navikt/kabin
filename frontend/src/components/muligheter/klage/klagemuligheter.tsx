@@ -1,7 +1,3 @@
-import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
 import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
@@ -16,8 +12,12 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
-import { IKlagemulighet } from '@app/types/mulighet';
+import type { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
+import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Klagemuligheter = () => {
   const canEdit = useCanEdit();

@@ -1,9 +1,9 @@
 import { RemovePartButton } from '@app/components/overstyringer/part-read/remove-part';
 import { SearchPartButton } from '@app/components/overstyringer/part-read/search-part-button';
 import { SetPartButton } from '@app/components/overstyringer/part-read/set-part';
-import { EnterSearchModeCallback, ISetPart } from '@app/components/overstyringer/part-read/types';
+import type { EnterSearchModeCallback, ISetPart } from '@app/components/overstyringer/part-read/types';
 import { PartActionsContainer } from '@app/components/overstyringer/styled-components';
-import { BaseProps } from '@app/components/overstyringer/types';
+import type { BaseProps } from '@app/components/overstyringer/types';
 
 export interface ActionsProps extends BaseProps {
   options?: ISetPart[];

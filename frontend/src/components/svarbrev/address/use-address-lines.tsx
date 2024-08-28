@@ -1,7 +1,7 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isNotNull } from '@app/functions/is-not';
-import { IAddress, isNorwegianAddress } from '@app/types/common';
+import { type IAddress, isNorwegianAddress } from '@app/types/common';
+import { useContext } from 'react';
 
 export const useAddressLines = (address: IAddress | null): string[] => {
   const { getPoststed, getCountryName } = useContext(StaticDataContext);

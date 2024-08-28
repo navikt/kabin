@@ -1,5 +1,5 @@
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { IAvsenderMottaker, IPart, ISimplePart, IdType } from '@app/types/common';
+import { type IAvsenderMottaker, type IPart, type ISimplePart, IdType } from '@app/types/common';
 
 export const getSakspartName = (
   sakspart: IPart | ISimplePart | IAvsenderMottaker | undefined | null,

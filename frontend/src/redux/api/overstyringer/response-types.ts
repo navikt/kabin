@@ -1,6 +1,6 @@
-import { Behandlingstid, Overstyringer, Receiver } from '@app/redux/api/registreringer/types';
-import { BaseResponse, OverstyringerResponse, SvarbrevResponse } from '@app/redux/api/types';
-import { IPart } from '@app/types/common';
+import type { Behandlingstid, Overstyringer, Receiver } from '@app/redux/api/registreringer/types';
+import type { BaseResponse, OverstyringerResponse, SvarbrevResponse } from '@app/redux/api/types';
+import type { IPart } from '@app/types/common';
 
 export type SetMottattKlageinstansResponse = OverstyringerResponse<{
   mottattKlageinstans: string;

@@ -1,7 +1,7 @@
+import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { useViewDocument } from '@app/components/documents/document/use-view-document';
 
 interface Props {
   journalpostId: string;

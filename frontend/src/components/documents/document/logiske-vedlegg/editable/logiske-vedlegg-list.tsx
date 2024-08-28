@@ -1,16 +1,16 @@
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { CreateLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/create';
 import { EditableLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/editable';
 import {
   LogiskeVedleggList,
   LogiskeVedleggListItem,
   NoAttachmentsText,
-  StyleProps,
+  type StyleProps,
 } from '@app/components/documents/document/logiske-vedlegg/shared/list-style';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props extends StyleProps {
   logiskeVedlegg: LogiskVedlegg[];
@@ -27,7 +27,7 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
 
   return (
     <LogiskeVedleggList onMouseDown={stopMouseDown} {...styleProps} aria-label="Logiske vedlegg">
-      {!hasLogiskeVedlegg && !isOpen ? (
+      {!(hasLogiskeVedlegg || isOpen) ? (
         <LogiskeVedleggListItem key="none-create">
           <Tooltip content="Legg til logisk vedlegg">
             <CreateButton

@@ -1,6 +1,6 @@
-import { Tag, TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { JournalposttypeEnum } from '@app/types/dokument';
+import { Tag, type TagProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   journalposttype: JournalposttypeEnum;

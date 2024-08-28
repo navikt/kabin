@@ -1,7 +1,7 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
 import { AppLoader } from '@app/components/app/loader';
-import { CountryCode, PostalCode, countryCodes, postalCodes, user } from '@app/static-data/static-data';
-import { IUserData } from '@app/types/bruker';
+import { type CountryCode, type PostalCode, countryCodes, postalCodes, user } from '@app/static-data/static-data';
+import type { IUserData } from '@app/types/bruker';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 interface Props {
   children: React.ReactNode;

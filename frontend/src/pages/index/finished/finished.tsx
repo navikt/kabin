@@ -1,8 +1,8 @@
-import { Heading, Skeleton, Table } from '@navikt/ds-react';
 import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedTable } from '@app/pages/index/finished/table';
 import { Container } from '@app/pages/index/styled-components';
 import { useGetFerdigeRegistreringerQuery } from '@app/redux/api/registreringer/queries';
+import { Heading, Skeleton, Table } from '@navikt/ds-react';
 
 export const Finished = () => (
   <Container>

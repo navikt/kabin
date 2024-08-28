@@ -1,7 +1,7 @@
-import { SuggestedReceiver } from '@app/pages/registrering/app-context/types';
-import { Behandlingstid } from '@app/redux/api/registreringer/types';
-import { IAddress } from '@app/types/common';
-import { HandlingEnum } from '@app/types/receiver';
+import type { SuggestedReceiver } from '@app/pages/registrering/app-context/types';
+import type { Behandlingstid } from '@app/redux/api/registreringer/types';
+import type { IAddress } from '@app/types/common';
+import type { HandlingEnum } from '@app/types/receiver';
 
 export interface SetSendParams {
   id: string;

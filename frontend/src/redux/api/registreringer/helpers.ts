@@ -1,4 +1,4 @@
-import { Registrering } from '@app/redux/api/registreringer/types';
+import type { Registrering } from '@app/redux/api/registreringer/types';
 
 export const setRegistreringFn = (draft: Registrering[], data: Registrering) => {
   for (let i = draft.length - 1; i >= 0; i--) {

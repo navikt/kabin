@@ -1,5 +1,3 @@
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
 import { StyledSaksbehandlerIcon } from '@app/components/overstyringer/icons';
 import {
   PartActionsContainer,
@@ -20,6 +18,8 @@ import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/o
 import { useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, Heading } from '@navikt/ds-react';
 
 const ID = ValidationFieldNames.SAKSBEHANDLER;
 

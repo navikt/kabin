@@ -1,6 +1,6 @@
-import { Receiver } from '@app/redux/api/registreringer/types';
-import { SvarbrevResponse } from '@app/redux/api/types';
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import type { Receiver } from '@app/redux/api/registreringer/types';
+import type { SvarbrevResponse } from '@app/redux/api/types';
+import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
 
 export type SetSvarbrevSendResponse = SvarbrevResponse<{ send: boolean }>;
 

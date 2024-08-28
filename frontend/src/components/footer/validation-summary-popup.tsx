@@ -1,17 +1,17 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort } from '@navikt/ds-react';
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
 import { StyledHeader, ValidationSummary } from '@app/components/footer/validation-summary';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Alert, BodyShort } from '@navikt/ds-react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const ValidationSummaryPopup = () => {
   const id = useRegistreringId();
-  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
+  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
 
   const hasError = error !== undefined;
   const [isOpen, setIsOpen] = useState(hasError);

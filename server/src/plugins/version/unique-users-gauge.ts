@@ -1,8 +1,8 @@
-import { Gauge, LabelValues } from 'prom-client';
 import { PROXY_VERSION, START_TIME } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { proxyRegister } from '@app/prometheus/types';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
+import { Gauge, type LabelValues } from 'prom-client';
 
 const log = getLogger('active-clients');
 
@@ -63,7 +63,7 @@ const start = (nav_ident: string, req: FastifyRequest): EndFn => {
     app_start_time: START_TIME,
     trace_id: req.trace_id,
     span_id: req.span_id,
-    domain: req.headers['host'] ?? 'UNKNOWN',
+    domain: req.headers.host ?? 'UNKNOWN',
   };
 
   uniqueUsersGauge.set(labels, 1);

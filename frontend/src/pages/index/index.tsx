@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { Finished } from '@app/pages/index/finished/finished';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
+import { styled } from 'styled-components';
 
 export const IndexPage = () => (
   <PageWrapper>

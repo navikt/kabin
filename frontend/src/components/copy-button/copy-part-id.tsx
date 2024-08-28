@@ -1,6 +1,6 @@
-import { CopyButton, CopyButtonProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { formatId } from '@app/functions/format-id';
+import { CopyButton, type CopyButtonProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   id: string | null;

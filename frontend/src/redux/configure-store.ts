@@ -1,4 +1,3 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { kodeverkApi } from '@app/redux/api/kodeverk';
 import { oppgaverApi } from '@app/redux/api/oppgaver';
@@ -9,6 +8,7 @@ import { statusApi } from '@app/redux/api/status';
 import { svarbrevSettingsApi } from '@app/redux/api/svarbrev-settings';
 import { errorToastMiddleware } from '@app/redux/error-toast-middleware';
 import { rootReducer } from '@app/redux/root';
+import { configureStore } from '@reduxjs/toolkit';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,

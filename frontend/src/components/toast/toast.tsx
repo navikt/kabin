@@ -1,5 +1,3 @@
-import { XMarkIcon } from '@navikt/aksel-icons';
-import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
@@ -7,7 +5,7 @@ import {
   XMarkOctagonFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from '@app/components/toast/constants';
-import { Message } from '@app/components/toast/store';
+import type { Message } from '@app/components/toast/store';
 import {
   BaseToastStyle,
   Container,
@@ -16,6 +14,8 @@ import {
   TimedToastStyle,
 } from '@app/components/toast/styled-components';
 import { ToastType } from '@app/components/toast/types';
+import { XMarkIcon } from '@navikt/aksel-icons';
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 export const CLOSE_TOAST_EVENT_TYPE = 'close-toast';
 
@@ -45,7 +45,7 @@ export const Toast = memo(
       return () => element.removeEventListener(CLOSE_TOAST_EVENT_TYPE, slideOut);
     }, [slideOut]);
 
-    if (expiresAt !== Infinity) {
+    if (expiresAt !== Number.POSITIVE_INFINITY) {
       return (
         <TimedToast
           type={type}
@@ -85,13 +85,15 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
     const mouse = useRef<MouseEvent | null>(null);
 
     const onMouseLeave = useCallback(() => {
-      setExpiresAt(Date.now() + (remaining === null || remaining === Infinity ? TOAST_TIMEOUT : remaining));
+      setExpiresAt(
+        Date.now() + (remaining === null || remaining === Number.POSITIVE_INFINITY ? TOAST_TIMEOUT : remaining),
+      );
       setRemaining(null);
     }, [remaining, setExpiresAt]);
 
     const onMouseEnter = useCallback(() => {
       setRemaining(expiresAt - Date.now());
-      setExpiresAt(Infinity);
+      setExpiresAt(Number.POSITIVE_INFINITY);
     }, [expiresAt, setExpiresAt]);
 
     useEffect(() => {
@@ -112,7 +114,7 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
       const { target } = mouse.current;
 
       if (
-        expiresAt === Infinity &&
+        expiresAt === Number.POSITIVE_INFINITY &&
         ref.current !== null &&
         target instanceof window.Node &&
         ref.current !== target &&
@@ -133,7 +135,7 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
     }, [close]);
 
     useEffect(() => {
-      if (expiresAt === Infinity) {
+      if (expiresAt === Number.POSITIVE_INFINITY) {
         return;
       }
 

@@ -1,17 +1,17 @@
-import { Button } from '@navikt/ds-react';
-import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { DeleteButton } from '@app/components/footer/delete-button';
 import { FinishButton } from '@app/components/footer/finish-button';
 import { ValidationSummaryPopup } from '@app/components/footer/validation-summary-popup';
 import { useIsOwner } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
+import { Button } from '@navikt/ds-react';
+import { Link as RouterLink } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 export const Footer = () => {
   const isOwner = useIsOwner();
   const { id, finished } = useRegistrering();
-  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: id + 'finish' });
+  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
 
   const isFinished = finished !== null;
 
@@ -73,7 +73,7 @@ const StyledFooter = styled.div<IStyleProps>`
   background-color: ${({ $hasError, $isFinished }) => getBackgroundColor($hasError, $isFinished)};
 `;
 
-const getBackgroundColor = (hasError: boolean = false, isFinished: boolean) => {
+const getBackgroundColor = (hasError: boolean, isFinished: boolean) => {
   if (hasError) {
     return 'var(--a-surface-warning-subtle)';
   }
@@ -85,7 +85,7 @@ const getBackgroundColor = (hasError: boolean = false, isFinished: boolean) => {
   return 'var(--a-surface-action-subtle)';
 };
 
-const getBorderColor = (hasError: boolean = false, isFinished: boolean) => {
+const getBorderColor = (hasError: boolean, isFinished: boolean) => {
   if (hasError) {
     return 'var(--a-border-warning)';
   }

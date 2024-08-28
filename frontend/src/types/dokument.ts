@@ -1,4 +1,4 @@
-import { IAvsenderMottaker } from '@app/types/common';
+import type { IAvsenderMottaker } from '@app/types/common';
 
 export enum JournalposttypeEnum {
   INNGAAENDE = 'I',

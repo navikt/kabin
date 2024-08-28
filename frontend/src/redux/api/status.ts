@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
-import { IAnkestatus, IKlagestatus } from '@app/types/status';
+import type { IAnkestatus, IKlagestatus } from '@app/types/status';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const statusApi = createApi({
   reducerPath: 'statusApi',

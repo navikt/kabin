@@ -1,8 +1,7 @@
-import { Heading } from '@navikt/ds-react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
-import { Actions, ActionsProps } from '@app/components/overstyringer/part-read/actions';
+import { Actions, type ActionsProps } from '@app/components/overstyringer/part-read/actions';
 import { Icon } from '@app/components/overstyringer/part-read/icon';
-import { EnterSearchModeCallback } from '@app/components/overstyringer/part-read/types';
+import type { EnterSearchModeCallback } from '@app/components/overstyringer/part-read/types';
 import {
   PartContent,
   PartTextContent,
@@ -14,6 +13,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { getSakspartName } from '@app/domain/name';
 import { useCanEdit } from '@app/hooks/use-can-edit';
+import { Heading } from '@navikt/ds-react';
 
 export interface PartReadProps extends ActionsProps, EnterSearchModeCallback {
   error?: string;

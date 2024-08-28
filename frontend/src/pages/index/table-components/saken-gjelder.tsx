@@ -1,7 +1,7 @@
-import { CopyButton, Skeleton, Table } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { useGetPartQuery } from '@app/redux/api/part';
+import { CopyButton, Skeleton, Table } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 
 interface Props {
   id: string | null;

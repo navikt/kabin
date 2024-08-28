@@ -1,7 +1,3 @@
-import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { Card } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
@@ -9,8 +5,12 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
-import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
+import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
+import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
+import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { styled } from 'styled-components';
 
 enum SvarbrevOptionEnum {
   SEND = 'SEND',

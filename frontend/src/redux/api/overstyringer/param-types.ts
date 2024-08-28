@@ -1,4 +1,4 @@
-import { Behandlingstid } from '@app/redux/api/registreringer/types';
+import type { Behandlingstid } from '@app/redux/api/registreringer/types';
 
 export interface SetMottattVedtaksintansParams {
   id: string;

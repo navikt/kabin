@@ -1,12 +1,12 @@
-import { HouseIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
-import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
 import { SaksTypeEnum } from '@app/types/common';
+import { HouseIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Link as RouterLink } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 interface StatusHeadingProps {
   headingText: string;

@@ -1,6 +1,6 @@
+import { Card } from '@app/components/card/card';
 import { BodyShort, Loader } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { Card } from '@app/components/card/card';
 
 export const StyledCard = styled(Card)<{ $gridArea: string }>`
   grid-area: ${({ $gridArea }) => $gridArea};

@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps } from '@navikt/ds-react';
+import { Button, type ButtonProps } from '@navikt/ds-react';
 
 interface Props {
   variant: ButtonProps['variant'];

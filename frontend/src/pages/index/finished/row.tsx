@@ -1,5 +1,3 @@
-import { Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
@@ -9,9 +7,11 @@ import { DateTime } from '@app/pages/index/table-components/datetime';
 import { OpenButton } from '@app/pages/index/table-components/open';
 import { SakenGjelder } from '@app/pages/index/table-components/saken-gjelder';
 import { Type } from '@app/pages/index/table-components/type';
-import { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
+import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
 import { usePrefetch } from '@app/redux/api/status';
 import { SaksTypeEnum } from '@app/types/common';
+import { Table } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreringListItem }) => {
   const { id, sakenGjelderValue, typeId, ytelseId, created, finished, behandlingId } = registrering;

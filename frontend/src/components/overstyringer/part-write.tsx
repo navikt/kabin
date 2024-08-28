@@ -1,11 +1,6 @@
-import { Alert, Search } from '@navikt/ds-react';
-import { idnr } from '@navikt/fnrvalidator';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { SearchResult } from '@app/components/overstyringer/search-result';
 import { PartContent, States, StyledContainer } from '@app/components/overstyringer/styled-components';
-import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
+import { type BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -17,8 +12,13 @@ import {
   useSetKlagerMutation,
 } from '@app/redux/api/overstyringer/overstyringer';
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
-import { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
-import { IPart } from '@app/types/common';
+import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
+import type { IPart } from '@app/types/common';
+import { Alert, Search } from '@navikt/ds-react';
+import { idnr } from '@navikt/fnrvalidator';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props extends BaseProps {
   exitSearchMode: () => void;

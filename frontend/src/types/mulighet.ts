@@ -1,5 +1,5 @@
-import { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
-import { Ytelse } from '@app/types/ytelse';
+import { type IPart, type ISaksbehandler, SaksTypeEnum } from '@app/types/common';
+import type { Ytelse } from '@app/types/ytelse';
 
 export enum FagsystemId {
   KABAL = '23',

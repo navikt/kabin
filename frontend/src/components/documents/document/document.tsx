@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { AttachmentList } from '@app/components/documents/document/attachment-list';
 import { AvsenderMottakerNotatforer } from '@app/components/documents/document/avsender-mottaker-notatforer';
 import { DocumentTitle } from '@app/components/documents/document/document-title';
@@ -12,7 +10,9 @@ import { Journalposttype } from '@app/components/journalposttype/journalposttype
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { IArkivertDocument } from '@app/types/dokument';
+import type { IArkivertDocument } from '@app/types/dokument';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   dokument: IArkivertDocument;

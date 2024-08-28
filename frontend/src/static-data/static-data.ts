@@ -1,6 +1,6 @@
 import { INNSTILLINGER_BASE_PATH, KABAL_API_BASE_PATH } from '@app/redux/api/common';
 import { loadStaticData } from '@app/static-data/loader';
-import { IUserData } from '@app/types/bruker';
+import type { IUserData } from '@app/types/bruker';
 
 export interface CountryCode {
   land: string;

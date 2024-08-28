@@ -1,7 +1,7 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_API_BASE_QUERY } from '@app/redux/api/common';
-import { SaksTypeEnum } from '@app/types/common';
-import { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import type { SaksTypeEnum } from '@app/types/common';
+import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 interface GetSvarbrevSettingParams {
   ytelseId: string;

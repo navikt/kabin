@@ -1,5 +1,3 @@
-import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Tag } from '@navikt/ds-react';
 import { Card } from '@app/components/card/card';
 import { TypeName } from '@app/components/muligheter/anke/type-name';
 import { UsedCount } from '@app/components/muligheter/anke/used-count';
@@ -9,7 +7,9 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import { IAnkemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet } from '@app/types/mulighet';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Tag } from '@navikt/ds-react';
 
 interface Props {
   onClick: () => void;

@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { ReadOnlyTag } from '@app/components/documents/document/logiske-vedlegg/shared/vedlegg-style';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
+import { styled } from 'styled-components';
 
 interface Props {
   logiskVedlegg: LogiskVedlegg;

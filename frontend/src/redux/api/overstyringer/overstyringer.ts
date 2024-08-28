@@ -1,7 +1,5 @@
-/* eslint-disable max-lines */
-import { addMonths, addWeeks, format } from 'date-fns';
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import {
+import type {
   SetBehandlingstidParams,
   SetHjemmelIdListParams,
   SetMottattKlageinstansParams,
@@ -10,7 +8,7 @@ import {
   SetSaksbehandlerIdentParams,
   SetYtelseParams,
 } from '@app/redux/api/overstyringer/param-types';
-import {
+import type {
   SetAvsenderResponse,
   SetBehandlingstidResponse,
   SetFullmektigResponse,
@@ -25,7 +23,9 @@ import {
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
+/* eslint-disable max-lines */
+import { addMonths, addWeeks, format } from 'date-fns';
 
 interface UpdatePartPayload {
   id: string;

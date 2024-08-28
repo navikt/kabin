@@ -1,5 +1,5 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import { CreateRegistreringParams } from '@app/redux/api/registreringer/param-types';
+import type { CreateRegistreringParams } from '@app/redux/api/registreringer/param-types';
 import {
   removeFerdigRegistrering,
   removeRegistrering,
@@ -10,8 +10,8 @@ import {
   updateRegistrering,
 } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import { FerdigstiltRegistreringResponse } from '@app/redux/api/registreringer/response-types';
-import {
+import type { FerdigstiltRegistreringResponse } from '@app/redux/api/registreringer/response-types';
+import type {
   BaseRegistrering,
   DraftRegistrering,
   FinishedRegistrering,

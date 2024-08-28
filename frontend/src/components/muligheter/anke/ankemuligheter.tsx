@@ -1,7 +1,3 @@
-import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { Card, CardSmall } from '@app/components/card/card';
 import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
 import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
@@ -18,8 +14,12 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
-import { IAnkemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
+import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Ankemuligheter = () => {
   const canEdit = useCanEdit();

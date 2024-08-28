@@ -1,6 +1,5 @@
-import { Button, Tooltip } from '@navikt/ds-react';
-import { ISetPart } from '@app/components/overstyringer/part-read/types';
-import { BaseProps, FieldNames } from '@app/components/overstyringer/types';
+import type { ISetPart } from '@app/components/overstyringer/part-read/types';
+import { type BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { formatId } from '@app/functions/format-id';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
@@ -8,7 +7,8 @@ import {
   useSetFullmektigMutation,
   useSetKlagerMutation,
 } from '@app/redux/api/overstyringer/overstyringer';
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
+import { Button, Tooltip } from '@navikt/ds-react';
 
 interface Props extends ISetPart<IPart | null> {
   partField: BaseProps['partField'];

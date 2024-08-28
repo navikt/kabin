@@ -1,7 +1,7 @@
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { Mulighet } from '@app/redux/api/registreringer/types';
+import type { Mulighet } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
-import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
 interface KlageResult {
   typeId: SaksTypeEnum.KLAGE;

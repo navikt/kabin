@@ -1,8 +1,8 @@
+import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 
 interface Props {
   isSelected: boolean;

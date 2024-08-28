@@ -1,6 +1,6 @@
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { ErrorMessage } from '@navikt/ds-react';
 import { isAfter, parseISO } from 'date-fns';
-import { useRegistrering } from '@app/hooks/use-registrering';
 
 export const MottattDateError = () => {
   const {

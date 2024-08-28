@@ -1,4 +1,4 @@
-import { Heading, HeadingProps } from '@navikt/ds-react';
+import { Heading, type HeadingProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props extends CardContentProps {

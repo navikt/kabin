@@ -1,4 +1,4 @@
-import { IPart } from '@app/types/common';
+import type { IPart } from '@app/types/common';
 
 export enum FieldNames {
   KLAGER = 'klager',

@@ -1,5 +1,5 @@
-import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { SaksTypeEnum } from '@app/types/common';
+import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import type { SaksTypeEnum } from '@app/types/common';
 
 interface SvarbrevBase {
   title: string;

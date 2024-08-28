@@ -1,6 +1,6 @@
-import { Skeleton, Table } from '@navikt/ds-react';
-import React from 'react';
 import { ValidationFieldNames } from '@app/types/validation';
+import { Skeleton, Table } from '@navikt/ds-react';
+import type React from 'react';
 
 export const LoadingAnkeMuligheter = ({ children }: { children?: React.ReactNode }) => (
   <Table size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">

@@ -1,4 +1,4 @@
-import { IAvsenderMottaker, IPart, PART_TYPES } from '@app/types/common';
+import { type IAvsenderMottaker, type IPart, PART_TYPES } from '@app/types/common';
 
 export const avsenderMottakerToPart = (avsenderMottaker: IAvsenderMottaker | null): IPart | null => {
   if (avsenderMottaker === null) {

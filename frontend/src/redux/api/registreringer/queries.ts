@@ -2,7 +2,7 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
 import { RegistreringTagType, registreringApi } from '@app/redux/api/registreringer/registrering';
-import {
+import type {
   DraftRegistrering,
   FinishedRegistreringListItem,
   Overstyringer,
@@ -10,7 +10,7 @@ import {
   Svarbrev,
 } from '@app/redux/api/registreringer/types';
 import { reduxStore } from '@app/redux/configure-store';
-import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
 interface MuligheterResponse {
   klagemuligheter: IKlagemulighet[];
@@ -21,11 +21,11 @@ const queriesSlice = registreringApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getFerdigeRegistreringer: builder.query<FinishedRegistreringListItem[], void>({
-      query: () => `/registreringer/ferdige?sidenDager=7`,
+      query: () => '/registreringer/ferdige?sidenDager=7',
     }),
 
     getUferdigeRegistreringer: builder.query<DraftRegistrering[], void>({
-      query: () => `/registreringer/uferdige`,
+      query: () => '/registreringer/uferdige',
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 

@@ -1,5 +1,5 @@
-import { RegistreringType } from '@app/types/common';
-import { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { RegistreringType } from '@app/types/common';
+import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
 
 export interface CreateRegistreringParams {
   sakenGjelderValue: string | null;

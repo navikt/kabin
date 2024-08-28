@@ -1,10 +1,10 @@
+import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { useJournalpost } from '@app/hooks/use-journalpost';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { useJournalpost } from '@app/hooks/use-journalpost';
-import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 
 interface Props {
   url: string;

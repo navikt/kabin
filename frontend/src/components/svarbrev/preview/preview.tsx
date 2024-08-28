@@ -1,17 +1,17 @@
-import { Alert } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { PDF_ASPECT_RATIO } from '@app/components/svarbrev/preview/constants';
-import { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
+import type { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { defaultString } from '@app/functions/empty-string';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
+import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
 import { SaksTypeEnum } from '@app/types/common';
+import { Alert } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Preview = () => {
   const { overstyringer } = useRegistrering();
@@ -67,7 +67,7 @@ const useUrl = () => {
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
   const ytelseId: string | null =
-    (typeId === SaksTypeEnum.ANKE ? (selectedYtelseId ?? mulighet?.ytelseId) : selectedYtelseId) ?? null;
+    (typeId === SaksTypeEnum.ANKE ? selectedYtelseId ?? mulighet?.ytelseId : selectedYtelseId) ?? null;
 
   useEffect(() => {
     if (

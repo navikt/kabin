@@ -1,5 +1,5 @@
 import { TOAST_TIMEOUT } from '@app/components/toast/constants';
-import { NewMessage, ToastType } from '@app/components/toast/types';
+import { type NewMessage, ToastType } from '@app/components/toast/types';
 
 type ListenerFn = (messages: Message[]) => void;
 

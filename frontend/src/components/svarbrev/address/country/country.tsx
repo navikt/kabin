@@ -1,11 +1,11 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
+import { CountryOption } from '@app/components/svarbrev/address/country/option';
+import { FieldLabel, Row } from '@app/components/svarbrev/address/layout';
+import type { CountryCode } from '@app/static-data/static-data';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { CountryOption } from '@app/components/svarbrev/address/country/option';
-import { FieldLabel, Row } from '@app/components/svarbrev/address/layout';
-import { CountryCode } from '@app/static-data/static-data';
 
 interface Props {
   value?: string;

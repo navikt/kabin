@@ -1,4 +1,3 @@
-import { styled } from 'styled-components';
 import { CustomReceivers } from '@app/components/svarbrev/custom-receivers';
 import { ReadOnlyReceivers } from '@app/components/svarbrev/read-only-receivers';
 import { SingleReceiver } from '@app/components/svarbrev/single-receiver';
@@ -6,6 +5,7 @@ import { SuggestedReceivers } from '@app/components/svarbrev/suggested-receivers
 import { useSuggestedBrevmottakere } from '@app/components/svarbrev/use-suggested-brevmottakere';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { styled } from 'styled-components';
 
 export const Receivers = () => {
   const { svarbrev } = useRegistrering();

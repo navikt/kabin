@@ -1,9 +1,9 @@
-import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { IGetOppgaverParams } from '@app/redux/api/oppgaver';
+import type { IGetOppgaverParams } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
-import { FagsystemId, IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import { FagsystemId, type IAnkemulighet, type IKlagemulighet } from '@app/types/mulighet';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 
 export const useParams = (): IGetOppgaverParams | typeof skipToken => {
   const { sakenGjelderValue } = useRegistrering();

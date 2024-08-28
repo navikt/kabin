@@ -1,12 +1,12 @@
-import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
-import { useCallback, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { EditLogiskVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit';
 import { ReadOnlyTag } from '@app/components/documents/document/logiske-vedlegg/shared/vedlegg-style';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useDeleteLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux/api/logiske-vedlegg';
-import { LogiskVedlegg } from '@app/types/dokument';
+import type { LogiskVedlegg } from '@app/types/dokument';
+import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
+import { useCallback, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   dokumentInfoId: string;

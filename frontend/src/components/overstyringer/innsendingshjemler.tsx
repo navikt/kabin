@@ -1,6 +1,3 @@
-import { Alert, Label } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { HjemmelTag, ReadOnlyHjemler } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -10,6 +7,9 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetLatestYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { ValidationFieldNames } from '@app/types/validation';
+import { Alert, Label } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 
 const ID = ValidationFieldNames.HJEMMEL_ID_LIST;
 
@@ -62,7 +62,11 @@ export const Innsendingshjemler = () => {
       id={ID}
       disabled={ytelseId === null}
     >
-      <HjemlerContainer>{hjemmelIdList?.map((h) => <HjemmelTag hjemmelId={h} key={h} />)}</HjemlerContainer>
+      <HjemlerContainer>
+        {hjemmelIdList?.map((h) => (
+          <HjemmelTag hjemmelId={h} key={h} />
+        ))}
+      </HjemlerContainer>
     </StyledFilterDropdown>
   );
 };

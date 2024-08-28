@@ -1,15 +1,15 @@
-/* eslint-disable max-lines */
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/svarbrev/address/country/country';
 import { AddressField } from '@app/components/svarbrev/address/field';
 import { AddressState, Container, Row } from '@app/components/svarbrev/address/layout';
 import { Postnummer } from '@app/components/svarbrev/address/postnummer';
-import { Addresses } from '@app/components/svarbrev/address/types';
+import type { Addresses } from '@app/components/svarbrev/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { IAddress } from '@app/types/common';
+import type { IAddress } from '@app/types/common';
+/* eslint-disable max-lines */
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 interface EditProps extends Addresses {
   onSave: (address: IAddress | null) => void;

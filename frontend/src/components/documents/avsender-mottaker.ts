@@ -1,4 +1,4 @@
-import { IAvsenderMottaker } from '@app/types/common';
+import type { IAvsenderMottaker } from '@app/types/common';
 
 export const formatAvsenderMottaker = (avsenderMottaker: IAvsenderMottaker | null): string => {
   if (avsenderMottaker === null) {

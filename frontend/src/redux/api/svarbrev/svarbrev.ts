@@ -1,9 +1,7 @@
-/* eslint-disable max-lines */
-import { formatISO } from 'date-fns';
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import {
+import type {
   AddReceiverParams,
   ChangeReceiverParams,
   RemoveReceiverParams,
@@ -14,7 +12,7 @@ import {
   SetSvarbrevOverrideBehandlingstidParams,
   SetSvarbrevTitleParams,
 } from '@app/redux/api/svarbrev/param-types';
-import {
+import type {
   ReceiverResponse,
   SetOverrideCustomTextResponse,
   SetSvarbrevBehandlingstidResponse,
@@ -25,6 +23,8 @@ import {
   SetSvarbrevTitleResponse,
 } from '@app/redux/api/svarbrev/response-types';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+/* eslint-disable max-lines */
+import { formatISO } from 'date-fns';
 
 export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
 

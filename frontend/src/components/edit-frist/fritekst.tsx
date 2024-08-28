@@ -1,11 +1,11 @@
-import { TextField, ToggleGroup } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
   useSetSvarbrevCustomTextMutation,
   useSetSvarbrevOverrideCustomTextMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
+import { TextField, ToggleGroup } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Fritekst = () => {
   const { id, svarbrev } = useRegistrering();

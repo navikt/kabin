@@ -1,12 +1,12 @@
+import { Address } from '@app/components/svarbrev/address/address';
+import { areAddressesEqual } from '@app/functions/are-addresses-equal';
+import type { Receiver } from '@app/redux/api/registreringer/types';
+import { type IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
+import { HandlingEnum } from '@app/types/receiver';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { Address } from '@app/components/svarbrev/address/address';
-import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { Receiver } from '@app/redux/api/registreringer/types';
-import { IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
-import { HandlingEnum } from '@app/types/receiver';
 
 interface Props {
   part: Receiver['part'];

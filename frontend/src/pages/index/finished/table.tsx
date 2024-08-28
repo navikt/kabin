@@ -1,10 +1,10 @@
-import { Alert, Pagination, SortState, Table } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
 import { ROWS_PER_PAGE, useSort } from '@app/pages/index/drafts/use-sort';
 import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedRow } from '@app/pages/index/finished/row';
 import { TableAndPagination } from '@app/pages/index/styled-components';
-import { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
+import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
+import { Alert, Pagination, type SortState, Table } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
 
 interface RegistreringerTableProps {
   registreringer: FinishedRegistreringListItem[];

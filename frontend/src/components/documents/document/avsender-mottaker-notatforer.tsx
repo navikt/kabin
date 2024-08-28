@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
 import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
 import { GridArea, StyledField } from '@app/components/documents/styled-grid-components';
 import { useGetKlageenheterQuery } from '@app/redux/api/kodeverk';
-import { IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
+import { useMemo } from 'react';
 
 type AvsenderMottakerProps = Pick<
   IArkivertDocument,

@@ -1,6 +1,6 @@
 import { request } from '@app/api/request';
 import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
-import { SvarbrevPreviewInput } from '@app/types/create';
+import type { SvarbrevPreviewInput } from '@app/types/create';
 
 const headers = { 'Content-Type': 'application/json' };
 

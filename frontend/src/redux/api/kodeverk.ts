@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { KODEVERK_BASE_QUERY } from '@app/redux/api/common';
-import { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
+import type { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const kodeverkApi = createApi({
   reducerPath: 'kodeverkApi',

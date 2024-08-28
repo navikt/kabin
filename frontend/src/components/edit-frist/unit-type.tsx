@@ -1,11 +1,11 @@
-import { ToggleGroup } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import {
   BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
-  BehandlingstidUnitType,
+  type BehandlingstidUnitType,
   isVarsletBehandlingstidUnitType,
 } from '@app/types/calculate-frist';
+import { ToggleGroup } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   value: BehandlingstidUnitType;

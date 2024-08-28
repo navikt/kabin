@@ -1,5 +1,5 @@
-import { isAfter, isEqual, isValid, parse } from 'date-fns';
 import { FORMAT } from '@app/domain/date-formats';
+import { isAfter, isEqual, isValid, parse } from 'date-fns';
 
 enum ComparisonResult {
   BEFORE = -1,

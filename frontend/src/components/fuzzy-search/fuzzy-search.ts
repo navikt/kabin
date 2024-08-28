@@ -1,4 +1,4 @@
-import { SplitQuery } from '@app/components/fuzzy-search/split-query';
+import type { SplitQuery } from '@app/components/fuzzy-search/split-query';
 
 export const fuzzySearch = (query: SplitQuery, text: string): number => {
   const textLower = text.toLowerCase();

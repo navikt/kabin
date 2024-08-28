@@ -1,11 +1,11 @@
-import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, TextField } from '@navikt/ds-react';
-import { useCallback, useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
+import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { Button, TextField } from '@navikt/ds-react';
+import { useCallback, useContext, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   exitEditMode: () => void;
@@ -28,7 +28,7 @@ export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }
     try {
       await setJournalpostTitle({ sakenGjelderValue, journalpostId, dokumentInfoId, tittel: newTitle });
 
-      toast.success(`Dokumenttittel endret`);
+      toast.success('Dokumenttittel endret');
 
       viewDokument({ tittel: newTitle, journalpostId, dokumentInfoId });
     } catch (e) {

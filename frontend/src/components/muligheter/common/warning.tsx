@@ -1,5 +1,5 @@
-import { Alert } from '@navikt/ds-react';
 import { isDateAfter } from '@app/functions/date';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   datoOpprettet?: string;
