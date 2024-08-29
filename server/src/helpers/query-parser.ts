@@ -4,12 +4,14 @@
  * @returns `{ foo: 'bar', baz: 'abc,123' }`
  */
 export const querystringParser = (query: string): Record<string, string | undefined> =>
-  query.split('&').reduce((acc, q) => {
+  query.split('&').reduce<Record<string, string | undefined>>((acc, q) => {
     const [key, value] = q.split('=');
 
     if (key === undefined || value === undefined) {
       return acc;
     }
 
-    return { ...acc, [key]: value };
+    acc[key] = value;
+
+    return acc;
   }, {});

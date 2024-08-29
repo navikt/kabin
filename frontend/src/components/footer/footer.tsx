@@ -17,7 +17,7 @@ export const Footer = () => {
 
   if (!isOwner) {
     return (
-      <StyledFooter $isFinished={isFinished}>
+      <StyledFooter $isFinished={isFinished} $hasError={isError}>
         <Buttons>{isFinished ? <StatusButton /> : null}</Buttons>
       </StyledFooter>
     );
@@ -50,7 +50,7 @@ const Buttons = styled.div`
 `;
 
 interface IStyleProps {
-  $hasError?: boolean;
+  $hasError: boolean;
   $isFinished: boolean;
 }
 

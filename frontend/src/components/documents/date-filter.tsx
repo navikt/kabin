@@ -4,7 +4,7 @@ import type { DateRange } from '@app/types/common';
 import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, DatePicker, type DatePickerProps } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
@@ -15,7 +15,7 @@ interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
 
 export const DateFilter = ({ children, onChange, selected, ...datepickerProps }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
+  const onClick = () => setIsOpen((o) => !o);
   const ref = useRef(null);
 
   useOnClickOutside(() => setIsOpen(false), ref);

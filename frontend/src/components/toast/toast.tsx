@@ -79,6 +79,7 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
   ({ type, message, close, setExpiresAt, expiresAt, id }, forwardedRef) => {
     const ref = useRef<HTMLDivElement>(null);
 
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     useImperativeHandle(forwardedRef, () => ref.current!);
 
     const [remaining, setRemaining] = useState<number | null>(null);
@@ -122,7 +123,7 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
       ) {
         onMouseLeave();
       }
-    }, [expiresAt, onMouseLeave, ref]);
+    }, [expiresAt, onMouseLeave]);
 
     const slideOut = useCallback(() => {
       if (ref.current === null) {
