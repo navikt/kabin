@@ -24,7 +24,9 @@ export const Actions = ({
         return list;
       }
 
-      return [...list, <SetPartButton key={p.label} {...p} partField={partField} />];
+      list.push(<SetPartButton key={p.label} {...p} partField={partField} />);
+
+      return list;
     }, [])}
     {!optional || part === null ? null : <RemovePartButton partField={partField} />}
     <SearchPartButton enterSearchMode={enterSearchMode} />

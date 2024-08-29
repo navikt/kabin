@@ -28,6 +28,7 @@ export const Preview = () => {
   const rendered: PdfLoader[] = [];
 
   for (let i = loaders.length - 1; i >= 0; i--) {
+    // biome-ignore lint/style/noNonNullAssertion: Cannot be undefined
     const current = loaders[i]!;
 
     rendered.push(current);

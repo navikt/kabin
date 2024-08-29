@@ -40,7 +40,7 @@ export const NewRegistrering = ({ orientation }: Props) => {
     }
 
     create();
-  }, [isValid, cleaned, isLoading, createRegistrering, fnr, navigate, isSuccess, create]);
+  }, [isValid, isLoading, isSuccess, create]);
 
   return (
     <Container $orientation={orientation}>

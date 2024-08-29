@@ -18,10 +18,14 @@ export class PdfLoader {
   private async load(params: SvarbrevPreviewInput) {
     try {
       const url = await createSvarbrevUrl(params, this.abortController);
-      this.listeners.forEach((listener) => listener(url));
+      for (const listener of this.listeners) {
+        listener(url);
+      }
       this.url = url;
     } catch (error) {
-      this.errorListeners.forEach((listener) => listener(error));
+      for (const listener of this.errorListeners) {
+        listener(error);
+      }
     }
   }
 

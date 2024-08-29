@@ -19,7 +19,7 @@ export const Dropdown = <T extends string>({
 
   useEffect(() => {
     setFilteredOptions(options.filter(({ label }) => filter.test(label)));
-  }, [setFilteredOptions, options, filter]);
+  }, [options, filter]);
 
   useEffect(() => {
     if (!isOpen && focused !== -1) {
