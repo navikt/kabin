@@ -24,7 +24,6 @@ import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/q
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IPart } from '@app/types/common';
-/* eslint-disable max-lines */
 import { addMonths, addWeeks, format } from 'date-fns';
 
 interface UpdatePartPayload {
