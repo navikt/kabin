@@ -6,7 +6,6 @@ import { Postnummer } from '@app/components/svarbrev/address/postnummer';
 import type { Addresses } from '@app/components/svarbrev/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IAddress } from '@app/types/common';
-/* eslint-disable max-lines */
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';

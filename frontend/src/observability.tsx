@@ -46,9 +46,7 @@ initializeFaro({
 export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) =>
   faro.api.pushEvent(name, attributes, domain, { skipDedupe: true });
 
-// eslint-disable-next-line import/no-unused-modules
 export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>
   faro.api.pushLog([message], { ...options, skipDedupe: true, level });
 
-// eslint-disable-next-line import/no-unused-modules
 export const { pushMeasurement, pushError } = faro.api;

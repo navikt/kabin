@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
 import { RegistreringTagType, registreringApi } from '@app/redux/api/registreringer/registrering';

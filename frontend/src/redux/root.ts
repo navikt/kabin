@@ -18,6 +18,3 @@ export const rootReducer = combineReducers({
   [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [statusApi.reducerPath]: statusApi.reducer,
 });
-
-// eslint-disable-next-line import/no-unused-modules
-export type RootState = ReturnType<typeof rootReducer>;

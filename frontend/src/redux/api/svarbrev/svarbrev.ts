@@ -23,7 +23,6 @@ import type {
   SetSvarbrevTitleResponse,
 } from '@app/redux/api/svarbrev/response-types';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-/* eslint-disable max-lines */
 import { formatISO } from 'date-fns';
 
 export const DEFAULT_SVARBREV_NAME = 'NAV orienterer om saksbehandlingen';
