@@ -141,7 +141,7 @@ export const updateRegistrering = (id: string, update: UpdateFn<Registrering>) =
   reduxStore.dispatch(queriesSlice.util.updateQueryData('getRegistrering', id, update));
 
 export const removeRegistrering = (id: string) =>
-  reduxStore.dispatch(queriesSlice.util.invalidateTags([{ id, type: RegistreringTagType.REGISTRERING }]));
+  reduxStore.dispatch(queriesSlice.util.updateQueryData('getRegistrering', id, () => undefined));
 
 export const setRegistrering = (id: string, data: Registrering) =>
   reduxStore.dispatch(queriesSlice.util.upsertQueryData('getRegistrering', id, data));
