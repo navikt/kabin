@@ -110,6 +110,7 @@ export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
   ANKE_I_TR = '3',
+  TR_OPPHEVET = '4',
 }
 
 export type RegistreringType = SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
@@ -126,3 +127,10 @@ export interface DateRange {
   from: Date | undefined;
   to?: Date | undefined;
 }
+
+export const TYPE_NAME: Record<SaksTypeEnum, string> = {
+  [SaksTypeEnum.KLAGE]: 'Klage',
+  [SaksTypeEnum.ANKE]: 'Anke',
+  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
+  [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter Trygderetten opphevet',
+};
