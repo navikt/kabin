@@ -1,8 +1,8 @@
 import { useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
 import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
 import type { SaksTypeEnum } from '@app/types/common';
+import { TYPE_NAME } from '@app/types/common';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
-import { TYPE_NAME } from '@app/types/mulighet';
 import type { SortState } from '@navikt/ds-react';
 import { useMemo } from 'react';
 

@@ -1,4 +1,4 @@
-import { type IPart, type ISaksbehandler, SaksTypeEnum } from '@app/types/common';
+import type { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import type { Ytelse } from '@app/types/ytelse';
 
 export enum FagsystemId {
@@ -39,9 +39,3 @@ interface ExistingAnkebehandling {
   /** LocalDateTime */
   completed: string | null;
 }
-
-export const TYPE_NAME: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke',
-  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
-};
