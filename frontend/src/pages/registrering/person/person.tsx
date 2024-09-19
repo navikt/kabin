@@ -1,15 +1,16 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { PersonInfo } from '@app/pages/registrering/person/info';
+import { PersonDetails } from '@app/pages/registrering/person/details';
 import { PersonSearch } from '@app/pages/registrering/person/search';
 import { Tag } from '@navikt/ds-react';
+import { idnr } from '@navikt/fnrvalidator';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 export const Person = () => {
-  const registrering = useRegistrering();
+  const { sakenGjelderValue } = useRegistrering();
+  const [newSakenGjelder, setNewSakenGjelder] = useState('');
   const canEdit = useCanEdit();
-
-  const { sakenGjelderValue } = registrering;
 
   if (!canEdit) {
     return sakenGjelderValue === null ? (
@@ -20,15 +21,24 @@ export const Person = () => {
       </Container>
     ) : (
       <Container>
-        <PersonInfo sakenGjelderValue={sakenGjelderValue} />
+        <PersonDetails sakenGjelderValue={sakenGjelderValue} />
       </Container>
     );
   }
 
+  const cleaned = newSakenGjelder.replaceAll(/\s/g, '');
+  const isValid = idnr(cleaned).status === 'valid';
+  const isSame = sakenGjelderValue === cleaned;
+
   return (
     <Container>
-      <PersonSearch />
-      {sakenGjelderValue === null ? null : <PersonInfo sakenGjelderValue={sakenGjelderValue} />}
+      <PersonSearch onChange={setNewSakenGjelder} value={newSakenGjelder} />
+
+      {/* Saken gjelder in search */}
+      {isValid && !isSame ? <PersonDetails sakenGjelderValue={newSakenGjelder} /> : null}
+
+      {/* Saken gjelder in registrering */}
+      {sakenGjelderValue === null ? null : <PersonDetails sakenGjelderValue={sakenGjelderValue} />}
     </Container>
   );
 };
@@ -42,9 +52,7 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   flex-wrap: wrap;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 16px;
+  padding: 16px;
   padding-bottom: 8px;
   background-color: white;
 `;

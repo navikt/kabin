@@ -85,7 +85,7 @@ const PartSearchInternal = ({
     };
   }, [isValid, mulighet, ytelseId, search]);
 
-  const { data, isLoading } = useGetPartWithUtsendingskanalQuery(searchParams);
+  const { data, isLoading, isSuccess } = useGetPartWithUtsendingskanalQuery(searchParams);
 
   const validate = () => setError(isValid ? undefined : 'Ugyldig ID-nummer');
 
@@ -112,12 +112,12 @@ const PartSearchInternal = ({
 
     validate();
 
-    if (isValid && !isLoading && data !== undefined) {
+    if (isValid && !isLoading && isSuccess && data !== null) {
       setPartAndClose(data);
     }
   };
 
-  const isPartInvalid = data !== undefined && excludedPartIds.includes(data.id);
+  const isPartInvalid = data !== undefined && data !== null && excludedPartIds.includes(data.id);
 
   return (
     <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>

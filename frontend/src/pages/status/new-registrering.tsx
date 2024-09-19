@@ -1,10 +1,9 @@
 import { toast } from '@app/components/toast/store';
 import { PersonDetails } from '@app/pages/registrering/person/details';
-import { useGetPartQuery } from '@app/redux/api/part';
 import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { Loader, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 
@@ -16,31 +15,34 @@ interface Props {
   orientation: Orientation;
 }
 
+const removeWhitespace = (value: string) => value.replaceAll(' ', '');
+
 export const NewRegistrering = ({ orientation }: Props) => {
   const [fnr, setFnr] = useState('');
-  const [createRegistrering, { isLoading, isSuccess }] = useCreateRegistreringMutation();
+  const [createRegistrering, { isLoading }] = useCreateRegistreringMutation();
   const navigate = useNavigate();
 
-  const cleaned = fnr.replaceAll(' ', '');
-  const isValid = idnr(cleaned).status === 'valid';
+  const onChange = async (value: string) => {
+    setFnr(value);
+    const cleaned = removeWhitespace(value);
 
-  const create = useCallback(async () => {
+    if (idnr(cleaned).status !== 'valid') {
+      return;
+    }
+
     try {
-      const { data } = await createRegistrering({ sakenGjelderValue: cleaned });
-      navigate(`/registrering/${data?.id}`);
+      const { id } = await createRegistrering({ sakenGjelderValue: cleaned }).unwrap();
+
+      navigate(`/registrering/${id}`);
+
       toast.success('Registrering opprettet');
     } catch {
       toast.error('Kunne ikke opprette registrering');
     }
-  }, [createRegistrering, cleaned, navigate]);
+  };
 
-  useEffect(() => {
-    if (!isValid || isLoading || isSuccess) {
-      return;
-    }
-
-    create();
-  }, [isValid, isLoading, isSuccess, create]);
+  const cleaned = removeWhitespace(fnr);
+  const isValid = idnr(cleaned).status === 'valid';
 
   return (
     <Container $orientation={orientation}>
@@ -55,12 +57,13 @@ export const NewRegistrering = ({ orientation }: Props) => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        onChange={setFnr}
+        onChange={onChange}
         value={fnr}
+        disabled={isLoading}
       />
 
       <Loaders>
-        {isValid ? <PersonInfo sakenGjelderValue={cleaned} /> : null}
+        {isValid ? <PersonDetails sakenGjelderValue={cleaned} /> : null}
         {isLoading ? (
           <SpinnerContainer>
             <Loader />
@@ -96,17 +99,3 @@ const Container = styled.div<{ $orientation: Orientation }>`
   gap: 8px;
   height: ${({ $orientation }) => ($orientation === 'vertical' ? '72px' : 'auto')};
 `;
-
-interface PersonInfoProps {
-  sakenGjelderValue: string;
-}
-
-const PersonInfo = ({ sakenGjelderValue }: PersonInfoProps) => {
-  const { data } = useGetPartQuery(sakenGjelderValue);
-
-  if (data === undefined) {
-    return null;
-  }
-
-  return <PersonDetails person={data} />;
-};
