@@ -1,17 +1,19 @@
 import { getSakspartNameAndId } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import type { ISimplePart } from '@app/types/common';
+import { useGetPartQuery } from '@app/redux/api/part';
 import { Loader, Tag, type TagProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-interface Props {
-  person: ISimplePart | undefined;
-}
-
 const SIZE: TagProps['size'] = 'medium';
 
-export const PersonDetails = ({ person }: Props) => {
-  if (person === undefined) {
+interface Props {
+  sakenGjelderValue: string;
+}
+
+export const PersonDetails = ({ sakenGjelderValue }: Props) => {
+  const { data, isFetching, isSuccess } = useGetPartQuery(sakenGjelderValue);
+
+  if (isFetching) {
     return (
       <StyledTag variant="alt3" size={SIZE}>
         <Loader size="small" /> Laster...
@@ -19,12 +21,24 @@ export const PersonDetails = ({ person }: Props) => {
     );
   }
 
-  const navn = getSakspartNameAndId(person);
+  if (!isSuccess) {
+    return null;
+  }
+
+  if (data === null) {
+    return (
+      <StyledTag variant="warning" size={SIZE}>
+        Ukjent
+      </StyledTag>
+    );
+  }
+
+  const navn = getSakspartNameAndId(data);
 
   if (navn === null) {
     return (
       <StyledTag variant="warning" size={SIZE}>
-        Ingen treff på &quot;{formatFoedselsnummer(person?.id)}&quot;
+        Ingen treff på &quot;{formatFoedselsnummer(data?.id)}&quot;
       </StyledTag>
     );
   }

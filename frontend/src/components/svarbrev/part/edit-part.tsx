@@ -1,43 +1,65 @@
 import { Lookup } from '@app/components/svarbrev/part/lookup';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { KABAL_API_BASE_PATH } from '@app/redux/api/common';
+import { useLazyGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { IPart } from '@app/types/common';
 import { Search, Tag } from '@navikt/ds-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 interface EditPartProps {
   onChange: (part: IPart) => void;
   onClose?: () => void;
-  isLoading: boolean;
+  isAdding: boolean;
   buttonText?: string;
   autoFocus?: boolean;
   id?: string;
 }
 
-export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
+export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, id }: EditPartProps) => {
   const { mulighet } = useMulighet();
   const [rawValue, setRawValue] = useState('');
   const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching, isFetching, isError, reset }] = useSearchPartWithUtsendingslkanal();
-
-  const sakenGjelderId = mulighet?.sakenGjelder.id;
-  const ytelseId = mulighet?.temaId;
+  const [searchPart, { data, isFetching }] = useLazyGetPartWithUtsendingskanalQuery();
 
   const onClick = () => {
-    const [value, inputError] = cleanAndValidate(rawValue);
+    const [identifikator, err] = cleanAndValidate(rawValue);
 
-    setError(inputError);
+    setError(err);
 
-    if (inputError === undefined && sakenGjelderId !== undefined && ytelseId !== undefined) {
-      search({ identifikator: value, sakenGjelderId, ytelseId });
+    if (err === undefined) {
+      search(identifikator);
+    }
+  };
+
+  const search = (identifikator: string) => {
+    const sakenGjelderId = mulighet?.sakenGjelder.id;
+
+    if (sakenGjelderId === undefined) {
+      return setError('Saken gjelder er ikke satt');
+    }
+
+    const ytelseId = mulighet?.temaId;
+
+    if (ytelseId === undefined) {
+      return setError('Ytelse er ikke satt');
+    }
+
+    searchPart({ identifikator, sakenGjelderId, ytelseId });
+  };
+
+  const onChangeInput = (value: string) => {
+    setRawValue(value);
+    const [identifikator, err] = cleanAndValidate(value);
+
+    if (err === undefined) {
+      search(identifikator);
     }
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (data === undefined) {
+      if (data === undefined || data === null) {
         return;
       }
 
@@ -52,38 +74,20 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
     }
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const [value, inputError] = cleanAndValidate(rawValue);
-
-      setError(undefined);
-
-      if (inputError !== undefined) {
-        return reset();
-      }
-
-      if (sakenGjelderId !== undefined && ytelseId !== undefined) {
-        search({ identifikator: value, sakenGjelderId, ytelseId });
-      }
-    }, 200);
-
-    return () => clearTimeout(timeout);
-  }, [rawValue, search, sakenGjelderId, ytelseId, reset]);
-
   return (
     <StyledEditPart id={id}>
       <Search
         label="Søk"
         size="small"
         value={rawValue}
-        onChange={setRawValue}
+        onChange={onChangeInput}
         error={error}
         onKeyDown={onKeyDown}
         autoFocus={autoFocus}
         autoComplete="off"
         htmlSize={63}
       >
-        <Search.Button onClick={onClick} loading={isSearching || isFetching} />
+        <Search.Button onClick={onClick} loading={isFetching} />
       </Search>
       <Result
         part={data}
@@ -92,9 +96,8 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
           setRawValue('');
           onChange(p);
         }}
-        isLoading={isLoading}
-        isSearching={isSearching || isFetching}
-        isError={isError}
+        isLoading={isAdding}
+        isSearching={isFetching}
         buttonText={buttonText}
       />
     </StyledEditPart>
@@ -102,21 +105,20 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
 };
 
 interface ResultProps {
-  part: IPart | undefined;
+  part: IPart | null | undefined;
   onChange: (part: IPart) => void;
   isLoading: boolean;
   isSearching: boolean;
-  isError: boolean;
   search: string;
   buttonText?: string;
 }
 
-const Result = ({ part, onChange, search, isError, isLoading, isSearching, buttonText }: ResultProps) => {
-  if (isError) {
+const Result = ({ part, onChange, search, isLoading, isSearching, buttonText }: ResultProps) => {
+  if (part === null) {
     return <Tag variant="warning">Ingen treff</Tag>;
   }
 
-  if (part === undefined || search.length === 0) {
+  if (part === undefined) {
     return null;
   }
 
@@ -130,60 +132,3 @@ const StyledEditPart = styled.div`
   flex-direction: column;
   row-gap: 8px;
 `;
-
-interface SearchPartWithUtsendingskanalParams {
-  identifikator: string;
-  sakenGjelderId: string;
-  ytelseId: string;
-}
-
-type SearchResult = [
-  (params: SearchPartWithUtsendingskanalParams) => Promise<void>,
-  { data: IPart | undefined; isLoading: boolean; isFetching: boolean; isError: boolean; reset: () => void },
-];
-
-const useSearchPartWithUtsendingslkanal = (): SearchResult => {
-  const [data, setData] = useState<IPart | undefined>();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const reset = useCallback(() => {
-    setData(undefined);
-    setError(null);
-  }, []);
-
-  const search = useCallback(async (params: SearchPartWithUtsendingskanalParams) => {
-    setIsFetching(true);
-
-    try {
-      const res = await fetch(`${KABAL_API_BASE_PATH}/searchpartwithutsendingskanal`, {
-        method: 'POST',
-        body: JSON.stringify(params),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (res.status === 401) {
-        window.location.assign('/oauth2/login');
-        throw new Error('Ikke innlogget');
-      }
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch');
-      }
-
-      setData(await res.json());
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e);
-      } else {
-        setError(new Error('Unknown error'));
-      }
-    } finally {
-      setIsFetching(false);
-    }
-  }, []);
-
-  return [search, { data, isLoading: isFetching && data === undefined, isFetching, isError: error !== null, reset }];
-};

@@ -1,61 +1,79 @@
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useGetPartQuery } from '@app/redux/api/part';
+import { useLazyGetPartQuery } from '@app/redux/api/part';
 import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 import { Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
-export const PersonSearch = () => {
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export const PersonSearch = ({ value, onChange }: Props) => {
   const { id, sakenGjelderValue } = useRegistrering();
-  const [setSakenGjelder, { isLoading: isSetting }] = useSetSakenGjelderMutation();
-  const [rawSearch, setRawSearch] = useState('');
+  const [setSakenGjelder] = useSetSakenGjelderMutation();
+  const [searchPerson] = useLazyGetPartQuery();
   const [error, setError] = useState<string>();
 
-  const cleaned = rawSearch.replaceAll(' ', '');
-  const isValid = idnr(cleaned).status === 'valid';
-  const search = isValid ? cleaned : skipToken;
-  const { data: person, isSuccess: hasPerson } = useGetPartQuery(search);
+  const onChangeInput = async (value: string) => {
+    onChange(value);
+    setError(undefined);
 
-  useEffect(() => {
-    if (hasPerson && !isSetting && sakenGjelderValue !== person.id) {
+    const cleaned = value.replaceAll(/\s/g, '');
+    const isValid = idnr(cleaned).status === 'valid';
+
+    if (!isValid) {
+      return;
+    }
+
+    const person = await searchPerson(cleaned).unwrap();
+
+    if (person !== null && person.id !== sakenGjelderValue) {
       setSakenGjelder({ id, sakenGjelderValue: person.id });
     }
-  }, [hasPerson, isSetting, person, sakenGjelderValue, setSakenGjelder, id]);
-
-  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(({ key }) => {
-    switch (key) {
-      case 'Escape': {
-        setRawSearch('');
-        setError(undefined);
-        break;
-      }
-    }
-  }, []);
+  };
 
   return (
-    <StyledSearch
-      value={rawSearch}
-      onChange={setRawSearch}
-      label="Søk etter person"
-      placeholder="Søk etter person"
-      hideLabel
-      error={error}
-      onKeyDown={onKeyDown}
-      onFocus={(e) => e.target.select()}
-      variant="simple"
-      size="small"
-      autoFocus
-      autoComplete="off"
-      autoCorrect="off"
-      autoCapitalize="off"
-      autoSave="off"
-      id="sakengjelder"
-    />
+    <Container>
+      <Search
+        value={value}
+        onChange={onChangeInput}
+        label="Søk etter person"
+        placeholder="Søk etter person"
+        hideLabel
+        error={error}
+        onKeyDown={({ key }) => {
+          if (key === 'Escape') {
+            onChange('');
+          }
+        }}
+        onFocus={(e) => e.target.select()}
+        variant="simple"
+        size="small"
+        autoFocus
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        autoSave="off"
+        id="sakengjelder"
+      >
+        <Search.Button
+          onClick={() => {
+            const cleaned = value.replaceAll(' ', '');
+            const isValid = idnr(cleaned).status === 'valid';
+
+            if (!isValid) {
+              setError('Ugyldig ID-nummer');
+            }
+          }}
+        />
+      </Search>
+    </Container>
   );
 };
 
-const StyledSearch = styled(Search)`
+const Container = styled.div`
   width: 250px;
 `;

@@ -9,7 +9,7 @@ import { styled } from 'styled-components';
 
 interface Props {
   label: string;
-  data: IPart | undefined;
+  data: IPart | undefined | null;
   setPart: (part: IPart) => void;
   isLoading: boolean;
   dismiss?: () => void;
@@ -27,7 +27,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
     );
   }
 
-  if (typeof data !== 'undefined') {
+  if (data !== undefined && data !== null) {
     return (
       <Render
         variant="alt3"

@@ -25,5 +25,5 @@ export const cleanAndValidate = (idNumber: string): [string, string | undefined]
     return [value, orgNumError];
   }
 
-  return [value, undefined];
+  return [value, 'Ugyldig fødselsnummer/D-nummer eller organisasjonsnummer'];
 };

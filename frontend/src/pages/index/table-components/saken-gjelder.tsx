@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const SakenGjelder = ({ id }: Props) => {
-  const { data: part } = useGetPartQuery(id ?? skipToken);
+  const { data, isSuccess, isLoading } = useGetPartQuery(id ?? skipToken);
 
   if (id === null) {
     return (
@@ -22,37 +22,53 @@ export const SakenGjelder = ({ id }: Props) => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <>
+        <Table.DataCell>
+          <Skeleton variant="text" width={220} height={32} />
+        </Table.DataCell>
+
+        <Table.DataCell>
+          <Skeleton variant="rounded" width={140} height={32} />
+        </Table.DataCell>
+      </>
+    );
+  }
+
+  if (!isSuccess) {
+    return null;
+  }
+
+  if (data === null) {
+    return (
+      <>
+        <Table.DataCell>
+          <i>Ukjent</i>
+        </Table.DataCell>
+
+        <Table.DataCell />
+      </>
+    );
+  }
+
   return (
     <>
-      {part === undefined ? (
-        <>
-          <Table.DataCell>
-            <Skeleton variant="text" width={220} height={32} />
-          </Table.DataCell>
+      <Table.DataCell>
+        <CopyButton
+          copyText={data.name ?? ''}
+          text={data.name ?? '<mangler>'}
+          variant="neutral"
+          size="small"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+          onKeyUp={(e) => e.stopPropagation()}
+        />
+      </Table.DataCell>
 
-          <Table.DataCell>
-            <Skeleton variant="rounded" width={140} height={32} />
-          </Table.DataCell>
-        </>
-      ) : (
-        <>
-          <Table.DataCell>
-            <CopyButton
-              copyText={part.name ?? ''}
-              text={part.name ?? '<mangler>'}
-              variant="neutral"
-              size="small"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
-              onKeyUp={(e) => e.stopPropagation()}
-            />
-          </Table.DataCell>
-
-          <Table.DataCell>
-            <CopyPartIdButton id={id} />
-          </Table.DataCell>
-        </>
-      )}
+      <Table.DataCell>
+        <CopyPartIdButton id={id} />
+      </Table.DataCell>
     </>
   );
 };

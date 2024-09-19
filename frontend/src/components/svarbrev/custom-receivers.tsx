@@ -19,7 +19,7 @@ interface Props {
 
 export const CustomReceivers = ({ receivers }: Props) => {
   const id = useRegistreringId();
-  const [add] = useAddSvarbrevReceiverMutation();
+  const [add, { isLoading }] = useAddSvarbrevReceiverMutation();
 
   return (
     <section>
@@ -27,7 +27,7 @@ export const CustomReceivers = ({ receivers }: Props) => {
         Ekstra mottakere
       </Label>
       <EditPart
-        isLoading={false}
+        isAdding={isLoading}
         id="extra-receivers"
         onChange={(part) => add({ id, receiver: { part, handling: HandlingEnum.AUTO, overriddenAddress: null } })}
         buttonText="Legg til mottaker"
