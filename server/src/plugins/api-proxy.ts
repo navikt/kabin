@@ -78,7 +78,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
             },
           });
           req.proxyStartTime = performance.now();
-          await req.ensureOboAccessToken(appName, reply);
+          await req.getOboAccessToken(appName, reply);
         },
         retryMethods: ['GET'], // Only retry GET requests. All others are not idempotent.
         replyOptions: {
@@ -116,7 +116,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
+  { fastify: '5', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const prefixServerTimingEntry = (entry: string, appName: string): string => {

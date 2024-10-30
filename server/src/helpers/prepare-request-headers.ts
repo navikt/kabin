@@ -37,7 +37,7 @@ export const getProxyRequestHeaders = (
     headers[AZURE_AD_TOKEN_HEADER] = accessToken;
   }
 
-  const oboAccessToken = req.getOboAccessToken(appName);
+  const oboAccessToken = req.getCachedOboAccessToken(appName);
 
   if (oboAccessToken !== undefined) {
     headers[AUTHORIZATION_HEADER] = `Bearer ${oboAccessToken}`;
