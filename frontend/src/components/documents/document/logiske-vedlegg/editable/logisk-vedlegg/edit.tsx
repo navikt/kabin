@@ -144,7 +144,7 @@ export const EditLogiskVedlegg = ({
   );
 
   useEffect(() => {
-    setContent(activeIndex === -1 ? customValueRef.current : suggestions[activeIndex] ?? customValueRef.current);
+    setContent(activeIndex === -1 ? customValueRef.current : (suggestions[activeIndex] ?? customValueRef.current));
     setCaretAtEnd();
   }, [suggestions, activeIndex, setCaretAtEnd, setContent]);
 
@@ -168,7 +168,6 @@ export const EditLogiskVedlegg = ({
           ref={ref}
           size="small"
           variant="neutral"
-          role="textbox"
           aria-multiline="false"
           aria-placeholder={placeholder}
           contentEditable={!isLoading}
