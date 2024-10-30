@@ -71,6 +71,6 @@ const getYtelseNames = (
   b: FinishedRegistreringListItem,
   ytelser: IKodeverkSimpleValue[],
 ): [string, string] => [
-  a.ytelseId === null ? 'Ingen' : ytelser.find((y) => y.id === a.ytelseId)?.navn ?? '',
-  b.ytelseId === null ? 'Ingen' : ytelser.find((y) => y.id === b.ytelseId)?.navn ?? '',
+  a.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === a.ytelseId)?.navn ?? ''),
+  b.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === b.ytelseId)?.navn ?? ''),
 ];
