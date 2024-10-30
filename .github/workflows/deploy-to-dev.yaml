@@ -60,6 +60,7 @@ jobs:
           BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: |
           cd frontend
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
           bun install --frozen-lockfile
 
       - name: Build frontend
@@ -82,6 +83,7 @@ jobs:
           BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: |
           cd server
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
           bun install --frozen-lockfile
       
       - name: Test server
