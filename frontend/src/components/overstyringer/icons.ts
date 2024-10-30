@@ -1,5 +1,5 @@
 import {
-  Buldings2Icon,
+  Buildings2Icon,
   EnvelopeClosedIcon,
   PersonIcon as NavPersonIcon,
   ParagraphIcon,
@@ -44,4 +44,4 @@ export const StyledSaksbehandlerIcon = styled(SaksbehandlerIcon)`
 
 // Types
 export const PersonIcon = NavPersonIcon;
-export const CompanyIcon = Buldings2Icon;
+export const CompanyIcon = Buildings2Icon;
