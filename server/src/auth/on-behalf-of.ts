@@ -1,6 +1,6 @@
-import { createHash } from 'node:crypto';
-import { oboCache } from '@app/auth/cache/cache';
+import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { AZURE_APP_CLIENT_ID, NAIS_CLUSTER_NAME } from '@app/config/config';
+import { parseTokenPayload } from '@app/helpers/token-parser';
 import { getLogger } from '@app/logger';
 import type { Client, GrantBody } from 'openid-client';
 
@@ -9,18 +9,47 @@ const log = getLogger('obo-token');
 export const getOnBehalfOfAccessToken = async (
   authClient: Client,
   accessToken: string,
+  navIdent: string,
   appName: string,
   trace_id: string,
   span_id: string,
 ): Promise<string> => {
-  const hash = createHash('sha256').update(accessToken).digest('hex');
-  const cacheKey = `${hash}-${appName}`;
+  const cacheKey = getCacheKey(navIdent, appName);
   const token = await oboCache.get(cacheKey);
 
-  if (token !== null) {
-    return token;
+  if (token === null) {
+    return refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id);
   }
 
+  const parsed = parseTokenPayload(token);
+
+  if (parsed === undefined) {
+    return refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id);
+  }
+
+  const now = Math.ceil(Date.now() / 1_000);
+
+  if (parsed.exp < now) {
+    return refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id);
+  }
+
+  if (parsed.exp - now < 30) {
+    log.debug({ msg: `Refreshing OBO token for ${appName}`, trace_id, span_id, data: { navIdent, appName } });
+
+    refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id);
+  }
+
+  return token;
+};
+
+export const refreshOnBehalfOfAccessToken = async (
+  authClient: Client,
+  accessToken: string,
+  cacheKey: string,
+  appName: string,
+  trace_id: string,
+  span_id: string,
+): Promise<string> => {
   if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
     const error = new Error('OpenID issuer misconfigured. Missing token endpoint.');
     log.error({ msg: 'On-Behalf-Of error', error, trace_id, span_id });
@@ -50,7 +79,7 @@ export const getOnBehalfOfAccessToken = async (
     }
 
     if (typeof expires_at === 'number') {
-      oboCache.set(cacheKey, obo_access_token, expires_at);
+      await oboCache.set(cacheKey, obo_access_token, expires_at);
     }
 
     return obo_access_token;
