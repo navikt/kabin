@@ -83,7 +83,13 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
         <UsedCount usedCount={usedCount} />
       </Table.DataCell>
       <StyledButtonCell>
-        <SelectMulighet isSelected={isSelected} select={selectAnke} isValid={isValid} isLoading={isLoading} />
+        <SelectMulighet
+          isSelected={isSelected}
+          select={selectAnke}
+          isValid={isValid}
+          isLoading={isLoading}
+          mulighetId={ankemulighet.id}
+        />
       </StyledButtonCell>
     </StyledTableRow>
   );
