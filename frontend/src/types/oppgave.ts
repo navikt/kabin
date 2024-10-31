@@ -13,4 +13,5 @@ export interface IOppgave {
   oppgavetype: string | null;
   tilordnetRessurs: string | null;
   fristFerdigstillelse: string | null;
+  alreadyUsed: boolean;
 }

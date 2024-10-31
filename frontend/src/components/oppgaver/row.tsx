@@ -1,4 +1,7 @@
-import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import {
+  CheckmarkCircleFillIconColored,
+  ExclamationmarkTriangleFillIconColored,
+} from '@app/components/colored-icons/colored-icons';
 import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -18,6 +21,7 @@ export const Row = ({
   opprettetAvEnhetsnr,
   tildeltEnhetsnr,
   beskrivelse,
+  alreadyUsed,
 }: IOppgave) => {
   const { id: registreringId, typeId, overstyringer } = useRegistrering();
   const [setOppgaveId] = useSetOppgaveIdMutation();
@@ -30,11 +34,14 @@ export const Row = ({
   const temaName = tema.find((t) => t.id === temaId)?.beskrivelse ?? temaId;
   const selected = overstyringer.oppgaveId === id;
 
+  const onClick = alreadyUsed ? undefined : () => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id });
+
   return (
     <StyledRow
       content={<Beskrivelse beskrivelse={beskrivelse} />}
       selected={selected}
-      onClick={() => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id })}
+      onClick={onClick}
+      $alreadyUsed={alreadyUsed}
     >
       <Table.DataCell>
         {opprettetTidspunkt === null ? null : isoDateTimeToPrettyDate(opprettetTidspunkt)}
@@ -47,19 +54,39 @@ export const Row = ({
       <Table.DataCell>{opprettetAvEnhetsnr}</Table.DataCell>
 
       <StyledButtonCell>
-        <Tooltip content={selected ? 'Oppgave er valgt. Klikk for å fjerne valg.' : 'Velg oppgave'}>
-          <Button
-            size="small"
-            variant="tertiary"
-            onClick={() => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id })}
-            icon={selected ? <CheckmarkCircleFillIconColored aria-hidden /> : null}
-            title={selected ? 'Valgt' : undefined}
-          >
-            {selected ? null : 'Velg'}
-          </Button>
-        </Tooltip>
+        <SelectButton selected={selected} alreadyUsed={alreadyUsed} onClick={onClick} />
       </StyledButtonCell>
     </StyledRow>
+  );
+};
+
+interface SelectButtonProps {
+  selected: boolean;
+  alreadyUsed: boolean;
+  onClick: (() => void) | undefined;
+}
+
+const SelectButton = ({ selected, alreadyUsed, onClick }: SelectButtonProps) => {
+  if (alreadyUsed) {
+    return (
+      <Tooltip content="Oppgaven er tilknyttet en annen behandling.">
+        <ExclamationmarkTriangleFillIconColored aria-hidden />
+      </Tooltip>
+    );
+  }
+
+  return (
+    <Tooltip content={selected ? 'Oppgave er valgt. Klikk for å fjerne valg.' : 'Velg oppgave'}>
+      <Button
+        size="small"
+        variant="tertiary"
+        onClick={onClick}
+        icon={selected ? <CheckmarkCircleFillIconColored aria-hidden /> : null}
+        title={selected ? 'Valgt' : undefined}
+      >
+        {selected ? null : 'Velg'}
+      </Button>
+    </Tooltip>
   );
 };
 
@@ -84,7 +111,7 @@ const StyledBeskrivelse = styled.section`
   flex-direction: column;
 `;
 
-const StyledRow = styled(Table.ExpandableRow)`
+const StyledRow = styled(Table.ExpandableRow)<{ $alreadyUsed: boolean }>`
   height: 44px;
-  cursor: pointer;
+  cursor: ${({ $alreadyUsed }) => ($alreadyUsed ? 'auto' : 'pointer')};
 `;
