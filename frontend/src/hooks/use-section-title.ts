@@ -12,6 +12,11 @@ const KLAGE_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
+const OMGJØRINGSKRAV_SECTIONS: Record<SectionNames, string> = {
+  [SectionNames.SAKSDATA]: 'Tilpasninger for omgjøringskravet',
+  [SectionNames.SVARBREV]: 'Svarbrev',
+};
+
 const DEFAULT_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SAKSDATA]: 'Tilpasninger',
   [SectionNames.SVARBREV]: 'Svarbrev',
@@ -25,6 +30,8 @@ const useSections = () => {
       return KLAGE_SECTIONS;
     case SaksTypeEnum.ANKE:
       return ANKE_SECTIONS;
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return OMGJØRINGSKRAV_SECTIONS;
     case null:
       return DEFAULT_SECTIONS;
   }

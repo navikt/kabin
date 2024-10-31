@@ -1,5 +1,5 @@
 import { CardLarge, CardSmall } from '@app/components/card/card';
-import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
+import { AnkeOrOmgjøringskravMuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
@@ -81,6 +81,7 @@ export const TypeSelect = () => {
       <ToggleGroup onChange={onChange} value={value ?? 'none'} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.OMGJØRINGSKRAV}>Omgjøringskrav</ToggleGroup.Item>
       </ToggleGroup>
     </Row>
   );
@@ -89,25 +90,41 @@ export const TypeSelect = () => {
 export const TypeInput = () => {
   const registrering = useRegistrering();
 
-  if (registrering?.typeId === SaksTypeEnum.ANKE) {
+  if (registrering.typeId === SaksTypeEnum.ANKE) {
     return (
       <>
-        <Ankemuligheter />
+        <AnkeOrOmgjøringskravMuligheter type={registrering.typeId} />
         <WillCreateNewJournalpostInfo />
         <Oppgaver />
-        <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
+        <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" saksbehandlerFromMulighetLabel="Fra klagen" />
         <Svarbrev />
       </>
     );
   }
 
-  if (registrering?.typeId === SaksTypeEnum.KLAGE) {
+  if (registrering.typeId === SaksTypeEnum.KLAGE) {
     return (
       <>
         <Klagemuligheter />
         <WillCreateNewJournalpostInfo />
         <Oppgaver />
-        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
+        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" saksbehandlerFromMulighetLabel="Fra klagen" />
+        <Svarbrev />
+      </>
+    );
+  }
+
+  if (registrering.typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
+    return (
+      <>
+        <AnkeOrOmgjøringskravMuligheter type={registrering.typeId} />
+        <WillCreateNewJournalpostInfo />
+        <Oppgaver />
+        <Overstyringer
+          title="Tilpass omgjøringskravet"
+          klagerLabel="Den som krever omgjøring"
+          saksbehandlerFromMulighetLabel="Fra tidligere behandling"
+        />
         <Svarbrev />
       </>
     );

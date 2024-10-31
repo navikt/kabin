@@ -1,11 +1,11 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
+import { Mulighet } from '@app/components/muligheter/anke/ankemulighet';
 import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
 import { TableHeaders } from '@app/components/muligheter/anke/table-headers';
 import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { SelectedAnkemulighet, SelectedAnkemulighetBody } from '@app/components/selected/selected-ankemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-ankemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
@@ -14,27 +14,33 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
-export const Ankemuligheter = () => {
+type Type = SaksTypeEnum.ANKE | SaksTypeEnum.OMGJØRINGSKRAV;
+
+interface Props {
+  type: Type;
+}
+
+export const AnkeOrOmgjøringskravMuligheter = ({ type }: Props) => {
   const canEdit = useCanEdit();
 
   if (canEdit) {
-    return <EditableAnkemuligheter />;
+    return <EditableMuligheter type={type} />;
   }
 
-  return <ReadOnlyAnkemulighet />;
+  return <ReadOnlyAnkemulighet type={type} />;
 };
 
-const ReadOnlyAnkemulighet = () => {
+const ReadOnlyAnkemulighet = ({ type }: Props) => {
   const { typeId, mulighet } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
+  if ((typeId !== SaksTypeEnum.ANKE && typeId !== SaksTypeEnum.OMGJØRINGSKRAV) || mulighet === undefined) {
     return null;
   }
 
@@ -42,19 +48,19 @@ const ReadOnlyAnkemulighet = () => {
     <Card>
       <Header>
         <Heading level="1" size="small">
-          Vedtaket klagen gjelder
+          Vedtaket {type === SaksTypeEnum.ANKE ? 'anken' : 'omgjøringskravet'} gjelder
         </Heading>
       </Header>
 
-      <SelectedAnkemulighetBody {...mulighet} />
+      <SelectedMulighetBody {...mulighet} />
     </Card>
   );
 };
 
-const EditableAnkemuligheter = () => {
+const EditableMuligheter = ({ type }: Props) => {
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();
-  const { ankemuligheter, id } = useRegistrering();
+  const { ankemuligheter, omgjøringskravmuligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
@@ -63,19 +69,19 @@ const EditableAnkemuligheter = () => {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.ANKE) {
+  if (typeId !== SaksTypeEnum.ANKE && typeId !== SaksTypeEnum.OMGJØRINGSKRAV) {
     return null;
   }
 
   if (!isExpanded && mulighet !== undefined) {
-    return <SelectedAnkemulighet onClick={() => setIsExpanded(true)} />;
+    return <SelectedMulighet onClick={() => setIsExpanded(true)} />;
   }
 
   return (
     <CardSmall>
       <Header>
         <Heading level="1" size="small">
-          Velg vedtaket anken gjelder
+          Velg vedtaket {type === SaksTypeEnum.ANKE ? 'anken' : 'omgjøringskravet'} gjelder
         </Heading>
 
         <Button
@@ -91,7 +97,7 @@ const EditableAnkemuligheter = () => {
           <StyledButton
             size="small"
             variant="tertiary-neutral"
-            title="Vis kun valgt ankemulighet"
+            title={`Vis kun valgt ${type === SaksTypeEnum.ANKE ? 'anke' : 'omgjøringskrav'}mulighet`}
             onClick={() => setIsExpanded(false)}
             icon={<ChevronUpIcon aria-hidden />}
           />
@@ -102,7 +108,11 @@ const EditableAnkemuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
+      <Content
+        muligheter={type === SaksTypeEnum.ANKE ? ankemuligheter : omgjøringskravmuligheter}
+        isLoading={isLoading}
+        type={type}
+      />
     </CardSmall>
   );
 };
@@ -122,11 +132,12 @@ const StyledButton = styled(Button)`
 `;
 
 interface ContentProps {
-  ankemuligheter: IAnkemulighet[] | undefined;
+  muligheter: IAnkemulighet[] | IOmgjøringskravmulighet[] | undefined;
   isLoading: boolean;
+  type: Type;
 }
 
-const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
+const Content = ({ muligheter, isLoading, type }: ContentProps) => {
   if (isLoading) {
     return (
       <LoadingAnkeMuligheter>
@@ -135,7 +146,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
     );
   }
 
-  if (ankemuligheter === undefined) {
+  if (muligheter === undefined) {
     return (
       <Placeholder>
         <ParagraphIcon aria-hidden />
@@ -143,17 +154,22 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
     );
   }
 
-  if (ankemuligheter.length === 0) {
-    return <BodyShort>Ingen ankemuligheter</BodyShort>;
+  if (muligheter.length === 0) {
+    return <BodyShort>Ingen {type === SaksTypeEnum.ANKE ? 'anke' : 'omgjøringskrav'}muligheter</BodyShort>;
   }
 
   return (
-    <TableContainer $showShadow={ankemuligheter.length >= 3}>
-      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
+    <TableContainer $showShadow={muligheter.length >= 3}>
+      <Table
+        zebraStripes
+        size="small"
+        id={ValidationFieldNames.MULIGHET}
+        aria-label={`${type === SaksTypeEnum.ANKE ? 'Anke' : 'Omgjøringskrav'}muligheter`}
+      >
         <TableHeaders />
         <Table.Body>
-          {ankemuligheter.map((ankemulighet) => (
-            <Ankemulighet key={ankemulighet.id} ankemulighet={ankemulighet} />
+          {muligheter.map((ankemulighet) => (
+            <Mulighet key={ankemulighet.id} mulighet={ankemulighet} />
           ))}
         </Table.Body>
       </Table>

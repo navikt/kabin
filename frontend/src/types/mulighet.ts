@@ -31,6 +31,8 @@ export interface IAnkemulighet extends IBasemulighet {
   readonly sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
 }
 
+export interface IOmgjøringskravmulighet extends IAnkemulighet {}
+
 interface ExistingAnkebehandling {
   /** UUID */
   id: string;

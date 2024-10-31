@@ -7,7 +7,7 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
 
@@ -15,21 +15,22 @@ interface Props {
   onClick: () => void;
 }
 
-export const SelectedAnkemulighet = ({ onClick }: Props) => {
+export const SelectedMulighet = ({ onClick }: Props) => {
   const { typeId, mulighet } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
+  if ((typeId !== SaksTypeEnum.ANKE && typeId !== SaksTypeEnum.OMGJØRINGSKRAV) || mulighet === undefined) {
     return null;
   }
 
-  return <RenderAnkemulighet mulighet={mulighet} onClick={onClick} />;
+  return <RenderMulighet mulighet={mulighet} onClick={onClick} type={typeId} />;
 };
 
 interface RenderProps extends Props {
-  mulighet: IAnkemulighet;
+  mulighet: IAnkemulighet | IOmgjøringskravmulighet;
+  type: SaksTypeEnum.ANKE | SaksTypeEnum.OMGJØRINGSKRAV;
 }
 
-const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => (
+const RenderMulighet = ({ mulighet, onClick, type }: RenderProps) => (
   <Card>
     <Header>
       <Heading size="small" level="1">
@@ -37,17 +38,17 @@ const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => (
       </Heading>
       <Button
         size="small"
-        title="Vis alle ankemuligheter"
+        title={`Vis alle ${type === SaksTypeEnum.ANKE ? 'anke' : 'omgjøringskrav'}muligheter`}
         onClick={onClick}
         icon={<ChevronDownIcon aria-hidden />}
         variant="tertiary-neutral"
       />
     </Header>
-    <SelectedAnkemulighetBody {...mulighet} />
+    <SelectedMulighetBody {...mulighet} />
   </Card>
 );
 
-export const SelectedAnkemulighetBody = (mulighet: IAnkemulighet) => {
+export const SelectedMulighetBody = (mulighet: IAnkemulighet | IOmgjøringskravmulighet) => {
   const { ytelseId, vedtakDate, fagsakId, originalFagsystemId, typeId, temaId, sourceOfExistingAnkebehandling } =
     mulighet;
 

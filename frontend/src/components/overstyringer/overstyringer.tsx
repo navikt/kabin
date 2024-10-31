@@ -35,9 +35,14 @@ import { styled } from 'styled-components';
 interface Props {
   title: string;
   klagerLabel: string;
+  saksbehandlerFromMulighetLabel: string;
 }
 
-export const Overstyringer = ({ title, klagerLabel }: Props) => {
+export const Overstyringer = ({
+  title,
+  klagerLabel,
+  saksbehandlerFromMulighetLabel: saksbehanlerFromMulighetLabel,
+}: Props) => {
   const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { typeId, mulighet } = useMulighet();
@@ -170,7 +175,7 @@ export const Overstyringer = ({ title, klagerLabel }: Props) => {
 
             <Avsender options={options} />
 
-            <Tildeling />
+            <Tildeling saksbehanlerFromMulighetLabel={saksbehanlerFromMulighetLabel} />
           </Content>
         </>
       )}
