@@ -46,7 +46,13 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
       <Table.DataCell>{vedtaksenhetName}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <StyledButtonCell>
-        {canEdit ? <SelectMulighet isSelected={isSelected} select={selectKlage} isValid isLoading={isLoading} /> : null}
+        <SelectMulighet
+          isSelected={isSelected}
+          select={selectKlage}
+          isValid
+          isLoading={isLoading}
+          mulighetId={klagemulighet.id}
+        />
       </StyledButtonCell>
     </StyledTableRow>
   );

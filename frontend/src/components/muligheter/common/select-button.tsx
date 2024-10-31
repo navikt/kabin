@@ -9,9 +9,10 @@ interface Props {
   select: (e: React.MouseEvent) => void;
   isValid: boolean;
   isLoading: boolean;
+  mulighetId: string;
 }
 
-export const SelectMulighet = ({ isSelected, select, isValid, isLoading }: Props) => {
+export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighetId }: Props) => {
   const [icon, buttonText, title] = useButtonProps(isSelected, isValid);
   const canEdit = useCanEdit();
 
@@ -31,7 +32,7 @@ export const SelectMulighet = ({ isSelected, select, isValid, isLoading }: Props
       title={title}
       onClick={select}
       disabled={!isValid}
-      data-testid="select-ankemulighet"
+      data-testid={`select-mulighet-${mulighetId}`}
       loading={isLoading}
     >
       {buttonText}
