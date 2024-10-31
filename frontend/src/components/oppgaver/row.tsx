@@ -80,7 +80,10 @@ const SelectButton = ({ selected, alreadyUsed, onClick }: SelectButtonProps) => 
       <Button
         size="small"
         variant="tertiary"
-        onClick={onClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick?.();
+        }}
         icon={selected ? <CheckmarkCircleFillIconColored aria-hidden /> : null}
         title={selected ? 'Valgt' : undefined}
       >
