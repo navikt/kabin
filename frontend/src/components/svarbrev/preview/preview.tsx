@@ -68,7 +68,7 @@ const useUrl = () => {
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
   const ytelseId: string | null =
-    (typeId === SaksTypeEnum.ANKE ? selectedYtelseId ?? mulighet?.ytelseId : selectedYtelseId) ?? null;
+    (typeId === SaksTypeEnum.ANKE ? (selectedYtelseId ?? mulighet?.ytelseId) : selectedYtelseId) ?? null;
 
   useEffect(() => {
     if (

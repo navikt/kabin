@@ -137,7 +137,7 @@ export const useFilteredDocuments = (
           selectedAvsenderMottakere.includes(
             avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
           )) &&
-        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : sak.fagsakId ?? UNKNOWN)) &&
+        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : (sak.fagsakId ?? UNKNOWN))) &&
         (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)),
     );
 
