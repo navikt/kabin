@@ -8,6 +8,35 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Skeleton } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
+export const LoadingOverstyringer = () => (
+  <Card>
+    <OverstyringerTop>
+      <Skeleton height={40} width={150} />
+      <Skeleton height={40} width={70} />
+      <Skeleton height={40} width={200} />
+      <Skeleton height={24} width={100} />
+    </OverstyringerTop>
+
+    <YtelseHjemler>
+      <Skeleton height={40} width={300} />
+      <Skeleton height={40} />
+    </YtelseHjemler>
+
+    <Parts>
+      <Part />
+      <Part />
+      <Part />
+    </Parts>
+  </Card>
+);
+
+export const LoadingSvarbrev = () => (
+  <ToggleContainer>
+    <Skeleton height={40} width={125} />
+    <Skeleton height={40} width={125} />
+  </ToggleContainer>
+);
+
 export const LoadingRegistrering = () => (
   <StyledMain>
     <Person>
@@ -29,29 +58,9 @@ export const LoadingRegistrering = () => (
 
       <LoadingOppgaver />
 
-      <Card>
-        <OverstyringerTop>
-          <Skeleton height={40} width={150} />
-          <Skeleton height={40} width={70} />
-          <Skeleton height={40} width={200} />
-          <Skeleton height={24} width={100} />
-        </OverstyringerTop>
+      <LoadingOverstyringer />
 
-        <YtelseHjemler>
-          <Skeleton height={40} width={300} />
-          <Skeleton height={40} />
-        </YtelseHjemler>
-
-        <Parts>
-          <Part />
-          <Part />
-          <Part />
-        </Parts>
-      </Card>
-      <ToggleContainer>
-        <Skeleton height={40} width={125} />
-        <Skeleton height={40} width={125} />
-      </ToggleContainer>
+      <LoadingSvarbrev />
     </LeftColumn>
     <RightColumn>
       <CardFullHeight>

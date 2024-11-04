@@ -1,6 +1,9 @@
 import { CardLarge, CardSmall } from '@app/components/card/card';
+import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
+import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
+import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
 import { Oppgaver } from '@app/components/oppgaver/oppgaver';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
@@ -41,7 +44,7 @@ const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
 
 export const TypeSelect = () => {
   const { id, typeId, journalpostId } = useRegistrering();
-  const [setType] = useSetTypeMutation();
+  const [setType] = useSetTypeMutation({ fixedCacheKey: id });
   const canEdit = useCanEdit();
 
   const onChange = useCallback(
@@ -86,10 +89,43 @@ export const TypeSelect = () => {
   );
 };
 
-export const TypeInput = () => {
-  const registrering = useRegistrering();
+const NoType = () => (
+  <>
+    <CardSmall>
+      <Placeholder>
+        <TasklistStartIcon aria-hidden />
+      </Placeholder>
+    </CardSmall>
+    <CardLarge>
+      <Placeholder>
+        <DocPencilIcon aria-hidden />
+      </Placeholder>
+    </CardLarge>
+  </>
+);
 
-  if (registrering?.typeId === SaksTypeEnum.ANKE) {
+export const TypeInput = () => {
+  const { id, typeId } = useRegistrering();
+  const [, { isLoading, isSuccess }] = useSetTypeMutation({ fixedCacheKey: id });
+
+  if (isLoading) {
+    return (
+      <>
+        <CardSmall>
+          <LoadingKlagemuligheter />
+        </CardSmall>
+        <LoadingOppgaver />
+        <LoadingOverstyringer />
+        <LoadingSvarbrev />
+      </>
+    );
+  }
+
+  if (!isSuccess) {
+    return <NoType />;
+  }
+
+  if (typeId === SaksTypeEnum.ANKE) {
     return (
       <>
         <Ankemuligheter />
@@ -101,7 +137,7 @@ export const TypeInput = () => {
     );
   }
 
-  if (registrering?.typeId === SaksTypeEnum.KLAGE) {
+  if (typeId === SaksTypeEnum.KLAGE) {
     return (
       <>
         <Klagemuligheter />
@@ -113,20 +149,7 @@ export const TypeInput = () => {
     );
   }
 
-  return (
-    <>
-      <CardSmall>
-        <Placeholder>
-          <TasklistStartIcon aria-hidden />
-        </Placeholder>
-      </CardSmall>
-      <CardLarge>
-        <Placeholder>
-          <DocPencilIcon aria-hidden />
-        </Placeholder>
-      </CardLarge>
-    </>
-  );
+  return <NoType />;
 };
 
 const WillCreateNewJournalpostInfo = () => {
