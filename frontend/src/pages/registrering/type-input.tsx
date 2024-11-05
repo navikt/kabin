@@ -106,7 +106,7 @@ const NoType = () => (
 
 export const TypeInput = () => {
   const { id, typeId } = useRegistrering();
-  const [, { isLoading, isSuccess }] = useSetTypeMutation({ fixedCacheKey: id });
+  const [, { isLoading }] = useSetTypeMutation({ fixedCacheKey: id });
 
   if (isLoading) {
     return (
@@ -119,10 +119,6 @@ export const TypeInput = () => {
         <LoadingSvarbrev />
       </>
     );
-  }
-
-  if (!isSuccess) {
-    return <NoType />;
   }
 
   if (typeId === SaksTypeEnum.ANKE) {
