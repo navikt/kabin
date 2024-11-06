@@ -138,5 +138,12 @@ const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
 
       return 'Du fullfører nå registrering av klagen. Klagen blir klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av klagen.';
     }
+    case SaksTypeEnum.OMGJØRINGSKRAV: {
+      if (sendSvarbrev) {
+        return 'Du fullfører nå registrering av omgjøringskravet. Omgjøringskravet blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av omgjøringskravet.';
+      }
+
+      return 'Du fullfører nå registrering av omgjøringskravet. Omgjøringskravet blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av omgjøringskravet.';
+    }
   }
 };

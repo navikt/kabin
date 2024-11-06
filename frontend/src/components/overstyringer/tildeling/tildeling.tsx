@@ -23,7 +23,11 @@ import { Button, Heading } from '@navikt/ds-react';
 
 const ID = ValidationFieldNames.SAKSBEHANDLER;
 
-export const Tildeling = () => {
+interface Props {
+  saksbehandlerFromMulighetLabel: string;
+}
+
+export const Tildeling = ({ saksbehandlerFromMulighetLabel }: Props) => {
   const { overstyringer } = useRegistrering();
   const { saksbehandlerIdent } = overstyringer;
   const canEdit = useCanEdit();
@@ -55,13 +59,13 @@ export const Tildeling = () => {
           <ValidationErrorMessage error={error} />
         </PartTextContent>
 
-        <Actions />
+        <Actions saksbehandlerFromMulighetLabel={saksbehandlerFromMulighetLabel} />
       </PartContent>
     </StyledContainer>
   );
 };
 
-const Actions = () => {
+const Actions = ({ saksbehandlerFromMulighetLabel }: Props) => {
   const { typeId, mulighet } = useMulighet();
 
   if (typeId === null || mulighet === undefined) {
@@ -73,7 +77,7 @@ const Actions = () => {
       <SetButton label="Fjern" title="Fjern" icon={<TrashIcon aria-hidden />} saksbehandlerIdent={null} />
       {typeId === SaksTypeEnum.ANKE && mulighet.previousSaksbehandler !== null ? (
         <SetButton
-          label="Fra klagen"
+          label={saksbehandlerFromMulighetLabel}
           title={mulighet.previousSaksbehandler.navn}
           saksbehandlerIdent={mulighet.previousSaksbehandler.navIdent}
         />

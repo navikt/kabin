@@ -1,19 +1,19 @@
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
-import type { IOppgave } from '@app/types/oppgave';
+import type { IGosysOppgave } from '@app/types/gosys-oppgave';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-export interface IGetOppgaverParams {
+export interface IGetGosysOppgaverParams {
   identifikator: string;
   temaId?: string;
 }
 
-export const oppgaverApi = createApi({
-  reducerPath: 'oppgaverApi',
+export const gosysOppgaverApi = createApi({
+  reducerPath: 'gosysOppgaverApi',
   baseQuery: KABIN_API_BASE_QUERY,
   endpoints: (builder) => ({
-    getOppgaver: builder.query<IOppgave[], IGetOppgaverParams>({
+    getGosysOppgaver: builder.query<IGosysOppgave[], IGetGosysOppgaverParams>({
       query: (body) => ({
-        url: '/searchoppgave',
+        url: '/searchgosysoppgave',
         method: 'POST',
         body,
       }),
@@ -21,4 +21,4 @@ export const oppgaverApi = createApi({
   }),
 });
 
-export const { useGetOppgaverQuery } = oppgaverApi;
+export const { useGetGosysOppgaverQuery } = gosysOppgaverApi;

@@ -111,12 +111,13 @@ export enum SaksTypeEnum {
   ANKE = '2',
   ANKE_I_TR = '3',
   TR_OPPHEVET = '4',
+  OMGJØRINGSKRAV = '5',
 }
 
-export type RegistreringType = SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
+export type RegistreringType = SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE | SaksTypeEnum.OMGJØRINGSKRAV;
 
 export const isType = (type: string): type is RegistreringType =>
-  type === SaksTypeEnum.KLAGE || type === SaksTypeEnum.ANKE;
+  type === SaksTypeEnum.KLAGE || type === SaksTypeEnum.ANKE || type === SaksTypeEnum.OMGJØRINGSKRAV;
 
 export interface ISaksbehandler {
   navIdent: string;
@@ -133,4 +134,5 @@ export const TYPE_NAME: Record<SaksTypeEnum, string> = {
   [SaksTypeEnum.ANKE]: 'Anke',
   [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
   [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter Trygderetten opphevet',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
 };

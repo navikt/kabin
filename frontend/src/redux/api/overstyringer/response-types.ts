@@ -13,7 +13,7 @@ export type SetHjemmelIdListResponse = OverstyringerResponse<{ hjemmelIdList: st
 
 export type SetSaksbehandlerIdentResponse = OverstyringerResponse<{ saksbehandlerIdent: string | null }>;
 
-export type SetOppgaveIdResponse = OverstyringerResponse<{ oppgaveId: number | null }>;
+export type SetGosysOppgaveIdResponse = OverstyringerResponse<{ gosysOppgaveId: number | null }>;
 
 export type SetYtelseResponse = OverstyringerResponse<Pick<Overstyringer, 'ytelseId' | 'saksbehandlerIdent'>>;
 

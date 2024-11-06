@@ -2,6 +2,7 @@ import { IS_LOCALHOST } from '@app/redux/api/common';
 import type {
   SetAnkemulisghetParams,
   SetKlagemulighetParams,
+  SetOmgjøringskravmulighetParams,
   SetTypeParams,
 } from '@app/redux/api/registreringer/param-types';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
@@ -119,6 +120,24 @@ const mutationsSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+
+    setOmgjøringskravmulighet: builder.mutation<SetMulighetResponse, SetOmgjøringskravmulighetParams>({
+      query: ({ id, mulighet }) => ({
+        url: `/registreringer/${id}/mulighet`,
+        method: 'PUT',
+        body: { mulighetId: mulighet.id } satisfies SetMulighetPayload,
+      }),
+      onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({ ...draft, mulighet: { id: mulighet.id } }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -128,4 +147,5 @@ export const {
   useSetTypeMutation,
   useSetAnkemulighetMutation,
   useSetKlagemulighetMutation,
+  useSetOmgjøringskravmulighetMutation,
 } = mutationsSlice;

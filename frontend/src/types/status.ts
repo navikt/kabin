@@ -24,6 +24,7 @@ interface IBaseStatus {
    * @type {string} DateTime
    */
   finished: string;
+  svarbrev: SvarbrevStatus | null;
 }
 
 export interface SvarbrevStatus {
@@ -35,12 +36,15 @@ export interface SvarbrevStatus {
 export interface IAnkestatus extends IBaseStatus {
   typeId: SaksTypeEnum.ANKE;
   vedtakDate: string | null;
-  svarbrev: SvarbrevStatus | null;
 }
 
 export interface IKlagestatus extends IBaseStatus {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
   vedtakDate: string;
-  svarbrev: SvarbrevStatus | null;
+}
+
+export interface IOmgjøringskravstatus extends IBaseStatus {
+  typeId: SaksTypeEnum.OMGJØRINGSKRAV;
+  vedtakDate: string | null;
 }

@@ -1,10 +1,11 @@
 import { CardLarge, CardSmall } from '@app/components/card/card';
+import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
+import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
-import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
-import { Oppgaver } from '@app/components/oppgaver/oppgaver';
+import { Omgjøringskravemuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
@@ -84,6 +85,7 @@ export const TypeSelect = () => {
       <ToggleGroup onChange={onChange} value={value ?? 'none'} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.OMGJØRINGSKRAV}>Omgjøringskrav</ToggleGroup.Item>
       </ToggleGroup>
     </Row>
   );
@@ -114,7 +116,7 @@ export const TypeInput = () => {
         <CardSmall>
           <LoadingKlagemuligheter />
         </CardSmall>
-        <LoadingOppgaver />
+        <LoadingGosysOppgaver />
         <LoadingOverstyringer />
         <LoadingSvarbrev />
       </>
@@ -126,8 +128,8 @@ export const TypeInput = () => {
       <>
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
-        <Oppgaver />
-        <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" />
+        <GosysOppgaver />
+        <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" saksbehandlerFromMulighetLabel="Fra klagen" />
         <Svarbrev />
       </>
     );
@@ -138,8 +140,24 @@ export const TypeInput = () => {
       <>
         <Klagemuligheter />
         <WillCreateNewJournalpostInfo />
-        <Oppgaver />
-        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" />
+        <GosysOppgaver />
+        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" saksbehandlerFromMulighetLabel="Fra klagen" />
+        <Svarbrev />
+      </>
+    );
+  }
+
+  if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
+    return (
+      <>
+        <Omgjøringskravemuligheter />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass omgjøringskravet"
+          klagerLabel="Den som krever omgjøring"
+          saksbehandlerFromMulighetLabel="Fra tidligere behandling"
+        />
         <Svarbrev />
       </>
     );

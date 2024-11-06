@@ -28,10 +28,12 @@ export interface IAnkemulighet extends IBasemulighet {
   readonly previousSaksbehandler: ISaksbehandler | null;
   readonly vedtakDate: string | null;
   readonly typeId: SaksTypeEnum;
-  readonly sourceOfExistingAnkebehandling: ExistingAnkebehandling[];
+  readonly sourceOfExistingBehandlinger: ExistingBehandling[];
 }
 
-interface ExistingAnkebehandling {
+export interface IOmgjøringskravmulighet extends IAnkemulighet {}
+
+interface ExistingBehandling {
   /** UUID */
   id: string;
   /** LocalDateTime */

@@ -1,7 +1,7 @@
 import { useRegistrering } from '@app/hooks/use-registrering';
 import type { Mulighet } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IKlagemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
 
 interface KlageResult {
   typeId: SaksTypeEnum.KLAGE;
@@ -13,16 +13,22 @@ interface AnkeResult {
   mulighet: IAnkemulighet | undefined;
 }
 
+interface OmgjøringskravResult {
+  typeId: SaksTypeEnum.OMGJØRINGSKRAV;
+  mulighet: IOmgjøringskravmulighet | undefined;
+}
+
 interface NoneResult {
   typeId: null;
   mulighet: undefined;
 }
 
-export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
-  const { typeId, mulighet, ankemuligheter, klagemuligheter } = useRegistrering();
+export const useMulighet = (): KlageResult | AnkeResult | OmgjøringskravResult | NoneResult => {
+  const { typeId, mulighet, ankemuligheter, klagemuligheter, omgjoeringskravmuligheter } = useRegistrering();
 
   const ankemulighet = selectMulighet(ankemuligheter, mulighet);
   const klagemulighet = selectMulighet(klagemuligheter, mulighet);
+  const omgjøringskravmulighet = selectMulighet(omgjoeringskravmuligheter, mulighet);
 
   if (typeId === SaksTypeEnum.ANKE) {
     return { typeId, mulighet: ankemulighet };
@@ -30,6 +36,10 @@ export const useMulighet = (): KlageResult | AnkeResult | NoneResult => {
 
   if (typeId === SaksTypeEnum.KLAGE) {
     return { typeId, mulighet: klagemulighet };
+  }
+
+  if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
+    return { typeId, mulighet: omgjøringskravmulighet };
   }
 
   return { typeId, mulighet: undefined };

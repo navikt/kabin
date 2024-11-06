@@ -7,7 +7,7 @@ import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
-import type { IOppgave } from '@app/types/oppgave';
+import type { IGosysOppgave } from '@app/types/gosys-oppgave';
 import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
@@ -22,7 +22,7 @@ export const Row = ({
   tildeltEnhetsnr,
   beskrivelse,
   alreadyUsed,
-}: IOppgave) => {
+}: IGosysOppgave) => {
   const { id: registreringId, typeId, overstyringer } = useRegistrering();
   const [setOppgaveId] = useSetOppgaveIdMutation();
   const { data: tema = [] } = useGetTemaQuery();
@@ -32,9 +32,11 @@ export const Row = ({
   }
 
   const temaName = tema.find((t) => t.id === temaId)?.beskrivelse ?? temaId;
-  const selected = overstyringer.oppgaveId === id;
+  const selected = overstyringer.gosysOppgaveId === id;
 
-  const onClick = alreadyUsed ? undefined : () => setOppgaveId({ id: registreringId, oppgaveId: selected ? null : id });
+  const onClick = alreadyUsed
+    ? undefined
+    : () => setOppgaveId({ id: registreringId, gosysOppgaveId: selected ? null : id });
 
   return (
     <StyledRow
@@ -70,7 +72,9 @@ const SelectButton = ({ selected, alreadyUsed, onClick }: SelectButtonProps) => 
   if (alreadyUsed) {
     return (
       <Tooltip content="Oppgaven er tilknyttet en annen behandling.">
-        <ExclamationmarkTriangleFillIconColored aria-hidden />
+        <span>
+          <ExclamationmarkTriangleFillIconColored aria-hidden />
+        </span>
       </Tooltip>
     );
   }

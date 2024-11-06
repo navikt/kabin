@@ -1,36 +1,41 @@
 import { Card } from '@app/components/card/card';
-import { Header } from '@app/components/oppgaver/header';
-import { useParams } from '@app/components/oppgaver/hooks';
-import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
-import { Row } from '@app/components/oppgaver/row';
-import { TableHeaders } from '@app/components/oppgaver/table-headers';
+import { Header } from '@app/components/gosys-oppgaver/header';
+import { useIsEnabled, useParams } from '@app/components/gosys-oppgaver/hooks';
+import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
+import { Row } from '@app/components/gosys-oppgaver/row';
+import { TableHeaders } from '@app/components/gosys-oppgaver/table-headers';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
+import { useGetGosysOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 
-export const Oppgaver = () => {
+export const GosysOppgaver = () => {
   const canEdit = useCanEdit();
+  const isEnabled = useIsEnabled();
 
-  if (canEdit) {
-    return <EditableOppgaver />;
+  if (!isEnabled) {
+    return null;
   }
 
-  return <ReadOnlyOppgaver />;
+  if (canEdit) {
+    return <EditableGosysOppgaver />;
+  }
+
+  return <ReadOnlyGosysOppgaver />;
 };
 
-const ReadOnlyOppgaver = () => {
+const ReadOnlyGosysOppgaver = () => {
   const { overstyringer } = useRegistrering();
-  const { oppgaveId } = overstyringer;
-  const oppgaverParams = useParams();
-  const { oppgave, isLoading } = useGetOppgaverQuery(oppgaveId === null ? skipToken : oppgaverParams, {
-    selectFromResult: ({ data, ...rest }) => ({ oppgave: data?.find((o) => o.id === oppgaveId), ...rest }),
+  const { gosysOppgaveId: oppgaveId } = overstyringer;
+  const params = useParams();
+  const { gosysOppgave, isLoading } = useGetGosysOppgaverQuery(oppgaveId === null ? skipToken : params, {
+    selectFromResult: ({ data, ...rest }) => ({ gosysOppgave: data?.find((o) => o.id === oppgaveId), ...rest }),
   });
 
   if (oppgaveId === null) {
@@ -47,8 +52,8 @@ const ReadOnlyOppgaver = () => {
     );
   }
 
-  if (isLoading || oppgave === undefined) {
-    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
+  if (isLoading || gosysOppgave === undefined) {
+    return <LoadingGosysOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
   }
 
   return (
@@ -60,27 +65,27 @@ const ReadOnlyOppgaver = () => {
       <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
         <TableHeaders />
         <Table.Body>
-          <Row {...oppgave} />
+          <Row {...gosysOppgave} />
         </Table.Body>
       </Table>
     </Card>
   );
 };
 
-const EditableOppgaver = () => {
-  const oppgaverParams = useParams();
-  const { data: oppgaver, isLoading } = useGetOppgaverQuery(oppgaverParams);
-  const error = useValidationError(ValidationFieldNames.OPPGAVE);
+const EditableGosysOppgaver = () => {
+  const params = useParams();
+  const { data: gosysOppgaver, isLoading } = useGetGosysOppgaverQuery(params);
+  const error = useValidationError(ValidationFieldNames.GOSYS_OPPGAVE);
 
-  if (oppgaverParams === skipToken) {
+  if (params === skipToken) {
     return null;
   }
 
   if (isLoading) {
-    return <LoadingOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
+    return <LoadingGosysOppgaver header={<Header />} tableHeaders={<TableHeaders />} />;
   }
 
-  if (oppgaver === undefined || oppgaver.length === 0) {
+  if (gosysOppgaver === undefined || gosysOppgaver.length === 0) {
     return (
       <Card>
         <Header />
@@ -93,13 +98,13 @@ const EditableOppgaver = () => {
     <Card>
       <Header />
 
-      <ValidationErrorMessage error={error} id={ValidationFieldNames.OPPGAVE} />
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.GOSYS_OPPGAVE} />
 
       <Table size="small" zebraStripes aria-label="Gosys-oppgaver">
         <TableHeaders />
         <Table.Body>
-          {oppgaver.map((oppgave) => (
-            <Row key={oppgave.id} {...oppgave} />
+          {gosysOppgaver.map((gosysOppgave) => (
+            <Row key={gosysOppgave.id} {...gosysOppgave} />
           ))}
         </Table.Body>
       </Table>
@@ -144,6 +149,18 @@ const ErrorMessage = () => {
         <BodyLong>
           Ingen Gosys-oppgaver funnet. Ankesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker
           denne oppgaven til å gi beskjed til vedtaksinstans når ankebehandling er fullført.
+        </BodyLong>
+        <Contact />
+      </StyledAlert>
+    );
+  }
+
+  if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
+    return (
+      <StyledAlert variant="warning" size="small">
+        <BodyLong>
+          Ingen Gosys-oppgaver funnet. Omgjøringskravet har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal
+          bruker denne oppgaven til å gi beskjed til vedtaksinstans når omgjøringskravet er behandlet.
         </BodyLong>
         <Contact />
       </StyledAlert>

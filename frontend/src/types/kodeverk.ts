@@ -18,3 +18,7 @@ export interface IYtelserLatest extends IKodeverkSimpleValue<string> {
   klageenheter: IKodeverkSimpleValue[];
   innsendingshjemler: IKodeverkValue[];
 }
+
+export interface IFagsystem extends IKodeverkValue {
+  modernized: boolean;
+}

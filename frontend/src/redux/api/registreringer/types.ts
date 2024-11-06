@@ -1,6 +1,6 @@
 import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IAddress, IPart, RegistreringType } from '@app/types/common';
-import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IKlagemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
 import type { HandlingEnum } from '@app/types/receiver';
 
 export interface Mulighet {
@@ -26,6 +26,7 @@ export interface BaseRegistrering {
   createdBy: string;
   klagemuligheter: IKlagemulighet[];
   ankemuligheter: IAnkemulighet[];
+  omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
 }
 
 export interface DraftRegistrering extends BaseRegistrering {
@@ -80,8 +81,7 @@ export interface Overstyringer {
   avsender: IPart | null;
   /** NAV ident */
   saksbehandlerIdent: string | null;
-  /** Gosys-oppgave */
-  oppgaveId: number | null;
+  gosysOppgaveId: number | null;
 }
 
 export interface Svarbrev {

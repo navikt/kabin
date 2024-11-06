@@ -1,5 +1,5 @@
 import { KODEVERK_BASE_QUERY } from '@app/redux/api/common';
-import type { IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
+import type { IFagsystem, IKodeverkSimpleValue, IKodeverkValue, IYtelserLatest } from '@app/types/kodeverk';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const kodeverkApi = createApi({
@@ -21,7 +21,7 @@ export const kodeverkApi = createApi({
     getKlageenheter: builder.query<IKodeverkSimpleValue[], void>({
       query: () => '/klageenheter',
     }),
-    getFagsystemer: builder.query<IKodeverkValue[], void>({
+    getFagsystemer: builder.query<IFagsystem[], void>({
       query: () => '/fagsystemer',
     }),
     getHjemlerMap: builder.query<Record<string, string>, void>({
