@@ -7,7 +7,7 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet } from '@app/types/mulighet';
+import type { IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
 
@@ -15,21 +15,21 @@ interface Props {
   onClick: () => void;
 }
 
-export const SelectedAnkemulighet = ({ onClick }: Props) => {
+export const SelectedOmgjøringskravmulighet = ({ onClick }: Props) => {
   const { typeId, mulighet } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV || mulighet === undefined) {
     return null;
   }
 
-  return <RenderAnkemulighet mulighet={mulighet} onClick={onClick} />;
+  return <RenderOmgjøringskravmulighet mulighet={mulighet} onClick={onClick} />;
 };
 
 interface RenderProps extends Props {
-  mulighet: IAnkemulighet;
+  mulighet: IOmgjøringskravmulighet;
 }
 
-const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => (
+const RenderOmgjøringskravmulighet = ({ mulighet, onClick }: RenderProps) => (
   <Card>
     <Header>
       <Heading size="small" level="1">
@@ -37,17 +37,17 @@ const RenderAnkemulighet = ({ mulighet, onClick }: RenderProps) => (
       </Heading>
       <Button
         size="small"
-        title="Vis alle ankemuligheter"
+        title="Vis alle omgjøringskravmuligheter"
         onClick={onClick}
         icon={<ChevronDownIcon aria-hidden />}
         variant="tertiary-neutral"
       />
     </Header>
-    <SelectedAnkemulighetBody {...mulighet} />
+    <SelectedOmgjøringskravmulighetBody {...mulighet} />
   </Card>
 );
 
-export const SelectedAnkemulighetBody = (mulighet: IAnkemulighet) => {
+export const SelectedOmgjøringskravmulighetBody = (mulighet: IOmgjøringskravmulighet) => {
   const { ytelseId, vedtakDate, fagsakId, originalFagsystemId, typeId, temaId, sourceOfExistingBehandlinger } =
     mulighet;
 

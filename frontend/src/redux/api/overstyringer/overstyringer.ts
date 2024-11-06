@@ -1,10 +1,10 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import type {
   SetBehandlingstidParams,
+  SetGosysOppgaveIdParams,
   SetHjemmelIdListParams,
   SetMottattKlageinstansParams,
   SetMottattVedtaksintansParams,
-  SetOppgaveIdParams,
   SetSaksbehandlerIdentParams,
   SetYtelseParams,
 } from '@app/redux/api/overstyringer/param-types';
@@ -12,11 +12,11 @@ import type {
   SetAvsenderResponse,
   SetBehandlingstidResponse,
   SetFullmektigResponse,
+  SetGosysOppgaveIdResponse,
   SetHjemmelIdListResponse,
   SetKlagerResponse,
   SetMottattKlageinstansResponse,
   SetMottattVedtaksintansResponse,
-  SetOppgaveIdResponse,
   SetSaksbehandlerIdentResponse,
   SetYtelseResponse,
 } from '@app/redux/api/overstyringer/response-types';
@@ -254,14 +254,17 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setOppgaveId: builder.mutation<SetOppgaveIdResponse, SetOppgaveIdParams>({
+    setOppgaveId: builder.mutation<SetGosysOppgaveIdResponse, SetGosysOppgaveIdParams>({
       query: ({ id, ...body }) => ({
-        url: `/registreringer/${id}/overstyringer/oppgave-id`,
+        url: `/registreringer/${id}/overstyringer/gosys-oppgave-id`,
         method: 'PUT',
         body,
       }),
-      onQueryStarted: async ({ id, oppgaveId }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => ({ ...draft, overstyringer: { ...draft.overstyringer, oppgaveId } }));
+      onQueryStarted: async ({ id, gosysOppgaveId }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, gosysOppgaveId },
+        }));
 
         try {
           const { data } = await queryFulfilled;

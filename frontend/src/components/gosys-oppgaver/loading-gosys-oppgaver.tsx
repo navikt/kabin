@@ -6,7 +6,7 @@ interface Props {
   tableHeaders?: React.ReactNode;
 }
 
-export const LoadingOppgaver = ({ header, tableHeaders }: Props) => (
+export const LoadingGosysOppgaver = ({ header, tableHeaders }: Props) => (
   <Card>
     {header}
     <Table size="small">

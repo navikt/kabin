@@ -1,6 +1,6 @@
-import { useParams } from '@app/components/oppgaver/hooks';
+import { useParams } from '@app/components/gosys-oppgaver/hooks';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useGetOppgaverQuery } from '@app/redux/api/oppgaver';
+import { useGetGosysOppgaverQuery } from '@app/redux/api/oppgaver';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
@@ -12,7 +12,7 @@ export const Header = () => {
   const { id, typeId, overstyringer } = useRegistrering();
   const [setOppgaveId] = useSetOppgaveIdMutation();
   const oppgaverParams = useParams();
-  const { refetch, isLoading } = useGetOppgaverQuery(oppgaverParams);
+  const { refetch, isLoading } = useGetGosysOppgaverQuery(oppgaverParams);
 
   if (oppgaverParams === skipToken) {
     return null;
@@ -21,12 +21,12 @@ export const Header = () => {
   const onRefresh = async () => {
     const { data: oppgaver } = await refetch();
 
-    if (oppgaver === undefined || oppgaver.some((o) => o.id === overstyringer.oppgaveId)) {
+    if (oppgaver === undefined || oppgaver.some((o) => o.id === overstyringer.gosysOppgaveId)) {
       return;
     }
 
     // If selected oppgaveId is not in the list of oppgaver, reset oppgaveId.
-    setOppgaveId({ id, oppgaveId: null });
+    setOppgaveId({ id, gosysOppgaveId: null });
   };
 
   return (

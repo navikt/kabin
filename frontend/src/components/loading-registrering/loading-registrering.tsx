@@ -1,7 +1,7 @@
 import { Card, CardFullHeight, CardMedium, CardSmall } from '@app/components/card/card';
 import { LoadingDocuments } from '@app/components/documents/loading-documents';
+import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
-import { LoadingOppgaver } from '@app/components/oppgaver/loading-oppgaver';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { LeftColumn, RightColumn, StyledMain } from '@app/pages/registrering/styled-components';
 import { FileTextIcon } from '@navikt/aksel-icons';
@@ -56,7 +56,7 @@ export const LoadingRegistrering = () => (
         <LoadingKlagemuligheter />
       </CardSmall>
 
-      <LoadingOppgaver />
+      <LoadingGosysOppgaver />
 
       <LoadingOverstyringer />
 

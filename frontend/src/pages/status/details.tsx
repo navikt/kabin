@@ -6,13 +6,46 @@ import { Mulighet } from '@app/pages/status/mulighet';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkestatus, IKlagestatus } from '@app/types/status';
+import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { parseISO } from 'date-fns';
 
 interface Props {
   id: string;
-  status: IAnkestatus | IKlagestatus;
+  status: IAnkestatus | IKlagestatus | IOmgjøringskravstatus;
 }
+
+const getJournalpostTitle = (typeId: SaksTypeEnum) => {
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
+      return 'Valgt journalpost';
+    case SaksTypeEnum.ANKE:
+      return 'Journalført anke';
+    default:
+      return 'Journalført omgjøringskrav';
+  }
+};
+
+const getKlagerTitle = (typeId: SaksTypeEnum) => {
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
+      return 'Klager';
+    case SaksTypeEnum.ANKE:
+      return 'Ankende part';
+    default:
+      return 'Den som krever omgjøring';
+  }
+};
+
+const getMulighetTitle = (typeId: SaksTypeEnum) => {
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
+      return 'Valgt klagevedtak';
+    case SaksTypeEnum.ANKE:
+      return 'Valgt ankevedtak';
+    default:
+      return 'Valgt vedtak';
+  }
+};
 
 export const StatusDetails = ({ id, status }: Props) => {
   const {
@@ -33,12 +66,9 @@ export const StatusDetails = ({ id, status }: Props) => {
     varsletFristUnits,
     varsletFristUnitTypeId,
   } = status;
-
-  const isKlage = typeId === SaksTypeEnum.KLAGE;
-
-  const journalpostTitle = isKlage ? 'Valgt journalpost' : 'Journalført anke';
-  const klagerTitle = isKlage ? 'Klager' : 'Ankende part';
-  const mulighetTitle = isKlage ? 'Valgt klagevedtak' : 'Valgt vedtak';
+  const journalpostTitle = getJournalpostTitle(typeId);
+  const klagerTitle = getKlagerTitle(typeId);
+  const mulighetTitle = getMulighetTitle(typeId);
 
   const mottattKlageinstansDate = parseISO(mottattKlageinstans);
 
@@ -47,7 +77,9 @@ export const StatusDetails = ({ id, status }: Props) => {
       <Journalpost title={journalpostTitle} journalpost={journalpost} />
 
       <StyledCard title="Saksinfo" $gridArea="case" titleSize="medium">
-        {isKlage ? <DateInfoItem label="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} /> : null}
+        {typeId === SaksTypeEnum.KLAGE ? (
+          <DateInfoItem label="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} />
+        ) : null}
         <DateInfoItem label="Mottatt NAV Klageinstans" date={mottattKlageinstans} />
         <DateInfoItem label="Frist" date={frist}>
           {getDifference(mottattKlageinstansDate, parseISO(frist))}

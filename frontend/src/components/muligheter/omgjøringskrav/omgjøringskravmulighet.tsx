@@ -9,38 +9,38 @@ import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
-import type { IAnkemulighet } from '@app/types/mulighet';
+import { useSetOmgjøringskravmulighetMutation } from '@app/redux/api/registreringer/mutations';
+import type { IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { Table, Tag } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 
 interface Props {
-  ankemulighet: IAnkemulighet;
+  omgjøringskravmulighet: IOmgjøringskravmulighet;
 }
 
-export const Ankemulighet = ({ ankemulighet }: Props) => {
+export const Omgjøringskravmulighet = ({ omgjøringskravmulighet }: Props) => {
   const { id, mulighet } = useRegistrering();
   const { journalpost } = useJournalpost();
-  const [setAnkemulighet, { isLoading }] = useSetAnkemulighetMutation();
-  const temaName = useFullTemaNameFromId(ankemulighet.temaId);
-  const fagsystemName = useFagsystemName(ankemulighet.originalFagsystemId);
+  const [setOmgjøringskravmulighet, { isLoading }] = useSetOmgjøringskravmulighetMutation();
+  const temaName = useFullTemaNameFromId(omgjøringskravmulighet.temaId);
+  const fagsystemName = useFagsystemName(omgjøringskravmulighet.originalFagsystemId);
   const canEdit = useCanEdit();
 
-  const isSelected = mulighet?.id === ankemulighet.id;
+  const isSelected = mulighet?.id === omgjøringskravmulighet.id;
 
   const isValid = useMemo(() => {
     if (journalpost === undefined) {
       return false;
     }
 
-    if (ankemulighet.vedtakDate === null) {
+    if (omgjøringskravmulighet.vedtakDate === null) {
       return true;
     }
 
-    return !isDateAfter(ankemulighet.vedtakDate, journalpost.datoOpprettet);
-  }, [journalpost, ankemulighet.vedtakDate]);
+    return !isDateAfter(omgjøringskravmulighet.vedtakDate, journalpost.datoOpprettet);
+  }, [journalpost, omgjøringskravmulighet.vedtakDate]);
 
-  const selectAnke = useCallback(
+  const selectOmgjøringskrav = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
@@ -48,36 +48,36 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
         return;
       }
 
-      if (mulighet === null || mulighet?.id !== ankemulighet.id) {
-        setAnkemulighet({ id, mulighet: ankemulighet });
+      if (mulighet === null || mulighet?.id !== omgjøringskravmulighet.id) {
+        setOmgjøringskravmulighet({ id, mulighet: omgjøringskravmulighet });
       }
     },
-    [isValid, mulighet, ankemulighet, setAnkemulighet, id],
+    [isValid, mulighet, omgjøringskravmulighet, setOmgjøringskravmulighet, id],
   );
 
-  const usedCount = ankemulighet.sourceOfExistingBehandlinger.length;
+  const usedCount = omgjøringskravmulighet.sourceOfExistingBehandlinger.length;
 
   return (
     <StyledTableRow
       selected={isSelected}
-      onClick={selectAnke}
+      onClick={selectOmgjøringskrav}
       $isValid={isValid}
       $isSelected={isSelected}
       $clickable={canEdit}
     >
       <Table.DataCell>
-        <TypeName typeId={ankemulighet.typeId} />
+        <TypeName typeId={omgjøringskravmulighet.typeId} />
       </Table.DataCell>
-      <Table.DataCell>{ankemulighet.fagsakId}</Table.DataCell>
+      <Table.DataCell>{omgjøringskravmulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>
         <Tag variant="alt3" size="small">
           {temaName}
         </Tag>
       </Table.DataCell>
       <Table.DataCell>
-        <YtelseTag ytelseId={ankemulighet.ytelseId} />
+        <YtelseTag ytelseId={omgjøringskravmulighet.ytelseId} />
       </Table.DataCell>
-      <Table.DataCell>{isoDateToPretty(ankemulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
+      <Table.DataCell>{isoDateToPretty(omgjøringskravmulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <Table.DataCell>
         <UsedCount usedCount={usedCount} />
@@ -85,10 +85,10 @@ export const Ankemulighet = ({ ankemulighet }: Props) => {
       <StyledButtonCell>
         <SelectMulighet
           isSelected={isSelected}
-          select={selectAnke}
+          select={selectOmgjøringskrav}
           isValid={isValid}
           isLoading={isLoading}
-          mulighetId={ankemulighet.id}
+          mulighetId={omgjøringskravmulighet.id}
         />
       </StyledButtonCell>
     </StyledTableRow>

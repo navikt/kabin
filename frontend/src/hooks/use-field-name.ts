@@ -16,8 +16,9 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
   [ValidationFieldNames.MULIGHET]: 'Mulighet',
   [ValidationFieldNames.ENHET]: 'Enhet',
   [ValidationFieldNames.VEDTAK]: 'Vedtak',
-  [ValidationFieldNames.OPPGAVE]: 'Gosys-oppgave',
   [ValidationFieldNames.SVARBREV_INPUT]: 'Svarbrev',
+  [ValidationFieldNames.GOSYS_OPPGAVE]: 'Oppgave i Gosys',
+  [ValidationFieldNames.SVARBREV_RECEIVERS]: 'Mottakere av svarbrev',
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {

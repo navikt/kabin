@@ -1,5 +1,5 @@
 import { KABIN_API_BASE_QUERY } from '@app/redux/api/common';
-import type { IAnkestatus, IKlagestatus } from '@app/types/status';
+import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const statusApi = createApi({
@@ -7,12 +7,16 @@ export const statusApi = createApi({
   baseQuery: KABIN_API_BASE_QUERY,
   endpoints: (builder) => ({
     getKlageStatus: builder.query<IKlagestatus, string>({
-      query: (id) => `/klager/${id}/status`,
+      query: (id) => `/behandlinger/${id}/status`,
     }),
     getAnkeStatus: builder.query<IAnkestatus, string>({
-      query: (id) => `/anker/${id}/status`,
+      query: (id) => `/behandlinger/${id}/status`,
+    }),
+    getOmgjøringskravStatus: builder.query<IOmgjøringskravstatus, string>({
+      query: (id) => `/behandlinger/${id}/status`,
     }),
   }),
 });
 
-export const { useGetKlageStatusQuery, useGetAnkeStatusQuery, usePrefetch } = statusApi;
+export const { useGetKlageStatusQuery, useGetAnkeStatusQuery, useGetOmgjøringskravStatusQuery, usePrefetch } =
+  statusApi;

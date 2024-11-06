@@ -2,7 +2,7 @@ import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
-import { SaksTypeEnum } from '@app/types/common';
+import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import { HouseIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { styled } from 'styled-components';
 interface StatusHeadingProps {
   headingText: string;
   alertText: string;
-  type: SaksTypeEnum;
+  type: RegistreringType;
   behandlingId: string;
   registreringId: string;
 }
@@ -44,11 +44,7 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
         Åpne Kabal søk
       </ExternalLinkButton>
 
-      <ExternalLinkButton
-        href={`${KABAL_URL}/${type === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
-        variant="secondary"
-        size="small"
-      >
+      <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary" size="small">
         Åpne behandling i Kabal
       </ExternalLinkButton>
 
@@ -56,6 +52,17 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
     </Buttons>
   </Container>
 );
+
+const getKabalUrl = (type: RegistreringType, behandlingId: string) => {
+  switch (type) {
+    case SaksTypeEnum.KLAGE:
+      return `${KABAL_URL}/klagebehandling/${behandlingId}`;
+    case SaksTypeEnum.ANKE:
+      return `${KABAL_URL}/ankebehandling/${behandlingId}`;
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return `${KABAL_URL}/omgjøringskravbehandling/${behandlingId}`;
+  }
+};
 
 const Container = styled.div`
   display: flex;

@@ -29,7 +29,7 @@ export interface SetSaksbehandlerIdentParams {
   saksbehandlerIdent: string | null;
 }
 
-export interface SetOppgaveIdParams {
+export interface SetGosysOppgaveIdParams {
   id: string;
-  oppgaveId: number | null;
+  gosysOppgaveId: number | null;
 }

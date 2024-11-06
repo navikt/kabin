@@ -1,6 +1,6 @@
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { kodeverkApi } from '@app/redux/api/kodeverk';
-import { oppgaverApi } from '@app/redux/api/oppgaver';
+import { gosysOppgaverApi } from '@app/redux/api/oppgaver';
 import { partApi } from '@app/redux/api/part';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { saksbehandlereApi } from '@app/redux/api/saksbehandlere';
@@ -22,7 +22,7 @@ export const reduxStore = configureStore({
       arkiverteDokumenterApi.middleware,
       partApi.middleware,
       svarbrevSettingsApi.middleware,
-      oppgaverApi.middleware,
+      gosysOppgaverApi.middleware,
       saksbehandlereApi.middleware,
       kodeverkApi.middleware,
       statusApi.middleware,

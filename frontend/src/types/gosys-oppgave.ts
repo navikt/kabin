@@ -1,4 +1,4 @@
-export interface IOppgave {
+export interface IGosysOppgave {
   id: number;
   temaId: string;
   tildeltEnhetsnr: string | null;
