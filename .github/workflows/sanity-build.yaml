@@ -14,15 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
           
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: |
           cd ${{ matrix.apps }}
-          bun install
+          bun install --frozen-lockfile
           
       - name: Restore caches for ${{ matrix.apps }}
         uses: actions/cache/restore@v3
@@ -41,7 +43,7 @@ jobs:
         shell: bash
         run: |
           cd ${{ matrix.apps }}
-          npm run lint
+          bun run lint
     
       - name: Test ${{ matrix.apps }}
         shell: bash

@@ -17,6 +17,9 @@ on:
       NAIS_WORKLOAD_IDENTITY_PROVIDER:
         description: "Identity provider for nais/docker-build-push"
         required: true
+      READER_TOKEN:
+        description: "Token for reading from GitHub Package Registry"
+        required: true
   workflow_dispatch:
     inputs:
       run_e2e:
@@ -47,15 +50,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       
       - name: Install frontend dependencies
         shell: bash
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: |
           cd frontend
-          bun install
+          bun install --frozen-lockfile
 
       - name: Build frontend
         shell: bash
@@ -73,9 +78,11 @@ jobs:
       
       - name: Install server dependencies
         shell: bash
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: |
           cd server
-          bun install
+          bun install --frozen-lockfile
       
       - name: Test server
         shell: bash
