@@ -21,7 +21,7 @@ export const OmgjøringskravStatusPage = ({ registrering }: Props) => {
     <StyledMain>
       <StatusHeading
         alertText={`Omgjøringskravet ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(finished)}.`}
-        headingText="Omgjøringskravet opprettet"
+        headingText="Omgjøringskrav opprettet"
         type={typeId}
         behandlingId={behandlingId}
         registreringId={id}
