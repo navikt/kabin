@@ -30,11 +30,9 @@ export const EditMottattKlageinstans = () => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
     case SaksTypeEnum.ANKE:
       return <FromVedtakToJournalpost />;
-    case null:
-      return <RenderEditMottattNav />;
-    default:
-      return null;
   }
+
+  return null;
 };
 
 const FromJournalpostToNow = () => {
