@@ -26,15 +26,18 @@ export const EditMottattKlageinstans = () => {
 
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
-      return <Klage />;
+      return <FromJournalpostToNow />;
+    case SaksTypeEnum.OMGJØRINGSKRAV:
     case SaksTypeEnum.ANKE:
-      return <Anke />;
+      return <FromVedtakToJournalpost />;
     case null:
       return <RenderEditMottattNAV />;
+    default:
+      return null;
   }
 };
 
-const Klage = () => {
+const FromJournalpostToNow = () => {
   const { overstyringer } = useRegistrering();
   const { journalpost } = useJournalpost();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
@@ -52,7 +55,7 @@ const Klage = () => {
   return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
-const Anke = () => {
+const FromVedtakToJournalpost = () => {
   const { overstyringer } = useRegistrering();
   const { journalpost } = useJournalpost();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
