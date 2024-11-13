@@ -31,7 +31,7 @@ export const EditMottattKlageinstans = () => {
     case SaksTypeEnum.ANKE:
       return <FromVedtakToJournalpost />;
     case null:
-      return <RenderEditMottattNAV />;
+      return <RenderEditMottattNav />;
     default:
       return null;
   }
@@ -52,7 +52,7 @@ const FromJournalpostToNow = () => {
     return now;
   }, []);
 
-  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+  return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
 const FromVedtakToJournalpost = () => {
@@ -67,7 +67,7 @@ const FromVedtakToJournalpost = () => {
   const toDate =
     journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
-  return <RenderEditMottattNAV value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+  return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
 const getSelectedDate = (mottattKlageinstans: string | null) =>
@@ -79,7 +79,7 @@ interface Props {
   fromDate?: Date;
 }
 
-const RenderEditMottattNAV = ({ value, toDate, fromDate }: Props) => {
+const RenderEditMottattNav = ({ value, toDate, fromDate }: Props) => {
   const { id } = useRegistrering();
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
   const error = useValidationError(ID);

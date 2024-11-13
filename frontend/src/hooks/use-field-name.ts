@@ -3,7 +3,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNames.KLAGER>, string> = {
-  [ValidationFieldNames.MOTTATT_KLAGEINSTANS]: 'Mottatt Klageinstans',
+  [ValidationFieldNames.MOTTATT_KLAGEINSTANS]: 'Mottatt klageinstans',
   [ValidationFieldNames.MOTTATT_VEDTAKSINSTANS]: 'Mottatt vedtaksinstans',
   [ValidationFieldNames.FRIST]: 'Frist',
   [ValidationFieldNames.AVSENDER]: 'Avsender',

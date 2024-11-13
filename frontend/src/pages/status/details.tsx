@@ -80,7 +80,7 @@ export const StatusDetails = ({ id, status }: Props) => {
         {typeId === SaksTypeEnum.KLAGE ? (
           <DateInfoItem label="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} />
         ) : null}
-        <DateInfoItem label="Mottatt NAV Klageinstans" date={mottattKlageinstans} />
+        <DateInfoItem label="Mottatt Nav klageinstans" date={mottattKlageinstans} />
         <DateInfoItem label="Frist" date={frist}>
           {getDifference(mottattKlageinstansDate, parseISO(frist))}
         </DateInfoItem>

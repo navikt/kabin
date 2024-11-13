@@ -16,5 +16,5 @@ export const MottattDateError = () => {
     return null;
   }
 
-  return <ErrorMessage size="small">Mottatt vedtaksinstans kan ikke være etter mottatt Klageinstans</ErrorMessage>;
+  return <ErrorMessage size="small">Mottatt vedtaksinstans kan ikke være etter mottatt klageinstans</ErrorMessage>;
 };

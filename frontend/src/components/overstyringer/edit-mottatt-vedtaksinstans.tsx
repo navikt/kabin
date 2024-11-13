@@ -29,7 +29,7 @@ export const EditMottattVedtaksinstans = () => {
     return <ReadOnlyTime id={ID} label={LABEL} value={mottattVedtaksinstans} />;
   }
 
-  return <RenderEditMottattNAV value={mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />;
+  return <RenderEditMottattNav value={mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />;
 };
 
 interface Props {
@@ -37,7 +37,7 @@ interface Props {
   toDate: string | null;
 }
 
-const RenderEditMottattNAV = ({ toDate }: Props) => {
+const RenderEditMottattNav = ({ toDate }: Props) => {
   const error = useValidationError(ID);
   const registrering = useRegistrering();
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
