@@ -79,7 +79,7 @@ export interface Overstyringer {
   fullmektig: IPart | null;
   klager: IPart | null;
   avsender: IPart | null;
-  /** NAV ident */
+  /** Nav ident */
   saksbehandlerIdent: string | null;
   gosysOppgaveId: number | null;
 }
