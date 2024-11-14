@@ -1,5 +1,6 @@
 ingresses:
   - https://kabin.intern.nav.no
+  - https://kabin.ansatt.nav.no
 tenant: nav.no
 roles:
   - 1c006e8b-c667-4622-9df7-43ed2fd494d6 # KABAL_OPPGAVESTYRING_ALLE_ENHETER
