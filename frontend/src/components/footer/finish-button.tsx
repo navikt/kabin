@@ -49,7 +49,8 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
 
   const text = getText(typeId, svarbrev?.send === true);
 
-  const disabled = journalpostId === null || mulighet === null || sakenGjelderValue === null;
+  const error = journalpostId === null || mulighet === null || sakenGjelderValue === null;
+  const disabled = error || isLoading;
 
   return (
     <StyledConfirm ref={ref}>
@@ -57,7 +58,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
         <BodyShort size="small" spacing>
           {text}
         </BodyShort>
-        {disabled ? (
+        {error ? (
           <ErrorSummary size="small" heading="Følgende må fylles ut først">
             {sakenGjelderValue === null ? (
               <ErrorSummary.Item href="#sakengjelder">Du må velge en person.</ErrorSummary.Item>
