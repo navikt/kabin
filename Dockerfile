@@ -12,5 +12,5 @@ WORKDIR /usr/src/app/server
 ARG VERSION
 ENV VERSION=$VERSION
 
-CMD npm run prod
+CMD ["npm", "run", "prod"]
 EXPOSE 8080
