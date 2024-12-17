@@ -14,6 +14,7 @@ export enum GridArea {
 }
 
 const gridTemplateAreas = [
+  GridArea.EXPAND,
   GridArea.TITLE,
   GridArea.TEMA,
   GridArea.DATE,
@@ -27,7 +28,7 @@ const gridTemplateAreas = [
 export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   display: grid;
   grid-template-rows: min-content min-content;
-  grid-template-columns: minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
+  grid-template-columns: 32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
   grid-template-areas:
     '${gridTemplateAreas.join(' ')}'
     '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}';

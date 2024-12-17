@@ -1,7 +1,7 @@
 import { AttachmentList } from '@app/components/documents/document/attachment-list';
 import { AvsenderMottakerNotatforer } from '@app/components/documents/document/avsender-mottaker-notatforer';
 import { DocumentTitle } from '@app/components/documents/document/document-title';
-import { StyledExpandButton } from '@app/components/documents/document/expand-button';
+import { ExpandButton } from '@app/components/documents/document/expand-button';
 import { SelectDocumentButton } from '@app/components/documents/document/select-document-button';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
@@ -11,14 +11,15 @@ import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
   dokument: IArkivertDocument;
+  isExpanded: boolean;
+  toggleExpanded: () => void;
 }
 
-export const Dokument = ({ dokument }: Props) => {
+export const Dokument = ({ dokument, isExpanded, toggleExpanded }: Props) => {
   const registrering = useRegistrering();
   const {
     dokumentInfoId,
@@ -44,7 +45,6 @@ export const Dokument = ({ dokument }: Props) => {
 
   const hasVedlegg = dokument.vedlegg.length !== 0 || dokument.logiskeVedlegg.length !== 0;
   const canExpand = hasVedlegg || harTilgangTilArkivvariant;
-  const [isExpanded, setIsExpanded] = useState(hasVedlegg);
 
   const title = tittel ?? '';
 
@@ -59,8 +59,8 @@ export const Dokument = ({ dokument }: Props) => {
         $showViewed={isViewed && !isSelected}
         onMouseDown={viewDocument}
       >
+        {canExpand ? <ExpandButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} /> : null}
         <TitleContainer aria-label="Dokumenttittel">
-          {canExpand ? <StyledExpandButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} /> : null}
           <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={title} />
         </TitleContainer>
         <GridTag variant="alt3" size="small" title={temaName} $gridArea={GridArea.TEMA}>
@@ -118,10 +118,10 @@ const Ellipsis = styled.span`
 const StyledDate = styled.time`
   display: flex;
   align-items: center;
+  grid-area: ${GridArea.DATE};
 `;
 
 const TitleContainer = styled.div`
   grid-area: ${GridArea.TITLE};
   position: relative;
-  padding-left: 32px;
 `;

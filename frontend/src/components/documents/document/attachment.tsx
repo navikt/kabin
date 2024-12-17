@@ -51,7 +51,7 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
 const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   display: grid;
   position: relative;
-  padding-left: 36px;
+  padding-left: 48px;
   grid-template-columns: max-content 1fr 30px 55px;
   grid-template-areas: 'title logiske-vedlegg view select';
   column-gap: 8px;
@@ -66,7 +66,7 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
     display: block;
     position: absolute;
     border-bottom: 1px solid #c6c2bf;
-    width: 18px;
+    width: 40px;
     left: 0;
     top: 15px;
   }

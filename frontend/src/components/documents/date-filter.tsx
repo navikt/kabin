@@ -1,3 +1,4 @@
+import { GridArea } from '@app/components/documents/styled-grid-components';
 import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { DateRange } from '@app/types/common';
@@ -87,6 +88,7 @@ const Time = ({ date }: TimeProps) => <time dateTime={formatISO(date)}>{format(d
 
 const Container = styled.div`
   position: relative;
+  grid-area: ${GridArea.DATE};
 `;
 
 const DatepickerContainer = styled.div`
