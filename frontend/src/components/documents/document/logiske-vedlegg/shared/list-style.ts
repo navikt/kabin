@@ -16,7 +16,7 @@ export const LogiskeVedleggList = styled.ul<StyleProps>`
   gap: ${GAP};
   flex-wrap: wrap;
   padding-right: ${({ $inset }) => ($inset === true ? '8px' : '0')};
-  padding-left: ${({ $inset }) => ($inset === true ? '32px' : '0')};
+  padding-left: ${({ $inset }) => ($inset === true ? '60px' : '0')};
   padding-bottom: ${({ $inset }) => ($inset === true ? '4px' : '0')};
   align-items: center;
   width: fit-content;

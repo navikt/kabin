@@ -3,8 +3,15 @@ import { Dokument } from '@app/components/documents/document/document';
 import { useFilteredDocuments } from '@app/components/documents/filter-helpers';
 import type { DateRange } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+
+const getExpandedRecords = (dokumenter: IArkivertDocument[], expanded: boolean) =>
+  dokumenter.reduce<Record<string, boolean>>((acc, d) => {
+    acc[`${d.journalpostId}-${d.dokumentInfoId}`] = (d.vedlegg.length > 0 || d.logiskeVedlegg.length > 0) && expanded;
+
+    return acc;
+  }, {});
 
 interface Props {
   dokumenter: IArkivertDocument[];
@@ -17,6 +24,8 @@ export const DocumentTable = ({ dokumenter }: Props) => {
   const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
   const [selectedSaksIds, setSelectedSaksIds] = useState<string[]>([]);
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(undefined);
+  const [expanded, setExpanded] = useState(getExpandedRecords(dokumenter, true));
+  const someExpanded = useMemo(() => Object.values(expanded).some((e) => e), [expanded]);
 
   const filteredDokumenter = useFilteredDocuments(
     dokumenter,
@@ -44,11 +53,22 @@ export const DocumentTable = ({ dokumenter }: Props) => {
         selectedDateRange={selectedDateRange}
         setSelectedDateRange={setSelectedDateRange}
         documents={dokumenter}
+        someExpanded={someExpanded}
+        toggleExpandAll={() => setExpanded(getExpandedRecords(dokumenter, !someExpanded))}
       />
       <StyledList>
-        {filteredDokumenter.map((d) => (
-          <Dokument key={`${d.journalpostId}-${d.dokumentInfoId}`} dokument={d} />
-        ))}
+        {filteredDokumenter.map((d) => {
+          const id = `${d.journalpostId}-${d.dokumentInfoId}`;
+
+          return (
+            <Dokument
+              key={id}
+              dokument={d}
+              isExpanded={expanded[id] === true}
+              toggleExpanded={() => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))}
+            />
+          );
+        })}
       </StyledList>
     </>
   );

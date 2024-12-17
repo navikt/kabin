@@ -5,7 +5,7 @@ import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown'
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import type { DateRange } from '@app/types/common';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathIcon, ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
@@ -32,6 +32,8 @@ interface Props {
   setSelectedSaksIds: (value: string[]) => void;
   selectedDateRange: DateRange | undefined;
   setSelectedDateRange: (range: DateRange | undefined) => void;
+  someExpanded: boolean;
+  toggleExpandAll: () => void;
 }
 
 export const ColumnHeaders = ({
@@ -48,6 +50,8 @@ export const ColumnHeaders = ({
   setSelectedSaksIds,
   setSelectedTemaer,
   setSelectedTypes,
+  someExpanded,
+  toggleExpandAll,
 }: Props) => {
   const { data: allTemaer } = useGetTemaQuery();
 
@@ -98,6 +102,13 @@ export const ColumnHeaders = ({
         Fjern filtere
       </StyledButton>
       <StyledGrid as="section" aria-label="Journalpostfiltere">
+        <Button
+          style={{ gridArea: GridArea.EXPAND }}
+          size="small"
+          variant="tertiary"
+          icon={someExpanded ? <ChevronUpDoubleIcon aria-hidden /> : <ChevronDownDoubleIcon aria-hidden />}
+          onClick={toggleExpandAll}
+        />
         <GridSearch
           $gridArea={GridArea.TITLE}
           label="Tittel/journalpost-ID"
