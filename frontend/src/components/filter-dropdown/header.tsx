@@ -1,7 +1,7 @@
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
-import { type KeyboardEventHandler, useRef } from 'react';
+import { type JSX, type KeyboardEventHandler, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface HeaderProps {

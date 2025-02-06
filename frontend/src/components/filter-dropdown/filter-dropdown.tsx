@@ -4,7 +4,7 @@ import { ToggleButton } from '@app/components/filter-dropdown/toggle-button';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Label } from '@navikt/ds-react';
-import { useId, useRef, useState } from 'react';
+import { type JSX, useId, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {

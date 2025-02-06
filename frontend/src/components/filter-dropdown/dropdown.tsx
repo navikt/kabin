@@ -1,7 +1,7 @@
 import { FilterList } from '@app/components/filter-dropdown/filter-list';
 import { Header } from '@app/components/filter-dropdown/header';
 import type { BaseProps, DropdownProps } from '@app/components/filter-dropdown/props';
-import { useEffect, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
@@ -12,7 +12,7 @@ export const Dropdown = <T extends string>({
   isOpen,
   onChange,
   closeDropdown,
-}: Props<T>): JSX.Element | null => {
+}: Props<T>): JSX.Element => {
   const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
