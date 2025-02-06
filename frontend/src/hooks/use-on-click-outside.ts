@@ -4,7 +4,7 @@ type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
 
 export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   callback: Callback,
-  ref: RefObject<T>,
+  ref: RefObject<T | null>,
   children = false,
 ) =>
   useEffect(() => {

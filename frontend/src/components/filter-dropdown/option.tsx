@@ -1,5 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
-import { useEffect, useRef } from 'react';
+import { type JSX, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface FilterProps<T extends string> {
