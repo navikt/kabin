@@ -59,9 +59,6 @@ spec:
   {{/each}}
   envFrom:
     - secret: slack-url
-  redis:
-    - instance: obo-cache
-      access: readwrite
   valkey:
     - instance: obo-cache-kabin
       access: readwrite
