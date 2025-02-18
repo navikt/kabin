@@ -22,13 +22,13 @@ interface Props {
 }
 
 export const EditVarsletFrist = ({ setting }: Props) => {
-  const registrering = useRegistrering();
+  const { id, typeId, svarbrev } = useRegistrering();
   const [setBehandlingstid] = useSetSvarbrevBehandlingstidMutation();
   const [setOverrideBehandlingstid] = useSetSvarbrevOverrideBehandlingstidMutation();
   const canEdit = useCanEdit();
 
   if (!canEdit) {
-    const { behandlingstid } = registrering.svarbrev;
+    const { behandlingstid } = svarbrev;
     const value =
       behandlingstid === null
         ? null
@@ -37,23 +37,21 @@ export const EditVarsletFrist = ({ setting }: Props) => {
     return <ReadOnlyText label={LABEL} value={value} id={ID} />;
   }
 
-  const { id } = registrering;
-
-  const units = registrering.svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
-  const unitTypeId = registrering.svarbrev.behandlingstid?.unitTypeId ?? setting.behandlingstidUnitTypeId;
+  const units = svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
+  const unitTypeId = svarbrev.behandlingstid?.unitTypeId ?? setting.behandlingstidUnitTypeId;
 
   const setUnits = (u: number) => setBehandlingstid({ id, units: u, unitTypeId });
 
   const setUnitType = (type: BehandlingstidUnitType) => setBehandlingstid({ id, units, unitTypeId: type });
 
-  const disabled = registrering.svarbrev.overrideBehandlingstid === false;
+  const disabled = svarbrev.overrideBehandlingstid === false;
 
   return (
     <Container>
       <TopRow>
         <ToggleGroup
-          value={registrering.svarbrev.overrideBehandlingstid ? 'true' : 'false'}
-          onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true' })}
+          value={svarbrev.overrideBehandlingstid ? 'true' : 'false'}
+          onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true', typeId })}
           size="small"
           label="Frist i svarbrev"
         >

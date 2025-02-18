@@ -1,6 +1,6 @@
 import type { SuggestedReceiver } from '@app/pages/registrering/app-context/types';
 import type { Behandlingstid } from '@app/redux/api/registreringer/types';
-import type { IAddress } from '@app/types/common';
+import type { IAddress, SaksTypeEnum } from '@app/types/common';
 import type { HandlingEnum } from '@app/types/receiver';
 
 export interface SetSendParams {
@@ -45,4 +45,5 @@ export interface SetCustomTextParams {
 export interface SetSvarbrevOverrideBehandlingstidParams {
   id: string;
   overrideBehandlingstid: boolean;
+  typeId: SaksTypeEnum | null;
 }

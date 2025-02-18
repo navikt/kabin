@@ -23,6 +23,7 @@ import type {
   SetSvarbrevTitleResponse,
 } from '@app/redux/api/svarbrev/response-types';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
+import { SaksTypeEnum } from '@app/types/common';
 import { formatISO } from 'date-fns';
 
 export const DEFAULT_SVARBREV_NAME = 'Nav klageinstans orienterer om saksbehandlingen';
@@ -194,12 +195,12 @@ const svarbrevSlice = registreringApi.injectEndpoints({
       SetSvarbrevOverrideBehandlingstidResponse,
       SetSvarbrevOverrideBehandlingstidParams
     >({
-      query: ({ id, ...body }) => ({
+      query: ({ id, overrideBehandlingstid }) => ({
         url: `/registreringer/${id}/svarbrev/override-behandlingstid`,
         method: 'PUT',
-        body,
+        body: { overrideBehandlingstid },
       }),
-      onQueryStarted: async ({ id, overrideBehandlingstid }, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, overrideBehandlingstid, typeId }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => ({
           ...draft,
           svarbrev: {
@@ -207,7 +208,10 @@ const svarbrevSlice = registreringApi.injectEndpoints({
             overrideBehandlingstid,
             behandlingstid: overrideBehandlingstid
               ? draft.svarbrev.behandlingstid
-              : { units: 12, unitTypeId: BehandlingstidUnitType.WEEKS },
+              : {
+                  unitTypeId: BehandlingstidUnitType.WEEKS,
+                  units: getDefaultBehandlingstid(typeId, BehandlingstidUnitType.WEEKS),
+                },
           },
         }));
 
@@ -245,6 +249,14 @@ const svarbrevSlice = registreringApi.injectEndpoints({
     }),
   }),
 });
+
+export const getDefaultBehandlingstid = (typeId: SaksTypeEnum | null, unitType: BehandlingstidUnitType) => {
+  if (unitType === BehandlingstidUnitType.WEEKS) {
+    return typeId === SaksTypeEnum.ANKE ? 11 : 12;
+  }
+
+  return 3;
+};
 
 export const {
   useSetSvarbrevSendMutation,
