@@ -4,6 +4,7 @@ import { Units } from '@app/components/edit-frist/units';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer/overstyringer';
+import { getDefaultBehandlingstid } from '@app/redux/api/svarbrev/svarbrev';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { Heading, Label } from '@navikt/ds-react';
 import { useCallback } from 'react';
@@ -20,7 +21,7 @@ export const EditFrist = () => {
 };
 
 const LoadedEditFrist = () => {
-  const { id, overstyringer } = useRegistrering();
+  const { id, overstyringer, typeId } = useRegistrering();
   const { behandlingstid } = overstyringer;
   const [setBehandlingstid] = useSetBehandlingstidMutation();
   const canEdit = useCanEdit();
@@ -32,12 +33,17 @@ const LoadedEditFrist = () => {
   );
 
   const onUnitTypeChange = useCallback(
-    (unitTypeId: BehandlingstidUnitType) => setBehandlingstid({ id, units: behandlingstid?.units ?? 12, unitTypeId }),
-    [behandlingstid?.units, id, setBehandlingstid],
+    (unitTypeId: BehandlingstidUnitType) =>
+      setBehandlingstid({
+        id,
+        units: behandlingstid?.units ?? getDefaultBehandlingstid(typeId, unitTypeId),
+        unitTypeId,
+      }),
+    [behandlingstid?.units, id, setBehandlingstid, typeId],
   );
 
-  const units = behandlingstid?.units ?? 12;
   const unitType = behandlingstid?.unitTypeId ?? BehandlingstidUnitType.WEEKS;
+  const units = getDefaultBehandlingstid(typeId, unitType);
 
   return (
     <Container aria-labelledby="fristIKabal">
