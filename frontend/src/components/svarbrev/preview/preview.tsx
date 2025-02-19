@@ -58,6 +58,8 @@ const useUrl = () => {
   const { svarbrev, overstyringer } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
 
+  console.log(svarbrev.initialCustomText);
+
   const selectedYtelseId = overstyringer.ytelseId;
   const { mottattKlageinstans, fullmektig, klager } = overstyringer;
 
@@ -89,6 +91,7 @@ const useUrl = () => {
         fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? null),
         title: svarbrev.title ?? DEFAULT_SVARBREV_NAME,
         customText: svarbrev.customText,
+        initialCustomText: svarbrev.initialCustomText,
         typeId,
         klager: klager?.id ?? null,
         sakenGjelder: mulighet.sakenGjelder.id,

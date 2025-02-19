@@ -5,6 +5,8 @@ class PdfManager {
   private cache: Map<string, PdfLoader> = new Map();
 
   public load(params: SvarbrevPreviewInput): PdfLoader {
+    console.log(params);
+
     const cachKey = createCacheKey(params);
     const existing = this.cache.get(cachKey);
 

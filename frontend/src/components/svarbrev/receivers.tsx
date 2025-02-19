@@ -7,7 +7,7 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ValidationFieldNames } from '@app/types/validation';
-import { ErrorMessage } from '@navikt/ds-react';
+import { ErrorMessage, HGrid } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const Receivers = () => {
@@ -26,7 +26,7 @@ export const Receivers = () => {
 
   return (
     <Container>
-      <Content>
+      <HGrid columns={2} gap="2">
         {onlyOneReceiver ? (
           <SingleReceiver receiver={receiver} />
         ) : (
@@ -34,7 +34,7 @@ export const Receivers = () => {
         )}
 
         <CustomReceivers receivers={customReceivers} />
-      </Content>
+      </HGrid>
 
       {error ? <ErrorMessage>{error}</ErrorMessage> : null}
     </Container>

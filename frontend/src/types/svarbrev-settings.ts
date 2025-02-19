@@ -7,6 +7,7 @@ interface BaseSvarbrevSetting {
   behandlingstidUnitTypeId: BehandlingstidUnitType;
   behandlingstidUnits: number;
   customText: string | null;
+  initialCustomText: string | null;
   shouldSend: boolean;
   created: string;
   modifiedBy: ISaksbehandler;
@@ -21,4 +22,8 @@ interface AnkeSvarbrevSetting extends BaseSvarbrevSetting {
   typeId: SaksTypeEnum.ANKE;
 }
 
-export type SvarbrevSetting = KlageSvarbrevSetting | AnkeSvarbrevSetting;
+interface OmgjøringskravSvarbrevSetting extends BaseSvarbrevSetting {
+  typeId: SaksTypeEnum.OMGJØRINGSKRAV;
+}
+
+export type SvarbrevSetting = KlageSvarbrevSetting | AnkeSvarbrevSetting | OmgjøringskravSvarbrevSetting;
