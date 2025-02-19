@@ -7,6 +7,7 @@ interface SvarbrevBase {
   varsletBehandlingstidUnits: number;
   varsletBehandlingstidUnitTypeId: BehandlingstidUnitType;
   customText: string | null;
+  initialCustomText: string | null;
 }
 
 export interface SvarbrevPreviewInput extends SvarbrevBase {
