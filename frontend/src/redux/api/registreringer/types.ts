@@ -94,6 +94,7 @@ export interface Svarbrev {
   title: string; // default DEFAULT_SVARBREV_NAME
   overrideCustomText: boolean;
   customText: string | null;
+  initialCustomText: string | null;
 }
 
 export interface Receiver {

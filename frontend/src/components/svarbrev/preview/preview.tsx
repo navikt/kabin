@@ -89,6 +89,7 @@ const useUrl = () => {
         fullmektigFritekst: defaultString(svarbrev.fullmektigFritekst, fullmektig?.name ?? null),
         title: svarbrev.title ?? DEFAULT_SVARBREV_NAME,
         customText: svarbrev.customText,
+        initialCustomText: svarbrev.initialCustomText,
         typeId,
         klager: klager?.id ?? null,
         sakenGjelder: mulighet.sakenGjelder.id,

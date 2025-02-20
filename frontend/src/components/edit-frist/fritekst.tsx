@@ -3,7 +3,7 @@ import {
   useSetSvarbrevCustomTextMutation,
   useSetSvarbrevOverrideCustomTextMutation,
 } from '@app/redux/api/svarbrev/svarbrev';
-import { TextField, ToggleGroup } from '@navikt/ds-react';
+import { HStack, TextField, ToggleGroup } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -30,12 +30,12 @@ export const Fritekst = () => {
   }, [id, setCustomText, svarbrev.customText, svarbrev.overrideCustomText, value]);
 
   return (
-    <>
+    <HStack gap="2" align="end">
       <ToggleGroup
         value={svarbrev.overrideCustomText ? 'true' : 'false'}
         onChange={(m) => override({ id, overrideCustomText: m === 'true' })}
         size="small"
-        label="Overstyr fritekst"
+        label="Overstyr fritekst om svartid"
       >
         <ToggleGroup.Item value="false" label="Uendret" />
         <ToggleGroup.Item value="true" label="Overstyr" />
@@ -48,7 +48,7 @@ export const Fritekst = () => {
         value={value}
         onChange={({ target }) => setValue(target.value)}
       />
-    </>
+    </HStack>
   );
 };
 

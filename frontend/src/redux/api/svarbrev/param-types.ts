@@ -42,6 +42,11 @@ export interface SetCustomTextParams {
   customText: string;
 }
 
+export interface SetInitialCustomTextParams {
+  id: string;
+  initialCustomText: string;
+}
+
 export interface SetSvarbrevOverrideBehandlingstidParams {
   id: string;
   overrideBehandlingstid: boolean;

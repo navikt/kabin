@@ -1,5 +1,6 @@
 import { Fritekst } from '@app/components/edit-frist/fritekst';
-import { Container, TopRow } from '@app/components/edit-frist/styled-components';
+import { InitialFritekst } from '@app/components/edit-frist/initial-fritekst';
+import { Container } from '@app/components/edit-frist/styled-components';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
 import { Warning } from '@app/components/edit-frist/warning';
@@ -12,7 +13,7 @@ import {
 } from '@app/redux/api/svarbrev/svarbrev';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
-import { ToggleGroup } from '@navikt/ds-react';
+import { HGrid, HStack, ToggleGroup } from '@navikt/ds-react';
 
 const ID = 'svarbrev-frist';
 const LABEL = 'Frist i svarbrev';
@@ -48,23 +49,27 @@ export const EditVarsletFrist = ({ setting }: Props) => {
 
   return (
     <Container>
-      <TopRow>
-        <ToggleGroup
-          value={svarbrev.overrideBehandlingstid ? 'true' : 'false'}
-          onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true', typeId })}
-          size="small"
-          label="Frist i svarbrev"
-        >
-          <ToggleGroup.Item value="false" label="Uendret" />
-          <ToggleGroup.Item value="true" label="Overstyr" />
-        </ToggleGroup>
+      <HGrid columns={2} gap="2">
+        <HStack gap="2" align="end">
+          <ToggleGroup
+            value={svarbrev.overrideBehandlingstid ? 'true' : 'false'}
+            onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true', typeId })}
+            size="small"
+            label="Frist i svarbrev"
+          >
+            <ToggleGroup.Item value="false" label="Uendret" />
+            <ToggleGroup.Item value="true" label="Overstyr" />
+          </ToggleGroup>
 
-        <Units label="Antall" readOnly={disabled} value={units} onChange={setUnits} />
+          <Units label="Antall" readOnly={disabled} value={units} onChange={setUnits} />
 
-        <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />
+          <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />
+        </HStack>
 
-        <Fritekst />
-      </TopRow>
+        <InitialFritekst />
+      </HGrid>
+
+      <Fritekst />
 
       {!disabled ? <Warning units={units} unitTypeId={unitTypeId} /> : null}
     </Container>

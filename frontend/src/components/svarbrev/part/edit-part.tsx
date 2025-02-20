@@ -85,7 +85,6 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
         onKeyDown={onKeyDown}
         autoFocus={autoFocus}
         autoComplete="off"
-        htmlSize={63}
       >
         <Search.Button onClick={onClick} loading={isFetching} />
       </Search>
