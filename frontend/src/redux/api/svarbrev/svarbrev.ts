@@ -6,6 +6,7 @@ import type {
   ChangeReceiverParams,
   RemoveReceiverParams,
   SetCustomTextParams,
+  SetInitialCustomTextParams,
   SetOverrideCustomTextParams,
   SetSendParams,
   SetSvarbrevBehandlingstidParams,
@@ -18,6 +19,7 @@ import type {
   SetSvarbrevBehandlingstidResponse,
   SetSvarbrevCustomTextResponse,
   SetSvarbrevFullmektigFritekst,
+  SetSvarbrevInitialCustomTextResponse,
   SetSvarbrevOverrideBehandlingstidResponse,
   SetSvarbrevSendResponse,
   SetSvarbrevTitleResponse,
@@ -191,6 +193,26 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+    setSvarbrevInitialCustomText: builder.mutation<SetSvarbrevInitialCustomTextResponse, SetInitialCustomTextParams>({
+      query: ({ id, ...body }) => ({
+        url: `/registreringer/${id}/svarbrev/initial-custom-text`,
+        method: 'PUT',
+        body,
+      }),
+      onQueryStarted: async ({ id, initialCustomText }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          svarbrev: { ...draft.svarbrev, initialCustomText },
+        }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
     setSvarbrevOverrideBehandlingstid: builder.mutation<
       SetSvarbrevOverrideBehandlingstidResponse,
       SetSvarbrevOverrideBehandlingstidParams
@@ -269,4 +291,5 @@ export const {
   useSetSvarbrevCustomTextMutation,
   useSetSvarbrevOverrideBehandlingstidMutation,
   useSetSvarbrevOverrideCustomTextMutation,
+  useSetSvarbrevInitialCustomTextMutation,
 } = svarbrevSlice;
