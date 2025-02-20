@@ -4,34 +4,37 @@ import { SetFullmektig } from '@app/components/svarbrev/fullmektig-name';
 import { Preview } from '@app/components/svarbrev/preview/preview';
 import { Receivers } from '@app/components/svarbrev/receivers';
 import { SetTitle } from '@app/components/svarbrev/title';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
-import { styled } from 'styled-components';
+import { HGrid } from '@navikt/ds-react';
 
 interface Props {
   setting: SvarbrevSetting;
 }
 
-export const InternalSvarbrevInput = ({ setting }: Props) => (
-  <>
-    <Card title="Svarbrev">
-      <Row>
-        <SetTitle />
-        <SetFullmektig />
-      </Row>
+export const InternalSvarbrevInput = ({ setting }: Props) => {
+  const { overstyringer } = useRegistrering();
 
-      <EditVarsletFrist setting={setting} />
+  return (
+    <>
+      <Card title="Svarbrev">
+        {overstyringer.fullmektig === null ? (
+          <SetTitle />
+        ) : (
+          <HGrid columns={2} gap="2">
+            <SetTitle />
+            <SetFullmektig />
+          </HGrid>
+        )}
 
-      <Receivers />
-    </Card>
+        <EditVarsletFrist setting={setting} />
 
-    <Card title="Forhåndsvisning av svarbrev">
-      <Preview />
-    </Card>
-  </>
-);
+        <Receivers />
+      </Card>
 
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 8px;
-`;
+      <Card title="Forhåndsvisning av svarbrev">
+        <Preview />
+      </Card>
+    </>
+  );
+};
