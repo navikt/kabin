@@ -13,16 +13,16 @@ export const ValidationSummaryPopup = () => {
   const id = useRegistreringId();
   const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
 
-  const hasError = error !== undefined;
-  const [isOpen, setIsOpen] = useState(hasError);
+  const hasValidationError = error !== undefined && 'status' in error && error.status === 400;
+  const [isOpen, setIsOpen] = useState(hasValidationError);
 
   useEffect(() => {
-    if (hasError) {
+    if (hasValidationError) {
       setIsOpen(true);
     }
-  }, [hasError]);
+  }, [hasValidationError]);
 
-  if (!hasError) {
+  if (!hasValidationError) {
     return null;
   }
 
