@@ -73,7 +73,7 @@ export const useSaksbehandlereParams = (): ISaksbehandlereParams | typeof skipTo
     return skipToken;
   }
 
-  return { ytelseId, fnr: mulighet.sakenGjelder.id };
+  return { ytelseId, fnr: mulighet.sakenGjelder.identifikator };
 };
 
 export const useSaksbehandler = (): ISaksbehandler | null => {

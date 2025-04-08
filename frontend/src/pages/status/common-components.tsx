@@ -3,7 +3,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { useFagsystemName } from '@app/hooks/kodeverk';
 import { StyledPart } from '@app/pages/status/styled-components';
 import type { IPart, ISaksbehandler } from '@app/types/common';
-import type { ISak } from '@app/types/dokument';
+import type { IJournalpostAvsenderMottaker, ISak } from '@app/types/dokument';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
@@ -68,30 +68,46 @@ const StyledSak = styled.div`
   gap: 16px;
 `;
 
+const NoPart = ({ title }: { title: string }) => (
+  <InfoItem label={title}>
+    <BodyShort>Ingen</BodyShort>
+  </InfoItem>
+);
+
+const PartInfo = ({ name, id }: { name: string | null; id: string }) => (
+  <StyledPart>
+    <span>{name ?? 'Navn mangler'}</span>
+    <CopyPartIdButton id={id} size="xsmall" />
+  </StyledPart>
+);
+
 interface PartProps {
   title: string;
   part: IPart | null;
 }
 
-export const Part = ({ part, title }: PartProps) => {
-  if (part === null) {
-    return (
-      <InfoItem label={title}>
-        <BodyShort>Ingen</BodyShort>
-      </InfoItem>
-    );
-  }
-
-  return (
+export const Part = ({ part, title }: PartProps) =>
+  part === null ? (
+    <NoPart title={title} />
+  ) : (
     <InfoItem label={title}>
-      <StyledPart>
-        <span>{part.name ?? 'Navn mangler'}</span>
-        <CopyPartIdButton id={part.id} size="xsmall" />
-      </StyledPart>
+      <PartInfo name={part.name} id={part.identifikator} />
       <PartStatusList statusList={part.statusList} />
     </InfoItem>
   );
-};
+
+interface AvsenderMottakerProps {
+  avsenderMottaker: IJournalpostAvsenderMottaker | null;
+}
+
+export const AvsenderMottaker = ({ avsenderMottaker }: AvsenderMottakerProps) =>
+  avsenderMottaker === null ? (
+    <NoPart title="Avsender/mottaker" />
+  ) : (
+    <InfoItem label="Avsender/mottaker">
+      <PartInfo name={avsenderMottaker.name} id={avsenderMottaker.id} />
+    </InfoItem>
+  );
 
 interface NavEmployeeProps {
   title: string;

@@ -26,7 +26,7 @@ export const Svarbrev = ({ svarbrev, id }: Props) => (
         <Label id="svarbrevinfo-mottakere">Mottakere</Label>
         <StyledList>
           {svarbrev.receivers.map((receiver) => (
-            <Part key={receiver.part.id} {...receiver} />
+            <Part key={receiver.part.identifikator} {...receiver} />
           ))}
         </StyledList>
       </Section>
@@ -58,12 +58,12 @@ const Part = ({ part, overriddenAddress, handling }: Receiver) => {
   const isPerson = part.type === IdType.FNR;
 
   return (
-    <PartContent aria-label={part.name ?? part.id}>
+    <PartContent aria-label={part.name ?? part.identifikator}>
       <StyledName>
         <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
           {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
         </Tooltip>
-        {part.name} <CopyPartIdButton id={part.id} size="xsmall" />
+        {part.name} <CopyPartIdButton id={part.identifikator} size="xsmall" />
       </StyledName>
 
       <StyledPartStatusList statusList={part.statusList} />

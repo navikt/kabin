@@ -12,11 +12,11 @@ const getSakspartId = (sakspart: IPart | ISimplePart | undefined | null): string
   }
 
   if (sakspart.type === IdType.FNR) {
-    return formatFoedselsnummer(sakspart.id);
+    return formatFoedselsnummer(sakspart.identifikator);
   }
 
   if (sakspart.type === IdType.ORGNR) {
-    return formatOrgNum(sakspart.id);
+    return formatOrgNum(sakspart.identifikator);
   }
 
   return null;

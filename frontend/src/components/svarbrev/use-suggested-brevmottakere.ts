@@ -29,7 +29,7 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
     ]
       .filter(isNotNull)
       .reduce<PartSuggestedReceiver[]>((acc, curr) => {
-        const found = acc.find(({ part }) => part.id === curr.part.id);
+        const found = acc.find(({ part }) => part.identifikator === curr.part.identifikator);
 
         if (found === undefined) {
           acc.push(curr);
@@ -42,7 +42,7 @@ export const useSuggestedBrevmottakere = (): (PartSuggestedReceiver | PartReceiv
         return acc;
       }, [])
       .map((sm) => {
-        const recipient = svarbrev.receivers.find((m) => m.part.id === sm.part.id);
+        const recipient = svarbrev.receivers.find((m) => m.part.identifikator === sm.part.identifikator);
 
         return recipient === undefined ? sm : { ...recipient, typeList: sm.typeList };
       });

@@ -91,8 +91,8 @@ const useUrl = () => {
         customText: svarbrev.customText,
         initialCustomText: svarbrev.initialCustomText,
         typeId,
-        klager: klager?.id ?? null,
-        sakenGjelder: mulighet.sakenGjelder.id,
+        klager: klager?.identifikator ?? null,
+        sakenGjelder: mulighet.sakenGjelder.identifikator,
         ytelseId,
         mottattKlageinstans,
       });
@@ -103,7 +103,16 @@ const useUrl = () => {
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [fullmektig?.name, klager?.id, mottattKlageinstans, mulighet, svarbrevSetting, svarbrev, typeId, ytelseId]);
+  }, [
+    fullmektig?.name,
+    klager?.identifikator,
+    mottattKlageinstans,
+    mulighet,
+    svarbrevSetting,
+    svarbrev,
+    typeId,
+    ytelseId,
+  ]);
 
   useEffect(() => () => PDF_MANAGER.clear(), []);
 

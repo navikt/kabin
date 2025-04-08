@@ -37,7 +37,7 @@ export const SetPartButton = ({ defaultPart, partField, label, title, icon, load
       content={
         defaultPart === null
           ? `Nullstill ${partField}`
-          : `${defaultPart.name ?? 'Ukjent navn'} (${formatId(defaultPart.id)})`
+          : `${defaultPart.name ?? 'Ukjent navn'} (${formatId(defaultPart.identifikator)})`
       }
     >
       <Button

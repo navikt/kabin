@@ -55,7 +55,7 @@ const Receivers = ({ receivers }: ReceiversProps) => {
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledReceiver key={id} aria-label={part.name ?? part.id}>
+          <StyledReceiver key={id} aria-label={part.name ?? part.identifikator}>
             <StyledReceiverContent>
               <StyledBrevmottaker>
                 <StyledReceiverInnerContent>
@@ -74,7 +74,7 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                   </Tooltip>
                   <StyledName>
                     <span>{part.name}</span>
-                    <CopyPartIdButton id={part.id} size="xsmall" />
+                    <CopyPartIdButton id={part.identifikator} size="xsmall" />
                   </StyledName>
                   <PartStatusList statusList={part.statusList} />
                 </StyledReceiverInnerContent>

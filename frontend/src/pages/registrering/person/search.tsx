@@ -30,8 +30,8 @@ export const PersonSearch = ({ value, onChange }: Props) => {
 
     const person = await searchPerson(cleaned).unwrap();
 
-    if (person !== null && person.id !== sakenGjelderValue) {
-      setSakenGjelder({ id, sakenGjelderValue: person.id });
+    if (person !== null && person.identifikator !== sakenGjelderValue) {
+      setSakenGjelder({ id, sakenGjelderValue: person.identifikator });
     }
   };
 

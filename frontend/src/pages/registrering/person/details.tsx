@@ -38,7 +38,7 @@ export const PersonDetails = ({ sakenGjelderValue }: Props) => {
   if (navn === null) {
     return (
       <StyledTag variant="warning" size={SIZE}>
-        Ingen treff på &quot;{formatFoedselsnummer(data?.id)}&quot;
+        Ingen treff på &quot;{formatFoedselsnummer(data?.identifikator)}&quot;
       </StyledTag>
     );
   }

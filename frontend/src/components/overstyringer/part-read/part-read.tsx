@@ -71,7 +71,7 @@ const Content = ({ part }: Pick<PartReadProps, 'part'>) => {
         <Icon type={part.type} />
         {getSakspartName(part, null)}
       </StyledPartName>
-      <CopyPartIdButton id={part.id} />
+      <CopyPartIdButton id={part.identifikator} />
       <PartStatusList statusList={part.statusList} />
     </>
   );

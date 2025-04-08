@@ -1,4 +1,4 @@
-import type { IAvsenderMottaker } from '@app/types/common';
+import type { AvsenderMottakerType, IdType } from '@app/types/common';
 
 export enum JournalposttypeEnum {
   INNGAAENDE = 'I',
@@ -108,6 +108,12 @@ export interface LogiskVedlegg {
   logiskVedleggId: string;
 }
 
+export interface IJournalpostAvsenderMottaker {
+  id: string;
+  name: string | null;
+  type: AvsenderMottakerType | IdType;
+}
+
 export interface IArkivertDocument {
   /** Unik identifikator per journalpost. */
   journalpostId: string;
@@ -128,7 +134,7 @@ export interface IArkivertDocument {
   behandlingstemanavn: string | null;
   sak: ISak | null;
   /** Personen eller organisasjonen som er avsender eller mottaker av dokumentene i journalposten. */
-  avsenderMottaker: IAvsenderMottaker | null;
+  avsenderMottaker: IJournalpostAvsenderMottaker | null;
   /** Nav-enheten som har journalført forsendelsen. I noen tilfeller brukes journalfEnhet til å rute journalføringsoppgaven til korrekt enhet i Nav. I slike tilfeller vil journalfEnhet være satt også for ikke-journalførte dokumenter. */
   journalfoerendeEnhet: string | null;
   /** Personen eller systembrukeren i Nav som har journalført forsendelsen. Bruken av feltet varierer, og kan inneholde den ansattes navn eller Nav-ident. Dersom forsendelsen er automatisk journalført, kan innholdet være f.eks. en servicebruker eller et batchnavn. */
