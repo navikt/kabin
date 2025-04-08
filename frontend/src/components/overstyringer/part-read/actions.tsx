@@ -20,7 +20,10 @@ export const Actions = ({
 }: ActionsProps & EnterSearchModeCallback) => (
   <PartActionsContainer>
     {options.reduce<React.ReactNode[]>((list, p) => {
-      if (p.defaultPart.id === part?.id || excludedPartIds.includes(p.defaultPart.id)) {
+      if (
+        p.defaultPart.identifikator === part?.identifikator ||
+        excludedPartIds.includes(p.defaultPart.identifikator)
+      ) {
         return list;
       }
 

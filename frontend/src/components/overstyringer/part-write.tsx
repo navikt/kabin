@@ -80,7 +80,7 @@ const PartSearchInternal = ({
 
     return {
       identifikator: search,
-      sakenGjelderId: mulighet.sakenGjelder.id,
+      sakenGjelderId: mulighet.sakenGjelder.identifikator,
       ytelseId,
     };
   }, [isValid, mulighet, ytelseId, search]);
@@ -117,7 +117,7 @@ const PartSearchInternal = ({
     }
   };
 
-  const isPartInvalid = data !== undefined && data !== null && excludedPartIds.includes(data.id);
+  const isPartInvalid = data !== undefined && data !== null && excludedPartIds.includes(data.identifikator);
 
   return (
     <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>

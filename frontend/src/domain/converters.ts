@@ -1,4 +1,10 @@
-import { type IAvsenderMottaker, type IPart, PART_TYPES } from '@app/types/common';
+import {
+  type AvsenderMottakerType,
+  type IAvsenderMottaker,
+  type IPart,
+  type IdType,
+  PART_TYPES,
+} from '@app/types/common';
 
 export const avsenderMottakerToPart = (avsenderMottaker: IAvsenderMottaker | null): IPart | null => {
   if (avsenderMottaker === null) {
@@ -8,5 +14,5 @@ export const avsenderMottakerToPart = (avsenderMottaker: IAvsenderMottaker | nul
   return avsenderIsPart(avsenderMottaker) ? avsenderMottaker : null;
 };
 
-export const avsenderIsPart = (avsender: IAvsenderMottaker): avsender is IPart =>
+export const avsenderIsPart = (avsender: { type: IdType | AvsenderMottakerType }) =>
   PART_TYPES.some((t) => t === avsender.type);

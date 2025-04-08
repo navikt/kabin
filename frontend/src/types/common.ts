@@ -40,7 +40,7 @@ export type IAddress = NorwegianAddress | ForeignAddress;
 export const isNorwegianAddress = (address: IAddress): address is NorwegianAddress => address.landkode === 'NO';
 
 interface IPartBase {
-  id: string;
+  identifikator: string;
   name: string | null;
   available: boolean;
   language: string;

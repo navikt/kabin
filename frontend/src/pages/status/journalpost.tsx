@@ -2,7 +2,7 @@ import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logis
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { InfoItem, Part, Sak, Time } from '@app/pages/status/common-components';
+import { AvsenderMottaker, InfoItem, Sak, Time } from '@app/pages/status/common-components';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { BodyShort, Tag } from '@navikt/ds-react';
@@ -35,7 +35,7 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
         </Time>
       </InfoItem>
 
-      <Part title="Avsender/mottaker" part={avsenderMottaker} />
+      <AvsenderMottaker avsenderMottaker={avsenderMottaker} />
 
       <Sak sak={sak} />
       <InfoItem label="Type">{getJournalposttype(journalposttype)}</InfoItem>

@@ -20,7 +20,9 @@ export const Receivers = () => {
     return <ReadOnlyReceivers />;
   }
 
-  const customReceivers = svarbrev.receivers.filter((m) => suggestedReceivers.every((s) => s.part.id !== m.part.id));
+  const customReceivers = svarbrev.receivers.filter((m) =>
+    suggestedReceivers.every((s) => s.part.identifikator !== m.part.identifikator),
+  );
   const [receiver] = suggestedReceivers;
   const onlyOneReceiver = suggestedReceivers.length === 1 && customReceivers.length === 0 && receiver !== undefined;
 

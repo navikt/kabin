@@ -25,11 +25,14 @@ import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
+import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
+import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
 import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -38,12 +41,33 @@ interface Props {
   saksbehandlerFromMulighetLabel: string;
 }
 
+const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | typeof skipToken => {
+  const { journalpost } = useJournalpost();
+  const { sakenGjelderValue, overstyringer } = useRegistrering();
+
+  if (
+    typeof journalpost?.avsenderMottaker?.id !== 'string' ||
+    sakenGjelderValue === null ||
+    overstyringer.ytelseId === null
+  ) {
+    return skipToken;
+  }
+
+  return {
+    identifikator: journalpost.avsenderMottaker.id,
+    sakenGjelderId: sakenGjelderValue,
+    ytelseId: overstyringer.ytelseId,
+  };
+};
+
 export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
   const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();
   const ytelseId = useYtelseId();
+  const avsenderMottakerParams = useAvsenderMottakerParams();
+  const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
@@ -97,7 +121,7 @@ export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLab
   };
 
   const journalpostAvsenderOption: ISetPart<IPart | null> | null =
-    journalpost?.avsenderMottaker?.id === avsender?.id
+    journalpost?.avsenderMottaker?.id === avsender?.identifikator
       ? null
       : {
           label: 'Journalpostavsender',
@@ -106,7 +130,7 @@ export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLab
             journalpost.journalposttype === JournalposttypeEnum.INNGAAENDE &&
             journalpost.avsenderMottaker !== null &&
             avsenderIsPart(journalpost.avsenderMottaker)
-              ? avsenderMottakerToPart(journalpost.avsenderMottaker)
+              ? (avsenderMottaker ?? null)
               : null,
           title: 'Journalpostavsender',
           icon: <ArchiveIcon aria-hidden />,

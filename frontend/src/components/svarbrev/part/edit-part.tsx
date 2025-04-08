@@ -33,7 +33,7 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
   };
 
   const search = (identifikator: string) => {
-    const sakenGjelderId = mulighet?.sakenGjelder.id;
+    const sakenGjelderId = mulighet?.sakenGjelder.identifikator;
 
     if (sakenGjelderId === undefined) {
       return setError('Saken gjelder er ikke satt');

@@ -27,7 +27,7 @@ export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
   return (
     <CheckboxGroup
       legend="Foreslåtte mottakere fra saken"
-      value={svarbrev.receivers.map((r) => r.part.id)}
+      value={svarbrev.receivers.map((r) => r.part.identifikator)}
       data-testid="document-send-receiver-list"
       size="small"
     >
@@ -38,11 +38,11 @@ export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
         const isAdded = isReceiver(receiver) && svarbrev.receivers.some((r) => r.id === receiver.id);
 
         return (
-          <StyledReceiver key={part.id} aria-label={part.name ?? part.id}>
+          <StyledReceiver key={part.identifikator} aria-label={part.name ?? part.identifikator}>
             <StyledBrevmottaker>
               <Checkbox
                 size="small"
-                value={part.id}
+                value={part.identifikator}
                 data-testid="document-send-receiver"
                 onChange={() => (isAdded ? remove({ id, receiverId: receiver.id }) : addReceiver({ id, receiver }))}
               >

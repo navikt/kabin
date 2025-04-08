@@ -161,12 +161,16 @@ const overstyringerSlice = registreringApi.injectEndpoints({
           const result = { ...draft, overstyringer: { ...draft.overstyringer, fullmektig: part } };
 
           // Fullmektig is removed or set to klager (i.e. removed)
-          if (part === null || part.id === draft.overstyringer.klager?.id) {
-            const klagerIsReceiver = draft.svarbrev.receivers.some((r) => r.part.id === draft.overstyringer.klager?.id);
+          if (part === null || part.identifikator === draft.overstyringer.klager?.identifikator) {
+            const klagerIsReceiver = draft.svarbrev.receivers.some(
+              (r) => r.part.identifikator === draft.overstyringer.klager?.identifikator,
+            );
 
             const receivers = klagerIsReceiver
               ? draft.svarbrev.receivers
-              : draft.svarbrev.receivers.filter((r) => r.part.id !== draft.overstyringer.fullmektig?.id);
+              : draft.svarbrev.receivers.filter(
+                  (r) => r.part.identifikator !== draft.overstyringer.fullmektig?.identifikator,
+                );
 
             return { ...result, svarbrev: { ...result.svarbrev, receivers } };
           }
@@ -193,12 +197,16 @@ const overstyringerSlice = registreringApi.injectEndpoints({
           const result = { ...draft, overstyringer: { ...draft.overstyringer, klager: part } };
 
           // Klager is removed or set to saken gjelder (i.e. removed)
-          if (part === null || part.id === draft.sakenGjelderValue) {
-            const sakenGjelderIsReceiver = draft.svarbrev.receivers.some((r) => r.part.id === draft.sakenGjelderValue);
+          if (part === null || part.identifikator === draft.sakenGjelderValue) {
+            const sakenGjelderIsReceiver = draft.svarbrev.receivers.some(
+              (r) => r.part.identifikator === draft.sakenGjelderValue,
+            );
 
             const receivers = sakenGjelderIsReceiver
               ? draft.svarbrev.receivers
-              : draft.svarbrev.receivers.filter((r) => r.part.id !== draft.overstyringer.klager?.id);
+              : draft.svarbrev.receivers.filter(
+                  (r) => r.part.identifikator !== draft.overstyringer.klager?.identifikator,
+                );
 
             return { ...result, svarbrev: { ...result.svarbrev, receivers } };
           }
