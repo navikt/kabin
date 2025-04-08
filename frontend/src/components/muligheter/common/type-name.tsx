@@ -1,6 +1,5 @@
 import { type SaksTypeEnum, TYPE_NAME } from '@app/types/common';
 import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   typeId: SaksTypeEnum;
@@ -8,12 +7,8 @@ interface Props {
 
 export const TypeName = ({ typeId }: Props) => {
   return (
-    <NowrapTag variant="info" size="small">
+    <Tag variant="info" size="small">
       {TYPE_NAME[typeId]}
-    </NowrapTag>
+    </Tag>
   );
 };
-
-const NowrapTag = styled(Tag)`
-  white-space: nowrap;
-`;
