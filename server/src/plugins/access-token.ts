@@ -27,7 +27,7 @@ export const accessTokenPlugin = fastifyPlugin(
   { fastify: '5', name: ACCESS_TOKEN_PLUGIN_ID },
 );
 
-export const getAccessToken = (req: FastifyRequest): string | undefined => {
+const getAccessToken = (req: FastifyRequest): string | undefined => {
   const authHeader = req.headers[AUTHORIZATION_HEADER];
 
   if (authHeader !== undefined) {
