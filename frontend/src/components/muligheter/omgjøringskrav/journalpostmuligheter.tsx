@@ -1,16 +1,16 @@
+import type { CanBeSelected } from '@app/components/documents/document/types';
 import { DocumentsBase } from '@app/components/documents/documents-base';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
-import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
+import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import type { CanBeSelected } from './document/types';
+import { skipToken } from '@reduxjs/toolkit/query';
 
-export const Dokumenter = () => {
-  const { sakenGjelderValue, journalpostId, mulighet } = useRegistrering();
+export const Journalpostmuligheter = () => {
+  const { sakenGjelderValue, mulighet, journalpostId } = useRegistrering();
   const { data, isLoading, isFetching, refetch } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
   const { id } = useRegistrering();
-  const [setJournalpostId, { isLoading: selectIsLoading }] = useSetJournalpostIdMutation();
+  const [setJournalpostId, { isLoading: selectIsLoading }] = useSetMulighetBasedOnJournalpostMutation();
 
   const createOnMouseDown = (journalpostId: string) => (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -31,18 +31,22 @@ export const Dokumenter = () => {
       return [false, 'Dette dokumentet er allerede benyttet i en eksisterende registrering'];
     }
 
+    if (typeof document.sak?.fagsakId !== 'string') {
+      return [false, 'Ingen fagsak tilknyttet'];
+    }
+
     return [true, undefined];
   };
 
   return (
     <DocumentsBase
-      dokumenter={data?.dokumenter.filter((d) => d.journalpostId !== mulighet?.id)}
+      dokumenter={data?.dokumenter.filter((d) => d.journalpostId !== journalpostId)}
       isLoading={isLoading || isFetching}
       refetch={refetch}
       selectJournalpost={[createOnMouseDown, selectIsLoading]}
-      getIsSelected={(id) => journalpostId === id}
+      getIsSelected={(id) => mulighet?.id === id}
       getCanBeSelected={getCanBeSelected}
-      heading="Velg journalpost"
+      heading="Velg vedtaket som omgjøringskravet gjelder"
     />
   );
 };

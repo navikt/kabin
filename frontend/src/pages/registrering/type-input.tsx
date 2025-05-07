@@ -5,7 +5,8 @@ import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-r
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
-import { Omgjøringskravemuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
+import { Journalpostmuligheter } from '@app/components/muligheter/omgjøringskrav/journalpostmuligheter';
+import { Omgjøringskravmuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
@@ -13,14 +14,19 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
-import { type RegistreringType, SaksTypeEnum, isType } from '@app/types/common';
+import {
+  useSetMulighetIsBasedOnJournalpostMutation,
+  useSetTypeMutation,
+} from '@app/redux/api/registreringer/mutations';
+import { SaksTypeEnum, isType } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
-import { Alert, Tag, ToggleGroup } from '@navikt/ds-react';
-import { useCallback } from 'react';
+import { Alert, Checkbox, HStack, Stack, Tag, ToggleGroup } from '@navikt/ds-react';
+import { type ChangeEventHandler, useCallback } from 'react';
 import { styled } from 'styled-components';
 
-const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
+const ReadOnlyType = () => {
+  const { id, typeId, journalpostId, mulighetIsBasedOnJournalpost } = useRegistrering();
+
   switch (typeId) {
     case SaksTypeEnum.ANKE:
       return (
@@ -34,6 +40,12 @@ const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
           Klage
         </Tag>
       );
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return (
+        <Tag variant="info" size="medium">
+          Omgjøringskrav{mulighetIsBasedOnJournalpost ? ' fra journalpost' : null}
+        </Tag>
+      );
     case null:
       return (
         <Tag variant="info" size="medium">
@@ -44,7 +56,7 @@ const ReadOnlyType = ({ typeId }: { typeId: RegistreringType | null }) => {
 };
 
 export const TypeSelect = () => {
-  const { id, typeId, journalpostId } = useRegistrering();
+  const { id, typeId, journalpostId, mulighetIsBasedOnJournalpost } = useRegistrering();
   const [setType] = useSetTypeMutation({ fixedCacheKey: id });
   const canEdit = useCanEdit();
 
@@ -61,19 +73,19 @@ export const TypeSelect = () => {
 
   if (!canEdit) {
     return (
-      <Row>
-        <ReadOnlyType typeId={typeId} />
-      </Row>
+      <Stack justify="center">
+        <ReadOnlyType />
+      </Stack>
     );
   }
 
   if (journalpostId === null) {
     return (
-      <Row>
+      <Stack justify="center">
         <Alert variant="info" size="small" inline>
           Velg journalpost.
         </Alert>
-      </Row>
+      </Stack>
     );
   }
 
@@ -81,13 +93,33 @@ export const TypeSelect = () => {
 
   // Without `key` TogglegGroup will remember last non-undefined value when undefined.
   return (
-    <Row>
+    <HStack gap="4" justify="center" align="center">
       <ToggleGroup onChange={onChange} value={value ?? 'none'} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.OMGJØRINGSKRAV}>Omgjøringskrav</ToggleGroup.Item>
       </ToggleGroup>
-    </Row>
+      {value === SaksTypeEnum.OMGJØRINGSKRAV ? <FraJournalpostCheckbox /> : null}
+    </HStack>
+  );
+};
+
+const FraJournalpostCheckbox = () => {
+  const { mulighetIsBasedOnJournalpost, id } = useRegistrering();
+  const [setMulighetBasedOnJournalpost, { isLoading }] = useSetMulighetIsBasedOnJournalpostMutation();
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (mulighetIsBasedOnJournalpost === event.target.checked) {
+      return;
+    }
+
+    setMulighetBasedOnJournalpost({ mulighetIsBasedOnJournalpost: event.target.checked, id });
+  };
+
+  return (
+    <Checkbox checked={mulighetIsBasedOnJournalpost} onChange={onChange} disabled={isLoading}>
+      Fra journalpost
+    </Checkbox>
   );
 };
 
@@ -107,7 +139,7 @@ const NoType = () => (
 );
 
 export const TypeInput = () => {
-  const { id, typeId } = useRegistrering();
+  const { id, typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
   const [, { isLoading }] = useSetTypeMutation({ fixedCacheKey: id });
 
   if (isLoading) {
@@ -148,9 +180,21 @@ export const TypeInput = () => {
   }
 
   if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
-    return (
+    return mulighetIsBasedOnJournalpost ? (
       <>
-        <Omgjøringskravemuligheter />
+        <Journalpostmuligheter />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass omgjøringskravet"
+          klagerLabel="Den som krever omgjøring"
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
+      <>
+        <Omgjøringskravmuligheter />
         <WillCreateNewJournalpostInfo />
         <GosysOppgaver />
         <Overstyringer

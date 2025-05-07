@@ -55,7 +55,7 @@ const PdfContainer = styled.div`
 `;
 
 const useUrl = () => {
-  const { svarbrev, overstyringer } = useRegistrering();
+  const { svarbrev, overstyringer, sakenGjelderValue } = useRegistrering();
   const { typeId, mulighet } = useMulighet();
 
   const selectedYtelseId = overstyringer.ytelseId;
@@ -76,7 +76,7 @@ const useUrl = () => {
       ytelseId === null ||
       typeId === null ||
       svarbrevSetting === undefined ||
-      mulighet === undefined
+      sakenGjelderValue === null
     ) {
       return;
     }
@@ -92,7 +92,7 @@ const useUrl = () => {
         initialCustomText: svarbrev.initialCustomText,
         typeId,
         klager: klager?.identifikator ?? null,
-        sakenGjelder: mulighet.sakenGjelder.identifikator,
+        sakenGjelder: sakenGjelderValue,
         ytelseId,
         mottattKlageinstans,
       });
@@ -107,11 +107,11 @@ const useUrl = () => {
     fullmektig?.name,
     klager?.identifikator,
     mottattKlageinstans,
-    mulighet,
     svarbrevSetting,
     svarbrev,
     typeId,
     ytelseId,
+    sakenGjelderValue,
   ]);
 
   useEffect(() => () => PDF_MANAGER.clear(), []);

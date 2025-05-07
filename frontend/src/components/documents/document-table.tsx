@@ -5,6 +5,7 @@ import type { DateRange } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+import type { BaseSelectDocumentProps } from './document/types';
 
 const getExpandedRecords = (dokumenter: IArkivertDocument[], expanded: boolean) =>
   dokumenter.reduce<Record<string, boolean>>((acc, d) => {
@@ -13,11 +14,11 @@ const getExpandedRecords = (dokumenter: IArkivertDocument[], expanded: boolean) 
     return acc;
   }, {});
 
-interface Props {
+interface Props extends BaseSelectDocumentProps {
   dokumenter: IArkivertDocument[];
 }
 
-export const DocumentTable = ({ dokumenter }: Props) => {
+export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, getCanBeSelected }: Props) => {
   const [search, setSearch] = useState<string>('');
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -66,6 +67,9 @@ export const DocumentTable = ({ dokumenter }: Props) => {
               dokument={d}
               isExpanded={expanded[id] === true}
               toggleExpanded={() => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))}
+              selectJournalpost={selectJournalpost}
+              getIsSelected={getIsSelected}
+              getCanBeSelected={getCanBeSelected}
             />
           );
         })}

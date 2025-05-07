@@ -26,8 +26,7 @@ export const isIError = (error: unknown): error is IError =>
 
 const isObject = (obj: unknown): obj is GenericObject => typeof obj === 'object' && obj !== null;
 
-export const isApiError = (response: unknown): response is IApiErrorReponse =>
-  isIError(response) && (typeof response.detail === 'string' || 'sections' in response);
+export const isApiError = (response: unknown): response is IApiErrorReponse => isIError(response);
 
 export const isValidationResponse = (response: unknown): response is IValidationResponse =>
   isIError(response) && Array.isArray(response.sections) && response.sections.every(isValidationSection);

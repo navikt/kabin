@@ -3,7 +3,7 @@ import { PartContent, States, StyledContainer } from '@app/components/overstyrin
 import { type BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
-import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import {
@@ -65,7 +65,7 @@ const PartSearchInternal = ({
   isSaving,
   excludedPartIds = [],
 }: InternalProps) => {
-  const { mulighet } = useMulighet();
+  const { sakenGjelderValue } = useRegistrering();
   const [rawSearch, setSearch] = useState('');
   const search = rawSearch.replaceAll(' ', '');
   const [error, setError] = useState<string>();
@@ -74,16 +74,16 @@ const PartSearchInternal = ({
   const isValid = useMemo(() => idnr(search).status === 'valid' || isValidOrgnr(search), [search]);
 
   const searchParams = useMemo<SearchPartWithUtsendingskanalParams | typeof skipToken>(() => {
-    if (!isValid || mulighet === undefined || ytelseId === null) {
+    if (!isValid || sakenGjelderValue === null || ytelseId === null) {
       return skipToken;
     }
 
     return {
       identifikator: search,
-      sakenGjelderId: mulighet.sakenGjelder.identifikator,
+      sakenGjelderId: sakenGjelderValue,
       ytelseId,
     };
-  }, [isValid, mulighet, ytelseId, search]);
+  }, [isValid, sakenGjelderValue, ytelseId, search]);
 
   const { data, isLoading, isSuccess } = useGetPartWithUtsendingskanalQuery(searchParams);
 
