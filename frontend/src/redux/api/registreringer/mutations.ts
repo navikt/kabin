@@ -138,6 +138,46 @@ const mutationsSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+
+    setMulighetIsBasedOnJournalpost: builder.mutation<
+      DraftRegistrering,
+      { id: string; mulighetIsBasedOnJournalpost: boolean }
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/registreringer/${id}/mulighet-is-based-on-journalpost`,
+        method: 'PUT',
+        body,
+      }),
+      onQueryStarted: async ({ id, mulighetIsBasedOnJournalpost }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({ ...draft, mulighetIsBasedOnJournalpost, mulighet: null }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
+
+    setMulighetBasedOnJournalpost: builder.mutation<DraftRegistrering, { id: string; journalpostId: string }>({
+      query: ({ id, ...body }) => ({
+        url: `/registreringer/${id}/mulighet-based-on-journalpost`,
+        method: 'PUT',
+        body,
+      }),
+      onQueryStarted: async ({ id, journalpostId }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({ ...draft, mulighet: { id: journalpostId } }));
+
+        try {
+          const { data } = await queryFulfilled;
+
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -148,4 +188,6 @@ export const {
   useSetAnkemulighetMutation,
   useSetKlagemulighetMutation,
   useSetOmgjøringskravmulighetMutation,
+  useSetMulighetIsBasedOnJournalpostMutation,
+  useSetMulighetBasedOnJournalpostMutation,
 } = mutationsSlice;

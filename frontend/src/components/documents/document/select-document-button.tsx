@@ -1,87 +1,61 @@
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import type { CanBeSelected, SelectJournalpost } from '@app/components/documents/document/types';
 import { GridArea, GridButton } from '@app/components/documents/styled-grid-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetJournalpostIdMutation } from '@app/redux/api/registreringer/mutations';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { CircleSlashIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import { useCallback } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
+  selectJournalpost: SelectJournalpost;
+  getCanBeSelected: (d: IArkivertDocument) => CanBeSelected;
   isSelected: boolean;
-  harTilgangTilArkivvariant: boolean;
-  alreadyUsed: boolean;
   dokument: IArkivertDocument;
 }
 
-export const SelectDocumentButton = ({ harTilgangTilArkivvariant, isSelected, alreadyUsed, dokument }: Props) => {
-  const { id } = useRegistrering();
-  const [setJournalpostId, { isLoading }] = useSetJournalpostIdMutation({
-    fixedCacheKey: `${dokument.journalpostId}-${dokument.dokumentInfoId}`,
-  });
+export const SelectDocumentButton = ({ isSelected, dokument, selectJournalpost, getCanBeSelected }: Props) => {
   const canEdit = useCanEdit();
-
-  const selectJournalpost = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-
-      if (e.button !== 0 || !harTilgangTilArkivvariant) {
-        return;
-      }
-
-      setJournalpostId({ id, journalpostId: dokument.journalpostId });
-    },
-    [dokument.journalpostId, harTilgangTilArkivvariant, id, setJournalpostId],
-  );
+  const canBeSelected = getCanBeSelected(dokument);
+  const [enabled] = canBeSelected;
 
   if (!canEdit) {
     return isSelected ? <ReadOnlyCheckmark aria-label="Valgt" fontSize={20} /> : null;
   }
 
+  const [createOnMouseDown, isLoading] = selectJournalpost;
+
   return (
-    <Tooltip content={getTitle(harTilgangTilArkivvariant, alreadyUsed)} placement="top">
-      <GridButton
-        disabled={!harTilgangTilArkivvariant}
-        size="small"
-        variant="tertiary"
-        icon={getIcon(harTilgangTilArkivvariant, isSelected)}
-        onMouseDown={selectJournalpost}
-        aria-pressed={isSelected}
-        data-testid="select-document"
-        $gridArea={GridArea.SELECT}
-        loading={isLoading}
-        title={isSelected ? 'Valgt' : undefined}
-      >
-        {getText(harTilgangTilArkivvariant, isSelected)}
-      </GridButton>
-    </Tooltip>
+    <GridButton
+      disabled={!enabled}
+      size="small"
+      variant="tertiary"
+      icon={getIcon(enabled, isSelected)}
+      onMouseDown={createOnMouseDown(dokument.journalpostId)}
+      aria-pressed={isSelected}
+      data-testid="select-document"
+      $gridArea={GridArea.SELECT}
+      loading={isLoading && isSelected} // Works beause isSelected will be set optimistically
+      title={getTitle(isSelected, canBeSelected)}
+    >
+      {!enabled || isSelected ? null : 'Velg'}
+    </GridButton>
   );
 };
 
-const getTitle = (harTilgangTilArkivvariant: boolean, alreadyUsed: boolean) => {
-  if (!harTilgangTilArkivvariant) {
-    return 'Du har ikke tilgang til dette dokumentet';
+const getTitle = (isSelected: boolean, [canBeSelected, reason]: CanBeSelected) => {
+  if (isSelected) {
+    return 'Valgt';
   }
 
-  if (alreadyUsed) {
-    return 'Dette dokumentet er allerede benyttet i en eksisterende klage eller anke';
-  }
-
-  return 'Velg dokumentet';
-};
-
-const getText = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
-  if (!harTilgangTilArkivvariant || isSelected) {
-    return null;
+  if (!canBeSelected) {
+    return reason;
   }
 
   return 'Velg';
 };
 
-const getIcon = (harTilgangTilArkivvariant: boolean, isSelected: boolean) => {
-  if (!harTilgangTilArkivvariant) {
+const getIcon = (enabled: boolean, isSelected: boolean) => {
+  if (!enabled) {
     return <CircleSlashIcon aria-hidden role="presentation" />;
   }
 

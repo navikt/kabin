@@ -9,6 +9,7 @@ export interface Mulighet {
 
 export interface BaseRegistrering {
   id: string;
+  mulighetIsBasedOnJournalpost: boolean;
   sakenGjelderValue: string | null;
   journalpostId: string | null;
   typeId: RegistreringType | null; // Samme type-IDer som i Kodeverket.

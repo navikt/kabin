@@ -1,6 +1,7 @@
 import { Lookup } from '@app/components/svarbrev/part/lookup';
 import { cleanAndValidate } from '@app/components/svarbrev/part/validate';
-import { useMulighet } from '@app/hooks/use-mulighet';
+import { useRegistrering } from '@app/hooks/use-registrering';
+import { useTemaId } from '@app/hooks/use-tema-id';
 import { useLazyGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { IPart } from '@app/types/common';
 import { Search, Tag } from '@navikt/ds-react';
@@ -17,10 +18,11 @@ interface EditPartProps {
 }
 
 export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, id }: EditPartProps) => {
-  const { mulighet } = useMulighet();
+  const { sakenGjelderValue } = useRegistrering();
   const [rawValue, setRawValue] = useState('');
   const [error, setError] = useState<string>();
   const [searchPart, { data, isFetching }] = useLazyGetPartWithUtsendingskanalQuery();
+  const ytelseId = useTemaId();
 
   const onClick = () => {
     const [identifikator, err] = cleanAndValidate(rawValue);
@@ -33,19 +35,15 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
   };
 
   const search = (identifikator: string) => {
-    const sakenGjelderId = mulighet?.sakenGjelder.identifikator;
-
-    if (sakenGjelderId === undefined) {
+    if (sakenGjelderValue === null) {
       return setError('Saken gjelder er ikke satt');
     }
 
-    const ytelseId = mulighet?.temaId;
-
-    if (ytelseId === undefined) {
+    if (ytelseId === null) {
       return setError('Ytelse er ikke satt');
     }
 
-    searchPart({ identifikator, sakenGjelderId, ytelseId });
+    searchPart({ identifikator, sakenGjelderId: sakenGjelderValue, ytelseId });
   };
 
   const onChangeInput = (value: string) => {

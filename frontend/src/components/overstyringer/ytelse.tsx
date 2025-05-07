@@ -2,6 +2,7 @@ import { YtelseTag } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useTemaId } from '@app/hooks/use-tema-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetTemaYtelserQuery } from '@app/redux/api/kodeverk';
@@ -91,9 +92,8 @@ const PredefinedYtelse = ({ ytelseId }: PredefinedYtelseProps) => (
 const CustomYtelse = () => {
   const { id } = useRegistrering();
   const ytelseId = useYtelseId();
-  const { mulighet } = useMulighet();
   const [setYtelseId] = useSetYtelseIdMutation();
-  const tema = mulighet?.temaId ?? skipToken;
+  const tema = useTemaId() ?? skipToken;
   const { data: ytelser = [] } = useGetTemaYtelserQuery(tema);
 
   const error = useValidationError(ID);

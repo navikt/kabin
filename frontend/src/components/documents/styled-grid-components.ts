@@ -60,6 +60,7 @@ export const StyledField = styled.span<GridAreaProps>`
 
 export const GridButton = styled(Button)<GridAreaProps>`
   grid-area: ${({ $gridArea }) => $gridArea};
+  position: relative;
 `;
 
 export const GridTag = styled(Tag)<GridAreaProps>`

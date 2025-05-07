@@ -3,24 +3,30 @@ import { AvsenderMottakerNotatforer } from '@app/components/documents/document/a
 import { DocumentTitle } from '@app/components/documents/document/document-title';
 import { ExpandButton } from '@app/components/documents/document/expand-button';
 import { SelectDocumentButton } from '@app/components/documents/document/select-document-button';
+import type { BaseSelectDocumentProps } from '@app/components/documents/document/types';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
 import { GridArea, GridTag, StyledField, StyledGrid } from '@app/components/documents/styled-grid-components';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
-import { useRegistrering } from '@app/hooks/use-registrering';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { styled } from 'styled-components';
 
-interface Props {
+interface Props extends BaseSelectDocumentProps {
   dokument: IArkivertDocument;
   isExpanded: boolean;
   toggleExpanded: () => void;
 }
 
-export const Dokument = ({ dokument, isExpanded, toggleExpanded }: Props) => {
-  const registrering = useRegistrering();
+export const Dokument = ({
+  dokument,
+  isExpanded,
+  toggleExpanded,
+  selectJournalpost,
+  getIsSelected,
+  getCanBeSelected,
+}: Props) => {
   const {
     dokumentInfoId,
     journalpostId,
@@ -34,7 +40,7 @@ export const Dokument = ({ dokument, isExpanded, toggleExpanded }: Props) => {
 
   const temaName = useFullTemaNameFromId(temaId);
 
-  const isSelected = registrering.journalpostId === journalpostId;
+  const isSelected = getIsSelected(journalpostId);
 
   const [viewDocument, isViewed] = useViewDocument({
     journalpostId,
@@ -80,9 +86,9 @@ export const Dokument = ({ dokument, isExpanded, toggleExpanded }: Props) => {
         />
         <SelectDocumentButton
           isSelected={isSelected}
-          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-          alreadyUsed={dokument.alreadyUsed}
           dokument={dokument}
+          selectJournalpost={selectJournalpost}
+          getCanBeSelected={getCanBeSelected}
         />
       </StyledGrid>
       <AttachmentList dokument={dokument} isOpen={isExpanded} temaId={temaId} />

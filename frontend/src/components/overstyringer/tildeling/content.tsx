@@ -34,14 +34,6 @@ export const Content = () => {
     );
   }
 
-  if (mulighet === undefined) {
-    return (
-      <Alert size="small" variant="info" inline>
-        Velg mulighet først.
-      </Alert>
-    );
-  }
-
   return (
     <>
       <Select
@@ -66,14 +58,15 @@ export const Content = () => {
 };
 
 export const useSaksbehandlereParams = (): ISaksbehandlereParams | typeof skipToken => {
-  const { typeId, mulighet } = useMulighet();
+  const { sakenGjelderValue } = useRegistrering();
+  const { typeId } = useMulighet();
   const ytelseId = useYtelseId();
 
-  if (typeId === null || ytelseId === null || mulighet === undefined) {
+  if (typeId === null || ytelseId === null || sakenGjelderValue === null) {
     return skipToken;
   }
 
-  return { ytelseId, fnr: mulighet.sakenGjelder.identifikator };
+  return { ytelseId, fnr: sakenGjelderValue };
 };
 
 export const useSaksbehandler = (): ISaksbehandler | null => {

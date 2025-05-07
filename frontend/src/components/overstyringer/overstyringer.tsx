@@ -17,9 +17,11 @@ import { SakenGjelder } from '@app/components/overstyringer/part-read/part-read'
 import type { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
 import { FieldNames } from '@app/components/overstyringer/types';
+import { useSakenGjelderPart } from '@app/components/overstyringer/use-saken-gjelder-part';
 import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
+import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -31,7 +33,7 @@ import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, Label, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 
@@ -60,31 +62,59 @@ const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | type
   };
 };
 
-export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
-  const { sakenGjelderValue, overstyringer } = useRegistrering();
+export const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
+  const { sakenGjelderValue, overstyringer, mulighet: mulighetFromRegistrering } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();
-  const ytelseId = useYtelseId();
   const avsenderMottakerParams = useAvsenderMottakerParams();
   const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
+  const { sakenGjelder, isLoading, error, refetch } = useSakenGjelderPart();
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  if (typeId === null || mulighet === undefined) {
+  if (isLoading) {
     return (
       <CardLarge title={title}>
         <Placeholder>
-          <DocPencilIcon aria-hidden />
+          <Loader size="3xlarge" aria-label="Laster..." />
         </Placeholder>
+      </CardLarge>
+    );
+  }
+
+  if (typeof error === 'string') {
+    return (
+      <CardLarge title={title}>
+        <Alert variant="error" size="small">
+          <BodyShort>{error}</BodyShort>
+        </Alert>
+      </CardLarge>
+    );
+  }
+
+  if (sakenGjelder === null) {
+    return (
+      <CardLarge title={title}>
+        <Alert variant="error" size="small">
+          <BodyShort spacing>Kunne ikke hente saken gjelder ({formatFoedselsnummer(sakenGjelderValue)}).</BodyShort>
+          <HStack gap="2" align="center" asChild>
+            <BodyShort>
+              <Button variant="primary" size="small" onClick={refetch} loading={isLoading}>
+                Prøv igjen
+              </Button>
+              eller ta kontakt med Team Klage på Teams.
+            </BodyShort>
+          </HStack>
+        </Alert>
       </CardLarge>
     );
   }
 
   const sakenGjelderOption: ISetPart<IPart> = {
     label: 'Saken gjelder',
-    defaultPart: mulighet.sakenGjelder,
+    defaultPart: sakenGjelder,
     title: 'Saken gjelder',
     icon: <SakenGjelderIcon aria-hidden />,
   };
@@ -104,7 +134,7 @@ export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLab
   };
 
   const mulighetFullmektig: ISetPart<IPart> | null =
-    typeId === SaksTypeEnum.ANKE && mulighet.fullmektig !== null
+    typeId === SaksTypeEnum.ANKE && mulighet?.fullmektig !== undefined && mulighet?.fullmektig !== null
       ? {
           label: 'Fullmektig fra mulighet',
           defaultPart: mulighet.fullmektig,
@@ -146,6 +176,54 @@ export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLab
   ].filter((o): o is ISetPart => o !== null && o.defaultPart !== null);
 
   return (
+    <>
+      <Label size="small">Parter</Label>
+      <Content>
+        <SakenGjelder part={sakenGjelder} label="Saken gjelder" icon={<StyledSakenGjelderIcon aria-hidden />} />
+
+        <Part
+          partField={FieldNames.KLAGER}
+          part={klager}
+          label={klagerLabel}
+          icon={<StyledKlagerIcon aria-hidden />}
+          error={klagerError}
+          options={options}
+        />
+
+        <Part
+          partField={FieldNames.FULLMEKTIG}
+          part={fullmektig}
+          label="Fullmektig"
+          icon={<StyledFullmektigIcon aria-hidden />}
+          optional
+          error={fullmektigError}
+          excludedPartIds={[sakenGjelderValue]}
+          options={options}
+        />
+
+        <Avsender options={options} />
+
+        <Tildeling saksbehandlerFromMulighetLabel={saksbehandlerFromMulighetLabel} />
+      </Content>
+    </>
+  );
+};
+
+export const Overstyringer = ({ title, ...props }: Props) => {
+  const { mulighet } = useRegistrering();
+  const ytelseId = useYtelseId();
+
+  if (typeof mulighet?.id !== 'string') {
+    return (
+      <CardLarge title={title}>
+        <Placeholder>
+          <DocPencilIcon aria-hidden />
+        </Placeholder>
+      </CardLarge>
+    );
+  }
+
+  return (
     <CardLarge title={title}>
       <Header>
         <TopRow>
@@ -164,40 +242,7 @@ export const Overstyringer = ({ title, klagerLabel, saksbehandlerFromMulighetLab
           <PersonGroupIcon aria-hidden />
         </Placeholder>
       ) : (
-        <>
-          <Label size="small">Parter</Label>
-          <Content>
-            <SakenGjelder
-              part={mulighet.sakenGjelder}
-              label="Saken gjelder"
-              icon={<StyledSakenGjelderIcon aria-hidden />}
-            />
-
-            <Part
-              partField={FieldNames.KLAGER}
-              part={klager}
-              label={klagerLabel}
-              icon={<StyledKlagerIcon aria-hidden />}
-              error={klagerError}
-              options={options}
-            />
-
-            <Part
-              partField={FieldNames.FULLMEKTIG}
-              part={fullmektig}
-              label="Fullmektig"
-              icon={<StyledFullmektigIcon aria-hidden />}
-              optional
-              error={fullmektigError}
-              excludedPartIds={[sakenGjelderValue]}
-              options={options}
-            />
-
-            <Avsender options={options} />
-
-            <Tildeling saksbehandlerFromMulighetLabel={saksbehandlerFromMulighetLabel} />
-          </Content>
-        </>
+        <Parts title={title} {...props} />
       )}
     </CardLarge>
   );
