@@ -1,6 +1,7 @@
 import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useTemaId } from '@app/hooks/use-tema-id';
 import { useGetFagsystemerQuery } from '@app/redux/api/kodeverk';
 import type { IGetGosysOppgaverParams } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
@@ -8,12 +9,13 @@ import { skipToken } from '@reduxjs/toolkit/query/react';
 
 export const useParams = (): IGetGosysOppgaverParams | typeof skipToken => {
   const { sakenGjelderValue } = useRegistrering();
+  const temaId = useTemaId();
 
   if (sakenGjelderValue === null) {
     return skipToken;
   }
 
-  return { identifikator: sakenGjelderValue };
+  return { identifikator: sakenGjelderValue, temaId: temaId ?? undefined };
 };
 
 const useFagsystemId = (): string | null => {
