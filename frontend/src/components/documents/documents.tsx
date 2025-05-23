@@ -27,10 +27,6 @@ export const Dokumenter = () => {
       return [false, 'Du har ikke tilgang til dette dokumentet'];
     }
 
-    if (document.alreadyUsed) {
-      return [false, 'Dette dokumentet er allerede benyttet i en eksisterende registrering'];
-    }
-
     return [true, undefined];
   };
 
