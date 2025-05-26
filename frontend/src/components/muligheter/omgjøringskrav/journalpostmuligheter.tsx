@@ -27,10 +27,6 @@ export const Journalpostmuligheter = () => {
       return [false, 'Du har ikke tilgang til dette dokumentet'];
     }
 
-    if (document.alreadyUsed) {
-      return [false, 'Dette dokumentet er allerede benyttet i en eksisterende registrering'];
-    }
-
     if (typeof document.sak?.fagsakId !== 'string') {
       return [false, 'Ingen fagsak tilknyttet'];
     }

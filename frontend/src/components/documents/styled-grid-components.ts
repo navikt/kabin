@@ -11,6 +11,7 @@ export enum GridArea {
   TYPE = 'type',
   VIEW = 'view',
   SELECT = 'select',
+  ALREADY_USED = 'alreadyUsed',
 }
 
 const gridTemplateAreas = [
@@ -23,12 +24,13 @@ const gridTemplateAreas = [
   GridArea.TYPE,
   GridArea.VIEW,
   GridArea.SELECT,
+  GridArea.ALREADY_USED,
 ];
 
 export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
   display: grid;
   grid-template-rows: min-content min-content;
-  grid-template-columns: 32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(200px, 2fr) 110px 90px 30px 55px;
+  grid-template-columns: 32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(170px, 2fr) 110px 90px 30px 55px 20px;
   grid-template-areas:
     '${gridTemplateAreas.join(' ')}'
     '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}';

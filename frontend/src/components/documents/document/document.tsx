@@ -1,3 +1,4 @@
+import { ExclamationmarkTriangleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { AttachmentList } from '@app/components/documents/document/attachment-list';
 import { AvsenderMottakerNotatforer } from '@app/components/documents/document/avsender-mottaker-notatforer';
 import { DocumentTitle } from '@app/components/documents/document/document-title';
@@ -11,6 +12,7 @@ import { Journalposttype } from '@app/components/journalposttype/journalposttype
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import type { IArkivertDocument } from '@app/types/dokument';
+import { Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props extends BaseSelectDocumentProps {
@@ -90,6 +92,13 @@ export const Dokument = ({
           selectJournalpost={selectJournalpost}
           getCanBeSelected={getCanBeSelected}
         />
+        {dokument.alreadyUsed ? (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Tooltip content="Dette dokumentet er allerede brukt i en annen registrering.">
+              <ExclamationmarkTriangleFillIconColored aria-hidden fontSize={20} />
+            </Tooltip>
+          </div>
+        ) : null}
       </StyledGrid>
       <AttachmentList dokument={dokument} isOpen={isExpanded} temaId={temaId} />
     </DocumentListItem>
