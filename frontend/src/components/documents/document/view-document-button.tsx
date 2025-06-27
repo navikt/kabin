@@ -1,37 +1,28 @@
-import { useViewDocument } from '@app/components/documents/document/use-view-document';
-import { GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
+import { DownloadIcon, GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
-  journalpostId: string;
-  dokumentInfoId: string;
-  tittel: string | null;
   harTilgangTilArkivvariant: boolean;
+  viewDocument: (e: React.MouseEvent) => void;
+  isViewed: boolean;
+  isDownload: boolean;
 }
 
-export const ViewDocumentButton = (props: Props) => {
-  const [viewDocument, isViewed] = useViewDocument(props);
-
-  if (!props.harTilgangTilArkivvariant) {
+export const ViewDocumentButton = ({ viewDocument, isViewed, harTilgangTilArkivvariant, isDownload }: Props) => {
+  if (!harTilgangTilArkivvariant) {
     return null;
   }
 
   return (
-    <Tooltip content={isViewed ? 'Åpnet' : 'Åpne dokumentet'} placement="top">
+    <Tooltip content={getTooltip(isViewed, isDownload)} placement="top">
       <StyledButton
         size="small"
         variant="tertiary-neutral"
         onMouseDown={viewDocument}
         aria-pressed={isViewed}
         aria-controls="document-viewer"
-        icon={
-          isViewed ? (
-            <GlassesFillIcon aria-hidden role="presentation" />
-          ) : (
-            <GlassesIcon aria-hidden role="presentation" />
-          )
-        }
+        icon={getIcon(isViewed, isDownload)}
       />
     </Tooltip>
   );
@@ -40,3 +31,23 @@ export const ViewDocumentButton = (props: Props) => {
 const StyledButton = styled(Button)`
   grid-area: view;
 `;
+
+const getIcon = (isViewed: boolean, isDownload: boolean) => {
+  if (isDownload) {
+    return <DownloadIcon aria-hidden role="presentation" />;
+  }
+
+  return isViewed ? (
+    <GlassesFillIcon aria-hidden role="presentation" />
+  ) : (
+    <GlassesIcon aria-hidden role="presentation" />
+  );
+};
+
+const getTooltip = (isViewed: boolean, isDownload: boolean) => {
+  if (isDownload) {
+    return 'Last ned dokumentet';
+  }
+
+  return isViewed ? 'Åpnet' : 'Åpne dokumentet';
+};
