@@ -2,29 +2,16 @@ import { CardFullHeight } from '@app/components/card/card';
 import { DocumentTitle } from '@app/components/document-viewer/document-title';
 import { getDocumentUrl } from '@app/components/documents/document/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
-import { type IArkivertDocument, VariantFormat } from '@app/types/dokument';
+import { DocumentViewerContext, type IViewedDocument } from '@app/pages/registrering/document-viewer-context';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 
 const DEFAULT_NAME = '<Mangler navn>';
 
 export const DocumentViewer = () => {
   const { dokument } = useContext(DocumentViewerContext);
-
-  if (dokument === null) {
-    return (
-      <CardFullHeight>
-        <Container>
-          <Placeholder>
-            <FileTextIcon aria-hidden />
-          </Placeholder>
-        </Container>
-      </CardFullHeight>
-    );
-  }
 
   return (
     <CardFullHeight>
@@ -35,30 +22,20 @@ export const DocumentViewer = () => {
   );
 };
 
-interface IContentProps {
-  dokument: IArkivertDocument | ViewedVedlegg;
-}
+const Content = ({ dokument }: { dokument: IViewedDocument | null }) => {
+  if (dokument === null) {
+    return (
+      <Placeholder>
+        <FileTextIcon aria-hidden />
+      </Placeholder>
+    );
+  }
 
-const Content = ({ dokument }: IContentProps) => {
-  const hasRedactedDocument = dokument.varianter.some(({ format }) => format === VariantFormat.SLADDET);
-  const [showRedacted, setShowRedacted] = useState(hasRedactedDocument);
-
-  useEffect(() => {
-    setShowRedacted(hasRedactedDocument);
-  }, [hasRedactedDocument]);
-
-  const format = showRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
-  const url = getDocumentUrl(dokument.journalpostId, dokument.dokumentInfoId, { format });
+  const url = getDocumentUrl(dokument.journalpostId, dokument.dokumentInfoId);
 
   return (
     <>
-      <DocumentTitle
-        url={url}
-        format={format}
-        hasRedactedDocument={hasRedactedDocument}
-        showRedacted={showRedacted}
-        setShowRedacted={setShowRedacted}
-      />
+      <DocumentTitle url={url} />
       <PDF tittel={dokument.tittel} url={url} />
     </>
   );

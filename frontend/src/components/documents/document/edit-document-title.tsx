@@ -1,8 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
-import type { IArkivertDocument } from '@app/types/dokument';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
@@ -10,16 +9,17 @@ import { styled } from 'styled-components';
 
 interface Props {
   exitEditMode: () => void;
-  dokument: IArkivertDocument | ViewedVedlegg;
+  dokumentInfoId: string;
+  journalpostId: string;
+  title: string;
 }
 
-export const EditTitle = ({ exitEditMode, dokument }: Props) => {
-  const { tittel, dokumentInfoId, journalpostId } = dokument;
+export const EditTitle = ({ exitEditMode, dokumentInfoId, journalpostId, title }: Props) => {
   const { viewDokument } = useContext(DocumentViewerContext);
   const { sakenGjelderValue } = useRegistrering();
   const [setJournalpostTitle] = useSetArkivertDokumentTitleMutation();
 
-  const [newTitle, setNewTitle] = useState(tittel ?? '');
+  const [newTitle, setNewTitle] = useState(title ?? '');
   const [isLoading, setIsLoading] = useState(false);
 
   const onSaveClick = useCallback(async () => {
@@ -30,7 +30,7 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
 
       toast.success('Dokumenttittel endret');
 
-      viewDokument(dokument);
+      viewDokument({ tittel: newTitle, journalpostId, dokumentInfoId });
     } catch (e) {
       if (e instanceof Error) {
         toast.error(`Feil ved endring av dokumenttittel: ${e.message}`);
@@ -39,18 +39,9 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
 
     setIsLoading(false);
     exitEditMode();
-  }, [
-    setJournalpostTitle,
-    sakenGjelderValue,
-    journalpostId,
-    dokumentInfoId,
-    newTitle,
-    viewDokument,
-    dokument,
-    exitEditMode,
-  ]);
+  }, [sakenGjelderValue, exitEditMode, setJournalpostTitle, journalpostId, dokumentInfoId, newTitle, viewDokument]);
 
-  const isChanged = tittel !== newTitle;
+  const isChanged = title !== newTitle;
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

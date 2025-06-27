@@ -1,5 +1,4 @@
 import { DocumentTitle } from '@app/components/documents/document/document-title';
-import { canOpen } from '@app/components/documents/document/filetype';
 import { EditableLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logiske-vedlegg-list';
 import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
@@ -14,42 +13,36 @@ interface Props {
 
 export const Attachment = ({ vedlegg, dokument }: Props) => {
   const { journalpostId, harTilgangTilArkivvariant, temaId } = dokument;
-  const { dokumentInfoId, tittel, logiskeVedlegg, varianter } = vedlegg;
-
-  const [viewDokument, isViewed] = useViewDocument({ ...vedlegg, journalpostId });
-
-  const isDownload = !canOpen(varianter);
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (!harTilgangTilArkivvariant) {
-      return;
-    }
-
-    if (!isDownload) {
-      return viewDokument(e);
-    }
-
-    window.location.href = `/api/kabin-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
-  };
+  const { dokumentInfoId, tittel, logiskeVedlegg } = vedlegg;
+  const [viewDokument, isViewed] = useViewDocument({
+    dokumentInfoId,
+    journalpostId,
+    tittel,
+    harTilgangTilArkivvariant,
+  });
 
   return (
     <StyledAttachmentListItem
-      onMouseDown={onMouseDown}
+      onMouseDown={viewDokument}
       data-testid="document-vedlegg-list-item"
       data-documentname={tittel}
       $isViewed={isViewed}
     >
-      <DocumentTitle dokument={{ ...vedlegg, journalpostId }} />
+      <DocumentTitle
+        journalpostId={journalpostId}
+        dokumentInfoId={dokumentInfoId}
+        tittel={tittel ?? 'Ukjent dokumentnavn'}
+      />
       {harTilgangTilArkivvariant ? (
         <EditableLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} dokumentInfoId={dokumentInfoId} temaId={temaId} />
       ) : (
         <ReadOnlyLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} />
       )}
       <ViewDocumentButton
-        viewDocument={onMouseDown}
-        isViewed={isViewed}
+        dokumentInfoId={dokumentInfoId}
+        journalpostId={journalpostId}
         harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-        isDownload={isDownload}
+        tittel={tittel}
       />
     </StyledAttachmentListItem>
   );

@@ -1,18 +1,16 @@
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { FeilTag, PolTag } from '@app/components/documents/document/document-warnings';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
-import { Skjerming, VariantFormat } from '@app/types/dokument';
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Switch, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, Heading, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 
-interface Props extends VariantProps {
+interface Props {
   url: string;
 }
 
-export const DocumentTitle = ({ url, ...props }: Props) => {
+export const DocumentTitle = ({ url }: Props) => {
   const { journalpost } = useJournalpost();
   const { dokument, viewDokument } = useContext(DocumentViewerContext);
 
@@ -38,9 +36,6 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       <Heading size="small" level="1">
         {dokument?.tittel ?? ''}
       </Heading>
-
-      <Variant {...props} />
-
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
       <Tooltip content="Lukk" placement="top">
         <RightAlignedButton
@@ -60,67 +55,8 @@ const StyledDocumentTitle = styled.div`
   align-items: center;
   gap: 8px;
   width: 100%;
-  margin-bottom: 4px;
 `;
 
 const RightAlignedButton = styled(Button)`
   margin-left: auto;
 `;
-
-interface VariantProps extends RedactedSwitchProps {
-  format: VariantFormat;
-}
-
-const Variant = ({ format, ...props }: VariantProps) => {
-  const { dokument } = useContext(DocumentViewerContext);
-
-  if (!dokument) {
-    return null;
-  }
-
-  const showsPol = dokument.varianter.some((v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.POL);
-  const showsFeil = dokument.varianter.some(
-    (v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.FEIL,
-  );
-
-  return (
-    <HStack gap="2" wrap={false}>
-      <RedactedSwitch {...props} />
-
-      {showsPol ? <PolTag /> : null}
-      {showsFeil ? <FeilTag /> : null}
-    </HStack>
-  );
-};
-
-interface RedactedSwitchProps {
-  hasRedactedDocument: boolean;
-  showRedacted: boolean;
-  setShowRedacted: (value: boolean) => void;
-}
-
-const RedactedSwitch = ({ showRedacted, setShowRedacted, hasRedactedDocument }: RedactedSwitchProps) => {
-  const { dokument } = useContext(DocumentViewerContext);
-
-  if (!hasRedactedDocument || dokument === null) {
-    return null;
-  }
-
-  const hasAccessToArchivedDocuments = dokument.varianter.some((v) => v.hasAccess && v.format === VariantFormat.ARKIV);
-
-  if (!hasAccessToArchivedDocuments) {
-    return (
-      <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
-        <Tag variant="alt1-filled" size="small">
-          Sladdet
-        </Tag>
-      </Tooltip>
-    );
-  }
-
-  return (
-    <Switch size="small" checked={showRedacted} onChange={() => setShowRedacted(!showRedacted)} className="py-0">
-      Sladdet
-    </Switch>
-  );
-};

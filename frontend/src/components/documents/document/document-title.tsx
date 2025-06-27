@@ -1,25 +1,23 @@
-import { DocumentWarnings } from '@app/components/documents/document/document-warnings';
 import { EditTitle } from '@app/components/documents/document/edit-document-title';
-import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
-import type { IArkivertDocument } from '@app/types/dokument';
+import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
-  dokument: IArkivertDocument | ViewedVedlegg;
+  journalpostId: string;
+  dokumentInfoId: string;
+  tittel: string;
 }
 
-export const DocumentTitle = ({ dokument }: Props) => {
-  const { dokumentInfoId, journalpostId, varianter } = dokument;
-  const tittel = dokument.tittel ?? 'Ukjent dokumentnavn';
-  const { dokument: viewed } = useContext(DocumentViewerContext);
+export const DocumentTitle = ({ dokumentInfoId, journalpostId, tittel }: Props) => {
+  const { dokument } = useContext(DocumentViewerContext);
   const [editMode, setEditMode] = useState(false);
 
   const isActive = useMemo(
-    () => viewed !== null && viewed.dokumentInfoId === dokumentInfoId && viewed.journalpostId === journalpostId,
-    [dokumentInfoId, journalpostId, viewed],
+    () => dokument !== null && dokument.dokumentInfoId === dokumentInfoId && dokument.journalpostId === journalpostId,
+    [dokumentInfoId, journalpostId, dokument],
   );
 
   const enterEditMode = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,9 +31,6 @@ export const DocumentTitle = ({ dokument }: Props) => {
         <EllipsisTitle title={tittel} data-testid="document-title" $isActive={isActive}>
           {tittel}
         </EllipsisTitle>
-
-        <DocumentWarnings varianter={varianter} />
-
         <Button
           size="xsmall"
           variant="tertiary"
@@ -50,7 +45,12 @@ export const DocumentTitle = ({ dokument }: Props) => {
 
   return (
     <StyledTitle>
-      <EditTitle exitEditMode={() => setEditMode(false)} dokument={{ ...dokument, journalpostId }} />
+      <EditTitle
+        dokumentInfoId={dokumentInfoId}
+        journalpostId={journalpostId}
+        exitEditMode={() => setEditMode(false)}
+        title={tittel}
+      />
     </StyledTitle>
   );
 };
