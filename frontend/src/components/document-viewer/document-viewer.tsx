@@ -2,16 +2,29 @@ import { CardFullHeight } from '@app/components/card/card';
 import { DocumentTitle } from '@app/components/document-viewer/document-title';
 import { getDocumentUrl } from '@app/components/documents/document/use-view-document';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { DocumentViewerContext, type IViewedDocument } from '@app/pages/registrering/document-viewer-context';
+import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
+import { type IArkivertDocument, VariantFormat } from '@app/types/dokument';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 const DEFAULT_NAME = '<Mangler navn>';
 
 export const DocumentViewer = () => {
   const { dokument } = useContext(DocumentViewerContext);
+
+  if (dokument === null) {
+    return (
+      <CardFullHeight>
+        <Container>
+          <Placeholder>
+            <FileTextIcon aria-hidden />
+          </Placeholder>
+        </Container>
+      </CardFullHeight>
+    );
+  }
 
   return (
     <CardFullHeight>
@@ -22,20 +35,30 @@ export const DocumentViewer = () => {
   );
 };
 
-const Content = ({ dokument }: { dokument: IViewedDocument | null }) => {
-  if (dokument === null) {
-    return (
-      <Placeholder>
-        <FileTextIcon aria-hidden />
-      </Placeholder>
-    );
-  }
+interface IContentProps {
+  dokument: IArkivertDocument | ViewedVedlegg;
+}
 
-  const url = getDocumentUrl(dokument.journalpostId, dokument.dokumentInfoId);
+const Content = ({ dokument }: IContentProps) => {
+  const hasRedactedDocument = dokument.varianter.some(({ format }) => format === VariantFormat.SLADDET);
+  const [showRedacted, setShowRedacted] = useState(hasRedactedDocument);
+
+  useEffect(() => {
+    setShowRedacted(hasRedactedDocument);
+  }, [hasRedactedDocument]);
+
+  const format = showRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
+  const url = getDocumentUrl(dokument.journalpostId, dokument.dokumentInfoId, { format });
 
   return (
     <>
-      <DocumentTitle url={url} />
+      <DocumentTitle
+        url={url}
+        format={format}
+        hasRedactedDocument={hasRedactedDocument}
+        showRedacted={showRedacted}
+        setShowRedacted={setShowRedacted}
+      />
       <PDF tittel={dokument.tittel} url={url} />
     </>
   );

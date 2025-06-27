@@ -3,6 +3,7 @@ import { AttachmentList } from '@app/components/documents/document/attachment-li
 import { AvsenderMottakerNotatforer } from '@app/components/documents/document/avsender-mottaker-notatforer';
 import { DocumentTitle } from '@app/components/documents/document/document-title';
 import { ExpandButton } from '@app/components/documents/document/expand-button';
+import { canOpen } from '@app/components/documents/document/filetype';
 import { SelectDocumentButton } from '@app/components/documents/document/select-document-button';
 import type { BaseSelectDocumentProps } from '@app/components/documents/document/types';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
@@ -44,17 +45,26 @@ export const Dokument = ({
 
   const isSelected = getIsSelected(journalpostId);
 
-  const [viewDocument, isViewed] = useViewDocument({
-    journalpostId,
-    dokumentInfoId,
-    tittel,
-    harTilgangTilArkivvariant,
-  });
+  const [viewDocument, isViewed] = useViewDocument(dokument);
 
   const hasVedlegg = dokument.vedlegg.length !== 0 || dokument.logiskeVedlegg.length !== 0;
   const canExpand = hasVedlegg || harTilgangTilArkivvariant;
 
   const title = tittel ?? '';
+
+  const isDownload = !canOpen(dokument.varianter);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!harTilgangTilArkivvariant) {
+      return;
+    }
+
+    if (!isDownload) {
+      return viewDocument(e);
+    }
+
+    window.location.href = `/api/kabin-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
+  };
 
   return (
     <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant} aria-label={title}>
@@ -65,11 +75,11 @@ export const Dokument = ({
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
         $showViewed={isViewed && !isSelected}
-        onMouseDown={viewDocument}
+        onMouseDown={onMouseDown}
       >
         {canExpand ? <ExpandButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} /> : null}
         <TitleContainer aria-label="Dokumenttittel">
-          <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={title} />
+          <DocumentTitle dokument={dokument} />
         </TitleContainer>
         <GridTag variant="alt3" size="small" title={temaName} $gridArea={GridArea.TEMA}>
           <Ellipsis>{temaName}</Ellipsis>
@@ -81,10 +91,10 @@ export const Dokument = ({
           <Journalposttype journalposttype={journalposttype} />
         </StyledField>
         <ViewDocumentButton
-          journalpostId={journalpostId}
-          dokumentInfoId={dokumentInfoId}
+          viewDocument={onMouseDown}
+          isViewed={isViewed}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-          tittel={tittel}
+          isDownload={isDownload}
         />
         <SelectDocumentButton
           isSelected={isSelected}

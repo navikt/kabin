@@ -26,6 +26,7 @@ export interface IVedlegg {
   tittel: string | null;
   harTilgangTilArkivvariant: boolean;
   logiskeVedlegg: LogiskVedlegg[];
+  varianter: Variants;
 }
 
 export interface ISak {
@@ -154,4 +155,39 @@ export interface IArkivertDocument {
   utsendingsinfo: IUtsendingsinfo | null;
   alreadyUsed: boolean;
   logiskeVedlegg: LogiskVedlegg[];
+  varianter: Variants;
+  hasAccess: boolean;
+}
+
+export interface Variant {
+  /** Filtype for dokumentvarianten. */
+  filtype: Filtype;
+  hasAccess: boolean;
+  format: VariantFormat;
+  skjerming: Skjerming | null;
+}
+
+export type Variants = [Variant, Variant] | [Variant];
+
+export enum VariantFormat {
+  ARKIV = 'ARKIV',
+  SLADDET = 'SLADDET',
+}
+
+export enum Skjerming {
+  POL = 'POL',
+  FEIL = 'FEIL',
+}
+
+export enum Filtype {
+  PDF = 'PDF',
+  JPEG = 'JPEG',
+  PNG = 'PNG',
+  TIFF = 'TIFF',
+  XLSX = 'XLSX',
+  JSON = 'JSON',
+  XML = 'XML',
+  AXML = 'AXML',
+  DXML = 'DXML',
+  RTF = 'RTF',
 }
