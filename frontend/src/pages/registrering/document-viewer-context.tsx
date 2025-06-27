@@ -1,21 +1,16 @@
+import { useGetArkivertDokumentQuery } from '@app/redux/api/journalposter';
+import type { IArkivertDocument, IVedlegg } from '@app/types/dokument';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { createContext, useState } from 'react';
 
-interface IViewedDocumentId {
+export interface ViewedVedlegg extends IVedlegg {
   journalpostId: string;
-  dokumentInfoId: string;
 }
-
-export interface IViewedDocument extends IViewedDocumentId {
-  tittel: string | null;
-}
-
-interface ISetViewedDocument extends IViewedDocumentId {
-  tittel: string | null;
-}
+export type IViewedDocument = IArkivertDocument | ViewedVedlegg | null;
 
 interface IDocumentViewerContext {
-  dokument: IViewedDocument | null;
-  viewDokument: (value: ISetViewedDocument | null) => void;
+  dokument: IViewedDocument;
+  viewDokument: (value: IViewedDocument) => void;
 }
 
 const DEFAULT_DOKUMENT_NAME = 'Ukjent dokumentnavn';
@@ -31,9 +26,11 @@ interface Props {
 
 export const DocumentViewerContextState = ({ children }: Props) => {
   const [dokument, setDokument] = useState<IViewedDocument | null>(null);
+  const { data } = useGetArkivertDokumentQuery(dokument?.journalpostId ?? skipToken);
 
-  const viewDokument = (value: ISetViewedDocument | null) =>
-    setDokument(value === null ? null : { ...value, tittel: value.tittel ?? DEFAULT_DOKUMENT_NAME });
-
-  return <DocumentViewerContext.Provider value={{ dokument, viewDokument }}>{children}</DocumentViewerContext.Provider>;
+  return (
+    <DocumentViewerContext.Provider value={{ viewDokument: setDokument, dokument: data ?? null }}>
+      {children}
+    </DocumentViewerContext.Provider>
+  );
 };
