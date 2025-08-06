@@ -120,15 +120,15 @@ const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }
   flex-direction: column;
   row-gap: 4px;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
-  border-radius: var(--a-border-radius-medium);
-  background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-surface-selected)' : 'var(--a-white)')};
+  border-radius: var(--ax-radius-4);
+  background-color: ${({ $isSelected }) => ($isSelected ? 'var(--ax-bg-accent-soft)' : 'var(--ax-bg-default)')};
 
   &:nth-child(odd) {
-    background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-surface-selected)' : 'var(--a-surface-subtle)')};
+    background-color: ${({ $isSelected }) => ($isSelected ? 'var(--ax-bg-accent-soft)' : 'var(--ax-bg-neutral-moderate)')};
   }
 
   &:hover {
-    background-color: var(--a-surface-active);
+    background-color: var(--ax-bg-neutral-moderate-pressedA);
   }
 `;
 

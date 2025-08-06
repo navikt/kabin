@@ -25,5 +25,5 @@ const Content = styled.div`
   flex-direction: row;
   align-items: center;
   column-gap: 4px;
-  color: var(--a-text-subtle);
+  color: var(--ax-text-neutral-subtle);
 `;

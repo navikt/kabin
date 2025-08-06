@@ -22,10 +22,9 @@ import { SaksTypeEnum, isType } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, Checkbox, HStack, Stack, Tag, ToggleGroup } from '@navikt/ds-react';
 import { type ChangeEventHandler, useCallback } from 'react';
-import { styled } from 'styled-components';
 
 const ReadOnlyType = () => {
-  const { id, typeId, journalpostId, mulighetIsBasedOnJournalpost } = useRegistrering();
+  const { typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
 
   switch (typeId) {
     case SaksTypeEnum.ANKE:
@@ -56,7 +55,7 @@ const ReadOnlyType = () => {
 };
 
 export const TypeSelect = () => {
-  const { id, typeId, journalpostId, mulighetIsBasedOnJournalpost } = useRegistrering();
+  const { id, typeId, journalpostId } = useRegistrering();
   const [setType] = useSetTypeMutation({ fixedCacheKey: id });
   const canEdit = useCanEdit();
 
@@ -239,12 +238,3 @@ const useJournalpostAndMulighet = () => {
 
   return { journalpost, mulighet };
 };
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  flex-shrink: 0;
-`;

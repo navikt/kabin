@@ -54,5 +54,5 @@ const Container = styled.div`
   flex-wrap: wrap;
   padding: 16px;
   padding-bottom: 8px;
-  background-color: white;
+  background-color: var(--ax-bg-default);
 `;

@@ -72,12 +72,12 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 12px;
   margin-bottom: 24px;
-  background-color: var(--a-bg-default);
+  background-color: var(--ax-bg-default);
   position: sticky;
   top: -110px;
   z-index: 1;
-  box-shadow: var(--a-shadow-small);
-  border-radius: var(--a-border-radius-medium);
+  box-shadow: var(--ax-shadow-dialog);
+  border-radius: var(--ax-radius-4);
 `;
 
 const Buttons = styled.div`

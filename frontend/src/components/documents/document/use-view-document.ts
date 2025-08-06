@@ -4,14 +4,6 @@ import { KABIN_API_BASE_PATH } from '@app/redux/api/common';
 import type { IArkivertDocument, VariantFormat } from '@app/types/dokument';
 import { useCallback, useContext } from 'react';
 
-interface Props {
-  tittel: string | null;
-  dokumentInfoId: string;
-  journalpostId: string;
-  harTilgangTilArkivvariant: boolean;
-  format?: VariantFormat;
-}
-
 export const useViewDocument = (
   documentToView: IArkivertDocument | ViewedVedlegg,
   format?: VariantFormat,

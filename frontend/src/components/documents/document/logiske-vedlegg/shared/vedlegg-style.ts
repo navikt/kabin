@@ -9,7 +9,7 @@ export const ReadOnlyTag = styled(Tag)`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  border-radius: var(--a-border-radius-xlarge);
+  border-radius: var(--ax-radius-12);
   position: relative;
   padding-left: 8px;
   padding-right: 8px;

@@ -62,7 +62,7 @@ const StyledCard = styled.section`
   display: flex;
   flex-direction: column;
   row-gap: 16px;
-  box-shadow: var(--a-shadow-medium);
+  box-shadow: var(--ax-shadow-dialog);
   border-radius: 4px;
   padding: 16px;
   flex-shrink: 0;

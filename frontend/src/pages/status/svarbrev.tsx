@@ -1,3 +1,4 @@
+import { AppTheme, useAppTheme } from '@app/app-theme';
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ReadAddress } from '@app/components/svarbrev/address/read-address';
@@ -18,27 +19,32 @@ interface Props {
   id: string;
 }
 
-export const Svarbrev = ({ svarbrev, id }: Props) => (
-  <>
-    <StyledCard title="Svarbrevinfo" $gridArea="svarbrev-metadata" titleSize="medium">
-      <InfoItem label="Dokumentnavn">{svarbrev.title}</InfoItem>
-      <Section aria-labelledby="svarbrevinfo-mottakere">
-        <Label id="svarbrevinfo-mottakere">Mottakere</Label>
-        <StyledList>
-          {svarbrev.receivers.map((receiver) => (
-            <Part key={receiver.part.identifikator} {...receiver} />
-          ))}
-        </StyledList>
-      </Section>
-    </StyledCard>
-    <StyledCard title="Svarbrev" $gridArea="svarbrev-pdf" titleSize="medium">
-      <StyledPdf
-        data={`${KABAL_API_BASE_PATH}/behandlinger/${id}/dokumenter/${svarbrev.dokumentUnderArbeidId}/pdf${PDF_PARAMS}`}
-        type="application/pdf"
-      />
-    </StyledCard>
-  </>
-);
+export const Svarbrev = ({ svarbrev, id }: Props) => {
+  const appTheme = useAppTheme();
+
+  return (
+    <>
+      <StyledCard title="Svarbrevinfo" $gridArea="svarbrev-metadata" titleSize="medium">
+        <InfoItem label="Dokumentnavn">{svarbrev.title}</InfoItem>
+        <Section aria-labelledby="svarbrevinfo-mottakere">
+          <Label id="svarbrevinfo-mottakere">Mottakere</Label>
+          <StyledList>
+            {svarbrev.receivers.map((receiver) => (
+              <Part key={receiver.part.identifikator} {...receiver} />
+            ))}
+          </StyledList>
+        </Section>
+      </StyledCard>
+      <StyledCard title="Svarbrev" $gridArea="svarbrev-pdf" titleSize="medium">
+        <StyledPdf
+          data={`${KABAL_API_BASE_PATH}/behandlinger/${id}/dokumenter/${svarbrev.dokumentUnderArbeidId}/pdf${PDF_PARAMS}`}
+          type="application/pdf"
+          style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+        />
+      </StyledCard>
+    </>
+  );
+};
 
 const StyledList = styled.ul`
   padding: 0;
@@ -100,9 +106,9 @@ const PartContent = styled.li`
   align-items: stretch;
   justify-content: start;
   row-gap: 0;
-  border: 1px solid var(--a-border-default);
+  border: 1px solid var(--ax-border-neutral);
   border-left-width: 4px;
-  border-radius: var(--a-border-radius-medium);
+  border-radius: var(--ax-radius-4);
   padding: 0;
 `;
 

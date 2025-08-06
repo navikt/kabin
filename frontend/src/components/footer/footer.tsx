@@ -75,24 +75,24 @@ const StyledFooter = styled.div<IStyleProps>`
 
 const getBackgroundColor = (hasError: boolean, isFinished: boolean) => {
   if (hasError) {
-    return 'var(--a-surface-warning-subtle)';
+    return 'var(--ax-bg-warning-soft)';
   }
 
   if (isFinished) {
-    return 'var(--a-surface-success-subtle)';
+    return 'var(--ax-bg-success-soft)';
   }
 
-  return 'var(--a-surface-action-subtle)';
+  return 'var(--ax-bg-accent-soft)';
 };
 
 const getBorderColor = (hasError: boolean, isFinished: boolean) => {
   if (hasError) {
-    return 'var(--a-border-warning)';
+    return 'var(--ax-border-warning)';
   }
 
   if (isFinished) {
-    return 'var(--a-border-success)';
+    return 'var(--ax-border-success)';
   }
 
-  return 'var(--a-border-action)';
+  return 'var(--ax-border-accent)';
 };

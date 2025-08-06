@@ -3,11 +3,11 @@ import { styled } from 'styled-components';
 
 export const EditTag = styled(ReadOnlyTag)`
   max-width: 200px;
-  background-color: white;
+  background-color: var(--ax-bg-default);
 
   &:empty::before {
     content: attr(aria-placeholder);
-    color: var(--a-text-subtle);
+    color: var(--ax-text-neutral-subtle);
   }
 
   &[contenteditable='true'] {

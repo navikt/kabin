@@ -108,7 +108,7 @@ const Beskrivelse = ({ beskrivelse }: { beskrivelse: string | null }) => (
 
 const StyledBodyLong = styled(BodyLong)`
   white-space: pre;
-  border-left: 4px solid var(--a-border-subtle);
+  border-left: 4px solid var(--ax-border-neutral-subtle);
   padding-left: 1rem;
 `;
 

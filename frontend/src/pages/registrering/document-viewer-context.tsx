@@ -13,8 +13,6 @@ interface IDocumentViewerContext {
   viewDokument: (value: IViewedDocument) => void;
 }
 
-const DEFAULT_DOKUMENT_NAME = 'Ukjent dokumentnavn';
-
 export const DocumentViewerContext = createContext<IDocumentViewerContext>({
   dokument: null,
   viewDokument: () => {},

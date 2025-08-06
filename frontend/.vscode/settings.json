@@ -5,8 +5,10 @@
   "editor.codeActionsOnSave": {
     "quickfix.biome": "always",
     "source.fixAll.biome": "always",
+    "source.biome": "always",
     "source.organizeImports.biome": "always",
-    "source.addMissingImports.ts": "explicit"
+    "source.addMissingImports.ts": "never",
+    "source.removeUnusedImports": "never"
   },
   "editor.acceptSuggestionOnCommitCharacter": false,
   "typescript.validate.enable": true,
@@ -39,5 +41,17 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ":\\s*?[\"'`]([^\"'`]*).*?,",
+    "const\\s\\w*Classes\\s+=\\s+[\"'`]([^\"'`]*)",
+    "const\\s\\w*Class\\s+=\\s+[\"'`]([^\"'`]*)",
+    "const\\s\\w*_CLASSES\\s+=\\s+[\"'`]([^\"'`]*)",
+    "const\\s\\w*_CLASS\\s+=\\s+[\"'`]([^\"'`]*)",
+    "\\s\\w*ClassName=[\"'`]([^\"'`]*)",
+    "@tw\\s\\*/\\s+[\"'`]([^\"'`]*)"
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
   }
 }

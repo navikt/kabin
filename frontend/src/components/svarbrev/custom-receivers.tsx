@@ -64,7 +64,7 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                       size="xsmall"
                       variant="tertiary-neutral"
                       title="Fjern"
-                      icon={<TrashIcon color="var(--a-surface-danger)" aria-hidden />}
+                      icon={<TrashIcon color="var(--ax-bg-danger-strong)" aria-hidden />}
                       onClick={() => remove({ id: registreringId, receiverId: id })}
                       loading={isRemoving}
                     />

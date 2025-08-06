@@ -24,15 +24,15 @@ interface ContainerProps {
 }
 
 const BACKGROUND_COLORS: Record<States, string> = {
-  [States.SET]: 'var(--a-blue-50)',
-  [States.UNSET]: 'var(--a-gray-100)',
-  [States.ERROR]: 'var(--a-surface-danger-subtle)',
+  [States.SET]: 'var(--ax-accent-100)',
+  [States.UNSET]: 'var(--ax-neutral-200)',
+  [States.ERROR]: 'var(--ax-bg-danger-soft)',
 };
 
 const BORDER_COLORS: Record<States, string> = {
-  [States.SET]: 'var(--a-blue-200)',
-  [States.UNSET]: 'var(--a-gray-400)',
-  [States.ERROR]: 'var(--a-border-danger)',
+  [States.SET]: 'var(--ax-accent-300)',
+  [States.UNSET]: 'var(--ax-neutral-500)',
+  [States.ERROR]: 'var(--ax-border-danger)',
 };
 
 export const StyledContainer = styled.section<ContainerProps>`
@@ -40,11 +40,11 @@ export const StyledContainer = styled.section<ContainerProps>`
   flex-direction: row;
   justify-content: flex-start;
   column-gap: 8px;
-  background-color: ${({ $state }) => (BACKGROUND_COLORS[$state] ? BACKGROUND_COLORS[$state] : 'var(--a-gray-100)')};
-  border: 1px solid ${({ $state }) => (BORDER_COLORS[$state] ? BORDER_COLORS[$state] : 'var(--a-gray-400)')};
+  background-color: ${({ $state }) => (BACKGROUND_COLORS[$state] ? BACKGROUND_COLORS[$state] : 'var(--ax-neutral-200)')};
+  border: 1px solid ${({ $state }) => (BORDER_COLORS[$state] ? BORDER_COLORS[$state] : 'var(--ax-neutral-500)')};
   padding: 16px;
   border-radius: 4px;
-  min-height: 178px;
+  min-height: 181px;
 `;
 
 export const StyledPartName = styled(BodyShort)`

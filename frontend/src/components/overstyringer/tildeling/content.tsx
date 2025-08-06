@@ -13,7 +13,7 @@ export const Content = () => {
   const params = useSaksbehandlereParams();
   const { data } = useGetSaksbehandlereQuery(params);
   const { id, overstyringer } = useRegistrering();
-  const { typeId, mulighet } = useMulighet();
+  const { typeId } = useMulighet();
   const { saksbehandlerIdent } = overstyringer;
   const [setSaksbehandlerIdent] = useSetSaksbehandlerIdentMutation();
   const ytelseId = useYtelseId();

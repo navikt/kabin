@@ -42,5 +42,5 @@ const StyledListItem = styled(List.Item)`
 `;
 
 const StyledSection = styled.section`
-  margin-block: var(--a-spacing-3);
+  margin-block: var(--ax-space-12);
 `;

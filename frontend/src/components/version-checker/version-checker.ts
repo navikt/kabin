@@ -1,6 +1,15 @@
+import {
+  appThemeStore,
+  getAppTheme,
+  getSystemTheme,
+  getUserTheme,
+  systemThemeStore,
+  userThemeStore,
+} from '@app/app-theme';
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
+import { useSyncExternalStore } from 'react';
 
 export enum UpdateRequest {
   REQUIRED = 'REQUIRED',
@@ -23,23 +32,62 @@ class VersionChecker {
   private isUpToDate = true;
   private updateRequest: UpdateRequest = UpdateRequest.NONE;
   private updateRequestListeners: UpdateRequestListenerFn[] = [];
+  private eventSource: EventSource;
+  private appTheme = getAppTheme();
+  private userTheme = getUserTheme();
+  private systemTheme = getSystemTheme();
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
-    this.createEventSource();
+    this.eventSource = this.createEventSource();
 
     window.sendUpdateRequest = (data: UpdateRequest) => {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
     };
+
+    // Listen for app theme changes
+    appThemeStore.subscribe((appTheme) => {
+      if (this.appTheme !== appTheme) {
+        this.appTheme = appTheme;
+        this.reopenEventSource();
+      }
+    });
+
+    // Listen for user theme changes
+    userThemeStore.subscribe((userTheme) => {
+      if (this.userTheme !== userTheme) {
+        this.userTheme = userTheme;
+        this.reopenEventSource();
+      }
+    });
+
+    // Listen for system theme changes
+    systemThemeStore.subscribe((systemTheme) => {
+      if (this.systemTheme !== systemTheme) {
+        this.systemTheme = systemTheme;
+        this.reopenEventSource();
+      }
+    });
   }
 
   public getUpdateRequest = (): UpdateRequest => this.updateRequest;
 
   private delay = 0;
 
+  private reopenEventSource = () => {
+    this.eventSource.close();
+    this.delay = 0;
+    this.eventSource = this.createEventSource();
+  };
+
   private createEventSource = () => {
-    const events = new EventSource(`/version?${getQueryParams()}`);
+    const params = getQueryParams();
+    params.set('theme', this.appTheme);
+    params.set('user_theme', this.userTheme);
+    params.set('system_theme', this.systemTheme);
+
+    const events = new EventSource(`/version?${params.toString()}`);
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {
@@ -60,6 +108,8 @@ class VersionChecker {
     events.addEventListener('version', this.onVersion);
 
     events.addEventListener(UPDATE_REQUEST_EVENT, this.onUpdateRequest);
+
+    return events;
   };
 
   private onVersion = ({ data }: MessageEvent<string>) => {
@@ -115,3 +165,13 @@ const UPDATE_REQUEST_VALUES = Object.values(UpdateRequest);
 const isUpdateRequest = (data: string): data is UpdateRequest => UPDATE_REQUEST_VALUES.some((value) => value === data);
 
 export const VERSION_CHECKER = new VersionChecker();
+
+export const useIsUpToDate = (): boolean =>
+  useSyncExternalStore(
+    (onStoreChange) => {
+      VERSION_CHECKER.addUpdateRequestListener(onStoreChange);
+
+      return () => VERSION_CHECKER.removeUpdateRequestListener(onStoreChange);
+    },
+    () => VERSION_CHECKER.getIsUpToDate(),
+  );

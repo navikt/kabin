@@ -96,16 +96,16 @@ const DatepickerContainer = styled.div`
   left: 0;
   top: 100%;
   z-index: 1;
-  background-color: white;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--ax-bg-raised);
+  border-radius: var(--ax-radius-4);
+  box-shadow: var(--ax-shadow-dialog);
 `;
 
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: var(--a-spacing-3);
+  padding: var(--ax-space-12);
   padding-bottom: 0;
   column-gap: 8px;
 `;

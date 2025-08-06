@@ -28,7 +28,6 @@ const Column = styled.div`
 
 export const LeftColumn = styled(Column)`
   grid-area: left;
-  width: fit-content;
   width: 1150px;
   overflow-y: auto;
   overflow-x: auto;

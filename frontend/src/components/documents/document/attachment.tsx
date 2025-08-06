@@ -62,17 +62,17 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   grid-template-columns: max-content 1fr 30px 55px;
   grid-template-areas: 'title logiske-vedlegg view select';
   column-gap: 8px;
-  background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-100)' : 'transparent')};
+  background-color: ${({ $isViewed }) => ($isViewed ? 'var(--ax-warning-200)' : 'transparent')};
 
   &:hover {
-    background-color: ${({ $isViewed }) => ($isViewed ? 'var(--a-orange-200)' : 'transparent')};
+    background-color: ${({ $isViewed }) => ($isViewed ? 'var(--ax-warning-300)' : 'transparent')};
   }
 
   &::before {
     content: '';
     display: block;
     position: absolute;
-    border-bottom: 1px solid #c6c2bf;
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
     width: 40px;
     left: 0;
     top: 15px;
@@ -82,7 +82,7 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
     content: '';
     display: block;
     position: absolute;
-    border-left: 1px solid #c6c2bf;
+    border-left: 1px solid var(--ax-border-neutral-subtle);
     width: 1px;
     left: 0;
     top: 0;

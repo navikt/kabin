@@ -22,7 +22,7 @@ export const StyledCloseButton = styled(Button)`
   position: absolute;
   top: 0;
   right: 0;
-  color: black;
+  color: var(--ax-text-neutral);
 `;
 
 const scaleX = keyframes`
@@ -50,14 +50,14 @@ interface BaseToastProps {
 }
 
 export const BaseToastStyle = styled.section<BaseToastProps>`
-  color: black;
+  color: var(--ax-text-neutral);
   position: relative;
   display: flex;
   flex-direction: column;
   background-color: ${({ $type }) => getSubtleColor($type)};
-  border-radius: var(--a-border-radius-medium);
+  border-radius: var(--ax-radius-4);
   width: 300px;
-  padding: var(--a-spacing-4);
+  padding: var(--ax-space-16);
   border: 1px solid ${({ $type }) => getColor($type)};
 `;
 
@@ -92,18 +92,28 @@ export const TimedToastStyle = styled(BaseToastStyle)<TimedToastProps>`
   }
 `;
 
-const getSubtleColor = (type: ToastType) => `var(--a-surface-${typeToCss(type)}-subtle)`;
-const getColor = (type: ToastType) => `var(--a-border-${typeToCss(type)})`;
-
-const typeToCss = (type: ToastType) => {
+const getSubtleColor = (type: ToastType) => {
   switch (type) {
     case ToastType.SUCCESS:
-      return 'success';
+      return 'var(--ax-bg-success-soft)';
     case ToastType.ERROR:
-      return 'danger';
+      return 'var(--ax-bg-danger-soft)';
     case ToastType.INFO:
-      return 'info';
+      return 'var(--ax-bg-info-soft)';
     case ToastType.WARNING:
-      return 'warning';
+      return 'var(--ax-bg-warning-soft)';
+  }
+};
+
+const getColor = (type: ToastType) => {
+  switch (type) {
+    case ToastType.SUCCESS:
+      return 'var(--ax-bg-success-strong)';
+    case ToastType.ERROR:
+      return 'var(--ax-bg-danger-strong)';
+    case ToastType.INFO:
+      return 'var(--ax-bg-info-strong)';
+    case ToastType.WARNING:
+      return 'var(--ax-bg-warning-strong)';
   }
 };

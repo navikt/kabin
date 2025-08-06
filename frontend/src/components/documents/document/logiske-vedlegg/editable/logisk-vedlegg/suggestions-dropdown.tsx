@@ -61,9 +61,9 @@ const Container = styled.ul`
   left: 0;
   right: 0;
   width: fit-content;
-  background-color: white;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
+  background-color: var(--ax-bg-default);
+  border-radius: var(--ax-radius-4);
+  box-shadow: var(--ax-shadow-dialog);
   padding: 0;
   margin: 0;
   list-style: none;

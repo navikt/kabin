@@ -102,8 +102,7 @@ const StyledButton = styled(Button)`
 const StyledHeader = styled.div`
   position: sticky;
   top: 0;
-  border-bottom: 1px solid #c6c2bf;
-  background-color: white;
+  border-bottom: 1px solid var(--ax-border-neutral);
   padding: 8px;
   display: flex;
   justify-content: space-between;
