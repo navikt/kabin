@@ -6,9 +6,9 @@ export const StyledTable = styled.table`
 `;
 
 export const TableWrapper = styled.div`
-  border: 1px solid var(--a-blue-200);
-  background-color: var(--a-blue-50);
-  border-radius: var(--a-border-radius-medium);
+  border: 1px solid var(--ax-accent-300);
+  background-color: var(--ax-accent-100);
+  border-radius: var(--ax-radius-4);
   padding-top: 16px;
   padding-bottom: 16px;
 `;

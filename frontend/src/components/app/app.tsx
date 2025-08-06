@@ -1,9 +1,5 @@
-import { GlobalStyles } from '@app/components/app/global-styles';
 import { Router } from '@app/components/app/router';
 import { StaticDataLoader } from '@app/components/app/static-data-context';
-import { NavHeader } from '@app/components/header/header';
-import { Toasts } from '@app/components/toast/toasts';
-import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
 import { reduxStore } from '@app/redux/configure-store';
 import { StrictMode } from 'react';
 import { Provider } from 'react-redux';
@@ -14,11 +10,7 @@ export const App = () => (
     <BrowserRouter>
       <StaticDataLoader>
         <Provider store={reduxStore}>
-          <GlobalStyles />
-          <NavHeader />
           <Router />
-          <Toasts />
-          <VersionCheckerStatus />
         </Provider>
       </StaticDataLoader>
     </BrowserRouter>

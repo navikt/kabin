@@ -105,17 +105,17 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
 };
 
 const StyledConfirm = styled.div`
-  background: var(--a-surface-default);
-  border: 1px solid var(--a-border-action);
+  background: var(--ax-bg-default);
+  border: 1px solid var(--ax-border-accent);
   border-radius: 4px;
   position: absolute;
-  padding: var(--a-spacing-4);
+  padding: var(--ax-space-16);
   width: 400px;
   bottom: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: var(--a-shadow-medium);
+  box-shadow: var(--ax-shadow-dialog);
 `;
 
 const Buttons = styled.div`

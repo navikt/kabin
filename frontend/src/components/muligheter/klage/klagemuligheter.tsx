@@ -1,5 +1,4 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
 import { TableHeaders } from '@app/components/muligheter/klage/table-headers';
@@ -142,7 +141,7 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
   }
 
   return (
-    <TableContainer $showShadow={klagemuligheter.length >= 3}>
+    <div className="overflow-y-auto">
       <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Klagemuligheter">
         <TableHeaders />
         <Table.Body>
@@ -151,6 +150,6 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
           ))}
         </Table.Body>
       </Table>
-    </TableContainer>
+    </div>
   );
 };

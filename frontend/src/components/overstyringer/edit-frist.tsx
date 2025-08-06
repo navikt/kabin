@@ -74,7 +74,7 @@ const Container = styled.section`
   flex-direction: column;
   row-gap: 8px;
   padding-left: 16px;
-  border-left: var(--a-border-subtle) solid 1px;
+  border-left: var(--ax-border-neutral-subtle) solid 1px;
 `;
 
 const Row = styled.div`

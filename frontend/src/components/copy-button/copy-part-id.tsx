@@ -26,7 +26,7 @@ export const CopyPartIdButton = ({ id, size = 'small' }: Props) => {
 };
 
 export const StyledCopyButton = styled(CopyButton)`
-  border: 2px solid var(--a-border-default);
+  border: 2px solid var(--ax-border-neutral);
   white-space: nowrap;
   align-self: flex-start;
 `;

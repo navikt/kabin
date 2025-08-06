@@ -43,12 +43,6 @@ export const Receivers = () => {
   );
 };
 
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;

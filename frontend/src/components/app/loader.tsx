@@ -20,7 +20,7 @@ const LoaderWrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: #fafafa;
+  background-color: var(--ax-bg-default);
 `;
 
 const Content = styled.div`

@@ -9,7 +9,7 @@ export const StyledCard = styled(Card)<{ $gridArea: string }>`
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  background-color: var(--a-bg-default);
+  background-color: var(--ax-bg-default);
 `;
 
 export const StyledPart = styled(BodyShort)`

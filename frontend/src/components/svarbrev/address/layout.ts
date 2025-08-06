@@ -22,18 +22,18 @@ const getBackgroundColor = (state: AddressState) => {
     case AddressState.SAVED:
       return 'transparent';
     case AddressState.OVERRIDDEN:
-      return 'var(--a-surface-alt-1-subtle)';
+      return 'var(--ax-bg-meta-purple-soft)';
     case AddressState.UNSAVED:
-      return 'var(--a-surface-warning-subtle)';
+      return 'var(--ax-bg-warning-soft)';
   }
 };
 
 export const receiverStyle = css`
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--a-border-subtle);
+  border: 1px solid var(--ax-border-neutral-subtle);
   border-left-width: 4px;
-  border-radius: var(--a-border-radius-medium);
+  border-radius: var(--ax-radius-4);
   padding: 0;
   margin-bottom: 8px;
 

@@ -2,7 +2,6 @@ import { Card, CardSmall } from '@app/components/card/card';
 import { Ankemulighet } from '@app/components/muligheter/anke/ankemulighet';
 import { LoadingAnkeMuligheter } from '@app/components/muligheter/anke/loading-ankemuligheter';
 import { TableHeaders } from '@app/components/muligheter/anke/table-headers';
-import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedAnkemulighet, SelectedAnkemulighetBody } from '@app/components/selected/selected-ankemulighet';
@@ -148,7 +147,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   }
 
   return (
-    <TableContainer $showShadow={ankemuligheter.length >= 3}>
+    <div className="overflow-y-auto">
       <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Ankemuligheter">
         <TableHeaders />
         <Table.Body>
@@ -157,6 +156,6 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
           ))}
         </Table.Body>
       </Table>
-    </TableContainer>
+    </div>
   );
 };

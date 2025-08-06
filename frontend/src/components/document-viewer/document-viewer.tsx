@@ -1,3 +1,4 @@
+import { AppTheme, useAppTheme } from '@app/app-theme';
 import { CardFullHeight } from '@app/components/card/card';
 import { DocumentTitle } from '@app/components/document-viewer/document-title';
 import { getDocumentUrl } from '@app/components/documents/document/use-view-document';
@@ -69,24 +70,31 @@ interface PDFProps {
   tittel: string | null;
 }
 
-const PDF = ({ url, tittel }: PDFProps) => (
-  <>
-    <StyledLoader size="3xlarge" />
-    <StyledObject
-      data={`${url}#toolbar=1&view=fitH&zoom=page-width`}
-      role="document"
-      type="application/pdf"
-      name={tittel ?? DEFAULT_NAME}
-      id="document-viewer"
-    />
-  </>
-);
+const PDF = ({ url, tittel }: PDFProps) => {
+  const appTheme = useAppTheme();
+
+  return (
+    <>
+      <StyledLoader size="3xlarge" />
+      <StyledObject
+        data={`${url}#toolbar=1&view=fitH&zoom=page-width`}
+        role="document"
+        type="application/pdf"
+        name={tittel ?? DEFAULT_NAME}
+        id="document-viewer"
+        style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+      />
+    </>
+  );
+};
 
 const Container = styled.div`
   position: relative;
   width: 100%;
   border-radius: 4px;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const LOADER_WIDTH = 15;
@@ -101,8 +109,8 @@ const StyledLoader = styled(Loader)`
 `;
 
 const StyledObject = styled.object`
-  position: relative;
+  position: relative; 
   width: 100%;
-  height: 100%;
+  flex-grow: 1;
   z-index: 1;
 `;

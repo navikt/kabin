@@ -75,10 +75,10 @@ const Buttons = styled.div`
 const Container = styled.section`
   position: absolute;
   bottom: 100%;
-  background-color: var(--a-bg-default);
-  box-shadow: var(--a-shadow-medium);
-  border-radius: var(--a-border-radius-medium);
-  border: 1px solid var(--a-border-warning);
+  background-color: var(--ax-bg-default);
+  box-shadow: var(--ax-shadow-dialog);
+  border-radius: var(--ax-radius-4);
+  border: 1px solid var(--ax-border-warning);
   padding: 16px;
   width: 270px;
   display: flex;

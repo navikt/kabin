@@ -112,8 +112,8 @@ const LoadingPart = styled.div`
   gap: 16px;
   padding-top: 16px;
   padding-left: 32px;
-  border-radius: var(--a-border-radius-medium);
-  border: 1px solid var(--a-border-subtle);
+  border-radius: var(--ax-radius-4);
+  border: 1px solid var(--ax-border-neutral-subtle);
 `;
 
 const Parts = styled.div`

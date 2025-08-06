@@ -35,10 +35,10 @@ export const StyledGrid = styled.div<{ $showViewed?: boolean }>`
     '${gridTemplateAreas.join(' ')}'
     '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}';
   column-gap: 8px;
-  background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-100)' : 'transparent')};
+  background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--ax-warning-200)' : 'transparent')};
 
   &:hover {
-    background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--a-orange-200)' : 'transparent')};
+    background-color: ${({ $showViewed = false }) => ($showViewed ? 'var(--ax-warning-300)' : 'transparent')};
   }
 `;
 

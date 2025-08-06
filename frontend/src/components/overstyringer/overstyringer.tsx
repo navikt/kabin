@@ -63,7 +63,7 @@ const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | type
 };
 
 export const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
-  const { sakenGjelderValue, overstyringer, mulighet: mulighetFromRegistrering } = useRegistrering();
+  const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();

@@ -1,5 +1,4 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { TableContainer } from '@app/components/muligheter/common/styled-components';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { LoadingOmgjøringskravMuligheter } from '@app/components/muligheter/omgjøringskrav/loading-omgjøringskravmuligheter';
 import { Omgjøringskravmulighet } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmulighet';
@@ -151,7 +150,7 @@ const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
   }
 
   return (
-    <TableContainer $showShadow={omgjøringskravmuligheter.length >= 3}>
+    <div className="overflow-y-auto">
       <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Omgjøringskravmuligheter">
         <TableHeaders />
         <Table.Body>
@@ -160,6 +159,6 @@ const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
           ))}
         </Table.Body>
       </Table>
-    </TableContainer>
+    </div>
   );
 };

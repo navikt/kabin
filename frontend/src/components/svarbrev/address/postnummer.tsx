@@ -48,7 +48,7 @@ const PoststedContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-items: start;
-  gap: var(--a-spacing-2);
+  gap: var(--ax-space-8);
 `;
 
 const StyledLabel = styled(Label)`

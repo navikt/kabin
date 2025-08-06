@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@import "@navikt/ds-css/darkside" layer(components);
+@import "./fonts.css" layer(fonts);
+@config './tailwind.config.js';
+
+@layer components {
+  @theme {
+    --a-font-family: "Source Sans 3", Arial, sans-serif;
+  }
+}
+
+@utility text-stroke-* {
+  text-shadow:
+    -0.3px -0.3px 0 --value(--color-*),
+    0.3px -0.3px 0 --value(--color-*),
+    -0.3px 0.3px 0 --value(--color-*),
+    0.3px 0.3px 0 --value(--color-*);
+}
+
+@utility animate-play {
+  animation-play-state: running;
+}
+
+@utility animate-paused {
+  animation-play-state: paused;
+}
+
+@utility animate-infinite {
+  animation-iteration-count: infinite;
+}
+
+@utility animate-once {
+  animation-iteration-count: 1;
+}
+
+@utility animate-twice {
+  animation-iteration-count: 2;
+}
+
+@utility animate-thrice {
+  animation-iteration-count: 3;
+}
+
+@utility animate-iteration-* {
+  animation-iteration-count: --value(integer, [integer]);
+}
+
+@utility animate-forwards {
+  animation-fill-mode: forwards;
+}
+
+@utility animate-backwards {
+  animation-fill-mode: backwards;
+}
+
+@utility animate-linear {
+  animation-timing-function: linear;
+}
+
+@utility animate-ease-in {
+  animation-timing-function: ease-in;
+}
+
+@utility animate-ease-in-out {
+  animation-timing-function: ease-in-out;
+}
+
+@utility animate-ease-out {
+  animation-timing-function: ease-out;
+}
+
+@theme {
+  --font-display: "Source Sans 3", Arial, sans-serif;
+
+  --animate-wiggle: wiggle 1.75s ease-in-out infinite;
+
+  @keyframes wiggle {
+    0%,
+    2.5%,
+    27.5% {
+      transform: rotate(0deg);
+    }
+
+    5% {
+      transform: rotate(20deg);
+    }
+
+    10% {
+      transform: rotate(-20deg);
+    }
+
+    15% {
+      transform: rotate(20deg);
+    }
+
+    20% {
+      transform: rotate(-20deg);
+    }
+
+    25% {
+      transform: rotate(20deg);
+    }
+  }
+
+  --animate-slide-in: slide-in 0.15s ease-in-out;
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  --animate-slide-out: slide-out 0.15s ease-in-out;
+
+  @keyframes slide-out {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(100% + var(--ax-space-8)));
+    }
+  }
+
+  --animate-timer: timer 10s linear;
+
+  @keyframes timer {
+    from {
+      transform: scaleX(100%);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+}
+
+:root {
+  --a-font-family: "Source Sans 3", Arial, sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+::selection {
+  color: var(--ax-text-accent-contrast);
+  background-color: var(--ax-bg-accent-strong);
+}

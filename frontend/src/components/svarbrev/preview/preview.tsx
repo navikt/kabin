@@ -51,7 +51,7 @@ const PdfContainer = styled.div`
   position: relative;
   width: 100%;
   aspect-ratio: ${PDF_ASPECT_RATIO};
-  background-color: white;
+  background-color: var(--ax-bg-default);
 `;
 
 const useUrl = () => {

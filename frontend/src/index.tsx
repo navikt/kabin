@@ -1,4 +1,3 @@
-import '@navikt/ds-css';
 import { App } from '@app/components/app/app';
 import { createRoot } from 'react-dom/client';
 

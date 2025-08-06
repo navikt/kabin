@@ -80,7 +80,7 @@ const KeyValue = ({ min = 100, max = 300 }: { min?: number; max?: number }) => {
 
 const Card = styled.div`
   padding: 16px;
-  box-shadow: var(--a-shadow-medium);
+  box-shadow: var(--ax-shadow-dialog);
 `;
 
 const InfoCard = styled(Card)`

@@ -3,12 +3,10 @@ import { styled } from 'styled-components';
 interface Props {
   $open: boolean;
   $minHeight?: string;
-  $error?: boolean;
 }
 
 export const ToggleButton = styled.button<Props>`
-  border: 1px solid ${({ $error }) => ($error === true ? '#ba3a26' : 'var(--a-border-default)')};
-  box-shadow: ${({ $error }) => ($error === true ? '0 0 0 1px #ba3a26' : 'none')};
+  border: 1px solid var(--ax-border-neutral);
   padding: 0 1.75rem 0 0.5rem;
   min-height: ${({ $minHeight }) => (typeof $minHeight === 'undefined' ? '2rem' : $minHeight)};
   width: 100%;
@@ -21,7 +19,7 @@ export const ToggleButton = styled.button<Props>`
   position: relative;
   font-size: 14px;
   font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-  color: var(--a-text-default);
+  color: var(--ax-text-neutral);
 
   &::before,
   &::after {
@@ -30,7 +28,7 @@ export const ToggleButton = styled.button<Props>`
     width: 0.5rem;
     border-radius: 2px;
     height: 1.5px;
-    background: var(--a-text-default);
+    background: var(--ax-text-neutral);
     right: 0.5rem;
     top: 50%;
     transition: transform 0.1s ease;
@@ -49,13 +47,13 @@ export const ToggleButton = styled.button<Props>`
   &:active,
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 3px #254b6d;
+    box-shadow: 0 0 0 3px var(--ax-border-accent);
   }
 
   &:disabled {
     cursor: not-allowed;
-    border-color: #6a6a6a;
-    background: #f1f1f1;
+    border-color: var(--ax-border-neutral);
+    background: var(--ax-bg-neutral);
     opacity: 0.7;
   }
 `;

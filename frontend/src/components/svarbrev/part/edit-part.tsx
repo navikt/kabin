@@ -88,7 +88,6 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
       </Search>
       <Result
         part={data}
-        search={rawValue}
         onChange={(p) => {
           setRawValue('');
           onChange(p);
@@ -106,11 +105,10 @@ interface ResultProps {
   onChange: (part: IPart) => void;
   isLoading: boolean;
   isSearching: boolean;
-  search: string;
   buttonText?: string;
 }
 
-const Result = ({ part, onChange, search, isLoading, isSearching, buttonText }: ResultProps) => {
+const Result = ({ part, onChange, isLoading, isSearching, buttonText }: ResultProps) => {
   if (part === null) {
     return <Tag variant="warning">Ingen treff</Tag>;
   }
