@@ -79,7 +79,7 @@ const EditableAnkemuligheter = () => {
 
         <Button
           size="xsmall"
-          variant="tertiary"
+          variant="tertiary-neutral"
           onClick={() => refetch(id)}
           loading={isFetching}
           icon={<ArrowsCirclepathIcon aria-hidden />}

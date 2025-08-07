@@ -42,7 +42,7 @@ export const SetPartButton = ({ defaultPart, partField, label, title, icon, load
     >
       <Button
         size="small"
-        variant="secondary"
+        variant="secondary-neutral"
         title={title}
         icon={icon}
         onClick={() => setPart({ id, part: defaultPart })}

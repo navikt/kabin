@@ -3,7 +3,7 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import type { Receiver } from '@app/redux/api/registreringer/types';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
-import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { BoxNew, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 const getHandlingLabel = (handling: HandlingEnum | null, utsendingskanal: Utsendingskanal) => {
@@ -30,14 +30,8 @@ const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
 
   return (
     <li>
-      <Box
-        background="surface-neutral-subtle"
-        padding="0"
-        borderRadius="medium"
-        borderColor="border-default"
-        borderWidth="1"
-      >
-        <Box padding="2">
+      <BoxNew background="neutral-soft" padding="0" borderRadius="medium" borderColor="neutral" borderWidth="1">
+        <BoxNew padding="2">
           <VStack gap="2" align="start">
             <Label as={Heading} level="1" size="small">
               {receiver.part.name}
@@ -49,24 +43,24 @@ const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
               </Tag>
             </Tooltip>
           </VStack>
-        </Box>
+        </BoxNew>
 
         {addressLines.length === 0 ? null : (
           <Tooltip content={addressIsOverridden ? 'Manuelt overstyrt addresse' : 'Standardadresse'}>
-            <Box
-              background={addressIsOverridden ? 'surface-warning-subtle' : undefined}
+            <BoxNew
+              background={addressIsOverridden ? 'warning-soft' : undefined}
               padding="2"
               borderRadius="medium"
-              borderColor="border-default"
+              borderColor="neutral"
               borderWidth="0"
             >
               {addressLines.map((l) => (
                 <div key={l}>{l}</div>
               ))}
-            </Box>
+            </BoxNew>
           </Tooltip>
         )}
-      </Box>
+      </BoxNew>
     </li>
   );
 };

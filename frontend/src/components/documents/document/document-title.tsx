@@ -38,7 +38,7 @@ export const DocumentTitle = ({ dokument }: Props) => {
 
         <Button
           size="xsmall"
-          variant="tertiary"
+          variant="tertiary-neutral"
           icon={<PencilIcon aria-hidden />}
           title="Endre"
           onClick={enterEditMode}

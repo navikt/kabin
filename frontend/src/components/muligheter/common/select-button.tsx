@@ -27,7 +27,7 @@ export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighe
   return (
     <Button
       size="small"
-      variant="tertiary"
+      variant="tertiary-neutral"
       icon={icon}
       title={title}
       onClick={select}

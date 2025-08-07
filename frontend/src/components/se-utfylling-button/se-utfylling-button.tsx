@@ -10,7 +10,7 @@ export const SeUtfylling = ({ registreringId }: Props) => (
   <Button
     as={Link}
     to={`/registrering/${registreringId}`}
-    variant="secondary"
+    variant="secondary-neutral"
     size="small"
     icon={<DocPencilIcon aria-hidden role="presentation" />}
   >

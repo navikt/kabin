@@ -33,18 +33,18 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
       <Button
         as={RouterLink}
         to="/"
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         icon={<HouseIcon aria-hidden role="presentation" />}
       >
         Tilbake til forsiden
       </Button>
 
-      <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary" size="small">
+      <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary-neutral" size="small">
         Åpne Kabal søk
       </ExternalLinkButton>
 
-      <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary" size="small">
+      <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary-neutral" size="small">
         Åpne behandling i Kabal
       </ExternalLinkButton>
 
