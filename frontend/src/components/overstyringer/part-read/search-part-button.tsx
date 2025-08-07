@@ -14,7 +14,7 @@ export const SearchPartButton = ({ enterSearchMode }: Props) => {
     <Tooltip content="Søk opp part med ID-nummer (f.nr. / org.nr. / ...)">
       <Button
         size="small"
-        variant="secondary"
+        variant="secondary-neutral"
         icon={<MagnifyingGlassIcon aria-hidden role="presentation" />}
         onClick={enterSearchMode}
       >

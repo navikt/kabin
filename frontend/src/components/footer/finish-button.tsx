@@ -92,7 +92,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
         </Button>
         <Button
           loading={isLoading}
-          variant="secondary"
+          variant="secondary-neutral"
           size="small"
           onClick={closeConfirm}
           icon={<ArrowUndoIcon aria-hidden />}

@@ -35,7 +35,7 @@ export const Header = () => {
       <OppgaveHelpText typeId={typeId} />
       <Button
         size="xsmall"
-        variant="tertiary"
+        variant="tertiary-neutral"
         onClick={onRefresh}
         loading={isLoading}
         title="Oppdater"

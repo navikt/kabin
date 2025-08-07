@@ -58,7 +58,7 @@ const Confirm = ({ close }: { close: () => void }) => {
           Bekreft
         </Button>
 
-        <Button size="small" variant="secondary" disabled={isLoading} loading={isLoading} onClick={close}>
+        <Button size="small" variant="secondary-neutral" disabled={isLoading} loading={isLoading} onClick={close}>
           Avbryt
         </Button>
       </Buttons>

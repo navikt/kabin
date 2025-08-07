@@ -27,7 +27,7 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       <Tooltip content="Åpne i nytt vindu" placement="top">
         <Button
           as="a"
-          variant="tertiary"
+          variant="tertiary-neutral"
           icon={<ExternalLinkIcon aria-hidden />}
           size="small"
           href={url}
@@ -44,7 +44,7 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
       <Tooltip content="Lukk" placement="top">
         <RightAlignedButton
-          variant="tertiary"
+          variant="tertiary-neutral"
           size="small"
           icon={<XMarkIcon aria-hidden />}
           onClick={() => viewDokument(null)}

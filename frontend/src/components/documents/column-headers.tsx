@@ -94,7 +94,7 @@ export const ColumnHeaders = ({
     <>
       <StyledButton
         size="small"
-        variant="secondary"
+        variant="secondary-neutral"
         onClick={resetFilters}
         disabled={resetFiltersDisabled}
         icon={<ArrowCirclepathIcon aria-hidden />}
@@ -105,7 +105,7 @@ export const ColumnHeaders = ({
         <Button
           style={{ gridArea: GridArea.EXPAND }}
           size="small"
-          variant="tertiary"
+          variant="tertiary-neutral"
           icon={someExpanded ? <ChevronUpDoubleIcon aria-hidden /> : <ChevronDownDoubleIcon aria-hidden />}
           onClick={toggleExpandAll}
         />

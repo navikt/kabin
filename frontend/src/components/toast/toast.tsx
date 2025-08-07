@@ -62,7 +62,12 @@ export const Toast = memo(
 
     return (
       <BaseToastStyle $type={type} ref={ref} key={id}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+        <StyledCloseButton
+          variant="tertiary-neutral"
+          size="xsmall"
+          onClick={slideOut}
+          icon={<XMarkIcon aria-hidden />}
+        />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>
@@ -158,7 +163,12 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
         ref={ref}
         key={id}
       >
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+        <StyledCloseButton
+          variant="tertiary-neutral"
+          size="xsmall"
+          onClick={slideOut}
+          icon={<XMarkIcon aria-hidden />}
+        />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>

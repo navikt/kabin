@@ -114,7 +114,7 @@ const SetButton = ({ label, title, icon, saksbehandlerIdent }: SetButtonProps) =
   return (
     <Button
       size="small"
-      variant="secondary"
+      variant="secondary-neutral"
       title={title}
       icon={icon}
       onClick={() => setSaksbehandlerIdent({ id, saksbehandlerIdent })}

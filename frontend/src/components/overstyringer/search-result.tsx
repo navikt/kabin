@@ -94,7 +94,7 @@ const Render = ({ children, variant, statusList, onConfirm, onDismiss, isSaving 
         icon={<XMarkIcon aria-hidden />}
         label="Avbryt"
         keys={['esc']}
-        variant="secondary"
+        variant="secondary-neutral"
       />
     );
 

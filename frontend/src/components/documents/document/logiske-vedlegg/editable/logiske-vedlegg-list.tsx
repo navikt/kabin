@@ -32,7 +32,7 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
           <Tooltip content="Legg til logisk vedlegg">
             <CreateButton
               size="xsmall"
-              variant="tertiary"
+              variant="tertiary-neutral"
               onClick={() => setIsOpen(true)}
               icon={<PlusCircleIcon aria-hidden />}
               iconPosition="right"
@@ -70,7 +70,7 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
           <Tooltip content="Legg til logisk vedlegg">
             <Button
               size="xsmall"
-              variant="tertiary"
+              variant="tertiary-neutral"
               onClick={() => setIsOpen(true)}
               icon={<PlusCircleIcon aria-hidden />}
               onMouseDown={stopMouseDown}

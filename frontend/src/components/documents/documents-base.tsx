@@ -58,7 +58,7 @@ export const DocumentsBase = ({
         {sakenGjelderValue === null ? null : (
           <Button
             size="xsmall"
-            variant="tertiary"
+            variant="tertiary-neutral"
             onClick={() => refetch()}
             loading={isLoading}
             icon={<ArrowsCirclepathIcon aria-hidden />}
