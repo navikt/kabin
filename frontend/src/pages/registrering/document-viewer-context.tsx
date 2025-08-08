@@ -24,10 +24,10 @@ interface Props {
 
 export const DocumentViewerContextState = ({ children }: Props) => {
   const [dokument, setDokument] = useState<IViewedDocument | null>(null);
-  const { data } = useGetArkivertDokumentQuery(dokument?.journalpostId ?? skipToken);
+  const { data = null } = useGetArkivertDokumentQuery(dokument?.journalpostId ?? skipToken);
 
   return (
-    <DocumentViewerContext.Provider value={{ viewDokument: setDokument, dokument: data ?? null }}>
+    <DocumentViewerContext.Provider value={{ viewDokument: setDokument, dokument: dokument === null ? null : data }}>
       {children}
     </DocumentViewerContext.Provider>
   );
