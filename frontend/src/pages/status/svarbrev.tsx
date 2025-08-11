@@ -37,7 +37,7 @@ export const Svarbrev = ({ svarbrev, id }: Props) => {
       </StyledCard>
       <StyledCard title="Svarbrev" $gridArea="svarbrev-pdf" titleSize="medium">
         <StyledPdf
-          data={`${KABAL_API_BASE_PATH}/behandlinger/${id}/dokumenter/${svarbrev.dokumentUnderArbeidId}/pdf${PDF_PARAMS}`}
+          data={`${KABAL_API_BASE_PATH}/behandlinger/${id}/dokumenter/mergedocuments/${svarbrev.dokumentUnderArbeidId}/pdf${PDF_PARAMS}`}
           type="application/pdf"
           style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
         />
