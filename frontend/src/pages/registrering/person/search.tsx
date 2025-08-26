@@ -11,6 +11,8 @@ interface Props {
   onChange: (value: string) => void;
 }
 
+const WHITE_SPACE_REGEX = /\s/g;
+
 export const PersonSearch = ({ value, onChange }: Props) => {
   const { id, sakenGjelderValue } = useRegistrering();
   const [setSakenGjelder] = useSetSakenGjelderMutation();
@@ -21,7 +23,7 @@ export const PersonSearch = ({ value, onChange }: Props) => {
     onChange(value);
     setError(undefined);
 
-    const cleaned = value.replaceAll(/\s/g, '');
+    const cleaned = value.replaceAll(WHITE_SPACE_REGEX, '');
     const isValid = idnr(cleaned).status === 'valid';
 
     if (!isValid) {
