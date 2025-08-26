@@ -15,7 +15,8 @@ interface Props {
   orientation: Orientation;
 }
 
-const removeWhitespace = (value: string) => value.replaceAll(' ', '');
+const WHITE_SPACE = /\s/g;
+const removeWhitespace = (value: string) => value.replaceAll(WHITE_SPACE, '');
 
 export const NewRegistrering = ({ orientation }: Props) => {
   const [fnr, setFnr] = useState('');
@@ -33,9 +34,9 @@ export const NewRegistrering = ({ orientation }: Props) => {
     try {
       const { id } = await createRegistrering({ sakenGjelderValue: cleaned }).unwrap();
 
-      navigate(`/registrering/${id}`);
-
       toast.success('Registrering opprettet');
+
+      navigate(`/registrering/${id}`);
     } catch {
       toast.error('Kunne ikke opprette registrering');
     }
