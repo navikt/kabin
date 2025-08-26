@@ -1,4 +1,4 @@
-import { AppTheme, UserTheme, isValidUserTheme, setUserTheme, useSystemTheme, useUserTheme } from '@app/app-theme';
+import { AppTheme, isValidUserTheme, setUserTheme, UserTheme, useSystemTheme, useUserTheme } from '@app/app-theme';
 import { MonitorFillIcon, MonitorIcon, MoonIcon, SunFillIcon } from '@navikt/aksel-icons';
 import { ToggleGroup } from '@navikt/ds-react';
 

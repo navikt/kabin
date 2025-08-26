@@ -15,7 +15,7 @@ import {
 } from '@app/components/toast/styled-components';
 import { ToastType } from '@app/components/toast/types';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 export const CLOSE_TOAST_EVENT_TYPE = 'close-toast';
 
@@ -80,105 +80,99 @@ export const Toast = memo(
 
 Toast.displayName = 'Toast';
 
-const TimedToast = forwardRef<HTMLDivElement, Message>(
-  ({ type, message, close, setExpiresAt, expiresAt, id }, forwardedRef) => {
-    const ref = useRef<HTMLDivElement>(null);
+interface TimedToastProps extends Message {
+  ref: React.Ref<HTMLDivElement>;
+}
 
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    useImperativeHandle(forwardedRef, () => ref.current!);
+const TimedToast = ({ type, message, close, setExpiresAt, expiresAt, id, ref }: TimedToastProps) => {
+  const innerRef = useRef<HTMLDivElement>(null);
 
-    const [remaining, setRemaining] = useState<number | null>(null);
-    const mouse = useRef<MouseEvent | null>(null);
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => innerRef.current);
 
-    const onMouseLeave = useCallback(() => {
-      setExpiresAt(
-        Date.now() + (remaining === null || remaining === Number.POSITIVE_INFINITY ? TOAST_TIMEOUT : remaining),
-      );
-      setRemaining(null);
-    }, [remaining, setExpiresAt]);
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const mouse = useRef<MouseEvent | null>(null);
 
-    const onMouseEnter = useCallback(() => {
-      setRemaining(expiresAt - Date.now());
-      setExpiresAt(Number.POSITIVE_INFINITY);
-    }, [expiresAt, setExpiresAt]);
-
-    useEffect(() => {
-      const listener = (e: MouseEvent) => {
-        mouse.current = e;
-      };
-
-      window.addEventListener('mousemove', listener);
-
-      return () => window.removeEventListener('mousemove', listener);
-    }, []);
-
-    useEffect(() => {
-      if (mouse.current === null) {
-        return;
-      }
-
-      const { target } = mouse.current;
-
-      if (
-        expiresAt === Number.POSITIVE_INFINITY &&
-        ref.current !== null &&
-        target instanceof window.Node &&
-        ref.current !== target &&
-        !ref.current.contains(target)
-      ) {
-        onMouseLeave();
-      }
-    }, [expiresAt, onMouseLeave]);
-
-    const slideOut = useCallback(() => {
-      if (ref.current === null) {
-        return close();
-      }
-
-      const anim = ref.current.animate(SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS);
-
-      anim.addEventListener('finish', close);
-    }, [close]);
-
-    useEffect(() => {
-      if (expiresAt === Number.POSITIVE_INFINITY) {
-        return;
-      }
-
-      const timeout = expiresAt - Date.now() - SLIDE_DURATION;
-      const timer = setTimeout(slideOut, timeout);
-
-      return () => clearTimeout(timer);
-    }, [expiresAt, slideOut]);
-
-    const paused = remaining !== null;
-
-    return (
-      <TimedToastStyle
-        $type={type}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        $paused={paused}
-        $timeout={expiresAt - Date.now()}
-        ref={ref}
-        key={id}
-      >
-        <StyledCloseButton
-          variant="tertiary-neutral"
-          size="xsmall"
-          onClick={slideOut}
-          icon={<XMarkIcon aria-hidden />}
-        />
-        <Container>
-          <Icon type={type} />
-          <Content>{message}</Content>
-        </Container>
-      </TimedToastStyle>
+  const onMouseLeave = useCallback(() => {
+    setExpiresAt(
+      Date.now() + (remaining === null || remaining === Number.POSITIVE_INFINITY ? TOAST_TIMEOUT : remaining),
     );
-  },
-);
+    setRemaining(null);
+  }, [remaining, setExpiresAt]);
 
-TimedToast.displayName = 'TimedToast';
+  const onMouseEnter = useCallback(() => {
+    setRemaining(expiresAt - Date.now());
+    setExpiresAt(Number.POSITIVE_INFINITY);
+  }, [expiresAt, setExpiresAt]);
+
+  useEffect(() => {
+    const listener = (e: MouseEvent) => {
+      mouse.current = e;
+    };
+
+    window.addEventListener('mousemove', listener);
+
+    return () => window.removeEventListener('mousemove', listener);
+  }, []);
+
+  useEffect(() => {
+    if (mouse.current === null) {
+      return;
+    }
+
+    const { target } = mouse.current;
+
+    if (
+      expiresAt === Number.POSITIVE_INFINITY &&
+      innerRef.current !== null &&
+      target instanceof window.Node &&
+      innerRef.current !== target &&
+      !innerRef.current.contains(target)
+    ) {
+      onMouseLeave();
+    }
+  }, [expiresAt, onMouseLeave]);
+
+  const slideOut = useCallback(() => {
+    if (innerRef.current === null) {
+      return close();
+    }
+
+    const anim = innerRef.current.animate(SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS);
+
+    anim.addEventListener('finish', close);
+  }, [close]);
+
+  useEffect(() => {
+    if (expiresAt === Number.POSITIVE_INFINITY) {
+      return;
+    }
+
+    const timeout = expiresAt - Date.now() - SLIDE_DURATION;
+    const timer = setTimeout(slideOut, timeout);
+
+    return () => clearTimeout(timer);
+  }, [expiresAt, slideOut]);
+
+  const paused = remaining !== null;
+
+  return (
+    <TimedToastStyle
+      $type={type}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      $paused={paused}
+      $timeout={expiresAt - Date.now()}
+      ref={innerRef}
+      key={id}
+    >
+      <StyledCloseButton variant="tertiary-neutral" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+      <Container>
+        <Icon type={type} />
+        <Content>{message}</Content>
+      </Container>
+    </TimedToastStyle>
+  );
+};
 
 const SLIDE_OUT_KEYFRAMES: Keyframe[] = [
   { transform: 'translateX(0%)' },

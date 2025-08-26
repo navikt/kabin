@@ -1,4 +1,4 @@
-import { FileType, canOpen, getDefaultVariant, hasRedactedVariant } from '@app/components/documents/document/filetype';
+import { canOpen, FileType, getDefaultVariant, hasRedactedVariant } from '@app/components/documents/document/filetype';
 import { Skjerming, type Variants } from '@app/types/dokument';
 import { EyeObfuscatedIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, Tooltip } from '@navikt/ds-react';

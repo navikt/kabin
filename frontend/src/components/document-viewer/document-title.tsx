@@ -4,7 +4,7 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { Skjerming, VariantFormat } from '@app/types/dokument';
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Switch, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, Heading, HStack, Switch, Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
 

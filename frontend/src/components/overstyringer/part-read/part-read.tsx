@@ -3,11 +3,11 @@ import { Actions, type ActionsProps } from '@app/components/overstyringer/part-r
 import { Icon } from '@app/components/overstyringer/part-read/icon';
 import type { EnterSearchModeCallback } from '@app/components/overstyringer/part-read/types';
 import {
+  getState,
   PartContent,
   PartTextContent,
   StyledContainer,
   StyledPartName,
-  getState,
 } from '@app/components/overstyringer/styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';

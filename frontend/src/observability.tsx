@@ -1,8 +1,8 @@
 import { ENVIRONMENT } from '@app/environment';
-import { ReactIntegration, ReactRouterVersion, getWebInstrumentations, initializeFaro } from '@grafana/faro-react';
-import { LogLevel, type PushLogOptions, faro } from '@grafana/faro-web-sdk';
+import { getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
+import { faro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
-import { Routes, createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
+import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
 
 const getUrl = () => {
   if (ENVIRONMENT.isProduction) {

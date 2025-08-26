@@ -2,7 +2,7 @@ import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';
-import { type IPart, IdType } from '@app/types/common';
+import { IdType, type IPart } from '@app/types/common';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, Loader, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';

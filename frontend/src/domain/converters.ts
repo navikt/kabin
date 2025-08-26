@@ -1,8 +1,8 @@
 import {
   type AvsenderMottakerType,
   type IAvsenderMottaker,
-  type IPart,
   type IdType,
+  type IPart,
   PART_TYPES,
 } from '@app/types/common';
 
