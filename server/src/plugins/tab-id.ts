@@ -1,5 +1,5 @@
 import { TAB_ID_HEADER } from '@app/headers';
-import { TAB_ID_QUERY, getHeaderOrQueryValue } from '@app/helpers/get-header-query';
+import { getHeaderOrQueryValue, TAB_ID_QUERY } from '@app/helpers/get-header-query';
 import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 

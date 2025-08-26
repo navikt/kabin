@@ -6,6 +6,8 @@ import { styled } from 'styled-components';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 
+const INITIAL_FILTER = /.*/;
+
 export const Dropdown = <T extends string>({
   selected,
   options,
@@ -13,7 +15,7 @@ export const Dropdown = <T extends string>({
   onChange,
   closeDropdown,
 }: Props<T>): JSX.Element => {
-  const [filter, setFilter] = useState<RegExp>(/.*/);
+  const [filter, setFilter] = useState<RegExp>(INITIAL_FILTER);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
 

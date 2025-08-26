@@ -1,5 +1,5 @@
 import { AppLoader } from '@app/components/app/loader';
-import { type CountryCode, type PostalCode, countryCodes, postalCodes, user } from '@app/static-data/static-data';
+import { type CountryCode, countryCodes, type PostalCode, postalCodes, user } from '@app/static-data/static-data';
 import type { IUserData } from '@app/types/bruker';
 import { createContext, useCallback, useEffect, useState } from 'react';
 

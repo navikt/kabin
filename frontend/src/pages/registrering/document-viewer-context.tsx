@@ -15,7 +15,7 @@ interface IDocumentViewerContext {
 
 export const DocumentViewerContext = createContext<IDocumentViewerContext>({
   dokument: null,
-  viewDokument: () => {},
+  viewDokument: () => undefined,
 });
 
 interface Props {

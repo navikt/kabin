@@ -18,7 +18,7 @@ import {
   useSetMulighetIsBasedOnJournalpostMutation,
   useSetTypeMutation,
 } from '@app/redux/api/registreringer/mutations';
-import { SaksTypeEnum, isType } from '@app/types/common';
+import { isType, SaksTypeEnum } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { Alert, Checkbox, HStack, Stack, Tag, ToggleGroup } from '@navikt/ds-react';
 import { type ChangeEventHandler, useCallback } from 'react';

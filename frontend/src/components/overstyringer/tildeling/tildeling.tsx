@@ -1,10 +1,10 @@
 import { StyledSaksbehandlerIcon } from '@app/components/overstyringer/icons';
 import {
+  getState,
   PartActionsContainer,
   PartContent,
   PartTextContent,
   StyledContainer,
-  getState,
 } from '@app/components/overstyringer/styled-components';
 import { Content, useSaksbehandler, useSaksbehandlereParams } from '@app/components/overstyringer/tildeling/content';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';

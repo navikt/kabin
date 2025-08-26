@@ -1,6 +1,6 @@
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { type IPart, IdType } from '@app/types/common';
+import { IdType, type IPart } from '@app/types/common';
 import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 

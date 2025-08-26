@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { PROXY_VERSION, frontendDistDirectoryPath } from '@app/config/config';
+import { frontendDistDirectoryPath, PROXY_VERSION } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import type { RouteHandler } from 'fastify';

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { getMimeType } from '@app/helpers/mime-type';
 import { getLogger } from '@app/logger';
 import fastifyPlugin from 'fastify-plugin';

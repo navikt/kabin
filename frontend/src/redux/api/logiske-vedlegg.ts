@@ -58,6 +58,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           dispatch(
+            // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: RTKQ
             arkiverteDokumenterApi.util.updateQueryData('getArkiverteDokumenter', sakenGjelderValue, (draft) => {
               dokumentLoop: for (const dokument of draft.dokumenter) {
                 if (dokument.dokumentInfoId === dokumentInfoId) {
@@ -102,6 +103,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
         { dispatch, queryFulfilled },
       ) => {
         const patchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: RTKQ
           arkiverteDokumenterApi.util.updateQueryData('getArkiverteDokumenter', sakenGjelderValue, (draft) => {
             dokumentLoop: for (const dokument of draft.dokumenter) {
               if (dokument.dokumentInfoId === dokumentInfoId) {

@@ -1,7 +1,7 @@
 import { isApiError } from '@app/components/footer/error-type-guard';
 import { ErrorDetails } from '@app/components/toast/error-details';
 import { toast } from '@app/components/toast/store';
-import { type Middleware, isRejectedWithValue } from '@reduxjs/toolkit';
+import { isRejectedWithValue, type Middleware } from '@reduxjs/toolkit';
 
 export const errorToastMiddleware: Middleware = () => (next) => (action) => {
   if (isRejectedWithValue(action)) {

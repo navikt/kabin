@@ -21,6 +21,7 @@ export const useAvsenderMottakerNoteurOptions = (documents: IArkivertDocument[])
   return useMemo(
     () =>
       documents.reduce<IOption<string>[]>(
+        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
         (acc, { avsenderMottaker, journalfortAvNavn, journalfoerendeEnhet, journalposttype }) => {
           if (avsenderMottaker !== null) {
             const { name: navn, id, type } = avsenderMottaker;
