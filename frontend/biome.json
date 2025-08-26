@@ -1,0 +1,15 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "root": false,
+  "extends": "//",
+  "linter": {
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": { "level": "error", "fix": "safe", "options": {} }
+      }
+    }
+  }
+}
