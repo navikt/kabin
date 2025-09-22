@@ -14,9 +14,10 @@ interface Props {
   overriddenAddress: Receiver['overriddenAddress'];
   handling: HandlingEnum;
   onChange: (receiverId: string, handling: HandlingEnum, overriddenAddress: IAddress | null) => void;
+  isLoading: boolean;
 }
 
-export const Options = ({ part, handling, overriddenAddress, onChange, id }: Props) => {
+export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoading }: Props) => {
   const onHandlingChange = useCallback(
     (newHandling: string) => onChange(id, ensureIsHandling(newHandling), overriddenAddress),
     [id, onChange, overriddenAddress],
@@ -49,13 +50,25 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id }: Pro
   return (
     <>
       <Row>
-        <ToggleGroup size="small" value={handling} onChange={onHandlingChange}>
-          <ToggleGroup.Item value={HandlingEnum.AUTO}>{UTSENDINGSKANAL[part.utsendingskanal]}</ToggleGroup.Item>
+        <ToggleGroup
+          size="small"
+          value={isLoading ? HandlingEnum.AUTO : handling}
+          onChange={isLoading ? () => undefined : onHandlingChange}
+          variant={isLoading ? 'neutral' : 'action'}
+          aria-disabled={isLoading}
+        >
+          <ToggleGroup.Item value={HandlingEnum.AUTO} aria-disabled={isLoading}>
+            {UTSENDINGSKANAL[part.utsendingskanal]}
+          </ToggleGroup.Item>
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT}>Sentral utskrift</ToggleGroup.Item>
+            <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT} aria-disabled={isLoading}>
+              Sentral utskrift
+            </ToggleGroup.Item>
           ) : null}
           {part.utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT}>Lokal utskrift</ToggleGroup.Item>
+            <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT} aria-disabled={isLoading}>
+              Lokal utskrift
+            </ToggleGroup.Item>
           ) : null}
         </ToggleGroup>
 
@@ -84,6 +97,7 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id }: Pro
           overriddenAddress={overriddenAddress}
           onChange={onAddressChange}
           handling={handling}
+          isLoading={isLoading}
         />
       ) : null}
     </>

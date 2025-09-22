@@ -80,7 +80,8 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                 </StyledReceiverInnerContent>
               </StyledBrevmottaker>
             </StyledReceiverContent>
-            <ShowOptionsOrWarning part={part} id={id} {...props} />
+
+            <ShowOptionsOrWarning receiver={{ ...props, part, id }} isLoading={isRemoving} />
           </StyledReceiver>
         );
       })}
