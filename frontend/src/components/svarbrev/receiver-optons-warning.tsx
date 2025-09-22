@@ -7,7 +7,12 @@ import type { IAddress } from '@app/types/common';
 import type { HandlingEnum } from '@app/types/receiver';
 import { BodyShort } from '@navikt/ds-react';
 
-export const ShowOptionsOrWarning = (receiver: Omit<PartSuggestedReceiver, 'typeList'>) => {
+interface Props {
+  receiver: Omit<PartSuggestedReceiver, 'typeList'>;
+  isLoading: boolean;
+}
+
+export const ShowOptionsOrWarning = ({ receiver, isLoading }: Props) => {
   const { id, svarbrev } = useRegistrering();
   const [change] = useChangeSvarbrevReceiverMutation();
   const { handling } = receiver;
@@ -25,5 +30,5 @@ export const ShowOptionsOrWarning = (receiver: Omit<PartSuggestedReceiver, 'type
   const onChange = (receiverId: string, h: HandlingEnum, overriddenAddress: IAddress | null) =>
     change({ receiverId, id, handling: h, overriddenAddress });
 
-  return <Options {...receiver} handling={handling} onChange={onChange} />;
+  return <Options {...receiver} handling={handling} onChange={onChange} isLoading={isLoading} />;
 };

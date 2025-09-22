@@ -9,9 +9,10 @@ interface Props extends Addresses {
   part: IPart;
   handling: HandlingEnum;
   onChange: (address: IAddress | null) => void;
+  isLoading: boolean;
 }
 
-export const Address = ({ part, address, overriddenAddress, handling, onChange }: Props) => {
+export const Address = ({ part, address, overriddenAddress, handling, onChange, isLoading }: Props) => {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
@@ -22,8 +23,15 @@ export const Address = ({ part, address, overriddenAddress, handling, onChange }
 
   const onEdit = handling === HandlingEnum.LOCAL_PRINT ? undefined : () => setEdit(true);
 
-  if (!edit) {
-    return <ReadAddress part={part} address={address} overriddenAddress={overriddenAddress} onEdit={onEdit} />;
+  if (!edit || isLoading) {
+    return (
+      <ReadAddress
+        part={part}
+        address={address}
+        overriddenAddress={overriddenAddress}
+        onEdit={isLoading ? undefined : onEdit}
+      />
+    );
   }
 
   return (

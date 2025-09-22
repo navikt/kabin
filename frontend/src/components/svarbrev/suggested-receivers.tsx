@@ -17,7 +17,7 @@ interface Props {
 
 export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
   const { id, svarbrev } = useRegistrering();
-  const [addReceiver] = useAddSvarbrevReceiverMutation();
+  const [addReceiver, { isLoading }] = useAddSvarbrevReceiverMutation();
   const [remove] = useRemoveSvarbrevReceiverMutation();
 
   if (suggestedReceivers.length === 0) {
@@ -57,7 +57,8 @@ export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
                 </StyledReceiverContent>
               </Checkbox>
             </StyledBrevmottaker>
-            <ShowOptionsOrWarning {...suggestedReceiver} />
+
+            <ShowOptionsOrWarning receiver={suggestedReceiver} isLoading={isLoading} />
           </StyledReceiver>
         );
       })}

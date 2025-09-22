@@ -31,7 +31,8 @@ export const SingleReceiver = ({ receiver: singleReceiver }: Props) => {
             <PartStatusList statusList={part.statusList} />
           </StyledReceiverContent>
         </StyledBrevmottaker>
-        <ShowOptionsOrWarning {...singleReceiver} />
+
+        <ShowOptionsOrWarning receiver={singleReceiver} isLoading={false} />
       </StyledReceiver>
     </section>
   );
