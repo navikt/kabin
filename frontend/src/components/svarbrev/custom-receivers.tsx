@@ -2,7 +2,7 @@ import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { receiverStyle } from '@app/components/svarbrev/address/layout';
 import { EditPart } from '@app/components/svarbrev/part/edit-part';
-import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-optons-warning';
+import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-options-warning';
 import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/styled-components';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import type { Receiver } from '@app/redux/api/registreringer/types';
