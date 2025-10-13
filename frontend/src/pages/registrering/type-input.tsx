@@ -10,6 +10,7 @@ import { Omgjøringskravmuligheter } from '@app/components/muligheter/omgjøring
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
+import { getKlagerTitle } from '@app/functions/get-klager-name';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -154,13 +155,15 @@ export const TypeInput = () => {
     );
   }
 
+  const klagerLabel = getKlagerTitle(typeId);
+
   if (typeId === SaksTypeEnum.ANKE) {
     return (
       <>
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
         <GosysOppgaver />
-        <Overstyringer title="Tilpass anken" klagerLabel="Ankende part" saksbehandlerFromMulighetLabel="Fra klagen" />
+        <Overstyringer title="Tilpass anken" klagerLabel={klagerLabel} saksbehandlerFromMulighetLabel="Fra klagen" />
         <Svarbrev />
       </>
     );
@@ -172,7 +175,7 @@ export const TypeInput = () => {
         <Klagemuligheter />
         <WillCreateNewJournalpostInfo />
         <GosysOppgaver />
-        <Overstyringer title="Tilpass klagen" klagerLabel="Klager" saksbehandlerFromMulighetLabel="Fra klagen" />
+        <Overstyringer title="Tilpass klagen" klagerLabel={klagerLabel} saksbehandlerFromMulighetLabel="Fra klagen" />
         <Svarbrev />
       </>
     );
@@ -186,7 +189,7 @@ export const TypeInput = () => {
         <GosysOppgaver />
         <Overstyringer
           title="Tilpass omgjøringskravet"
-          klagerLabel="Den som krever omgjøring"
+          klagerLabel={klagerLabel}
           saksbehandlerFromMulighetLabel="Fra journalpost"
         />
         <Svarbrev />
@@ -198,7 +201,7 @@ export const TypeInput = () => {
         <GosysOppgaver />
         <Overstyringer
           title="Tilpass omgjøringskravet"
-          klagerLabel="Den som krever omgjøring"
+          klagerLabel={klagerLabel}
           saksbehandlerFromMulighetLabel="Fra tidligere behandling"
         />
         <Svarbrev />

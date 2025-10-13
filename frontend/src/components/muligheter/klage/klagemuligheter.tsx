@@ -1,4 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
+import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
 import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
 import { TableHeaders } from '@app/components/muligheter/klage/table-headers';
@@ -13,10 +14,9 @@ import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries
 import { SaksTypeEnum } from '@app/types/common';
 import type { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { ArrowsCirclepathIcon, ChevronUpIcon, ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Table } from '@navikt/ds-react';
+import { ParagraphIcon } from '@navikt/aksel-icons';
+import { BodyShort, Table } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Klagemuligheter = () => {
   const canEdit = useCanEdit();
@@ -37,11 +37,7 @@ const ReadOnlyKlagemulighet = () => {
 
   return (
     <Card>
-      <Header>
-        <Heading level="1" size="small">
-          Vedtaket klagen gjelder
-        </Heading>
-      </Header>
+      <HeaderReadOnly />
       <SelectedKlagemulighetBody {...mulighet} />
     </Card>
   );
@@ -68,30 +64,15 @@ const EditableKlagemuligheter = () => {
 
   return (
     <CardSmall>
-      <Header>
-        <Heading level="1" size="small">
-          Velg vedtaket klagen gjelder
-        </Heading>
-
-        <Button
-          size="xsmall"
-          variant="tertiary-neutral"
-          onClick={() => refetch(id)}
-          loading={isFetching}
-          icon={<ArrowsCirclepathIcon aria-hidden />}
-          title="Oppdater"
-        />
-
-        {mulighet === null ? null : (
-          <StyledButton
-            size="small"
-            variant="tertiary-neutral"
-            title="Vis kun valgt klagemulighet"
-            onClick={() => setIsExpanded(false)}
-            icon={<ChevronUpIcon aria-hidden />}
-          />
-        )}
-      </Header>
+      <HeaderEditable
+        toggleExpanded={() => setIsExpanded(!isExpanded)}
+        refetch={refetch}
+        isFetching={isFetching}
+        mulighet={mulighet}
+        id={id}
+        label="Velg vedtaket klagen gjelder"
+        showOnlySelectedLabel="Vis kun valgt klagemulighet"
+      />
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.VEDTAK} />
 
@@ -99,20 +80,6 @@ const EditableKlagemuligheter = () => {
     </CardSmall>
   );
 };
-
-const Header = styled.div`
-  display: grid;
-  grid-template-columns: min-content min-content 1fr;
-  grid-gap: 4px;
-  white-space: nowrap;
-`;
-
-const StyledButton = styled(Button)`
-  flex-grow: 0;
-  width: fit-content;
-  align-self: flex-end;
-  justify-self: right;
-`;
 
 interface ContentProps {
   klagemuligheter: IKlagemulighet[] | undefined;

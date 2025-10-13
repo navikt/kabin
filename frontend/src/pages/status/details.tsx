@@ -1,3 +1,4 @@
+import { getKlagerTitle } from '@app/functions/get-klager-name';
 import { NavEmployee, Part } from '@app/pages/status/common-components';
 import { DateInfoItem, getDifference } from '@app/pages/status/date';
 import { getDuration } from '@app/pages/status/duration';
@@ -5,7 +6,7 @@ import { Journalpost } from '@app/pages/status/journalpost';
 import { Mulighet } from '@app/pages/status/mulighet';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { Svarbrev } from '@app/pages/status/svarbrev';
-import { SaksTypeEnum } from '@app/types/common';
+import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { parseISO } from 'date-fns';
 
@@ -14,35 +15,24 @@ interface Props {
   status: IAnkestatus | IKlagestatus | IOmgjøringskravstatus;
 }
 
-const getJournalpostTitle = (typeId: SaksTypeEnum) => {
+const getJournalpostTitle = (typeId: RegistreringType): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
       return 'Valgt journalpost';
     case SaksTypeEnum.ANKE:
       return 'Journalført anke';
-    default:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
   }
 };
 
-const getKlagerTitle = (typeId: SaksTypeEnum) => {
-  switch (typeId) {
-    case SaksTypeEnum.KLAGE:
-      return 'Klager';
-    case SaksTypeEnum.ANKE:
-      return 'Ankende part';
-    default:
-      return 'Den som krever omgjøring';
-  }
-};
-
-const getMulighetTitle = (typeId: SaksTypeEnum) => {
+const getMulighetTitle = (typeId: RegistreringType): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
       return 'Valgt klagevedtak';
     case SaksTypeEnum.ANKE:
       return 'Valgt ankevedtak';
-    default:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Valgt vedtak';
   }
 };

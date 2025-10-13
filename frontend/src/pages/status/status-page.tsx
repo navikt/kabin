@@ -1,33 +1,34 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
 import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
 import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
-import { useGetOmgjøringskravStatusQuery } from '@app/redux/api/status';
-import type { IOmgjøringskravstatus } from '@app/types/status';
+import { useGetAnkeStatusQuery } from '@app/redux/api/status';
+import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { Alert } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
   registrering: FinishedRegistrering;
+  alertText: string;
+  headingText: string;
 }
 
-export const OmgjøringskravStatusPage = ({ registrering }: Props) => {
-  const { id, typeId, behandlingId, finished } = registrering;
-  const { data, isLoading, isError } = useGetOmgjøringskravStatusQuery(behandlingId);
+export const Status = ({ registrering, alertText, headingText }: Props) => {
+  const { id, typeId, behandlingId } = registrering;
+  const { data, isLoading, isError } = useGetAnkeStatusQuery(behandlingId);
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
     <StyledMain>
       <StatusHeading
-        alertText={`Omgjøringskravet ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(finished)}.`}
-        headingText="Omgjøringskrav opprettet"
+        alertText={alertText}
+        headingText={headingText}
         type={typeId}
         behandlingId={behandlingId}
         registreringId={id}
       />
       <Container>
-        <OmgjøringskravDetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />
+        <DetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />
       </Container>
     </StyledMain>
   );
@@ -37,14 +38,14 @@ const StyledMain = styled.main`
   padding-top: 16px;
 `;
 
-interface OmgjøringskravDetailsLoaderProps {
-  data: IOmgjøringskravstatus | undefined;
+interface DetailsLoaderProps {
+  data: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | undefined;
   id: string | undefined;
   isLoading: boolean;
   isError: boolean;
 }
 
-const OmgjøringskravDetailsLoader = ({ isLoading, isError, data, id }: OmgjøringskravDetailsLoaderProps) => {
+const DetailsLoader = ({ isLoading, isError, data, id }: DetailsLoaderProps) => {
   if (isError) {
     return <Alert variant="error">Kunne ikke hente status</Alert>;
   }

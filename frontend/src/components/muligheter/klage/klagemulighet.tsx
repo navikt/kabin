@@ -4,7 +4,7 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useSetKlagemulighetMutation } from '@app/redux/api/registreringer/mutations';
+import { useSetNonAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
 import type { IKlagemulighet } from '@app/types/mulighet';
 import { Table, Tag } from '@navikt/ds-react';
 import { useCallback } from 'react';
@@ -15,7 +15,7 @@ interface Props {
 
 export const Klagemulighet = ({ klagemulighet }: Props) => {
   const { id, mulighet } = useRegistrering();
-  const [setKlagemulighet, { isLoading }] = useSetKlagemulighetMutation();
+  const [setKlagemulighet, { isLoading }] = useSetNonAnkemulighetMutation();
   const canEdit = useCanEdit();
   const temaName = useFullTemaNameFromId(klagemulighet.temaId);
   const vedtaksenhetName = useVedtaksenhetName(klagemulighet.klageBehandlendeEnhet);

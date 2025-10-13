@@ -1,7 +1,7 @@
 import { StyledTableHeader } from '@app/components/muligheter/common/styled-components';
 import { Table } from '@navikt/ds-react';
 
-export const TableHeaders = () => (
+export const NonKlageTableHeaders = () => (
   <StyledTableHeader>
     <Table.Row style={{ whiteSpace: 'nowrap' }}>
       <Table.HeaderCell>Type</Table.HeaderCell>

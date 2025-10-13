@@ -1,5 +1,5 @@
+import { getKlagerTitle } from '@app/functions/get-klager-name';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNames.KLAGER>, string> = {
@@ -25,11 +25,7 @@ export const useFieldName = (field: ValidationFieldNames) => {
   const { typeId } = useRegistrering();
 
   if (field === ValidationFieldNames.KLAGER) {
-    if (typeId === SaksTypeEnum.ANKE) {
-      return 'Ankende part';
-    }
-
-    return 'Klager';
+    return getKlagerTitle(typeId);
   }
 
   return FIELD_NAMES[field] ?? field;

@@ -2,8 +2,8 @@ import { ValidationFieldNames } from '@app/types/validation';
 import { Skeleton, Table } from '@navikt/ds-react';
 import type React from 'react';
 
-export const LoadingOmgjøringskravMuligheter = ({ children }: { children?: React.ReactNode }) => (
-  <Table size="small" id={ValidationFieldNames.MULIGHET} aria-label="Omgjøringskravmuligheter">
+export const LoadingNonKlagemuligheter = ({ children, label }: { children?: React.ReactNode; label: string }) => (
+  <Table size="small" id={ValidationFieldNames.MULIGHET} aria-label={label}>
     {children}
     <Table.Body>
       <LoadingRow />
