@@ -7,29 +7,32 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IOmgjøringskravmulighet } from '@app/types/mulighet';
+import type { IAnkemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
 
 interface Props {
   onClick: () => void;
+  label: string;
 }
 
-export const SelectedOmgjøringskravmulighet = ({ onClick }: Props) => {
+type Mulighet = IOmgjøringskravmulighet | IAnkemulighet;
+
+export const SelectedNonKlageMulighet = ({ onClick, label }: Props) => {
   const { typeId, mulighet } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV || mulighet === undefined) {
+  if ((typeId !== SaksTypeEnum.OMGJØRINGSKRAV && typeId !== SaksTypeEnum.ANKE) || mulighet === undefined) {
     return null;
   }
 
-  return <RenderOmgjøringskravmulighet mulighet={mulighet} onClick={onClick} />;
+  return <RenderNonKlagemulighet mulighet={mulighet} onClick={onClick} label={label} />;
 };
 
 interface RenderProps extends Props {
-  mulighet: IOmgjøringskravmulighet;
+  mulighet: Mulighet;
 }
 
-const RenderOmgjøringskravmulighet = ({ mulighet, onClick }: RenderProps) => (
+const RenderNonKlagemulighet = ({ mulighet, onClick, label }: RenderProps) => (
   <Card>
     <Header>
       <Heading size="small" level="1">
@@ -37,17 +40,17 @@ const RenderOmgjøringskravmulighet = ({ mulighet, onClick }: RenderProps) => (
       </Heading>
       <Button
         size="small"
-        title="Vis alle omgjøringskravmuligheter"
+        title={label}
         onClick={onClick}
         icon={<ChevronDownIcon aria-hidden />}
         variant="tertiary-neutral"
       />
     </Header>
-    <SelectedOmgjøringskravmulighetBody {...mulighet} />
+    <SelectedNonKlageMulighetBody {...mulighet} />
   </Card>
 );
 
-export const SelectedOmgjøringskravmulighetBody = (mulighet: IOmgjøringskravmulighet) => {
+export const SelectedNonKlageMulighetBody = (mulighet: Mulighet) => {
   const { ytelseId, vedtakDate, fagsakId, originalFagsystemId, typeId, temaId, sourceOfExistingBehandlinger } =
     mulighet;
 

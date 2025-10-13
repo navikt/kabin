@@ -1,7 +1,6 @@
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { AnkeStatusPage } from '@app/pages/status/anke-status';
-import { KlageStatusPage } from '@app/pages/status/klage-status';
-import { OmgjøringskravStatusPage } from '@app/pages/status/omgjøringskrav-status';
+import { Status } from '@app/pages/status/status-page';
 import { isDraftRegistrering } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import { Navigate } from 'react-router-dom';
@@ -14,15 +13,33 @@ export const StatusPage = () => {
   }
 
   if (registrering.typeId === SaksTypeEnum.KLAGE) {
-    return <KlageStatusPage registrering={registrering} />;
+    return (
+      <Status
+        registrering={registrering}
+        alertText={`Klagen ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(registrering.finished)}.`}
+        headingText="Klage opprettet"
+      />
+    );
   }
 
   if (registrering.typeId === SaksTypeEnum.ANKE) {
-    return <AnkeStatusPage registrering={registrering} />;
+    return (
+      <Status
+        registrering={registrering}
+        alertText={`Anken ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(registrering.finished)}.`}
+        headingText="Anke opprettet"
+      />
+    );
   }
 
   if (registrering.typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
-    return <OmgjøringskravStatusPage registrering={registrering} />;
+    return (
+      <Status
+        registrering={registrering}
+        alertText={`Omgjøringskravet ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(registrering.finished)}.`}
+        headingText="Omgjøringskrav opprettet"
+      />
+    );
   }
 
   console.error('Unknown sakstype for finished registrering', registrering.typeId);

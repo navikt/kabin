@@ -1,8 +1,7 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import type {
-  SetAnkemulisghetParams,
-  SetKlagemulighetParams,
-  SetOmgjøringskravmulighetParams,
+  SetAnkemulighetParams,
+  SetNonAnkemulighetParams,
   SetTypeParams,
 } from '@app/redux/api/registreringer/param-types';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
@@ -73,25 +72,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
       },
     }),
 
-    setKlagemulighet: builder.mutation<SetMulighetResponse, SetKlagemulighetParams>({
-      query: ({ id, mulighet }) => ({
-        url: `/registreringer/${id}/mulighet`,
-        method: 'PUT',
-        body: { mulighetId: mulighet.id } satisfies SetMulighetPayload,
-      }),
-      onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => ({ ...draft, mulighet: { id: mulighet.id } }));
-
-        try {
-          const { data } = await queryFulfilled;
-          pessimisticUpdate(id, data);
-        } catch {
-          undo();
-        }
-      },
-    }),
-
-    setAnkemulighet: builder.mutation<SetMulighetResponse, SetAnkemulisghetParams>({
+    setAnkemulighet: builder.mutation<SetMulighetResponse, SetAnkemulighetParams>({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
@@ -121,11 +102,11 @@ const mutationsSlice = registreringApi.injectEndpoints({
       },
     }),
 
-    setOmgjøringskravmulighet: builder.mutation<SetMulighetResponse, SetOmgjøringskravmulighetParams>({
+    setNonAnkemulighet: builder.mutation<SetMulighetResponse, SetNonAnkemulighetParams>({
       query: ({ id, mulighet }) => ({
         url: `/registreringer/${id}/mulighet`,
         method: 'PUT',
-        body: { mulighetId: mulighet.id } satisfies SetMulighetPayload,
+        body: { mulighetId: mulighet.id },
       }),
       onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
         const undo = updateDrafts(id, (draft) => ({ ...draft, mulighet: { id: mulighet.id } }));
@@ -186,8 +167,7 @@ export const {
   useSetJournalpostIdMutation,
   useSetTypeMutation,
   useSetAnkemulighetMutation,
-  useSetKlagemulighetMutation,
-  useSetOmgjøringskravmulighetMutation,
   useSetMulighetIsBasedOnJournalpostMutation,
   useSetMulighetBasedOnJournalpostMutation,
+  useSetNonAnkemulighetMutation,
 } = mutationsSlice;

@@ -10,19 +10,14 @@ export interface SetTypeParams {
   typeId: RegistreringType | null;
 }
 
-export interface SetKlagemulighetParams {
-  id: string;
-  mulighet: IKlagemulighet;
-}
-
-export interface SetAnkemulisghetParams {
+export interface SetAnkemulighetParams {
   id: string;
   mulighet: IAnkemulighet;
 }
 
-export interface SetOmgjøringskravmulighetParams {
+export interface SetNonAnkemulighetParams {
   id: string;
-  mulighet: IOmgjøringskravmulighet;
+  mulighet: IKlagemulighet | IOmgjøringskravmulighet;
 }
 
 export interface SearchPartWithUtsendingskanalParams {
