@@ -42,6 +42,16 @@ export const StatusPage = () => {
     );
   }
 
+  if (registrering.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) {
+    return (
+      <Status
+        registrering={registrering}
+        alertText={`Begjæringen om gjenopptak ble registrert og klar for saksbehandling i Kabal ${isoDateTimeToPretty(registrering.finished)}.`}
+        headingText="Begjæring om gjenopptak opprettet"
+      />
+    );
+  }
+
   console.error('Unknown sakstype for finished registrering', registrering.typeId);
 
   return null;

@@ -23,6 +23,8 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
       return 'Journalført anke';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return 'Journalført begjæring om gjenopptak';
   }
 };
 
@@ -33,6 +35,7 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.ANKE:
       return 'Valgt ankevedtak';
     case SaksTypeEnum.OMGJØRINGSKRAV:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return 'Valgt vedtak';
   }
 };

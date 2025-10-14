@@ -33,6 +33,8 @@ export interface IAnkemulighet extends IBasemulighet {
 
 export interface IOmgjøringskravmulighet extends IAnkemulighet {}
 
+export interface IBegjæringOmGjenopptakMulighet extends IAnkemulighet {}
+
 interface ExistingBehandling {
   /** UUID */
   id: string;

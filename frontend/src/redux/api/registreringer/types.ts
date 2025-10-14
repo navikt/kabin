@@ -1,6 +1,11 @@
 import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IAddress, IPart, RegistreringType } from '@app/types/common';
-import type { IAnkemulighet, IKlagemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
+import type {
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IKlagemulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 import type { HandlingEnum } from '@app/types/receiver';
 
 export interface Mulighet {
@@ -28,6 +33,7 @@ export interface BaseRegistrering {
   klagemuligheter: IKlagemulighet[];
   ankemuligheter: IAnkemulighet[];
   omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
+  gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
 }
 
 export interface DraftRegistrering extends BaseRegistrering {

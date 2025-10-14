@@ -1,6 +1,5 @@
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetArkivertDokumentQuery } from '@app/redux/api/journalposter';
-import { SaksTypeEnum } from '@app/types/common';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 export const useJournalpost = () => {
@@ -11,11 +10,10 @@ export const useJournalpost = () => {
 };
 
 export const useJournalpostFromMulighet = () => {
-  const { mulighet, typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
-  const isOmgjøringskravBasedOnJournalpost = typeId === SaksTypeEnum.OMGJØRINGSKRAV && mulighetIsBasedOnJournalpost;
+  const { mulighet, mulighetIsBasedOnJournalpost } = useRegistrering();
 
   const { data, ...rest } = useGetArkivertDokumentQuery(
-    isOmgjøringskravBasedOnJournalpost && typeof mulighet?.id === 'string' ? mulighet.id : skipToken,
+    mulighetIsBasedOnJournalpost && typeof mulighet?.id === 'string' ? mulighet.id : skipToken,
   );
 
   return { journalpost: data, ...rest };

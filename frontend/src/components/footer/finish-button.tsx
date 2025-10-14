@@ -146,5 +146,12 @@ const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
 
       return 'Du fullfører nå registrering av omgjøringskravet. Omgjøringskravet blir journalført og klart for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av omgjøringskravet.';
     }
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK: {
+      if (sendSvarbrev) {
+        return 'Du fullfører nå registrering av begjæringen om gjenopptak av Trygderettens kjennelse. Begjæringen blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av begjæringen om gjenopptak.';
+      }
+
+      return 'Du fullfører nå registrering av begjæringen om gjenopptak av Trygderettens kjennelse. Begjæringen blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av begjæringen om gjenopptak.';
+    }
   }
 };

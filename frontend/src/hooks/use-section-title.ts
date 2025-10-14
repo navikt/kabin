@@ -22,6 +22,11 @@ const DEFAULT_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
+const BEGJÆRING_OM_GJENOPPTAK_SECTIONS: Record<SectionNames, string> = {
+  [SectionNames.SAKSDATA]: 'Tilpasninger for begjæringen om gjenopptak',
+  [SectionNames.SVARBREV]: 'Svarbrev',
+};
+
 const useSections = () => {
   const { typeId } = useRegistrering();
 
@@ -32,6 +37,8 @@ const useSections = () => {
       return ANKE_SECTIONS;
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return OMGJØRINGSKRAV_SECTIONS;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return BEGJÆRING_OM_GJENOPPTAK_SECTIONS;
     case null:
       return DEFAULT_SECTIONS;
   }

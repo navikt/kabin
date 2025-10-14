@@ -3,9 +3,10 @@ import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
+import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
+import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
 import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
-import { Journalpostmuligheter } from '@app/components/muligheter/omgjøringskrav/journalpostmuligheter';
 import { Omgjøringskravmuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
@@ -44,6 +45,12 @@ const ReadOnlyType = () => {
       return (
         <Tag variant="info" size="medium">
           Omgjøringskrav{mulighetIsBasedOnJournalpost ? ' fra journalpost' : null}
+        </Tag>
+      );
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return (
+        <Tag variant="info" size="medium">
+          Begjæring om gjenopptak{mulighetIsBasedOnJournalpost ? ' fra journalpost' : null}
         </Tag>
       );
     case null:
@@ -98,8 +105,11 @@ export const TypeSelect = () => {
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.OMGJØRINGSKRAV}>Omgjøringskrav</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK}>Begjæring om gjenopptak</ToggleGroup.Item>
       </ToggleGroup>
-      {value === SaksTypeEnum.OMGJØRINGSKRAV ? <FraJournalpostCheckbox /> : null}
+      {value === SaksTypeEnum.OMGJØRINGSKRAV || value === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? (
+        <FraJournalpostCheckbox />
+      ) : null}
     </HStack>
   );
 };
@@ -184,7 +194,7 @@ export const TypeInput = () => {
   if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
     return mulighetIsBasedOnJournalpost ? (
       <>
-        <Journalpostmuligheter />
+        <Journalpostmuligheter title="Velg vedtaket som omgjøringskravet gjelder" />
         <WillCreateNewJournalpostInfo />
         <GosysOppgaver />
         <Overstyringer
@@ -202,6 +212,34 @@ export const TypeInput = () => {
         <Overstyringer
           title="Tilpass omgjøringskravet"
           klagerLabel={klagerLabel}
+          saksbehandlerFromMulighetLabel="Fra tidligere behandling"
+        />
+        <Svarbrev />
+      </>
+    );
+  }
+
+  if (typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) {
+    return mulighetIsBasedOnJournalpost ? (
+      <>
+        <Journalpostmuligheter title="Velg kjennelsen som begjæringen om gjenopptak gjelder" />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass begjæringen om gjenopptak"
+          klagerLabel="Den som begjærer gjenopptak"
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
+      <>
+        <BegjæringOmGjenopptakMuligheter />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass begjæringen om gjenopptak"
+          klagerLabel="Den som begjærer gjenopptak"
           saksbehandlerFromMulighetLabel="Fra tidligere behandling"
         />
         <Svarbrev />

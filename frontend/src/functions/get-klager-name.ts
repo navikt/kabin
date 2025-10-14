@@ -9,5 +9,7 @@ export const getKlagerTitle = (registreringType: RegistreringType | null): strin
       return 'Ankende part';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Den som krever omgjøring';
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return 'Den som begjærer gjenopptak';
   }
 };
