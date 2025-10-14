@@ -1,5 +1,10 @@
 import type { RegistreringType } from '@app/types/common';
-import type { IAnkemulighet, IKlagemulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
+import type {
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IKlagemulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 
 export interface CreateRegistreringParams {
   sakenGjelderValue: string | null;
@@ -17,7 +22,7 @@ export interface SetAnkemulighetParams {
 
 export interface SetNonAnkemulighetParams {
   id: string;
-  mulighet: IKlagemulighet | IOmgjøringskravmulighet;
+  mulighet: IKlagemulighet | IOmgjøringskravmulighet | IBegjæringOmGjenopptakMulighet;
 }
 
 export interface SearchPartWithUtsendingskanalParams {

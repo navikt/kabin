@@ -61,6 +61,8 @@ const getKabalUrl = (type: RegistreringType, behandlingId: string) => {
       return `${KABAL_URL}/ankebehandling/${behandlingId}`;
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return `${KABAL_URL}/omgjøringskravbehandling/${behandlingId}`;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return `${KABAL_URL}/begjaering-om-gjenopptak-behandling/${behandlingId}`;
   }
 };
 

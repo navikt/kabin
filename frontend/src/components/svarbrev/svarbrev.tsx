@@ -7,7 +7,6 @@ import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
-import { SaksTypeEnum } from '@app/types/common';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
@@ -66,10 +65,7 @@ const SvarbrevInput = () => {
     return null;
   }
 
-  if (
-    mulighet === null ||
-    (typeId === SaksTypeEnum.OMGJØRINGSKRAV && mulighetIsBasedOnJournalpost && typeof mulighet.id !== 'string')
-  ) {
+  if (mulighet === null || (mulighetIsBasedOnJournalpost && typeof mulighet.id !== 'string')) {
     return (
       <Card title="Svarbrev">
         <Placeholder>
