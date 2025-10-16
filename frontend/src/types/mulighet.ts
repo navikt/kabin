@@ -13,6 +13,7 @@ interface IBasemulighet {
   readonly temaId: string;
   readonly originalFagsystemId: string;
   readonly currentFagsystemId: FagsystemId;
+  readonly requiresGosysOppgave: boolean;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
