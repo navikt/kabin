@@ -35,9 +35,9 @@ export const Omgjøringskravmuligheter = () => {
 };
 
 const ReadOnlyOmgjøringskravmulighet = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
@@ -50,7 +50,7 @@ const ReadOnlyOmgjøringskravmulighet = () => {
 };
 
 const EditableOmgjøringskravmuligheter = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { journalpost } = useJournalpost();
   const { omgjoeringskravmuligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
@@ -61,7 +61,7 @@ const EditableOmgjøringskravmuligheter = () => {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV) {
+  if (typeId !== SaksTypeEnum.OMGJØRINGSKRAV || fromJournalpost) {
     return null;
   }
 

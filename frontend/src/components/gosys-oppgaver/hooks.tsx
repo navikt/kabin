@@ -16,11 +16,10 @@ export const useParams = (): IGetGosysOppgaverParams | typeof skipToken => {
 };
 
 export const useIsEnabled = () => {
-  const { mulighetIsBasedOnJournalpost } = useRegistrering();
-  const { mulighet } = useMulighet();
+  const { mulighet, fromJournalpost } = useMulighet();
 
-  if (mulighetIsBasedOnJournalpost && typeof mulighet?.id === 'string') {
-    return true;
+  if (fromJournalpost) {
+    return typeof mulighet?.id === 'string';
   }
 
   return mulighet?.requiresGosysOppgave === true;

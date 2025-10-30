@@ -19,9 +19,15 @@ interface Props {
 type Mulighet = IOmgjøringskravmulighet | IAnkemulighet | IBegjæringOmGjenopptakMulighet;
 
 export const SelectedNonKlageMulighet = ({ onClick, label }: Props) => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if ((typeId !== SaksTypeEnum.OMGJØRINGSKRAV && typeId !== SaksTypeEnum.ANKE) || mulighet === undefined) {
+  if (
+    (typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
+      typeId !== SaksTypeEnum.ANKE &&
+      typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) ||
+    mulighet === undefined ||
+    fromJournalpost
+  ) {
     return null;
   }
 

@@ -271,9 +271,9 @@ const WillCreateNewJournalpostInfo = () => {
 
 const useJournalpostAndMulighet = () => {
   const { journalpost } = useJournalpost();
-  const { mulighet } = useMulighet();
+  const { mulighet, fromJournalpost } = useMulighet();
 
-  if (journalpost === undefined || mulighet === undefined) {
+  if (journalpost === undefined || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
