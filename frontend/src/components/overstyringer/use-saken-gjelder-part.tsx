@@ -35,12 +35,12 @@ type NotEnoughDataPart = {
 
 export const useSakenGjelderPart = (): LoadedPart | LoadingPart | NotFoundPart | NotEnoughDataPart => {
   const { sakenGjelderValue } = useRegistrering();
-  const { mulighet } = useMulighet();
+  const { mulighet, fromJournalpost } = useMulighet();
   const ytelseId = useYtelseId();
   const [getPart, { isFetching, isSuccess, isError }] = useLazyGetPartWithUtsendingskanalQuery();
   const [fetchedPart, setFetchedPart] = useState<IPart | null>();
 
-  if (mulighet !== undefined) {
+  if (mulighet !== undefined && !fromJournalpost) {
     return { sakenGjelder: mulighet.sakenGjelder, isLoading: false };
   }
 

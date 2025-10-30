@@ -58,9 +58,12 @@ const FromVedtakToJournalpost = () => {
   const { journalpost } = useJournalpost();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
-  const { mulighet } = useMulighet();
+  const { mulighet, fromJournalpost } = useMulighet();
 
-  const fromDate = mulighet === undefined || mulighet.vedtakDate === null ? undefined : parseISO(mulighet.vedtakDate);
+  const fromDate =
+    mulighet === undefined || fromJournalpost || mulighet.vedtakDate === null
+      ? undefined
+      : parseISO(mulighet.vedtakDate);
 
   const toDate =
     journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));

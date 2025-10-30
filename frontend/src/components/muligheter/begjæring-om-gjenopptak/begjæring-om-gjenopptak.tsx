@@ -35,9 +35,9 @@ export const BegjæringOmGjenopptakMuligheter = () => {
 };
 
 const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
@@ -50,7 +50,7 @@ const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
 };
 
 const EditableBegjæringOmGjenopptakMuligheter = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { journalpost } = useJournalpost();
   const { gjenopptaksmuligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
@@ -61,7 +61,7 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) {
+  if (typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK || fromJournalpost) {
     return null;
   }
 

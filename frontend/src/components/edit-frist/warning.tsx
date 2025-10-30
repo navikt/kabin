@@ -14,13 +14,19 @@ interface Props {
 
 export const Warning = ({ unitTypeId, units }: Props) => {
   const ytelseId = useYtelseId();
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
   );
 
-  if (typeId === null || svarbrevSetting === undefined || typeId === SaksTypeEnum.KLAGE || mulighet === undefined) {
-    return;
+  if (
+    typeId === null ||
+    svarbrevSetting === undefined ||
+    typeId === SaksTypeEnum.KLAGE ||
+    mulighet === undefined ||
+    fromJournalpost
+  ) {
+    return null;
   }
 
   const { vedtakDate } = mulighet;
