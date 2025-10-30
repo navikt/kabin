@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
-import { useDeleteRegistreringMutation } from '@app/redux/api/registreringer/main';
+import { useDeleteRegistreringMutation, useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { Alert, Button } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -11,7 +11,7 @@ export const DeleteButton = () => {
   const id = useRegistreringId();
 
   const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
-  const [, { isLoading: isFinishing }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
 
   return (
     <DeleteContainer>
