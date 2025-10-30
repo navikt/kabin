@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
+import { useDeleteRegistreringMutation, useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, ErrorSummary } from '@navikt/ds-react';
@@ -12,7 +12,7 @@ export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { id, typeId } = useRegistrering();
   const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
-  const [, { isLoading: isDeleting }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}delete` });
+  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
   const closeConfirm = () => setShowConfirm(false);
