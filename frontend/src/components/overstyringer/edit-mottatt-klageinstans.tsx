@@ -11,12 +11,12 @@ import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer/
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 import { parseISO } from 'date-fns';
-import { useCallback, useMemo } from 'react';
+import { type JSX, useCallback, useMemo } from 'react';
 
 const ID = ValidationFieldNames.MOTTATT_KLAGEINSTANS;
 const LABEL = FIELD_NAMES[ID];
 
-export const EditMottattKlageinstans = () => {
+export const EditMottattKlageinstans = (): JSX.Element | null => {
   const { typeId, overstyringer } = useRegistrering();
   const canEdit = useCanEdit();
 
@@ -25,6 +25,8 @@ export const EditMottattKlageinstans = () => {
   }
 
   switch (typeId) {
+    case null:
+      return null;
     case SaksTypeEnum.KLAGE:
       return <FromJournalpostToNow />;
     case SaksTypeEnum.OMGJØRINGSKRAV:
@@ -32,8 +34,6 @@ export const EditMottattKlageinstans = () => {
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return <FromVedtakToJournalpost />;
   }
-
-  return null;
 };
 
 const FromJournalpostToNow = () => {
