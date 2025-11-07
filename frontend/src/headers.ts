@@ -1,7 +1,7 @@
 import { ENVIRONMENT } from '@app/environment';
 import { generateTraceParent } from '@app/functions/generate-request-id';
 
-export const TAB_UUID = crypto.randomUUID();
+const TAB_UUID = crypto.randomUUID();
 
 enum HeaderKeys {
   TRACEPARENT = 'traceparent',

@@ -2,8 +2,8 @@ import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
 import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
-import { useGetAnkeStatusQuery } from '@app/redux/api/status';
-import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
+import { useGetStatusQuery } from '@app/redux/api/status';
+import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { Alert } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
@@ -15,7 +15,7 @@ interface Props {
 
 export const Status = ({ registrering, alertText, headingText }: Props) => {
   const { id, typeId, behandlingId } = registrering;
-  const { data, isLoading, isError } = useGetAnkeStatusQuery(behandlingId);
+  const { data, isLoading, isError } = useGetStatusQuery(behandlingId);
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
@@ -39,7 +39,7 @@ const StyledMain = styled.main`
 `;
 
 interface DetailsLoaderProps {
-  data: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | undefined;
+  data: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | IBegjæringOmGjenopptakStatus | undefined;
   id: string | undefined;
   isLoading: boolean;
   isError: boolean;

@@ -15,11 +15,7 @@ export const SortHeader = ({ sortKey, orderBy, direction, ...rest }: Props) => (
   </Table.HeaderCell>
 );
 
-export const getAriaSort = (
-  sortKey: string,
-  orderBy: string,
-  direction: SortState['direction'],
-): SortState['direction'] => {
+const getAriaSort = (sortKey: string, orderBy: string, direction: SortState['direction']): SortState['direction'] => {
   if (orderBy !== sortKey) {
     return 'none';
   }
@@ -27,20 +23,12 @@ export const getAriaSort = (
   return direction;
 };
 
-export interface SortButtonProps extends Props {
+interface SortButtonProps extends Props {
   className?: string;
   size?: ButtonProps['size'];
 }
 
-export const SortButton = ({
-  sortKey,
-  children,
-  orderBy,
-  direction,
-  onSortChange,
-  className,
-  size,
-}: SortButtonProps) => (
+const SortButton = ({ sortKey, children, orderBy, direction, onSortChange, className, size }: SortButtonProps) => (
   <Button
     variant={orderBy === sortKey ? 'primary-neutral' : 'tertiary-neutral'}
     size={size}

@@ -159,7 +159,7 @@ export interface IArkivertDocument {
   hasAccess: boolean;
 }
 
-export interface Variant {
+interface Variant {
   /** Filtype for dokumentvarianten. */
   filtype: Filtype;
   hasAccess: boolean;

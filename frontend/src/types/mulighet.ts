@@ -3,6 +3,7 @@ import type { Ytelse } from '@app/types/ytelse';
 
 export enum FagsystemId {
   KABAL = '23',
+  /** @public */
   INFOTRYGD = '7',
 }
 

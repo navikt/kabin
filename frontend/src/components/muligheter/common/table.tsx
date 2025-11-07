@@ -47,7 +47,7 @@ interface RowProps extends CommonProps {
   mulighet: Mulighet;
 }
 
-export const Row = ({ mulighet, setMulighetHook }: RowProps) => {
+const Row = ({ mulighet, setMulighetHook }: RowProps) => {
   const { id, mulighet: registreringMulighet } = useRegistrering();
   const { journalpost } = useJournalpost();
   const [setMulighet, { isLoading }] = setMulighetHook();

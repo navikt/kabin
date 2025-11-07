@@ -7,12 +7,12 @@ import { Mulighet } from '@app/pages/status/mulighet';
 import { StyledCard } from '@app/pages/status/styled-components';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
-import type { IAnkestatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
+import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { parseISO } from 'date-fns';
 
 interface Props {
   id: string;
-  status: IAnkestatus | IKlagestatus | IOmgjøringskravstatus;
+  status: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | IBegjæringOmGjenopptakStatus;
 }
 
 const getJournalpostTitle = (typeId: RegistreringType): string => {

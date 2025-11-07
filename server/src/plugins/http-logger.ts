@@ -6,7 +6,7 @@ import { SERVE_INDEX_PLUGIN_ID } from '@app/plugins/serve-index';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import fastifyPlugin from 'fastify-plugin';
 
-export const HTTP_LOGGER_PLUGIN_ID = 'http-logger';
+const HTTP_LOGGER_PLUGIN_ID = 'http-logger';
 
 export const httpLoggerPlugin = fastifyPlugin(
   (app, _, pluginDone) => {

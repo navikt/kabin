@@ -45,6 +45,12 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun run lint
+
+      - name: Knip ${{ matrix.apps }}
+        shell: bash
+        run: |
+          cd ${{ matrix.apps }}
+          bun run knip
     
       - name: Test ${{ matrix.apps }}
         shell: bash

@@ -4,7 +4,8 @@ import { createContext, useState } from 'react';
 export interface ViewedVedlegg extends IVedlegg {
   journalpostId: string;
 }
-export type IViewedDocument = IArkivertDocument | ViewedVedlegg | null;
+
+type IViewedDocument = IArkivertDocument | ViewedVedlegg | null;
 
 interface IDocumentViewerContext {
   dokument: IViewedDocument;

@@ -11,12 +11,11 @@ export const API_CLIENT_IDS = [KABIN_API, KABAL_API, KABAL_INNSTILLINGER, KLAGE_
 
 const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
 const serverDirectoryPath = cwd;
-export const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
+const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');
 
 const defaultValue = isLocal ? 'local' : undefined;
 
 export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
-export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);
 export const START_TIME = Date.now();
