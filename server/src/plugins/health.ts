@@ -1,6 +1,6 @@
 import fastifyPlugin from 'fastify-plugin';
 
-export const HEALTH_PLUGIN_ID = 'health';
+const HEALTH_PLUGIN_ID = 'health';
 
 export const healthPlugin = fastifyPlugin(
   (app, _, pluginDone) => {

@@ -1,26 +1,26 @@
 import { getDuration } from '@app/helpers/duration';
 import fastifyPlugin from 'fastify-plugin';
 
-export const serverTimingsKey = Symbol('server-timings');
-export const serverTimingStartsKey = Symbol('server-timing-starts');
-export const serverTimingHeaders = Symbol('server-timing-headers');
+const serverTimingsKey = Symbol('server-timings');
+const serverTimingStartsKey = Symbol('server-timing-starts');
+const serverTimingHeaders = Symbol('server-timing-headers');
 
 interface ServerTimingStart {
   start: number;
   description?: string;
 }
 
-export interface ServerTiming {
+interface ServerTiming {
   name: string;
   duration: number;
   description?: string;
 }
 
-export type AddServerTimingFn = (name: string, duration: number, description?: string) => void;
-export type StartServerTimingFn = (name: string, description?: string) => void;
-export type EndServerTimingFn = (name: string) => void;
-export type TimedFn = () => Promise<void> | void;
-export type MeasureServerTimingFn = (opts: { name: string; description?: string }, timedFn: TimedFn) => void;
+type AddServerTimingFn = (name: string, duration: number, description?: string) => void;
+type StartServerTimingFn = (name: string, description?: string) => void;
+type EndServerTimingFn = (name: string) => void;
+type TimedFn = () => Promise<void> | void;
+type MeasureServerTimingFn = (opts: { name: string; description?: string }, timedFn: TimedFn) => void;
 
 declare module 'fastify' {
   interface FastifyReply {

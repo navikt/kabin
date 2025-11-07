@@ -15,7 +15,7 @@ declare module 'fastify' {
   }
 }
 
-export interface ApiProxyPluginOptions {
+interface ApiProxyPluginOptions {
   appNames: string[];
 }
 

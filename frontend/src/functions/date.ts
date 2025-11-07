@@ -34,18 +34,22 @@ const compareDates = (a: string, b: string): number => {
 export const isDateAfter = (maybeAfter: string, base: string): boolean =>
   compareDates(maybeAfter, base) === ComparisonResult.AFTER;
 
+/** @public */
 export const isDateBefore = (maybeBefore: string, base: string): boolean =>
   compareDates(maybeBefore, base) === ComparisonResult.BEFORE;
 
+/** @public */
 export const isDateEqual = (maybeEqual: string, base: string): boolean =>
   compareDates(maybeEqual, base) === ComparisonResult.EQUAL;
 
+/** @public */
 export const isDateBeforeOrEqual = (maybeBefore: string, base: string): boolean => {
   const comparison = compareDates(maybeBefore, base);
 
   return comparison === ComparisonResult.BEFORE || comparison === ComparisonResult.EQUAL;
 };
 
+/** @public */
 export const isDateAfterOrEqual = (maybeAfter: string, base: string): boolean => {
   const comparison = compareDates(maybeAfter, base);
 

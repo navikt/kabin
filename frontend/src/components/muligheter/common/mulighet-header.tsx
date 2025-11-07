@@ -56,7 +56,7 @@ export const HeaderReadOnly = () => (
   </Header>
 );
 
-export const Header = styled.div`
+const Header = styled.div`
   display: grid;
   grid-template-columns: min-content min-content 1fr;
   grid-gap: 4px;

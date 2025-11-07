@@ -19,7 +19,7 @@ const labelNames = [
 
 type LabelNames = (typeof labelNames)[number];
 
-export const uniqueUsersGauge = new Gauge({
+const uniqueUsersGauge = new Gauge({
   name: 'active_users',
   help: 'Number of active unique users. All timestamps are Unix timestamps in milliseconds (UTC). "start_time" is when the session started. "app_start_time" is when the app started.',
   labelNames,

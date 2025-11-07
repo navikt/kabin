@@ -48,3 +48,8 @@ export interface IOmgjøringskravstatus extends IBaseStatus {
   typeId: SaksTypeEnum.OMGJØRINGSKRAV;
   vedtakDate: string | null;
 }
+
+export interface IBegjæringOmGjenopptakStatus extends IBaseStatus {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+  vedtakDate: string | null;
+}

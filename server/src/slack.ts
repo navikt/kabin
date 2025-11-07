@@ -5,10 +5,8 @@ import { getLogger } from '@app/logger';
 const log = getLogger('slack');
 
 export enum EmojiIcons {
-  Tada = ':tada:',
   LoadingDots = ':loading-dots:',
   Broken = ':broken:',
-  Collision = ':collision:',
 }
 
 const url = optionalEnvString('SLACK_URL');

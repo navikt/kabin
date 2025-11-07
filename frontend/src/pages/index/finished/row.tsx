@@ -15,7 +15,7 @@ import { styled } from 'styled-components';
 
 export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreringListItem }) => {
   const { id, sakenGjelderValue, typeId, ytelseId, created, finished, behandlingId } = registrering;
-  const prefetchStatus = usePrefetch(typeId === SaksTypeEnum.KLAGE ? 'getKlageStatus' : 'getAnkeStatus');
+  const prefetchStatus = usePrefetch('getStatus');
 
   const path = `/registrering/${id}/status`;
 

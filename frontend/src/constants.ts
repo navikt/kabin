@@ -1,6 +1,6 @@
 import { ENVIRONMENT } from '@app/environment';
 
-export const getKabalUrl = (): string => {
+const getKabalUrl = (): string => {
   const hostname = window.location.hostname;
 
   if (hostname.includes('.ansatt.nav.no')) {
