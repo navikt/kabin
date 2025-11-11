@@ -19,6 +19,7 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
   [ValidationFieldNames.SVARBREV_INPUT]: 'Svarbrev',
   [ValidationFieldNames.GOSYS_OPPGAVE]: 'Oppgave i Gosys',
   [ValidationFieldNames.SVARBREV_RECEIVERS]: 'Mottakere av svarbrev',
+  [ValidationFieldNames.REASON_NO_LETTER]: 'Skriv kort hvordan du har varslet på annen måte',
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {

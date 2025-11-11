@@ -1,6 +1,7 @@
 import { Card } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
+import { VarsletFrist } from '@app/components/svarbrev/varslet-frist';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
@@ -61,7 +62,7 @@ const SvarbrevInput = () => {
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
   );
 
-  if (typeId === null || svarbrev.send !== true) {
+  if (typeId === null) {
     return null;
   }
 
@@ -100,11 +101,11 @@ const SvarbrevInput = () => {
     );
   }
 
-  if (svarbrev.send !== true) {
-    return null;
-  }
-
-  return <InternalSvarbrevInput setting={svarbrevSetting} />;
+  return svarbrev.send ? (
+    <InternalSvarbrevInput setting={svarbrevSetting} />
+  ) : (
+    <VarsletFrist setting={svarbrevSetting} />
+  );
 };
 
 const ToggleContainer = styled.div`

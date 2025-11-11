@@ -1,3 +1,4 @@
+import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { Fritekst } from '@app/components/edit-frist/fritekst';
 import { InitialFritekst } from '@app/components/edit-frist/initial-fritekst';
 import { Container } from '@app/components/edit-frist/styled-components';
@@ -13,20 +14,20 @@ import {
 } from '@app/redux/api/svarbrev/svarbrev';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { SvarbrevSetting } from '@app/types/svarbrev-settings';
-import { HGrid, HStack, ToggleGroup } from '@navikt/ds-react';
+import { HStack, Label, ToggleGroup, VStack } from '@navikt/ds-react';
 
 const ID = 'svarbrev-frist';
-const LABEL = 'Frist i svarbrev';
+const LABEL = 'Varslet frist i Kabal-behandling';
 
 interface Props {
   setting: SvarbrevSetting;
 }
 
 export const EditVarsletFrist = ({ setting }: Props) => {
-  const { id, typeId, svarbrev } = useRegistrering();
-  const [setBehandlingstid] = useSetSvarbrevBehandlingstidMutation();
-  const [setOverrideBehandlingstid] = useSetSvarbrevOverrideBehandlingstidMutation();
+  const { svarbrev, id, typeId } = useRegistrering();
   const canEdit = useCanEdit();
+  const { units, unitTypeId } = useBehandlingstid(setting);
+  const [setOverrideBehandlingstid] = useSetSvarbrevOverrideBehandlingstidMutation();
 
   if (!canEdit) {
     const { behandlingstid } = svarbrev;
@@ -38,19 +39,13 @@ export const EditVarsletFrist = ({ setting }: Props) => {
     return <ReadOnlyText label={LABEL} value={value} id={ID} />;
   }
 
-  const units = svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
-  const unitTypeId = svarbrev.behandlingstid?.unitTypeId ?? setting.behandlingstidUnitTypeId;
-
-  const setUnits = (u: number) => setBehandlingstid({ id, units: u, unitTypeId });
-
-  const setUnitType = (type: BehandlingstidUnitType) => setBehandlingstid({ id, units, unitTypeId: type });
-
   const disabled = svarbrev.overrideBehandlingstid === false;
 
   return (
     <Container>
-      <HGrid columns={2} gap="2">
-        <HStack gap="2" align="end">
+      <HStack gap="4">
+        <HStack gap="2" align="end" justify="end">
+          <VarsletFristBehandlingstid disabled={disabled} units={units} unitTypeId={unitTypeId} />
           <ToggleGroup
             value={svarbrev.overrideBehandlingstid ? 'true' : 'false'}
             onChange={(m) => setOverrideBehandlingstid({ id, overrideBehandlingstid: m === 'true', typeId })}
@@ -60,18 +55,60 @@ export const EditVarsletFrist = ({ setting }: Props) => {
             <ToggleGroup.Item value="false" label="Uendret" />
             <ToggleGroup.Item value="true" label="Overstyr" />
           </ToggleGroup>
-
-          <Units label="Antall" readOnly={disabled} value={units} onChange={setUnits} />
-
-          <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />
+          <Fristdato date={svarbrev.calculatedFrist} />
         </HStack>
 
         <InitialFritekst />
-      </HGrid>
+      </HStack>
 
       <Fritekst />
 
       {!disabled ? <Warning units={units} unitTypeId={unitTypeId} /> : null}
     </Container>
   );
+};
+
+interface VarsletFristBehandlingstidProps {
+  disabled?: boolean;
+  units: number;
+  unitTypeId: BehandlingstidUnitType;
+  label?: string;
+}
+
+const FIELDSET_ID = 'varslet-frist-fieldset';
+
+export const VarsletFristBehandlingstid = ({
+  disabled = false,
+  units,
+  unitTypeId,
+  label,
+}: VarsletFristBehandlingstidProps) => {
+  const [setBehandlingstid] = useSetSvarbrevBehandlingstidMutation();
+  const { id } = useRegistrering();
+  const setUnits = (units: number) => setBehandlingstid({ id, units, unitTypeId });
+  const setUnitType = (unitTypeId: BehandlingstidUnitType) => setBehandlingstid({ id, units, unitTypeId });
+
+  return (
+    <VStack gap="2">
+      {label === undefined ? null : (
+        <Label size="small" htmlFor={FIELDSET_ID}>
+          {label}
+        </Label>
+      )}
+      <HStack gap="2" align="end" as="fieldset" id={FIELDSET_ID}>
+        <Units label="Antall" readOnly={disabled} value={units} onChange={setUnits} />
+
+        <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />
+      </HStack>
+    </VStack>
+  );
+};
+
+export const useBehandlingstid = (setting: SvarbrevSetting) => {
+  const { svarbrev } = useRegistrering();
+
+  const units = svarbrev.behandlingstid?.units ?? setting.behandlingstidUnits;
+  const unitTypeId = svarbrev.behandlingstid?.unitTypeId ?? setting.behandlingstidUnitTypeId;
+
+  return { units, unitTypeId };
 };
