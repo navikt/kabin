@@ -102,6 +102,7 @@ export interface Svarbrev {
   overrideCustomText: boolean;
   customText: string | null;
   initialCustomText: string | null;
+  reasonNoLetter: string | null;
 }
 
 export interface Receiver {

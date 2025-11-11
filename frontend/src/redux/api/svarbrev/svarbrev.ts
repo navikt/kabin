@@ -20,6 +20,7 @@ import type {
   SetSvarbrevCustomTextResponse,
   SetSvarbrevFullmektigFritekst,
   SetSvarbrevInitialCustomTextResponse,
+  SetSvarbrevNoReasonResponse,
   SetSvarbrevOverrideBehandlingstidResponse,
   SetSvarbrevSendResponse,
   SetSvarbrevTitleResponse,
@@ -269,6 +270,26 @@ const svarbrevSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+    setSvarbrevReasonNoLetter: builder.mutation<SetSvarbrevNoReasonResponse, { id: string; reasonNoLetter: string }>({
+      query: ({ id, ...body }) => ({
+        url: `/registreringer/${id}/svarbrev/reason-no-letter`,
+        method: 'PUT',
+        body,
+      }),
+      onQueryStarted: async ({ id, reasonNoLetter }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          svarbrev: { ...draft.svarbrev, reasonNoLetter },
+        }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -292,4 +313,5 @@ export const {
   useSetSvarbrevOverrideBehandlingstidMutation,
   useSetSvarbrevOverrideCustomTextMutation,
   useSetSvarbrevInitialCustomTextMutation,
+  useSetSvarbrevReasonNoLetterMutation,
 } = svarbrevSlice;
