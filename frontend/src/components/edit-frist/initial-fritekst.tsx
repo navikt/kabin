@@ -22,6 +22,7 @@ export const InitialFritekst = () => {
 
   return (
     <TextField
+      className="grow"
       size="small"
       label="Fritekst (valgfri)"
       value={value}

@@ -63,7 +63,7 @@ const LoadedEditFrist = () => {
           </span>
         )}
 
-        <Fristdato />
+        <Fristdato date={overstyringer?.calculatedFrist} />
       </Row>
     </Container>
   );

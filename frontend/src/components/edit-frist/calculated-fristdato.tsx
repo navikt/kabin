@@ -1,24 +1,18 @@
 import { isoDateToPretty } from '@app/domain/date';
-import { useRegistrering } from '@app/hooks/use-registrering';
 import { CalculatorIcon } from '@navikt/aksel-icons';
 import { BodyShort, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-export const Fristdato = () => {
-  const { overstyringer } = useRegistrering();
-  const { calculatedFrist } = overstyringer;
-
-  return (
-    <Tooltip content="Beregnet fristdato">
-      <BodyShort as="time" dateTime={calculatedFrist ?? ''}>
-        <Content>
-          <CalculatorIcon aria-hidden />
-          {isoDateToPretty(calculatedFrist) ?? '-'}
-        </Content>
-      </BodyShort>
-    </Tooltip>
-  );
-};
+export const Fristdato = ({ date }: { date: string | null }) => (
+  <Tooltip content="Beregnet dato">
+    <BodyShort as="time" dateTime={date ?? ''} className="min-h">
+      <Content>
+        <CalculatorIcon aria-hidden />
+        {isoDateToPretty(date) ?? '-'}
+      </Content>
+    </BodyShort>
+  </Tooltip>
+);
 
 const Content = styled.div`
   display: flex;

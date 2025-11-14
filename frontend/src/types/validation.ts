@@ -32,4 +32,5 @@ export enum ValidationFieldNames {
   ENHET = 'enhet',
   GOSYS_OPPGAVE = 'gosysOppgaveId',
   SVARBREV_RECEIVERS = 'svarbrevReceivers',
+  REASON_NO_LETTER = 'reasonNoLetter',
 }

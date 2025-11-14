@@ -26,3 +26,5 @@ export type SetSvarbrevCustomTextResponse = SvarbrevResponse<{ customText: strin
 export type SetSvarbrevInitialCustomTextResponse = SvarbrevResponse<{ initialCustomText: string }>;
 
 export type ReceiverResponse = SvarbrevResponse<{ receivers: Receiver[] }>;
+
+export type SetSvarbrevNoReasonResponse = SvarbrevResponse<{ reasonNoLetter: string | null }>;
