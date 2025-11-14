@@ -28,7 +28,7 @@ import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SaksTypeEnum } from '@app/types/common';
 import { formatISO } from 'date-fns';
 
-export const DEFAULT_SVARBREV_NAME = 'Nav klageinstans orienterer om saksbehandlingen';
+export const DEFAULT_SVARBREV_NAME = 'Klageinstans orienterer om saksbehandlingen';
 
 const svarbrevSlice = registreringApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
