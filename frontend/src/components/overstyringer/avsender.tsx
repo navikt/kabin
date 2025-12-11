@@ -18,7 +18,11 @@ export const Avsender = ({ options }: Props) => {
   const { journalpost } = useJournalpost();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
 
-  if (journalpost === undefined || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
+  if (
+    journalpost === undefined ||
+    journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE ||
+    !journalpost.canChangeAvsender
+  ) {
     return null;
   }
 
