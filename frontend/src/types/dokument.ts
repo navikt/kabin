@@ -157,6 +157,7 @@ export interface IArkivertDocument {
   logiskeVedlegg: LogiskVedlegg[];
   varianter: Variants;
   hasAccess: boolean;
+  canChangeAvsender: boolean;
 }
 
 interface Variant {
