@@ -11,7 +11,7 @@ export const ErrorDetails = ({ error }: Props) => (
     <Heading size="xsmall">Teknisk feil</Heading>
     <Details label="Tittel">{error.title}</Details>
     <Details label="Status">{error.status}</Details>
-    <Details label="Type">{error.type}</Details>
+    <Details label="Type">{error.type === undefined ? '-' : error.type}</Details>
     <Details label="Instans">{error.instance}</Details>
     <Details label="Detaljer">{error.detail}</Details>
   </section>
