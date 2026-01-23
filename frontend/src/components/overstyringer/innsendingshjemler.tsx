@@ -29,7 +29,10 @@ export const Innsendingshjemler = () => {
     }
 
     return (
-      data.find((y) => y.id === ytelseId)?.innsendingshjemler.map((h) => ({ value: h.id, label: h.beskrivelse })) ?? []
+      data
+        .find((y) => y.id === ytelseId)
+        ?.innsendingshjemler.filter((h) => !h.utfases)
+        .map((h) => ({ value: h.id, label: h.beskrivelse })) ?? []
     );
   }, [data, typeId, ytelseId]);
 

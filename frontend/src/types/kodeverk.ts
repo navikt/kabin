@@ -16,7 +16,7 @@ export interface IYtelserLatest extends IKodeverkSimpleValue<string> {
   lovKildeToRegistreringshjemler: ILovkildeToRegistreringshjemler[];
   enheter: IKodeverkSimpleValue[];
   klageenheter: IKodeverkSimpleValue[];
-  innsendingshjemler: IKodeverkValue[];
+  innsendingshjemler: (IKodeverkValue & { utfases: boolean })[];
 }
 
 export interface IFagsystem extends IKodeverkValue {
