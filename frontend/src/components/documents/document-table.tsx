@@ -4,7 +4,7 @@ import { useFilteredDocuments } from '@app/components/documents/filter-helpers';
 import type { DateRange } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
+import { List, type RowComponentProps, useDynamicRowHeight } from 'react-window';
 import type { BaseSelectDocumentProps } from './document/types';
 
 const getExpandedRecords = (dokumenter: IArkivertDocument[], expanded: boolean) =>
@@ -38,6 +38,8 @@ export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, ge
     search,
   );
 
+  const rowHeight = useDynamicRowHeight({ defaultRowHeight: 32 });
+
   return (
     <>
       <ColumnHeaders
@@ -57,31 +59,52 @@ export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, ge
         someExpanded={someExpanded}
         toggleExpandAll={() => setExpanded(getExpandedRecords(dokumenter, !someExpanded))}
       />
-      <StyledList>
-        {filteredDokumenter.map((d) => {
-          const id = `${d.journalpostId}-${d.dokumentInfoId}`;
-
-          return (
-            <Dokument
-              key={id}
-              dokument={d}
-              isExpanded={expanded[id] === true}
-              toggleExpanded={() => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))}
-              selectJournalpost={selectJournalpost}
-              getIsSelected={getIsSelected}
-              getCanBeSelected={getCanBeSelected}
-            />
-          );
-        })}
-      </StyledList>
+      <List
+        rowComponent={RowComponent}
+        rowCount={filteredDokumenter.length}
+        rowHeight={rowHeight}
+        rowProps={{ filteredDokumenter, getIsSelected, selectJournalpost, getCanBeSelected, expanded, setExpanded }}
+      />
     </>
   );
 };
 
-const StyledList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  overflow-y: auto;
-`;
+interface RowProps extends BaseSelectDocumentProps {
+  filteredDokumenter: IArkivertDocument[];
+  expanded: Record<string, boolean>;
+  setExpanded: (value: Record<string, boolean>) => void;
+}
+
+const RowComponent = ({
+  index,
+  getIsSelected,
+  selectJournalpost,
+  getCanBeSelected,
+  filteredDokumenter,
+  expanded,
+  setExpanded,
+  ariaAttributes,
+  style,
+}: RowComponentProps<RowProps>) => {
+  const document = filteredDokumenter[index];
+
+  if (document === undefined) {
+    return null;
+  }
+
+  const id = `${document.journalpostId}-${document.dokumentInfoId}`;
+
+  return (
+    <Dokument
+      key={id}
+      dokument={document}
+      isExpanded={expanded[id] === true}
+      toggleExpanded={() => setExpanded({ ...expanded, [id]: !expanded[id] })}
+      selectJournalpost={selectJournalpost}
+      getIsSelected={getIsSelected}
+      getCanBeSelected={getCanBeSelected}
+      style={style}
+      ariaAttributes={ariaAttributes}
+    />
+  );
+};
