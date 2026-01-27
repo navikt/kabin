@@ -14,12 +14,16 @@ import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { Tooltip } from '@navikt/ds-react';
+import type { CSSProperties } from 'react';
+import type { RowComponentProps } from 'react-window';
 import { styled } from 'styled-components';
 
 interface Props extends BaseSelectDocumentProps {
   dokument: IArkivertDocument;
   isExpanded: boolean;
   toggleExpanded: () => void;
+  style: CSSProperties;
+  ariaAttributes: RowComponentProps['ariaAttributes'];
 }
 
 export const Dokument = ({
@@ -29,6 +33,8 @@ export const Dokument = ({
   selectJournalpost,
   getIsSelected,
   getCanBeSelected,
+  style,
+  ariaAttributes,
 }: Props) => {
   const {
     dokumentInfoId,
@@ -67,7 +73,13 @@ export const Dokument = ({
   };
 
   return (
-    <DocumentListItem $isSelected={isSelected} $clickable={harTilgangTilArkivvariant} aria-label={title}>
+    <DocumentListItem
+      $isSelected={isSelected}
+      $clickable={harTilgangTilArkivvariant}
+      aria-label={title}
+      style={style}
+      {...ariaAttributes}
+    >
       <StyledGrid
         as="article"
         data-testid="document"
