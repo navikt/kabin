@@ -57,8 +57,9 @@ export const DocumentsBase = ({
 
         {sakenGjelderValue === null ? null : (
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={() => refetch()}
             loading={isLoading}
             icon={<ArrowsCirclepathIcon aria-hidden />}
@@ -76,9 +77,7 @@ export const DocumentsBase = ({
           />
         )}
       </Header>
-
       <ValidationErrorMessage error={error} id={ValidationFieldNames.JOURNALPOST_ID} />
-
       <Content
         dokumenter={dokumenter}
         isLoading={isLoading}

@@ -9,8 +9,9 @@ interface ExpandButtonProps {
 
 export const ExpandButton = ({ isExpanded, toggleExpanded, className }: ExpandButtonProps) => (
   <Button
+    data-color="neutral"
     size="small"
-    variant="tertiary-neutral"
+    variant="tertiary"
     icon={isExpanded ? <ChevronDownIcon aria-hidden /> : <ChevronRightIcon aria-hidden />}
     onClick={(e) => {
       e.stopPropagation();

@@ -71,17 +71,14 @@ const Part = ({ part, overriddenAddress, handling }: Receiver) => {
         </Tooltip>
         {part.name} <CopyPartIdButton id={part.identifikator} size="xsmall" />
       </StyledName>
-
       <StyledPartStatusList statusList={part.statusList} />
-
       <Channel>
         <Tooltip content="Utsendingskanal">
-          <Tag size="small" variant="neutral">
+          <Tag data-color="neutral" size="small" variant="outline">
             {getUtsendingskanal(handling, part.utsendingskanal)}
           </Tag>
         </Tooltip>
       </Channel>
-
       <ReadAddress address={part.address} overriddenAddress={overriddenAddress} part={part} />
     </PartContent>
   );

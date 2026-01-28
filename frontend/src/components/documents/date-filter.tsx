@@ -29,7 +29,14 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
 
   return (
     <Container ref={ref}>
-      <Button onClick={onClick} size="small" variant="tertiary-neutral" icon={<Icon aria-hidden />} title={title}>
+      <Button
+        data-color="neutral"
+        onClick={onClick}
+        size="small"
+        variant="tertiary"
+        icon={<Icon aria-hidden />}
+        title={title}
+      >
         {children}
       </Button>
       {isOpen ? (
@@ -37,8 +44,9 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
           <StyledHeader>
             <StyledDateRange>{formatDateRange(selected)}</StyledDateRange>
             <Button
+              data-color="neutral"
               size="small"
-              variant="secondary-neutral"
+              variant="secondary"
               onClick={() => {
                 onChange(undefined);
                 setIsOpen(false);
@@ -47,8 +55,9 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
               icon={<ArrowCirclepathIcon aria-hidden />}
             />
             <Button
+              data-color="neutral"
               size="small"
-              variant="secondary-neutral"
+              variant="secondary"
               onClick={() => setIsOpen(false)}
               title="Lukk"
               icon={<XMarkIcon aria-hidden />}

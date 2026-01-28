@@ -32,20 +32,21 @@ export const AddressField = ({
         <FieldLabel>
           {label}
           {required ? (
-            <Tag size="xsmall" variant="info">
+            <Tag data-color="info" size="xsmall" variant="outline">
               Påkrevd
             </Tag>
           ) : null}
           {isOverridden ? (
-            <Tag size="xsmall" variant="warning">
+            <Tag data-color="warning" size="xsmall" variant="outline">
               Overstyrt
             </Tag>
           ) : null}
           {isOverridden ? (
             <Tooltip content={`Tilbakestill til «${originalValue}»`}>
               <Button
+                data-color="neutral"
                 size="xsmall"
-                variant="tertiary-neutral"
+                variant="tertiary"
                 onClick={() => onChange(originalValue)}
                 icon={<ArrowUndoIcon aria-hidden />}
               />

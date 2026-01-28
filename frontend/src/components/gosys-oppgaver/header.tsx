@@ -34,8 +34,9 @@ export const Header = () => {
       Velg oppgave i Gosys
       <OppgaveHelpText typeId={typeId} />
       <Button
+        data-color="neutral"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         onClick={onRefresh}
         loading={isLoading}
         title="Oppdater"

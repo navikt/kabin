@@ -108,19 +108,20 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
         label={
           <FieldLabel>
             Land
-            <Tag size="xsmall" variant="info">
+            <Tag data-color="info" size="xsmall" variant="outline">
               Påkrevd
             </Tag>
             {isOverridden ? (
-              <Tag size="xsmall" variant="warning">
+              <Tag data-color="warning" size="xsmall" variant="outline">
                 Overstyrt
               </Tag>
             ) : null}
             {isOverridden ? (
               <Tooltip content={`Tilbakestill til «${originalCountryName}»`}>
                 <Button
+                  data-color="neutral"
                   size="xsmall"
-                  variant="tertiary-neutral"
+                  variant="tertiary"
                   onClick={() => {
                     countryNameRef.current = originalCountryName;
                     onChange(originalValue);

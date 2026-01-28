@@ -1,13 +1,7 @@
 @import "tailwindcss";
-@import "@navikt/ds-css/darkside" layer(components);
+@import "@navikt/ds-css" layer(components);
 @import "./fonts.css" layer(fonts);
 @config './tailwind.config.js';
-
-@layer components {
-  @theme {
-    --a-font-family: "Source Sans 3", Arial, sans-serif;
-  }
-}
 
 @utility text-stroke-* {
   text-shadow:
@@ -134,10 +128,6 @@
       transform: scaleX(0);
     }
   }
-}
-
-:root {
-  --a-font-family: "Source Sans 3", Arial, sans-serif;
 }
 
 html {

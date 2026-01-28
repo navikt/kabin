@@ -61,7 +61,7 @@ export const HjemmelTag = ({ hjemmelId }: { hjemmelId: string }) => {
   const hjemmelName = useHjemmelName(hjemmelId);
 
   return (
-    <Tag variant="info" size="small" title="Hentet fra kildesystem">
+    <Tag data-color="info" variant="outline" size="small" title="Hentet fra kildesystem">
       {hjemmelName}
     </Tag>
   );
@@ -77,7 +77,7 @@ export const YtelseTag = ({ ytelseId, ...props }: IYtelseTagProps) => {
   return ytelseName === undefined ? (
     'Ingen'
   ) : (
-    <Tag variant="info" size="medium" title="Hentet fra kildesystem" {...props}>
+    <Tag data-color="info" variant="outline" size="medium" title="Hentet fra kildesystem" {...props}>
       {ytelseName}
     </Tag>
   );

@@ -57,11 +57,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
       <Title $isFocused={isFocused} data-testid="logisk-vedlegg">
         {logiskVedlegg.tittel}
       </Title>
-
       <AbsoluteTitle $isFocused={isFocused} aria-hidden role="presentation">
         {logiskVedlegg.tittel}
       </AbsoluteTitle>
-
       <ButtonContainer $isFocused={isFocused}>
         <Tooltip content="Kopier" placement="top">
           <CopyButton
@@ -76,8 +74,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
         <Tooltip content="Endre" placement="top">
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={onEditClick}
             icon={<PencilIcon aria-hidden />}
             loading={isUpdating}
@@ -90,8 +89,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
         <Tooltip content="Slett" placement="top">
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={() => remove({ sakenGjelderValue, dokumentInfoId, logiskVedleggId })}
             icon={<TrashIcon aria-hidden />}
             loading={isRemoving}

@@ -86,8 +86,9 @@ export const Units = ({ readOnly, value, onChange, label, min = 1 }: Props) => {
         readOnly={readOnly}
       />
       <Button
+        data-color="neutral"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         icon={<PlusIcon aria-hidden />}
         onClick={increment}
         disabled={readOnly}
@@ -95,8 +96,9 @@ export const Units = ({ readOnly, value, onChange, label, min = 1 }: Props) => {
         title="Øk med 1"
       />
       <Button
+        data-color="neutral"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         icon={<MinusIcon aria-hidden />}
         onClick={decrement}
         disabled={readOnly || internalValue === minValue}

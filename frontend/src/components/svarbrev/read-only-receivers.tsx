@@ -3,7 +3,7 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import type { Receiver } from '@app/redux/api/registreringer/types';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
-import { BoxNew, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 const getHandlingLabel = (handling: HandlingEnum | null, utsendingskanal: Utsendingskanal) => {
@@ -30,9 +30,9 @@ const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
 
   return (
     <li>
-      <BoxNew background="neutral-soft" padding="0" borderRadius="medium" borderColor="neutral" borderWidth="1">
-        <BoxNew padding="2">
-          <VStack gap="2" align="start">
+      <Box background="neutral-soft" padding="space-0" borderRadius="4" borderColor="neutral" borderWidth="1">
+        <Box padding="space-8">
+          <VStack gap="space-8" align="start">
             <Label as={Heading} level="1" size="small">
               {receiver.part.name}
             </Label>
@@ -43,24 +43,24 @@ const ReadOnlyReceiver = ({ receiver }: { receiver: Receiver }) => {
               </Tag>
             </Tooltip>
           </VStack>
-        </BoxNew>
+        </Box>
 
         {addressLines.length === 0 ? null : (
           <Tooltip content={addressIsOverridden ? 'Manuelt overstyrt addresse' : 'Standardadresse'}>
-            <BoxNew
+            <Box
               background={addressIsOverridden ? 'warning-soft' : undefined}
-              padding="2"
-              borderRadius="medium"
+              padding="space-8"
+              borderRadius="4"
               borderColor="neutral"
               borderWidth="0"
             >
               {addressLines.map((l) => (
                 <div key={l}>{l}</div>
               ))}
-            </BoxNew>
+            </Box>
           </Tooltip>
         )}
-      </BoxNew>
+      </Box>
     </li>
   );
 };

@@ -2,7 +2,6 @@ import type { CountryCode } from '@app/static-data/static-data';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   country: CountryCode;
@@ -22,20 +21,17 @@ export const CountryOption = ({ country, isFocused, isSelected, onClick }: Props
 
   return (
     <li key={country.landkode} ref={ref}>
-      <StyledButton
+      <Button
         size="small"
-        variant={isFocused ? 'primary' : 'tertiary-neutral'}
+        variant={isFocused ? 'primary' : 'tertiary'}
+        data-color={isFocused ? undefined : 'neutral'}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => onClick(country)}
         icon={isSelected ? <CheckmarkIcon aria-hidden /> : null}
+        className="justify-start! w-full"
       >
         {country.land} ({country.landkode})
-      </StyledButton>
+      </Button>
     </li>
   );
 };
-
-const StyledButton = styled(Button)`
-  width: 100%;
-  justify-content: start;
-`;

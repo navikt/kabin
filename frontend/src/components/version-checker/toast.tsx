@@ -18,7 +18,8 @@ export const VersionToast = ({ isRequired = false }: Props) => (
         <Warning size="small">Gjør gjerne saken ferdig før du oppdaterer.</Warning>
 
         <Button
-          variant="secondary-neutral"
+          data-color="neutral"
+          variant="secondary"
           size="small"
           onClick={(e) => {
             pushEvent('close_update_toast', 'update', { required: isRequired ? 'true' : 'false' });

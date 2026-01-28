@@ -38,7 +38,7 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
     <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected} $clickable={canEdit}>
       <Table.DataCell>{klagemulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>
-        <Tag variant="alt3" size="small">
+        <Tag data-color="info" variant="outline" size="small">
           {temaName}
         </Tag>
       </Table.DataCell>

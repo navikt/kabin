@@ -10,14 +10,14 @@ export const YtelseTag = ({ ytelseId }: Props) => {
 
   if (ytelseName === undefined) {
     return (
-      <Tag variant="neutral" size="small">
+      <Tag data-color="neutral" variant="outline" size="small">
         Ingen
       </Tag>
     );
   }
 
   return (
-    <Tag size="small" variant="info">
+    <Tag data-color="info" size="small" variant="outline">
       {ytelseName}
     </Tag>
   );

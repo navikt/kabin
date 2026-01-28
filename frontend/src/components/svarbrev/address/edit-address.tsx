@@ -190,14 +190,15 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
         <Button size="small" variant="primary" onClick={save}>
           Lagre
         </Button>
-        <Button size="small" variant="secondary-neutral" onClick={onCancel}>
+        <Button data-color="neutral" size="small" variant="secondary" onClick={onCancel}>
           Avbryt
         </Button>
         {isOverridden ? (
           <Tooltip content="Tilbakestill til original adresse.">
             <Button
+              data-color="neutral"
               size="small"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => onSave(null)}
               icon={<ArrowUndoIcon aria-hidden />}
             >

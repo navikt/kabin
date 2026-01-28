@@ -31,9 +31,10 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
     <NewRegistrering orientation="horizontal" />
     <Buttons>
       <Button
+        data-color="neutral"
         as={RouterLink}
         to="/"
-        variant="secondary-neutral"
+        variant="secondary"
         size="small"
         icon={<HouseIcon aria-hidden role="presentation" />}
       >

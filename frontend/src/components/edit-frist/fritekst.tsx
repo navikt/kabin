@@ -30,7 +30,7 @@ export const Fritekst = () => {
   }, [id, setCustomText, svarbrev.customText, svarbrev.overrideCustomText, value]);
 
   return (
-    <HStack gap="2" align="end">
+    <HStack gap="space-8" align="end">
       <ToggleGroup
         value={svarbrev.overrideCustomText ? 'true' : 'false'}
         onChange={(m) => override({ id, overrideCustomText: m === 'true' })}
@@ -40,7 +40,6 @@ export const Fritekst = () => {
         <ToggleGroup.Item value="false" label="Uendret" />
         <ToggleGroup.Item value="true" label="Overstyr" />
       </ToggleGroup>
-
       <StyledFritekst
         size="small"
         label="Fritekst"

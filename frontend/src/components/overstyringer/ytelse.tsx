@@ -55,7 +55,7 @@ const ReadOnly = () => {
     <Container aria-labelledby={HEADING_ID}>
       {HEADING}
       {ytelseId === null ? (
-        <Tag variant="neutral" size="medium" data-testid={ID}>
+        <Tag data-color="neutral" variant="outline" size="medium" data-testid={ID}>
           Ikke satt
         </Tag>
       ) : (

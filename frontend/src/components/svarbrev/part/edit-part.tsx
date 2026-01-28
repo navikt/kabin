@@ -110,7 +110,11 @@ interface ResultProps {
 
 const Result = ({ part, onChange, isLoading, isSearching, buttonText }: ResultProps) => {
   if (part === null) {
-    return <Tag variant="warning">Ingen treff</Tag>;
+    return (
+      <Tag data-color="warning" variant="outline">
+        Ingen treff
+      </Tag>
+    );
   }
 
   if (part === undefined) {

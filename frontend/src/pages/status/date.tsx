@@ -21,7 +21,7 @@ export const DateInfoItem = ({ date, label, children }: Props) => {
       <Row>
         <Time dateTime={date}>{isoDateToPretty(date) ?? date}</Time>
         {children === undefined ? null : (
-          <Tag variant="neutral" size="small">
+          <Tag data-color="neutral" variant="outline" size="small">
             {children}
           </Tag>
         )}

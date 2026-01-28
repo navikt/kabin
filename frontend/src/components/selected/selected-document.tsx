@@ -42,15 +42,15 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
         </Heading>
         {onClick === undefined ? null : (
           <Button
+            data-color="neutral"
             size="small"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={onClick}
             icon={<ChevronDownIcon aria-hidden />}
             title="Vis alle journalposter"
           />
         )}
       </Header>
-
       <Table zebraStripes size="small">
         <Table.Header>
           <Table.Row>

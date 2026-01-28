@@ -26,8 +26,9 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
     <StyledDocumentTitle>
       <Tooltip content="Åpne i nytt vindu" placement="top">
         <Button
+          data-color="neutral"
           as="a"
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={<ExternalLinkIcon aria-hidden />}
           size="small"
           href={url}
@@ -38,9 +39,7 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       <Heading size="small" level="1">
         {dokument?.tittel ?? ''}
       </Heading>
-
       <Variant {...props} />
-
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
       <Tooltip content="Lukk" placement="top">
         <RightAlignedButton
@@ -84,9 +83,8 @@ const Variant = ({ format, ...props }: VariantProps) => {
   );
 
   return (
-    <HStack gap="2" wrap={false}>
+    <HStack gap="space-8" wrap={false}>
       <RedactedSwitch {...props} />
-
       {showsPol ? <PolTag /> : null}
       {showsFeil ? <FeilTag /> : null}
     </HStack>
@@ -111,7 +109,7 @@ const RedactedSwitch = ({ showRedacted, setShowRedacted, hasRedactedDocument }: 
   if (!hasAccessToArchivedDocuments) {
     return (
       <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
-        <Tag variant="alt1-filled" size="small">
+        <Tag data-color="meta-purple" variant="strong" size="small">
           Sladdet
         </Tag>
       </Tooltip>

@@ -56,7 +56,7 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
 };
 
 const Path = () => (
-  <Tag variant="neutral-moderate" size="xsmall">
+  <Tag data-color="neutral" variant="moderate" size="xsmall">
     <StyledPre>{window.location.pathname}</StyledPre>
   </Tag>
 );

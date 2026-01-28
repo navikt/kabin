@@ -82,8 +82,9 @@ const SelectButton = ({ selected, alreadyUsed, onClick }: SelectButtonProps) => 
   return (
     <Tooltip content={selected ? 'Oppgave er valgt. Klikk for å fjerne valg.' : 'Velg oppgave'}>
       <Button
+        data-color="neutral"
         size="small"
-        variant="tertiary-neutral"
+        variant="tertiary"
         onClick={(e) => {
           e.stopPropagation();
           onClick?.();
