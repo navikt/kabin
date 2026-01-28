@@ -59,8 +59,8 @@ const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
   display: grid;
   position: relative;
   padding-left: 48px;
-  grid-template-columns: max-content 1fr 30px 55px;
-  grid-template-areas: 'title logiske-vedlegg view select';
+  grid-template-columns: max-content 1fr 30px 55px 20px;
+  grid-template-areas: 'title logiske-vedlegg view select already-used';
   column-gap: 8px;
   background-color: ${({ $isViewed }) => ($isViewed ? 'var(--ax-warning-200)' : 'transparent')};
 
