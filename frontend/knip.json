@@ -1,9 +1,0 @@
-{
-  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
-  "entry": ["src/index.tsx", "tailwind.config.js"],
-  "project": ["src/**"],
-  "bun": {
-    "config": ["package.json"],
-    "entry": ["**/*.test.{ts,tsx}"]
-  }
-}
