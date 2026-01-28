@@ -28,8 +28,9 @@ export const HeaderEditable = ({
     </Heading>
 
     <Button
+      data-color="neutral"
       size="xsmall"
-      variant="tertiary-neutral"
+      variant="tertiary"
       onClick={() => refetch(id)}
       loading={isFetching}
       icon={<ArrowsCirclepathIcon aria-hidden />}

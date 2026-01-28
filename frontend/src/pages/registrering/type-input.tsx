@@ -31,31 +31,31 @@ const ReadOnlyType = () => {
   switch (typeId) {
     case SaksTypeEnum.ANKE:
       return (
-        <Tag variant="alt1" size="medium">
+        <Tag data-color="meta-purple" variant="outline" size="medium">
           Anke
         </Tag>
       );
     case SaksTypeEnum.KLAGE:
       return (
-        <Tag variant="info" size="medium">
+        <Tag data-color="info" variant="outline" size="medium">
           Klage
         </Tag>
       );
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return (
-        <Tag variant="info" size="medium">
+        <Tag data-color="info" variant="outline" size="medium">
           Omgjøringskrav{mulighetIsBasedOnJournalpost ? ' fra journalpost' : null}
         </Tag>
       );
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return (
-        <Tag variant="info" size="medium">
+        <Tag data-color="info" variant="outline" size="medium">
           Begjæring om gjenopptak{mulighetIsBasedOnJournalpost ? ' fra journalpost' : null}
         </Tag>
       );
     case null:
       return (
-        <Tag variant="info" size="medium">
+        <Tag data-color="info" variant="outline" size="medium">
           Ingen sakstype valgt
         </Tag>
       );
@@ -100,7 +100,7 @@ export const TypeSelect = () => {
 
   // Without `key` TogglegGroup will remember last non-undefined value when undefined.
   return (
-    <HStack gap="4" justify="center" align="center">
+    <HStack gap="space-16" justify="center" align="center">
       <ToggleGroup onChange={onChange} value={value ?? 'none'} size="small" key={value === undefined ? 'none' : 'some'}>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>

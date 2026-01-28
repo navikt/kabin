@@ -53,7 +53,6 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
           </LogiskeVedleggListItem>
         ))
       )}
-
       {isOpen ? (
         <LogiskeVedleggListItem key="create">
           <CreateLogiskVedlegg
@@ -64,13 +63,13 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
           />
         </LogiskeVedleggListItem>
       ) : null}
-
       {!isOpen && hasLogiskeVedlegg ? (
         <LogiskeVedleggListItem key="toggle-create">
           <Tooltip content="Legg til logisk vedlegg">
             <Button
+              data-color="neutral"
               size="xsmall"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => setIsOpen(true)}
               icon={<PlusCircleIcon aria-hidden />}
               onMouseDown={stopMouseDown}

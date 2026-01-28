@@ -16,15 +16,15 @@ export const DeleteButton = () => {
   return (
     <DeleteContainer>
       <Button
+        data-color="danger"
         onClick={() => setShowConfirm(!showConfirm)}
         size="small"
-        variant="danger"
+        variant="primary"
         disabled={isDeleting || isFinishing}
         loading={isDeleting}
       >
         Slett registrering
       </Button>
-
       {showConfirm ? <Confirm close={() => setShowConfirm(false)} /> : null}
     </DeleteContainer>
   );
@@ -46,19 +46,27 @@ const Confirm = ({ close }: { close: () => void }) => {
       </Alert>
       <Buttons>
         <Button
+          data-color="danger"
           onClick={async () => {
             await deleteRegistrering(id).unwrap();
             navigate('/');
           }}
           size="small"
-          variant="danger"
+          variant="primary"
           disabled={isLoading}
           loading={isLoading}
         >
           Bekreft
         </Button>
 
-        <Button size="small" variant="secondary-neutral" disabled={isLoading} loading={isLoading} onClick={close}>
+        <Button
+          data-color="neutral"
+          size="small"
+          variant="secondary"
+          disabled={isLoading}
+          loading={isLoading}
+          onClick={close}
+        >
           Avbryt
         </Button>
       </Buttons>

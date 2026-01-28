@@ -103,9 +103,10 @@ export const ColumnHeaders = ({
       </StyledButton>
       <StyledGrid as="section" aria-label="Journalpostfiltere">
         <Button
+          data-color="neutral"
           style={{ gridArea: GridArea.EXPAND }}
           size="small"
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={someExpanded ? <ChevronUpDoubleIcon aria-hidden /> : <ChevronDownDoubleIcon aria-hidden />}
           onClick={toggleExpandAll}
         />

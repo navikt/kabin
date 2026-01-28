@@ -99,7 +99,7 @@ const Row = ({ mulighet, setMulighetHook }: RowProps) => {
       </Table.DataCell>
       <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>
-        <Tag variant="alt3" size="small">
+        <Tag data-color="info" variant="outline" size="small">
           {temaName}
         </Tag>
       </Table.DataCell>

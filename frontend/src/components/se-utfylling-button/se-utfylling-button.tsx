@@ -8,9 +8,10 @@ interface Props {
 
 export const SeUtfylling = ({ registreringId }: Props) => (
   <Button
+    data-color="neutral"
     as={Link}
     to={`/registrering/${registreringId}`}
-    variant="secondary-neutral"
+    variant="secondary"
     size="small"
     icon={<DocPencilIcon aria-hidden role="presentation" />}
   >

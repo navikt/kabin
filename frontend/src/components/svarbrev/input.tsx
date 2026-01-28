@@ -21,7 +21,7 @@ export const InternalSvarbrevInput = ({ setting }: Props) => {
         {overstyringer.fullmektig === null ? (
           <SetTitle />
         ) : (
-          <HGrid columns={2} gap="2">
+          <HGrid columns={2} gap="space-8">
             <SetTitle />
             <SetFullmektig />
           </HGrid>
@@ -31,7 +31,6 @@ export const InternalSvarbrevInput = ({ setting }: Props) => {
 
         <Receivers />
       </Card>
-
       <Card title="Forhåndsvisning av svarbrev">
         <Preview />
       </Card>

@@ -5,19 +5,19 @@ export const Type = ({ typeId }: { typeId: string | null }) => {
   switch (typeId) {
     case null:
       return (
-        <Tag variant="neutral" size="small">
+        <Tag data-color="neutral" variant="outline" size="small">
           Ikke satt
         </Tag>
       );
     case SaksTypeEnum.KLAGE:
       return (
-        <Tag variant="info" size="small">
+        <Tag data-color="info" variant="outline" size="small">
           Klage
         </Tag>
       );
     case SaksTypeEnum.ANKE:
       return (
-        <Tag variant="alt1" size="small">
+        <Tag data-color="meta-purple" variant="outline" size="small">
           Anke
         </Tag>
       );

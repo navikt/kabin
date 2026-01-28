@@ -37,7 +37,7 @@ const Result = ({ part, isLoading, onChange, buttonText = 'Bruk' }: ResultProps)
 
     <PartStatusList statusList={part.statusList} />
 
-    <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary-neutral">
+    <Button data-color="neutral" onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
       {buttonText}
     </Button>
   </StyledResult>

@@ -99,7 +99,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
       <CardLarge title={title}>
         <Alert variant="error" size="small">
           <BodyShort spacing>Kunne ikke hente saken gjelder ({formatFoedselsnummer(sakenGjelderValue)}).</BodyShort>
-          <HStack gap="2" align="center" asChild>
+          <HStack gap="space-8" align="center" asChild>
             <BodyShort>
               <Button variant="primary" size="small" onClick={refetch} loading={isLoading}>
                 Prøv igjen

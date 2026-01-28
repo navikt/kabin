@@ -1,6 +1,6 @@
 import { RoleItem } from '@app/components/role-list/role-list-item';
 import type { Role } from '@app/types/bruker';
-import { Heading, List, type TagProps } from '@navikt/ds-react';
+import { BodyShort, Heading, List, type TagProps, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -23,13 +23,17 @@ export const RoleList = ({ roles, variant, title, description }: Props) => {
   }
 
   return (
-    <StyledList size="small" title={title} description={description}>
-      {roles.map((r) => (
-        <StyledListItem key={r}>
-          <RoleItem key={r} role={r} variant={variant} />
-        </StyledListItem>
-      ))}
-    </StyledList>
+    <VStack>
+      <Heading size="small">{title}</Heading>
+      <BodyShort>{description}</BodyShort>
+      <StyledList size="small">
+        {roles.map((r) => (
+          <StyledListItem key={r}>
+            <RoleItem key={r} role={r} variant={variant} />
+          </StyledListItem>
+        ))}
+      </StyledList>
+    </VStack>
   );
 };
 

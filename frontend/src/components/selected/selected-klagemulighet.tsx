@@ -33,11 +33,12 @@ const RenderKlagemulighet = ({ mulighet, onClick }: RenderProps) => (
         Valgt klagemulighet
       </Heading>
       <Button
+        data-color="neutral"
         size="small"
         title="Vis alle klagemuligheter"
         onClick={onClick}
         icon={<ChevronDownIcon aria-hidden />}
-        variant="tertiary-neutral"
+        variant="tertiary"
       />
     </Header>
 
@@ -68,7 +69,7 @@ export const SelectedKlagemulighetBody = (mulighet: IKlagemulighet) => {
           <tr>
             <td>{fagsakId}</td>
             <td>
-              <Tag size="small" variant="alt3">
+              <Tag data-color="info" size="small" variant="outline">
                 {temaName}
               </Tag>
             </td>

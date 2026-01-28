@@ -43,8 +43,8 @@ export const EditVarsletFrist = ({ setting }: Props) => {
 
   return (
     <Container>
-      <HStack gap="4">
-        <HStack gap="2" align="end" justify="end">
+      <HStack gap="space-16">
+        <HStack gap="space-8" align="end" justify="end">
           <VarsletFristBehandlingstid disabled={disabled} units={units} unitTypeId={unitTypeId} />
           <ToggleGroup
             value={svarbrev.overrideBehandlingstid ? 'true' : 'false'}
@@ -60,9 +60,7 @@ export const EditVarsletFrist = ({ setting }: Props) => {
 
         <InitialFritekst />
       </HStack>
-
       <Fritekst />
-
       {!disabled ? <Warning units={units} unitTypeId={unitTypeId} /> : null}
     </Container>
   );
@@ -89,13 +87,13 @@ export const VarsletFristBehandlingstid = ({
   const setUnitType = (unitTypeId: BehandlingstidUnitType) => setBehandlingstid({ id, units, unitTypeId });
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       {label === undefined ? null : (
         <Label size="small" htmlFor={FIELDSET_ID}>
           {label}
         </Label>
       )}
-      <HStack gap="2" align="end" as="fieldset" id={FIELDSET_ID}>
+      <HStack gap="space-8" align="end" as="fieldset" id={FIELDSET_ID}>
         <Units label="Antall" readOnly={disabled} value={units} onChange={setUnits} />
 
         <UnitType disabled={disabled} value={unitTypeId} onChange={setUnitType} />

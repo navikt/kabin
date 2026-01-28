@@ -37,8 +37,8 @@ export const VarsletFrist = ({ setting }: Props) => {
 
   return (
     <Card>
-      <VStack gap="4">
-        <HStack gap="2" align="end">
+      <VStack gap="space-16">
+        <HStack gap="space-8" align="end">
           <VarsletFristBehandlingstid units={units} unitTypeId={unitTypeId} label="Varslet frist" />
           <Fristdato date={svarbrev.calculatedFrist} />
         </HStack>

@@ -7,7 +7,7 @@ import { useLazyGetPartQuery } from '@app/redux/api/part';
 import { useSetSakenGjelderMutation } from '@app/redux/api/registreringer/mutations';
 import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
 import { ArrowsSquarepathIcon, CircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Label, Loader, Tag } from '@navikt/ds-react';
+import { Box, Button, HStack, Label, Loader, Tag } from '@navikt/ds-react';
 import { useCallback, useId, useState } from 'react';
 
 export const Person = () => {
@@ -93,7 +93,7 @@ export const Person = () => {
   if (!canEdit) {
     return sakenGjelderValue === null ? (
       <Container>
-        <Tag variant="alt3" size="small">
+        <Tag data-color="info" variant="outline" size="small">
           <i>Ingen person valgt</i>
         </Tag>
       </Container>
@@ -109,13 +109,17 @@ export const Person = () => {
   return (
     <Container>
       {sakenGjelderValue === null ? null : (
-        <HStack align="center" gap="1" className="border-ax-border-neutral border-r" paddingInline="0 4">
+        <HStack
+          align="center"
+          gap="space-4"
+          className="border-ax-border-neutral border-r"
+          paddingInline="space-0 space-16"
+        >
           <Label htmlFor={sakenGjelderLabelId}>Saken gjelder</Label>
           <PersonDetails sakenGjelderValue={sakenGjelderValue} id={sakenGjelderLabelId} variant="success" />
         </HStack>
       )}
-
-      <HStack gap="1" align="start">
+      <HStack gap="space-4" align="start">
         <FnrInput
           value={inputValue}
           onChange={setInputValue}
@@ -125,31 +129,31 @@ export const Person = () => {
         />
 
         {inputError === null ? null : (
-          <Tag variant="error" className="gap-1">
+          <Tag data-color="danger" variant="outline" className="gap-1">
             <XMarkOctagonIcon aria-hidden /> <span>{inputError}</span>
           </Tag>
         )}
 
         {isSearching ? (
-          <Tag variant="alt3" className="gap-1">
+          <Tag data-color="info" variant="outline" className="gap-1">
             <Loader size="small" /> <span>Søker etter person...</span>
           </Tag>
         ) : null}
 
         {isSettingSakenGjelder ? (
-          <Tag variant="alt3" className="gap-1">
+          <Tag data-color="info" variant="outline" className="gap-1">
             <Loader size="small" /> <span>Bytter saken gjelder...</span>
           </Tag>
         ) : null}
 
         {isSame ? (
-          <Tag variant="neutral" className="gap-1">
+          <Tag data-color="neutral" variant="outline" className="gap-1">
             <CircleIcon aria-hidden /> <span>Allerede satt som saken gjelder</span>
           </Tag>
         ) : null}
 
         {setSakenGjelderError === null ? null : (
-          <Tag variant="error" className="gap-1">
+          <Tag data-color="danger" variant="outline" className="gap-1">
             <XMarkOctagonIcon aria-hidden /> <span>{setSakenGjelderError}</span>
           </Tag>
         )}
@@ -176,9 +180,9 @@ interface ContainerProps {
 }
 
 const Container = ({ children }: ContainerProps) => (
-  <HStack asChild style={{ gridArea: 'search' }} gap="4" justify="start" align="start" width="100%" wrap>
-    <BoxNew background="default" paddingInline="4" paddingBlock="4 2">
+  <HStack asChild style={{ gridArea: 'search' }} gap="space-16" justify="start" align="start" width="100%" wrap>
+    <Box background="default" paddingInline="space-16" paddingBlock="space-16 space-8">
       {children}
-    </BoxNew>
+    </Box>
   </HStack>
 );

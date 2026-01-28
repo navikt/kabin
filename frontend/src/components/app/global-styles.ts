@@ -1,5 +1,4 @@
 import { createGlobalStyle, css } from 'styled-components';
-import '@navikt/ds-css/darkside';
 
 const styles = css`
   html {

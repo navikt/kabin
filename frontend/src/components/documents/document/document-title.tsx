@@ -33,12 +33,11 @@ export const DocumentTitle = ({ dokument }: Props) => {
         <EllipsisTitle title={tittel} data-testid="document-title" $isActive={isActive}>
           {tittel}
         </EllipsisTitle>
-
         <DocumentWarnings varianter={varianter} />
-
         <Button
+          data-color="neutral"
           size="xsmall"
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={<PencilIcon aria-hidden />}
           title="Endre"
           onClick={enterEditMode}

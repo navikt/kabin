@@ -52,5 +52,13 @@ export const PersonDetails = ({ sakenGjelderValue, id, variant = 'alt3' }: Props
 };
 
 const StyledTag = (props: TagProps) => (
-  <HStack as={Tag} {...props} align="center" justify="center" gap="2" wrap={false} className="whitespace-nowrap" />
+  <HStack
+    as={Tag}
+    {...props}
+    align="center"
+    justify="center"
+    gap="space-8"
+    wrap={false}
+    className="whitespace-nowrap"
+  />
 );

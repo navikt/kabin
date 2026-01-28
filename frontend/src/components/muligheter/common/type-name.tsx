@@ -7,7 +7,7 @@ interface Props {
 
 export const TypeName = ({ typeId }: Props) => {
   return (
-    <Tag variant="info" size="small">
+    <Tag data-color="info" variant="outline" size="small">
       {TYPE_NAME[typeId]}
     </Tag>
   );

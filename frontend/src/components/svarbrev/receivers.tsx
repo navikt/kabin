@@ -28,7 +28,7 @@ export const Receivers = () => {
 
   return (
     <Container>
-      <HGrid columns={2} gap="2">
+      <HGrid columns={2} gap="space-8">
         {onlyOneReceiver ? (
           <SingleReceiver receiver={receiver} />
         ) : (
@@ -37,7 +37,6 @@ export const Receivers = () => {
 
         <CustomReceivers receivers={customReceivers} />
       </HGrid>
-
       {error ? <ErrorMessage>{error}</ErrorMessage> : null}
     </Container>
   );

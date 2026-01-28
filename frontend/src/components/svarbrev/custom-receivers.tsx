@@ -61,8 +61,9 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                 <StyledReceiverInnerContent>
                   <Tooltip content="Fjern mottaker">
                     <Button
+                      data-color="neutral"
                       size="xsmall"
-                      variant="tertiary-neutral"
+                      variant="tertiary"
                       title="Fjern"
                       icon={<TrashIcon color="var(--ax-bg-danger-strong)" aria-hidden />}
                       onClick={() => remove({ id: registreringId, receiverId: id })}
@@ -80,7 +81,6 @@ const Receivers = ({ receivers }: ReceiversProps) => {
                 </StyledReceiverInnerContent>
               </StyledBrevmottaker>
             </StyledReceiverContent>
-
             <ShowOptionsOrWarning receiver={{ ...props, part, id }} isLoading={isRemoving} />
           </StyledReceiver>
         );

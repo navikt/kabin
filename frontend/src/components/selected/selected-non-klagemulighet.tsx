@@ -45,11 +45,12 @@ const RenderNonKlagemulighet = ({ mulighet, onClick, label }: RenderProps) => (
         Valgt vedtak
       </Heading>
       <Button
+        data-color="neutral"
         size="small"
         title={label}
         onClick={onClick}
         icon={<ChevronDownIcon aria-hidden />}
-        variant="tertiary-neutral"
+        variant="tertiary"
       />
     </Header>
     <SelectedNonKlageMulighetBody {...mulighet} />
@@ -84,7 +85,7 @@ export const SelectedNonKlageMulighetBody = (mulighet: Mulighet) => {
             </td>
             <td>{fagsakId}</td>
             <td>
-              <Tag size="small" variant="alt3">
+              <Tag data-color="info" size="small" variant="outline">
                 {temaName}
               </Tag>
             </td>

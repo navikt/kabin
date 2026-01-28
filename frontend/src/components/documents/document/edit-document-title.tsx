@@ -84,7 +84,8 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
       />
       <ButtonContainer>
         <Button
-          variant="tertiary-neutral"
+          data-color="neutral"
+          variant="tertiary"
           size="xsmall"
           icon={<CheckmarkIcon title="Lagre" />}
           onClick={(e) => {
@@ -100,7 +101,8 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
           loading={isLoading}
         />
         <Button
-          variant="tertiary-neutral"
+          data-color="neutral"
+          variant="tertiary"
           size="xsmall"
           icon={<ArrowUndoIcon title="Avbryt" />}
           onClick={(e) => {
