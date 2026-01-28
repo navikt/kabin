@@ -1,3 +1,4 @@
+import { ENVIRONMENT } from '@app/environment';
 import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IAddress, IPart, RegistreringType } from '@app/types/common';
 import type {
@@ -111,3 +112,7 @@ export interface Receiver {
   handling: HandlingEnum | null;
   overriddenAddress: IAddress | null;
 }
+
+export const GET_FERDIGE_REGISTRERINGER_PARAMS = {
+  sidenDager: ENVIRONMENT.isProduction ? 7 : 1_000_000,
+};

@@ -2,13 +2,16 @@ import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedTable } from '@app/pages/index/finished/table';
 import { Container } from '@app/pages/index/styled-components';
 import { useGetFerdigeRegistreringerQuery } from '@app/redux/api/registreringer/queries';
+import { GET_FERDIGE_REGISTRERINGER_PARAMS } from '@app/redux/api/registreringer/types';
 import { Heading, Skeleton, type SortState, Table } from '@navikt/ds-react';
 import { useState } from 'react';
+
+const FORMATTER = new Intl.NumberFormat('nb-NO');
 
 export const Finished = () => (
   <Container>
     <Heading level="1" size="medium" spacing>
-      Ferdige registreringer siste 7 dager
+      Ferdige registreringer siste {FORMATTER.format(GET_FERDIGE_REGISTRERINGER_PARAMS.sidenDager)} dager
     </Heading>
 
     <Rows />
@@ -16,7 +19,7 @@ export const Finished = () => (
 );
 
 const Rows = () => {
-  const { data, isLoading } = useGetFerdigeRegistreringerQuery();
+  const { data, isLoading } = useGetFerdigeRegistreringerQuery(GET_FERDIGE_REGISTRERINGER_PARAMS);
   const [sortState, setSortState] = useState<SortState>({ direction: 'descending', orderBy: 'finished' });
 
   const onSortChange = (sortKey: string) =>
