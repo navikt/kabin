@@ -20,6 +20,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
     "knip": "5.82.1",
+    "tailwindcss": "^4.1.18",
     "typescript": "5.9.3",
     "vite": "npm:rolldown-vite@latest",
     "vite-tsconfig-paths": "6.0.5"
