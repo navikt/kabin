@@ -1,12 +1,13 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
 import { RegistreringTagType, registreringApi } from '@app/redux/api/registreringer/registrering';
-import type {
-  DraftRegistrering,
-  FinishedRegistreringListItem,
-  Overstyringer,
-  Registrering,
-  Svarbrev,
+import {
+  type DraftRegistrering,
+  type FinishedRegistreringListItem,
+  GET_FERDIGE_REGISTRERINGER_PARAMS,
+  type Overstyringer,
+  type Registrering,
+  type Svarbrev,
 } from '@app/redux/api/registreringer/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
@@ -19,8 +20,8 @@ interface MuligheterResponse {
 const queriesSlice = registreringApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getFerdigeRegistreringer: builder.query<FinishedRegistreringListItem[], void>({
-      query: () => '/registreringer/ferdige?sidenDager=7',
+    getFerdigeRegistreringer: builder.query<FinishedRegistreringListItem[], { sidenDager: number }>({
+      query: ({ sidenDager }) => `/registreringer/ferdige?sidenDager=${sidenDager}`,
     }),
 
     getUferdigeRegistreringer: builder.query<DraftRegistrering[], void>({
@@ -170,7 +171,7 @@ export const removeUferdigRegistrering = (id: string) =>
 // Ferdig registrering
 export const updateFerdigRegistrering = (finishedRegistrering: FinishedRegistreringListItem) =>
   reduxStore.dispatch(
-    queriesSlice.util.updateQueryData('getFerdigeRegistreringer', undefined, (draft) => [
+    queriesSlice.util.updateQueryData('getFerdigeRegistreringer', GET_FERDIGE_REGISTRERINGER_PARAMS, (draft) => [
       finishedRegistrering,
       ...draft,
     ]),
@@ -178,7 +179,7 @@ export const updateFerdigRegistrering = (finishedRegistrering: FinishedRegistrer
 
 export const removeFerdigRegistrering = (id: string) =>
   reduxStore.dispatch(
-    queriesSlice.util.updateQueryData('getFerdigeRegistreringer', undefined, (draft) =>
+    queriesSlice.util.updateQueryData('getFerdigeRegistreringer', GET_FERDIGE_REGISTRERINGER_PARAMS, (draft) =>
       draft.filter((d) => d.id !== id),
     ),
   );
