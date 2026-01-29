@@ -8,8 +8,17 @@
     },
     "rules": {
       "correctness": {
-        "useExhaustiveDependencies": { "level": "error", "fix": "safe", "options": {} }
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "fix": "safe",
+          "options": {}
+        }
       }
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }
