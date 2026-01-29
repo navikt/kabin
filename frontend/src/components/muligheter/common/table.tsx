@@ -84,8 +84,6 @@ const Row = ({ mulighet, setMulighetHook }: RowProps) => {
     [isValid, registreringMulighet, mulighet, id, setMulighet],
   );
 
-  const usedCount = mulighet.sourceOfExistingBehandlinger.length;
-
   return (
     <StyledTableRow
       selected={isSelected}
@@ -109,7 +107,7 @@ const Row = ({ mulighet, setMulighetHook }: RowProps) => {
       <Table.DataCell>{isoDateToPretty(mulighet.vedtakDate) ?? 'Ukjent'}</Table.DataCell>
       <Table.DataCell>{fagsystemName}</Table.DataCell>
       <Table.DataCell>
-        <UsedCount usedCount={usedCount} />
+        <UsedCount sourceOfExistingBehandlinger={mulighet.sourceOfExistingBehandlinger} />
       </Table.DataCell>
       <StyledButtonCell>
         <SelectMulighet
