@@ -1,17 +1,30 @@
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { isoDateTimeToPretty } from '@app/domain/date';
+import { TYPE_NAME } from '@app/types/common';
+import type { ExistingBehandling } from '@app/types/mulighet';
+import { Tag, Tooltip } from '@navikt/ds-react';
 
 interface Props {
-  usedCount: number;
+  sourceOfExistingBehandlinger: ExistingBehandling[];
 }
 
-export const UsedCount = ({ usedCount }: Props) =>
-  usedCount === 0 ? null : (
-    <NowrapTag variant="warning" size="small">
-      Brukt til {usedCount} anke{usedCount > 1 ? 'r' : ''}
-    </NowrapTag>
-  );
+export const UsedCount = ({ sourceOfExistingBehandlinger }: Props) => {
+  const usedCount = sourceOfExistingBehandlinger.length;
 
-const NowrapTag = styled(Tag)`
-  white-space: nowrap;
-`;
+  if (usedCount === 0) {
+    return null;
+  }
+
+  return (
+    <Tooltip content={tooltipContent(sourceOfExistingBehandlinger)} className="whitespace-pre-wrap text-left">
+      <Tag variant="warning" size="small" className="whitespace-nowrap">
+        Brukt {usedCount} gang{usedCount !== 1 ? 'er' : ''}
+      </Tag>
+    </Tooltip>
+  );
+};
+
+const tooltipContent = (sourceOfExistingBehandlinger: ExistingBehandling[]) =>
+  sourceOfExistingBehandlinger
+    .toSorted((a, b) => b.created.localeCompare(a.created))
+    .map(({ typeId, created }) => `${TYPE_NAME[typeId]} registrert ${isoDateTimeToPretty(created)}`)
+    .join('\n');

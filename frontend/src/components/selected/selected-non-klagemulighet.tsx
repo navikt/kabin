@@ -102,7 +102,7 @@ export const SelectedNonKlageMulighetBody = (mulighet: Mulighet) => {
             <td>{fagsystemName}</td>
             {sourceOfExistingBehandlinger.length === 0 ? null : (
               <td>
-                <UsedCount usedCount={sourceOfExistingBehandlinger.length} />
+                <UsedCount sourceOfExistingBehandlinger={sourceOfExistingBehandlinger} />
               </td>
             )}
           </tr>

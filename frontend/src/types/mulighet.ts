@@ -37,9 +37,10 @@ export interface IOmgjøringskravmulighet extends IAnkemulighet {}
 
 export interface IBegjæringOmGjenopptakMulighet extends IAnkemulighet {}
 
-interface ExistingBehandling {
+export interface ExistingBehandling {
   /** UUID */
   id: string;
+  typeId: SaksTypeEnum;
   /** LocalDateTime */
   created: string;
   /** LocalDateTime */
