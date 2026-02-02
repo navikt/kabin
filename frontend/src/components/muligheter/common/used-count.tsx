@@ -1,4 +1,4 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
+import { isoDateToPretty } from '@app/domain/date';
 import { TYPE_NAME } from '@app/types/common';
 import type { ExistingBehandling } from '@app/types/mulighet';
 import { Tag, Tooltip } from '@navikt/ds-react';
@@ -26,5 +26,8 @@ export const UsedCount = ({ sourceOfExistingBehandlinger }: Props) => {
 const tooltipContent = (sourceOfExistingBehandlinger: ExistingBehandling[]) =>
   sourceOfExistingBehandlinger
     .toSorted((a, b) => b.created.localeCompare(a.created))
-    .map(({ typeId, created }) => `${TYPE_NAME[typeId]} registrert ${isoDateTimeToPretty(created)}`)
+    .map(({ typeId, created }) => {
+      const [date, time] = created.split('T');
+      return `${TYPE_NAME[typeId]} registrert ${isoDateToPretty(date)} kl. ${time?.slice(0, 5) ?? '00:00'}`;
+    })
     .join('\n');
