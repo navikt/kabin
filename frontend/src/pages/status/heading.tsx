@@ -4,9 +4,8 @@ import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import { HouseIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 interface StatusHeadingProps {
   headingText: string;
@@ -17,41 +16,49 @@ interface StatusHeadingProps {
 }
 
 export const StatusHeading = ({ headingText, alertText, type, behandlingId, registreringId }: StatusHeadingProps) => (
-  <Container>
-    <Alert variant="success">
-      <Heading level="1" size="medium">
-        {headingText}
-      </Heading>
-    </Alert>
+  <Box
+    background="default"
+    padding="space-12"
+    borderRadius="4"
+    shadow="dialog"
+    className="sticky -top-27.5 z-1 mx-auto mb-6 w-250"
+  >
+    <VStack gap="space-8">
+      <Alert variant="success">
+        <Heading level="1" size="medium">
+          {headingText}
+        </Heading>
+      </Alert>
 
-    <Alert variant="info" inline>
-      {alertText}
-    </Alert>
+      <Alert variant="info" inline>
+        {alertText}
+      </Alert>
 
-    <NewRegistrering orientation="horizontal" />
-    <Buttons>
-      <Button
-        data-color="neutral"
-        as={RouterLink}
-        to="/"
-        variant="secondary"
-        size="small"
-        icon={<HouseIcon aria-hidden role="presentation" />}
-      >
-        Tilbake til forsiden
-      </Button>
+      <NewRegistrering orientation="horizontal" />
+      <HStack align="center" justify="start" gap="space-8" width="100%">
+        <Button
+          data-color="neutral"
+          as={RouterLink}
+          to="/"
+          variant="secondary"
+          size="small"
+          icon={<HouseIcon aria-hidden role="presentation" />}
+        >
+          Tilbake til forsiden
+        </Button>
 
-      <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary-neutral" size="small">
-        Åpne Kabal søk
-      </ExternalLinkButton>
+        <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary-neutral" size="small">
+          Åpne Kabal søk
+        </ExternalLinkButton>
 
-      <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary-neutral" size="small">
-        Åpne behandling i Kabal
-      </ExternalLinkButton>
+        <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary-neutral" size="small">
+          Åpne behandling i Kabal
+        </ExternalLinkButton>
 
-      <SeUtfylling registreringId={registreringId} />
-    </Buttons>
-  </Container>
+        <SeUtfylling registreringId={registreringId} />
+      </HStack>
+    </VStack>
+  </Box>
 );
 
 const getKabalUrl = (type: RegistreringType, behandlingId: string) => {
@@ -66,27 +73,3 @@ const getKabalUrl = (type: RegistreringType, behandlingId: string) => {
       return `${KABAL_URL}/begjaering-om-gjenopptak-behandling/${behandlingId}`;
   }
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  width: 1000px;
-  margin: 0 auto;
-  padding: 12px;
-  margin-bottom: 24px;
-  background-color: var(--ax-bg-default);
-  position: sticky;
-  top: -110px;
-  z-index: 1;
-  box-shadow: var(--ax-shadow-dialog);
-  border-radius: var(--ax-radius-4);
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  column-gap: 8px;
-  width: 100%;
-`;

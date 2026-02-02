@@ -1,7 +1,6 @@
 import { ROLE_NAMES, type Role } from '@app/types/bruker';
 import { FilesIcon } from '@navikt/aksel-icons';
-import { Tag, type TagProps, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   role: Role;
@@ -13,21 +12,20 @@ export const RoleItem = ({ role, variant }: Props) => {
 
   return (
     <Tooltip key={role} content="Kopier">
-      <RoleContent onClick={() => navigator.clipboard.writeText(formattedRole)}>
+      <HStack
+        as="button"
+        type="button"
+        align="center"
+        gap="space-8"
+        margin="space-0"
+        padding="space-0"
+        className="cursor-pointer border-none bg-transparent"
+        onClick={() => navigator.clipboard.writeText(formattedRole)}
+      >
         <Tag variant={variant} size="small">
           {formattedRole} <FilesIcon aria-hidden />
         </Tag>
-      </RoleContent>
+      </HStack>
     </Tooltip>
   );
 };
-
-const RoleContent = styled.button`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  border: none;
-`;

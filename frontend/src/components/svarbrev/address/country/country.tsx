@@ -5,7 +5,6 @@ import type { CountryCode } from '@app/static-data/static-data';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   value?: string;
@@ -102,7 +101,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
   );
 
   return (
-    <Container>
+    <div className="relative">
       <Search
         size="small"
         label={
@@ -154,7 +153,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
         ref={searchRef}
       />
       {showCountryList ? (
-        <DropdownList>
+        <ul className="absolute top-full left-0 z-1 max-h-50 w-full overflow-x-auto rounded bg-ax-bg-default shadow-ax-shadow-dialog">
           {options.map((country, i) => (
             <CountryOption
               key={country.landkode}
@@ -164,26 +163,8 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
               onClick={onSelect}
             />
           ))}
-        </DropdownList>
+        </ul>
       ) : null}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const DropdownList = styled.ul`
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  left: 0;
-  padding: 0;
-  background-color: var(--ax-bg-default);
-  border-radius: var(--ax-radius-4);
-  box-shadow: var(--ax-shadow-dialog);
-  z-index: 1;
-  max-height: 200px;
-  overflow-x: auto;
-`;

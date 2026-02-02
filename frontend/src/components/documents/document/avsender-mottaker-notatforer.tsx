@@ -38,7 +38,7 @@ export const AvsenderMottakerNotatforer = ({
   }, [avsenderMottaker, enhetNavn, journalfortAvNavn, journalposttype]);
 
   return (
-    <StyledField $gridArea={GridArea.AVSENDER_MOTTAKER} title={title}>
+    <StyledField gridArea={GridArea.AVSENDER_MOTTAKER} title={title}>
       {text}
     </StyledField>
   );

@@ -33,9 +33,8 @@ import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, HStack, Label, Loader } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 
 interface Props {
   title: string;
@@ -178,7 +177,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   return (
     <>
       <Label size="small">Parter</Label>
-      <Content>
+      <div className="grid grid-cols-2 gap-2">
         <SakenGjelder part={sakenGjelder} label="Saken gjelder" icon={<StyledSakenGjelderIcon aria-hidden />} />
 
         <Part
@@ -204,7 +203,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
         <Avsender options={options} />
 
         <Tildeling saksbehandlerFromMulighetLabel={saksbehandlerFromMulighetLabel} />
-      </Content>
+      </div>
     </>
   );
 };
@@ -225,18 +224,18 @@ export const Overstyringer = ({ title, ...props }: Props) => {
 
   return (
     <CardLarge title={title}>
-      <Header>
-        <TopRow>
+      <VStack gap="space-12">
+        <HStack gap="space-16">
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
           <EditFrist />
-        </TopRow>
+        </HStack>
         <MottattDateError />
-      </Header>
-      <Content>
+      </VStack>
+      <div className="grid grid-cols-2 gap-2">
         <Ytelse />
         <Innsendingshjemler />
-      </Content>
+      </div>
       {ytelseId === null ? (
         <Placeholder>
           <PersonGroupIcon aria-hidden />
@@ -247,20 +246,3 @@ export const Overstyringer = ({ title, ...props }: Props) => {
     </CardLarge>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 12px;
-`;
-
-const TopRow = styled.div`
-  display: flex;
-  column-gap: 16px;
-`;
-
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-`;

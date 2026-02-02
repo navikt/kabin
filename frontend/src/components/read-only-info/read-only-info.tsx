@@ -1,7 +1,6 @@
 import { isoDateToPretty } from '@app/domain/date';
 import { useHjemmelName, useYtelseName } from '@app/hooks/kodeverk';
-import { Label, Tag, type TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Label, Tag, type TagProps, VStack } from '@navikt/ds-react';
 
 interface BaseProps {
   id: string;
@@ -28,13 +27,13 @@ interface HjemlerProps extends BaseProps {
 
 export const ReadOnlyHjemler = ({ hjemmelIdList }: HjemlerProps) => (
   <ReadOnly id="hjemler" label="Hjemler">
-    <TagsContainer>
+    <HStack gap="space-4" wrap={false}>
       {hjemmelIdList === null || hjemmelIdList.length === 0 ? (
         <i>Ingen</i>
       ) : (
         hjemmelIdList.map((h) => <HjemmelTag hjemmelId={h} key={h} />)
       )}
-    </TagsContainer>
+    </HStack>
   </ReadOnly>
 );
 
@@ -43,19 +42,13 @@ interface ReadOnlyProps extends BaseProps {
 }
 
 const ReadOnly = ({ id, label, children }: ReadOnlyProps) => (
-  <StyledReadOnly>
+  <VStack gap="space-8">
     <Label size="small" htmlFor={id}>
       {label}
     </Label>
     <div id={id}>{children}</div>
-  </StyledReadOnly>
+  </VStack>
 );
-
-const TagsContainer = styled.div`
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-`;
 
 export const HjemmelTag = ({ hjemmelId }: { hjemmelId: string }) => {
   const hjemmelName = useHjemmelName(hjemmelId);
@@ -82,9 +75,3 @@ export const YtelseTag = ({ ytelseId, ...props }: IYtelseTagProps) => {
     </Tag>
   );
 };
-
-const StyledReadOnly = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;

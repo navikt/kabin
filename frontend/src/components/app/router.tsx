@@ -1,5 +1,5 @@
 import { useAppTheme } from '@app/app-theme';
-import { GlobalStyles } from '@app/components/app/global-styles';
+import '@app/global-styles.css';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { RouterLoader } from '@app/components/app/router-loader';
 import { NavHeader } from '@app/components/header/header';
@@ -48,7 +48,6 @@ const AppWrapper = () => {
         <Outlet />
         <Toasts />
         <VersionCheckerStatus />
-        <GlobalStyles />
       </VStack>
     </Theme>
   );

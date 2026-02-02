@@ -11,9 +11,8 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetGosysOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, BodyLong, Heading, Table } from '@navikt/ds-react';
+import { Alert, BodyLong, Heading, InfoCard, Table, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 
 export const GosysOppgaver = () => {
   const canEdit = useCanEdit();
@@ -112,60 +111,63 @@ const EditableGosysOppgaver = () => {
   );
 };
 
-const StyledAlert = styled(Alert)`
-  & .navds-alert__wrapper {
-    max-width: none;
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-const Contact = () => (
-  <BodyLong>
-    Ta kontakt med Team Klage i <i>Merkantil og Team Klage</i> på Teams dersom oppgaven allerede er opprettet uten å
-    dukke opp her.
-  </BodyLong>
-);
-
 const ErrorMessage = () => {
   const { typeId } = useRegistrering();
 
   if (typeId === SaksTypeEnum.KLAGE) {
     return (
-      <StyledAlert variant="warning" size="small">
-        <BodyLong>
-          Ingen Gosys-oppgaver funnet. Klagesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker
-          denne oppgaven til å gi beskjed til vedtaksinstans når klagebehandling er fullført.
-        </BodyLong>
-        <Contact />
-      </StyledAlert>
+      <WarningCard>
+        Klagesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker denne oppgaven til å gi
+        beskjed til vedtaksinstans når klagebehandling er fullført.
+      </WarningCard>
     );
   }
 
   if (typeId === SaksTypeEnum.ANKE) {
     return (
-      <StyledAlert variant="warning" size="small">
-        <BodyLong>
-          Ingen Gosys-oppgaver funnet. Ankesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker
-          denne oppgaven til å gi beskjed til vedtaksinstans når ankebehandling er fullført.
-        </BodyLong>
-        <Contact />
-      </StyledAlert>
+      <WarningCard>
+        Ankesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker denne oppgaven til å gi beskjed
+        til vedtaksinstans når ankebehandling er fullført.
+      </WarningCard>
     );
   }
 
   if (typeId === SaksTypeEnum.OMGJØRINGSKRAV) {
     return (
-      <StyledAlert variant="warning" size="small">
-        <BodyLong>
-          Ingen Gosys-oppgaver funnet. Omgjøringskravet har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal
-          bruker denne oppgaven til å gi beskjed til vedtaksinstans når omgjøringskravet er behandlet.
-        </BodyLong>
-        <Contact />
-      </StyledAlert>
+      <WarningCard>
+        Omgjøringskravet har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker denne oppgaven til å gi
+        beskjed til vedtaksinstans når omgjøringskravet er behandlet.
+      </WarningCard>
     );
   }
 
   return null;
 };
+
+const Contact = () => (
+  <BodyLong>
+    Ta kontakt med Team Klage i{' '}
+    <Tag variant="outline" size="small">
+      Merkantil og Team Klage
+    </Tag>{' '}
+    på Teams dersom oppgaven allerede er opprettet uten å dukke opp her.
+  </BodyLong>
+);
+
+interface CardProps {
+  children: string;
+}
+
+const WarningCard = ({ children }: CardProps) => (
+  <InfoCard data-color="warning" size="small">
+    <InfoCard.Header>
+      <InfoCard.Title>Ingen Gosys-oppgaver funnet</InfoCard.Title>
+    </InfoCard.Header>
+
+    <InfoCard.Content>
+      <BodyLong spacing>{children}</BodyLong>
+
+      <Contact />
+    </InfoCard.Content>
+  </InfoCard>
+);

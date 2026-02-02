@@ -1,7 +1,6 @@
 import type { Mulighet } from '@app/redux/api/registreringer/types';
 import { ArrowsCirclepathIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   toggleExpanded: () => void;
@@ -22,7 +21,7 @@ export const HeaderEditable = ({
   showOnlySelectedLabel,
   label,
 }: Props) => (
-  <Header>
+  <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
     <Heading level="1" size="small">
       {label}
     </Heading>
@@ -38,7 +37,8 @@ export const HeaderEditable = ({
     />
 
     {mulighet === undefined ? null : (
-      <StyledButton
+      <Button
+        className="w-fit grow-0 self-end justify-self-end"
         size="small"
         variant="tertiary-neutral"
         title={showOnlySelectedLabel}
@@ -46,27 +46,13 @@ export const HeaderEditable = ({
         icon={<ChevronUpIcon aria-hidden />}
       />
     )}
-  </Header>
+  </div>
 );
 
 export const HeaderReadOnly = () => (
-  <Header>
+  <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
     <Heading level="1" size="small">
       Vedtaket klagen gjelder
     </Heading>
-  </Header>
+  </div>
 );
-
-const Header = styled.div`
-  display: grid;
-  grid-template-columns: min-content min-content 1fr;
-  grid-gap: 4px;
-  white-space: nowrap;
-`;
-
-const StyledButton = styled(Button)`
-  flex-grow: 0;
-  width: fit-content;
-  align-self: flex-end;
-  justify-self: right;
-`;

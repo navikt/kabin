@@ -4,8 +4,7 @@ import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';
 import { IdType, type IPart } from '@app/types/common';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Loader, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, type ButtonProps, HStack, Loader, Tag, type TagProps, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props {
   label: string;
@@ -99,16 +98,18 @@ const Render = ({ children, variant, statusList, onConfirm, onDismiss, isSaving 
     );
 
   return (
-    <StyledSearchResults>
-      <StyledTag variant={variant} size="medium">
-        {children}
-      </StyledTag>
+    <VStack align="start" gap="space-8" style={{ gridArea: 'results' }}>
+      <HStack gap="space-8" asChild wrap={false}>
+        <Tag variant={variant} size="medium">
+          {children}
+        </Tag>
+      </HStack>
       {statusList === undefined ? null : <PartStatusList statusList={statusList} />}
-      <Buttons>
+      <HStack justify="end" gap="space-8" wrap={false}>
         {accept}
         {dismiss}
-      </Buttons>
-    </StyledSearchResults>
+      </HStack>
+    </VStack>
   );
 };
 
@@ -126,27 +127,6 @@ const CustomButton = ({ label, keys, ...props }: CustomButtonProps) => (
     </Button>
   </Tooltip>
 );
-
-const StyledSearchResults = styled.div`
-  grid-area: results;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  gap: 8px;
-`;
-
-const StyledTag = styled(Tag)`
-  display: flex;
-  flex-direction: row;
-  column-gap: 8px;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  column-gap: 8px;
-`;
 
 interface IconProps {
   part: IPart | null;

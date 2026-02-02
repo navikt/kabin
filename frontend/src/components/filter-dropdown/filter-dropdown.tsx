@@ -3,9 +3,9 @@ import type { BaseProps } from '@app/components/filter-dropdown/props';
 import { ToggleButton } from '@app/components/filter-dropdown/toggle-button';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Label } from '@navikt/ds-react';
-import { type JSX, useId, useRef, useState } from 'react';
-import { styled } from 'styled-components';
+import { Box, Label, VStack } from '@navikt/ds-react';
+import type { CSSProperties, JSX } from 'react';
+import { useId, useRef, useState } from 'react';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   fullWidth?: boolean;
@@ -19,6 +19,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   title?: string;
   error?: string;
   id?: string;
+  style?: CSSProperties;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -31,11 +32,12 @@ export const FilterDropdown = <T extends string>({
   align,
   direction,
   fullWidth,
-  className,
+  className = '',
   disabled = false,
   title,
   error,
   id,
+  style,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -51,16 +53,24 @@ export const FilterDropdown = <T extends string>({
   };
 
   return (
-    <StyledFilterDropdown ref={ref} data-testid={testId} className={className} title={title}>
+    <VStack
+      as="section"
+      ref={ref}
+      data-testid={testId}
+      gap="space-12"
+      className={className}
+      title={title}
+      style={style}
+    >
       {typeof label === 'string' ? (
         <Label htmlFor={buttonId} size="medium">
           {label}
         </Label>
       ) : null}
-      <Container>
+      <div className="relative">
         <ToggleButton
           id={buttonId}
-          $open={isOpen}
+          open={isOpen}
           onClick={() => setIsOpen(!isOpen)}
           ref={buttonRef}
           disabled={disabled}
@@ -77,26 +87,16 @@ export const FilterDropdown = <T extends string>({
             closeDropdown={closeDropdown}
           />
         </Popup>
-      </Container>
+      </div>
       <ValidationErrorMessage error={error} />
-    </StyledFilterDropdown>
+    </VStack>
   );
 };
 
-const Container = styled.div`
-  position: relative;
-`;
-
-const StyledFilterDropdown = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
 interface PopupProps {
   isOpen: boolean;
-  align: StyledPopupProps['$align'];
-  direction: StyledPopupProps['$direction'];
+  align?: 'left' | 'right';
+  direction?: 'up' | 'down';
   children: React.ReactNode;
   fullWidth?: boolean;
 }
@@ -106,33 +106,26 @@ const Popup = ({ isOpen, align, direction, children, fullWidth = false }: PopupP
     return null;
   }
 
+  const positionClasses = [
+    direction === 'up' ? 'bottom-full' : 'top-full',
+    align === 'left' ? 'right-0' : 'left-0',
+    'z-3',
+  ].join(' ');
+
   return (
-    <StyledPopup $align={align} $direction={direction} $fullWidth={fullWidth}>
-      {children}
-    </StyledPopup>
+    <Box
+      asChild
+      position="absolute"
+      width={fullWidth ? '100%' : '275px'}
+      maxHeight="350px"
+      borderRadius="4"
+      background="raised"
+      shadow="dialog"
+    >
+      <VStack className={positionClasses}>{children}</VStack>
+    </Box>
   );
 };
-
-interface StyledPopupProps {
-  $align?: 'left' | 'right';
-  $direction?: 'up' | 'down';
-  $fullWidth: boolean;
-}
-
-const StyledPopup = styled.div<StyledPopupProps>`
-  display: flex;
-  position: absolute;
-  top: ${({ $direction }) => ($direction === 'up' ? 'auto' : '100%')};
-  bottom: ${({ $direction }) => ($direction === 'up' ? '100%' : 'auto')};
-  left: ${({ $align }) => ($align === 'left' ? 'auto' : '0')};
-  right: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
-  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : '275px')};
-  max-height: 350px;
-  z-index: 3;
-  background-color: var(--ax-bg-raised);
-  border-radius: var(--ax-border-radius);
-  box-shadow: var(--ax-shadow-dialog);
-`;
 
 const getSelectedLength = (label: string | undefined, num: number, total: number) =>
   label === undefined ? `${num}/${total} valgt` : `${label} (${num}/${total})`;

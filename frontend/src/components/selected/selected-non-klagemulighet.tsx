@@ -1,7 +1,7 @@
 import { Card } from '@app/components/card/card';
 import { TypeName } from '@app/components/muligheter/common/type-name';
 import { UsedCount } from '@app/components/muligheter/common/used-count';
-import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/styled-components';
+import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/layout';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';

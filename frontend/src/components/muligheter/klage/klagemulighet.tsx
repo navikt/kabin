@@ -1,5 +1,5 @@
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
-import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
+import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/table-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -35,7 +35,7 @@ export const Klagemulighet = ({ klagemulighet }: Props) => {
   );
 
   return (
-    <StyledTableRow selected={isSelected} onClick={selectKlage} $isValid $isSelected={isSelected} $clickable={canEdit}>
+    <StyledTableRow selected={isSelected} onClick={selectKlage} isValid isSelected={isSelected} clickable={canEdit}>
       <Table.DataCell>{klagemulighet.fagsakId}</Table.DataCell>
       <Table.DataCell>
         <Tag data-color="info" variant="outline" size="small">

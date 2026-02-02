@@ -4,7 +4,6 @@ import { ResponseError } from '@app/components/svarbrev/preview/create-url';
 import type { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   loader: PdfLoader;
@@ -42,12 +41,14 @@ export const RenderPdf = ({ loader }: Props) => {
   }
 
   return (
-    <StyledObject
+    <object
+      className="absolute h-full w-full"
       key={loader.key}
       data={`${url}${PDF_PARAMS}`}
       type="application/pdf"
       onLoad={() => setTimeout(() => setReady(true), 500)}
       style={{ zIndex: ready ? 0 : -1, filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+      aria-label="Svarbrev PDF"
     />
   );
 };
@@ -63,10 +64,3 @@ const getErrorMessage = (error: unknown) => {
 
   return 'Ukjent feil';
 };
-
-const StyledObject = styled.object`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-`;

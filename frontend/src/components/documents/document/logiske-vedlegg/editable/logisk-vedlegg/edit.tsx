@@ -1,10 +1,9 @@
-import { EditTag } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/styled-components';
+import { EditTag } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/edit-tag';
 import { Suggestions } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/suggestions-dropdown';
 import { useSuggestions } from '@app/components/documents/document/logiske-vedlegg/editable/logisk-vedlegg/use-suggestions';
 import type { LogiskVedlegg } from '@app/types/dokument';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   initialValue?: string;
@@ -161,7 +160,8 @@ export const EditLogiskVedlegg = ({
   }, [activeIndex, customValue]);
 
   return (
-    <Container onMouseDown={(e) => e.stopPropagation()}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: Stop propagation
+    <div className="relative" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content={`${placeholder} logisk vedlegg`} keys={['Enter', 'Tab', 'Esc']} open>
         <EditTag
           key="edit-tag"
@@ -187,12 +187,8 @@ export const EditLogiskVedlegg = ({
         </EditTag>
       </Tooltip>
       {showSuggestions ? <Suggestions suggestions={suggestions} activeIndex={activeIndex} onSelect={onSelect} /> : null}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
 
 const getText = (e: React.FormEvent<HTMLSpanElement>) => e.currentTarget.textContent?.replaceAll('\n', ' ').trim();

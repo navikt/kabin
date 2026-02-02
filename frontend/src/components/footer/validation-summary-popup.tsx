@@ -3,11 +3,10 @@ import { StyledHeader, ValidationSummary } from '@app/components/footer/validati
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const ValidationSummaryPopup = () => {
   const id = useRegistreringId();
@@ -32,21 +31,25 @@ export const ValidationSummaryPopup = () => {
 
   return (
     <>
-      <StyledButton onClick={toggleOpen}>
+      <button type="button" className="cursor-pointer whitespace-nowrap border-0 bg-transparent" onClick={toggleOpen}>
         <Alert variant="warning" inline>
-          <StyledAlertStripeText>
-            <StyledStatusText>Feil i utfyllingen</StyledStatusText>
+          <HStack align="center" wrap={false}>
+            <span>Feil i utfyllingen</span>
             <Icon />
-          </StyledAlertStripeText>
+          </HStack>
         </Alert>
-      </StyledButton>
+      </button>
       {isOpen ? (
-        <StyledPopup>
-          <StyledIconButton onClick={toggleOpen}>
+        <div className="absolute right-4 bottom-16 w-100">
+          <button
+            type="button"
+            className="absolute right-0 cursor-pointer whitespace-nowrap border-0 bg-transparent p-4"
+            onClick={toggleOpen}
+          >
             <Icon />
-          </StyledIconButton>
+          </button>
           <RenderError error={error} />
-        </StyledPopup>
+        </div>
       ) : null}
     </>
   );
@@ -87,32 +90,3 @@ const RenderError = ({ error }: { error: FetchBaseQueryError | SerializedError }
 
   return <Alert variant="error">Ukjent feil</Alert>;
 };
-
-const StyledAlertStripeText = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledPopup = styled.div`
-  position: absolute;
-  bottom: 4em;
-  right: 1em;
-  width: 400px;
-`;
-
-const StyledButton = styled.button`
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  white-space: nowrap;
-`;
-
-const StyledStatusText = styled.span`
-  margin-right: 1em;
-`;
-
-const StyledIconButton = styled(StyledButton)`
-  position: absolute;
-  right: 0;
-  padding: 1em;
-`;

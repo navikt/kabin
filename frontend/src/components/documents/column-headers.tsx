@@ -8,7 +8,6 @@ import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument
 import { ArrowCirclepathIcon, ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 
 const EMPTY_LIST: [] = [];
 
@@ -92,7 +91,8 @@ export const ColumnHeaders = ({
 
   return (
     <>
-      <StyledButton
+      <Button
+        className="w-50"
         size="small"
         variant="secondary-neutral"
         onClick={resetFilters}
@@ -100,7 +100,7 @@ export const ColumnHeaders = ({
         icon={<ArrowCirclepathIcon aria-hidden />}
       >
         Fjern filtere
-      </StyledButton>
+      </Button>
       <StyledGrid as="section" aria-label="Journalpostfiltere">
         <Button
           data-color="neutral"
@@ -111,7 +111,7 @@ export const ColumnHeaders = ({
           onClick={toggleExpandAll}
         />
         <GridSearch
-          $gridArea={GridArea.TITLE}
+          gridArea={GridArea.TITLE}
           label="Tittel/journalpost-ID"
           hideLabel
           size="small"
@@ -121,58 +121,50 @@ export const ColumnHeaders = ({
           value={search}
         />
 
-        <StyledFilterDropdown
+        <FilterDropdown
           options={temaOptions}
           onChange={setSelectedTemaer}
           selected={selectedTemaer}
-          $area={GridArea.TEMA}
+          style={{ gridArea: GridArea.TEMA }}
         >
           Tema
-        </StyledFilterDropdown>
+        </FilterDropdown>
 
         <DateFilter onChange={setSelectedDateRange} selected={selectedDateRange}>
           Dato
         </DateFilter>
 
-        <StyledFilterDropdown
+        <FilterDropdown
           options={avsenderMottakerOptions}
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
           align="left"
-          $area={GridArea.AVSENDER_MOTTAKER}
+          style={{ gridArea: GridArea.AVSENDER_MOTTAKER }}
           title="Avsender/mottaker/notatfører"
         >
           Avs./mot./not.
-        </StyledFilterDropdown>
+        </FilterDropdown>
 
-        <StyledFilterDropdown
+        <FilterDropdown
           options={saksIdOptions}
           onChange={setSelectedSaksIds}
           selected={selectedSaksIds}
           align="left"
-          $area={GridArea.SAKS_ID}
+          style={{ gridArea: GridArea.SAKS_ID }}
         >
           Saks-ID
-        </StyledFilterDropdown>
+        </FilterDropdown>
 
-        <StyledFilterDropdown
+        <FilterDropdown
           options={JOURNALPOSTTYPE_OPTIONS}
           onChange={setSelectedTypes}
           selected={selectedTypes}
           align="left"
-          $area={GridArea.TYPE}
+          style={{ gridArea: GridArea.TYPE }}
         >
           Type
-        </StyledFilterDropdown>
+        </FilterDropdown>
       </StyledGrid>
     </>
   );
 };
-
-const StyledButton = styled(Button)`
-  width: 200px;
-`;
-
-const StyledFilterDropdown = styled(FilterDropdown)<{ $area: GridArea }>`
-  grid-area: ${({ $area }) => $area};
-`;

@@ -1,29 +1,12 @@
 import { Finished } from '@app/pages/index/finished/finished';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
-import { styled } from 'styled-components';
+import { HStack, VStack } from '@navikt/ds-react';
 
 export const IndexPage = () => (
-  <PageWrapper>
-    <NewRegistreringWrapper>
+  <VStack as="main" align="start" gap="space-32" overflow="auto" padding="space-16">
+    <HStack align="center" justify="center" width="100%" padding="space-40">
       <NewRegistrering orientation="vertical" />
-    </NewRegistreringWrapper>
+    </HStack>
     <Finished />
-  </PageWrapper>
+  </VStack>
 );
-
-const NewRegistreringWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  width: 100%;
-`;
-
-const PageWrapper = styled.main`
-  overflow: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 32px;
-  align-items: flex-start;
-`;

@@ -2,14 +2,13 @@ import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
-import { StyledButtonCell } from '@app/components/muligheter/common/styled-components';
+import { StyledButtonCell } from '@app/components/muligheter/common/table-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import type { IGosysOppgave } from '@app/types/gosys-oppgave';
-import { BodyLong, Button, Heading, Table, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BodyLong, Box, Button, Heading, Table, Tooltip, VStack } from '@navikt/ds-react';
 
 export const Row = ({
   id,
@@ -39,11 +38,11 @@ export const Row = ({
     : () => setOppgaveId({ id: registreringId, gosysOppgaveId: selected ? null : id });
 
   return (
-    <StyledRow
+    <Table.ExpandableRow
       content={<Beskrivelse beskrivelse={beskrivelse} />}
       selected={selected}
       onClick={onClick}
-      $alreadyUsed={alreadyUsed}
+      className={`h-11 ${alreadyUsed ? 'cursor-auto' : 'cursor-pointer'}`}
     >
       <Table.DataCell>
         {opprettetTidspunkt === null ? null : isoDateTimeToPrettyDate(opprettetTidspunkt)}
@@ -58,7 +57,7 @@ export const Row = ({
       <StyledButtonCell>
         <SelectButton selected={selected} alreadyUsed={alreadyUsed} onClick={onClick} />
       </StyledButtonCell>
-    </StyledRow>
+    </Table.ExpandableRow>
   );
 };
 
@@ -99,27 +98,12 @@ const SelectButton = ({ selected, alreadyUsed, onClick }: SelectButtonProps) => 
 };
 
 const Beskrivelse = ({ beskrivelse }: { beskrivelse: string | null }) => (
-  <StyledBeskrivelse>
+  <VStack as="section" gap="space-16">
     <Heading size="small" level="1">
       Beskrivelse
     </Heading>
-    <StyledBodyLong>{beskrivelse ?? 'Ingen beskrivelse tilgjengelig.'}</StyledBodyLong>
-  </StyledBeskrivelse>
+    <Box asChild borderColor="neutral-subtle" borderWidth="0 0 0 4" paddingInline="space-16 space-0">
+      <BodyLong className="whitespace-pre">{beskrivelse ?? 'Ingen beskrivelse tilgjengelig.'}</BodyLong>
+    </Box>
+  </VStack>
 );
-
-const StyledBodyLong = styled(BodyLong)`
-  white-space: pre;
-  border-left: 4px solid var(--ax-border-neutral-subtle);
-  padding-left: 1rem;
-`;
-
-const StyledBeskrivelse = styled.section`
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-`;
-
-const StyledRow = styled(Table.ExpandableRow)<{ $alreadyUsed: boolean }>`
-  height: 44px;
-  cursor: ${({ $alreadyUsed }) => ($alreadyUsed ? 'auto' : 'pointer')};
-`;

@@ -1,9 +1,8 @@
 import { isoDateToPretty } from '@app/domain/date';
 import { InfoItem, Time } from '@app/pages/status/common-components';
 import { monthUnit, weekUnit } from '@app/pages/status/helpers';
-import { Tag } from '@navikt/ds-react';
+import { HStack, Tag } from '@navikt/ds-react';
 import { addMonths, differenceInDays, differenceInMonths, isEqual, isValid } from 'date-fns';
-import { styled } from 'styled-components';
 
 interface Props {
   label: string;
@@ -18,14 +17,14 @@ export const DateInfoItem = ({ date, label, children }: Props) => {
 
   return (
     <InfoItem label={label}>
-      <Row>
+      <HStack align="center" gap="space-8">
         <Time dateTime={date}>{isoDateToPretty(date) ?? date}</Time>
         {children === undefined ? null : (
           <Tag data-color="neutral" variant="outline" size="small">
             {children}
           </Tag>
         )}
-      </Row>
+      </HStack>
     </InfoItem>
   );
 };
@@ -70,10 +69,3 @@ const getWeeksDiff = (from: Date, to: Date) => {
 
   return 0;
 };
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 8px;
-`;

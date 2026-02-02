@@ -2,7 +2,7 @@ import { Attachment } from '@app/components/documents/document/attachment';
 import { EditableLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/editable/logiske-vedlegg-list';
 import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { styled } from 'styled-components';
+import { VStack } from '@navikt/ds-react';
 
 interface Props {
   dokument: IArkivertDocument;
@@ -20,33 +20,32 @@ export const AttachmentList = ({ dokument, isOpen, temaId }: Props) => {
   return (
     <>
       {harTilgangTilArkivvariant ? (
-        <EditableLogiskeVedlegg
-          logiskeVedlegg={logiskeVedlegg}
-          dokumentInfoId={dokumentInfoId}
-          temaId={temaId}
-          $inset
-        />
+        <EditableLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} dokumentInfoId={dokumentInfoId} temaId={temaId} inset />
       ) : (
-        <ReadOnlyLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} $inset />
+        <ReadOnlyLogiskeVedlegg logiskeVedlegg={logiskeVedlegg} inset />
       )}
       {vedlegg.length === 0 ? null : (
-        <StyledAttachmentList data-testid="documents-vedlegg-list" aria-label="Vedlegg">
-          {vedlegg.map((v) => (
-            <Attachment key={`vedlegg_${journalpostId}_${v.dokumentInfoId}`} vedlegg={v} dokument={dokument} />
+        <VStack
+          as="ul"
+          gap="space-0"
+          position="relative"
+          margin="space-0"
+          marginInline="space-16 space-0"
+          padding="space-0"
+          className="list-none"
+          data-testid="documents-vedlegg-list"
+          aria-label="Vedlegg"
+        >
+          {vedlegg.map((v, index) => (
+            <Attachment
+              key={`vedlegg_${journalpostId}_${v.dokumentInfoId}`}
+              vedlegg={v}
+              dokument={dokument}
+              isLast={index === vedlegg.length - 1}
+            />
           ))}
-        </StyledAttachmentList>
+        </VStack>
       )}
     </>
   );
 };
-
-const StyledAttachmentList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: relative;
-  padding: 0;
-  margin: 0;
-  margin-left: 16px;
-  list-style-type: none;
-`;

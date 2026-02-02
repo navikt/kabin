@@ -1,8 +1,7 @@
 import { isoDateToPretty } from '@app/domain/date';
 import { type IOrganizationStatus, type IPart, type IPersonStatus, PartStatusEnum } from '@app/types/common';
 import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
-import { Tag, type TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props extends Pick<IPart, 'statusList'> {
   /**
@@ -19,11 +18,11 @@ export const PartStatusList = ({ statusList = [], variant, className }: Props) =
   }
 
   return (
-    <Container className={className}>
+    <HStack gap="space-4" wrap className={className}>
       {statusList.map((s) => (
         <PartStatus partStatus={s} size="small" variant={variant} key={s.status} />
       ))}
-    </Container>
+    </HStack>
   );
 };
 
@@ -48,13 +47,6 @@ const PartStatus = ({ partStatus, size, variant = STATUS_VARIANT[partStatus.stat
     </Tag>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 4px;
-`;
 
 const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.DEAD]: (

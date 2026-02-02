@@ -1,7 +1,7 @@
 import { Fristdato } from '@app/components/edit-frist/calculated-fristdato';
 import { Fritekst } from '@app/components/edit-frist/fritekst';
 import { InitialFritekst } from '@app/components/edit-frist/initial-fritekst';
-import { Container } from '@app/components/edit-frist/styled-components';
+import { Container } from '@app/components/edit-frist/layout';
 import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
 import { Warning } from '@app/components/edit-frist/warning';

@@ -7,9 +7,8 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetLatestYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, Label } from '@navikt/ds-react';
+import { Alert, HStack, Label, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 
 const ID = ValidationFieldNames.HJEMMEL_ID_LIST;
 
@@ -43,17 +42,18 @@ export const Innsendingshjemler = () => {
 
   if (options.length === 0) {
     return (
-      <NoHjemmelOptionsContainer>
+      <VStack gap="space-8" className="col-2">
         <Label size="small">Hjemler</Label>
         <Alert variant="info" size="small" inline>
           {ytelseId === null ? 'Velg ytelse.' : 'Valgt ytelse har ingen hjemler.'}
         </Alert>
-      </NoHjemmelOptionsContainer>
+      </VStack>
     );
   }
 
   return (
-    <StyledFilterDropdown
+    <FilterDropdown
+      className="col-2"
       label="Hjemler"
       options={options}
       selected={hjemmelIdList ?? []}
@@ -62,28 +62,11 @@ export const Innsendingshjemler = () => {
       id={ID}
       disabled={ytelseId === null}
     >
-      <HjemlerContainer>
+      <HStack gap="space-4" wrap>
         {hjemmelIdList?.map((h) => (
           <HjemmelTag hjemmelId={h} key={h} />
         ))}
-      </HjemlerContainer>
-    </StyledFilterDropdown>
+      </HStack>
+    </FilterDropdown>
   );
 };
-
-const StyledFilterDropdown = styled(FilterDropdown)`
-  grid-column: 2;
-`;
-
-const HjemlerContainer = styled.div`
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-`;
-
-const NoHjemmelOptionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  grid-column: 2;
-`;

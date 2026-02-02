@@ -1,6 +1,5 @@
 import type { IApiErrorReponse } from '@app/components/footer/error-type-guard';
 import { Detail, Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   error: IApiErrorReponse;
@@ -29,16 +28,7 @@ const Details = ({ label, children }: DetailProps) => {
 
   return (
     <Detail>
-      <DetailLabel>{label}:</DetailLabel> <StyledCode>{children}</StyledCode>
+      <span className="font-bold">{label}:</span> <code className="break-all text-xs">{children}</code>
     </Detail>
   );
 };
-
-const DetailLabel = styled.span`
-  font-weight: bold;
-`;
-
-const StyledCode = styled.code`
-  font-size: 12px;
-  line-break: anywhere;
-`;

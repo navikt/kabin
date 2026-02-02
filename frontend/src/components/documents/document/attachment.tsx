@@ -5,14 +5,14 @@ import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logis
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
 import type { IArkivertDocument, IVedlegg } from '@app/types/dokument';
-import { styled } from 'styled-components';
 
 interface Props {
   dokument: IArkivertDocument;
   vedlegg: IVedlegg;
+  isLast?: boolean;
 }
 
-export const Attachment = ({ vedlegg, dokument }: Props) => {
+export const Attachment = ({ vedlegg, dokument, isLast = false }: Props) => {
   const { journalpostId, harTilgangTilArkivvariant, temaId } = dokument;
   const { dokumentInfoId, tittel, logiskeVedlegg, varianter } = vedlegg;
 
@@ -33,11 +33,16 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
   };
 
   return (
-    <StyledAttachmentListItem
+    <li
       onMouseDown={onMouseDown}
       data-testid="document-vedlegg-list-item"
       data-documentname={tittel}
-      $isViewed={isViewed}
+      className={`relative grid gap-x-2 pl-12 ${isViewed ? 'bg-ax-warning-200 hover:bg-ax-warning-300' : 'bg-transparent hover:bg-transparent'}before:content-[''] before:absolute before:top-3.75 before:left-0 before:block before:w-10 before:border-ax-border-neutral-subtle before:border-b after:absolute after:top-0 after:left-0 after:block after:w-px after:border-ax-border-neutral-subtle after:border-l after:content-[''] ${isLast ? 'after:h-4' : 'after:h-full'}
+      `}
+      style={{
+        gridTemplateColumns: 'max-content 1fr 30px 55px 20px',
+        gridTemplateAreas: "'title logiske-vedlegg view select already-used'",
+      }}
     >
       <DocumentTitle dokument={{ ...vedlegg, journalpostId }} />
       {harTilgangTilArkivvariant ? (
@@ -51,52 +56,6 @@ export const Attachment = ({ vedlegg, dokument }: Props) => {
         harTilgangTilArkivvariant={harTilgangTilArkivvariant}
         isDownload={isDownload}
       />
-    </StyledAttachmentListItem>
+    </li>
   );
 };
-
-const StyledAttachmentListItem = styled.li<{ $isViewed: boolean }>`
-  display: grid;
-  position: relative;
-  padding-left: 48px;
-  grid-template-columns: max-content 1fr 30px 55px 20px;
-  grid-template-areas: 'title logiske-vedlegg view select already-used';
-  column-gap: 8px;
-  background-color: ${({ $isViewed }) => ($isViewed ? 'var(--ax-warning-200)' : 'transparent')};
-
-  &:hover {
-    background-color: ${({ $isViewed }) => ($isViewed ? 'var(--ax-warning-300)' : 'transparent')};
-  }
-
-  &::before {
-    content: '';
-    display: block;
-    position: absolute;
-    border-bottom: 1px solid var(--ax-border-neutral-subtle);
-    width: 40px;
-    left: 0;
-    top: 15px;
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    border-left: 1px solid var(--ax-border-neutral-subtle);
-    width: 1px;
-    left: 0;
-    top: 0;
-  }
-
-  &:not(:last-of-type) {
-    &::after {
-      height: 100%;
-    }
-  }
-
-  &:last-of-type {
-    &::after {
-      height: 16px;
-    }
-  }
-`;

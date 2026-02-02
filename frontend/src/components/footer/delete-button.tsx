@@ -1,10 +1,9 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useDeleteRegistreringMutation, useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { styled } from 'styled-components';
 
 export const DeleteButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -14,7 +13,7 @@ export const DeleteButton = () => {
   const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
 
   return (
-    <DeleteContainer>
+    <Box position="relative">
       <Button
         data-color="danger"
         onClick={() => setShowConfirm(!showConfirm)}
@@ -26,74 +25,63 @@ export const DeleteButton = () => {
         Slett registrering
       </Button>
       {showConfirm ? <Confirm close={() => setShowConfirm(false)} /> : null}
-    </DeleteContainer>
+    </Box>
   );
 };
 
 const Confirm = ({ close }: { close: () => void }) => {
   const id = useRegistreringId();
   const navigate = useNavigate();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useOnClickOutside(close, ref);
 
   const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
 
   return (
-    <Container ref={ref}>
-      <Alert size="small" inline variant="warning">
-        Er du sikker på at du vil slette denne registreringen?
-      </Alert>
-      <Buttons>
-        <Button
-          data-color="danger"
-          onClick={async () => {
-            await deleteRegistrering(id).unwrap();
-            navigate('/');
-          }}
-          size="small"
-          variant="primary"
-          disabled={isLoading}
-          loading={isLoading}
-        >
-          Bekreft
-        </Button>
+    <Box
+      asChild
+      position="absolute"
+      bottom="space-0"
+      width="270px"
+      background="default"
+      padding="space-16"
+      borderRadius="4"
+      borderColor="warning"
+      borderWidth="1"
+      shadow="dialog"
+    >
+      <VStack as="section" ref={ref} gap="space-8">
+        <Alert size="small" inline variant="warning">
+          Er du sikker på at du vil slette denne registreringen?
+        </Alert>
+        <HStack justify="space-between" gap="space-8" wrap={false}>
+          <Button
+            data-color="danger"
+            onClick={async () => {
+              await deleteRegistrering(id).unwrap();
+              navigate('/');
+            }}
+            size="small"
+            variant="primary"
+            disabled={isLoading}
+            loading={isLoading}
+          >
+            Bekreft
+          </Button>
 
-        <Button
-          data-color="neutral"
-          size="small"
-          variant="secondary"
-          disabled={isLoading}
-          loading={isLoading}
-          onClick={close}
-        >
-          Avbryt
-        </Button>
-      </Buttons>
-    </Container>
+          <Button
+            data-color="neutral"
+            size="small"
+            variant="secondary"
+            disabled={isLoading}
+            loading={isLoading}
+            onClick={close}
+          >
+            Avbryt
+          </Button>
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
-
-const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-`;
-
-const Container = styled.section`
-  position: absolute;
-  bottom: 100%;
-  background-color: var(--ax-bg-default);
-  box-shadow: var(--ax-shadow-dialog);
-  border-radius: var(--ax-radius-4);
-  border: 1px solid var(--ax-border-warning);
-  padding: 16px;
-  width: 270px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const DeleteContainer = styled.div`
-  position: relative;
-`;

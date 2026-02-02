@@ -1,6 +1,5 @@
 import { Filter } from '@app/components/filter-dropdown/option';
 import type { BaseProps } from '@app/components/filter-dropdown/props';
-import { styled } from 'styled-components';
 
 export const FilterList = <T extends string>({ selected, options, focused, onChange }: BaseProps<T>) => {
   const setSelected = (value: T, active: boolean) => {
@@ -12,9 +11,9 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
   };
 
   return (
-    <StyledFilterList data-testid="filter-list">
+    <ul className="shrink grow list-none overflow-y-auto overflow-x-hidden" data-testid="filter-list">
       {options.map(({ value, label }) => (
-        <StyledListItem key={value} data-testid="filter-list-item" data-filterid={value}>
+        <li key={value} className="w-full pl-2" data-testid="filter-list-item" data-filterid={value}>
           <Filter
             active={selected.includes(value)}
             filterId={value}
@@ -23,24 +22,8 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
           >
             {label}
           </Filter>
-        </StyledListItem>
+        </li>
       ))}
-    </StyledFilterList>
+    </ul>
   );
 };
-
-const StyledFilterList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-`;
-
-const StyledListItem = styled.li`
-  margin: 0;
-  padding: 0;
-  padding-left: 8px;
-  width: 100%;
-`;

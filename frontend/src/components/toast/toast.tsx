@@ -5,14 +5,8 @@ import {
   XMarkOctagonFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from '@app/components/toast/constants';
+import { BaseToastStyle, Container, Content, StyledCloseButton, TimedToastStyle } from '@app/components/toast/layout';
 import type { Message } from '@app/components/toast/store';
-import {
-  BaseToastStyle,
-  Container,
-  Content,
-  StyledCloseButton,
-  TimedToastStyle,
-} from '@app/components/toast/styled-components';
 import { ToastType } from '@app/components/toast/types';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -61,7 +55,7 @@ export const Toast = memo(
     }
 
     return (
-      <BaseToastStyle $type={type} ref={ref} key={id}>
+      <BaseToastStyle type={type} ref={ref} key={id}>
         <StyledCloseButton
           variant="tertiary-neutral"
           size="xsmall"
@@ -157,11 +151,11 @@ const TimedToast = ({ type, message, close, setExpiresAt, expiresAt, id, ref }: 
 
   return (
     <TimedToastStyle
-      $type={type}
+      type={type}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      $paused={paused}
-      $timeout={expiresAt - Date.now()}
+      paused={paused}
+      timeout={expiresAt - Date.now()}
       ref={innerRef}
       key={id}
     >

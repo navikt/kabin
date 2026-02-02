@@ -2,7 +2,6 @@ import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast';
 import { pushEvent } from '@app/observability';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   isRequired?: boolean;
@@ -15,7 +14,9 @@ export const VersionToast = ({ isRequired = false }: Props) => (
       <BodyShort size="small">Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
     ) : (
       <>
-        <Warning size="small">Gjør gjerne saken ferdig før du oppdaterer.</Warning>
+        <BodyShort size="small" className="italic">
+          Gjør gjerne saken ferdig før du oppdaterer.
+        </BodyShort>
 
         <Button
           data-color="neutral"
@@ -29,7 +30,9 @@ export const VersionToast = ({ isRequired = false }: Props) => (
           Ignorer oppdatering
         </Button>
 
-        <Warning size="small">Du kan når som helst oppdatere Kabin ved å laste siden på nytt.</Warning>
+        <BodyShort size="small" className="italic">
+          Du kan når som helst oppdatere Kabin ved å laste siden på nytt.
+        </BodyShort>
       </>
     )}
 
@@ -47,7 +50,3 @@ export const VersionToast = ({ isRequired = false }: Props) => (
     </Button>
   </>
 );
-
-const Warning = styled(BodyShort)`
-  font-style: italic;
-`;

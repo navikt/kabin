@@ -12,7 +12,6 @@ import { ValidationFieldNames } from '@app/types/validation';
 import { ArrowsCirclepathIcon, ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 import type { BaseSelectDocumentProps } from './document/types';
 
 interface Props extends BaseSelectDocumentProps {
@@ -50,7 +49,7 @@ export const DocumentsBase = ({
 
   return (
     <CardMedium labelledBy="documents-heading" id="documents">
-      <Header>
+      <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
         <Heading size="small" level="1" id="documents-heading">
           {heading}
         </Heading>
@@ -68,7 +67,8 @@ export const DocumentsBase = ({
         )}
 
         {journalpostId === null ? null : (
-          <StyledButton
+          <Button
+            className="w-fit grow-0 self-end justify-self-end"
             size="xsmall"
             variant="tertiary-neutral"
             onClick={() => setIsExpanded(false)}
@@ -76,7 +76,7 @@ export const DocumentsBase = ({
             title="Vis kun valgt journalpost"
           />
         )}
-      </Header>
+      </div>
       <ValidationErrorMessage error={error} id={ValidationFieldNames.JOURNALPOST_ID} />
       <Content
         dokumenter={dokumenter}
@@ -120,17 +120,3 @@ const Content = ({ dokumenter, isLoading, selectJournalpost, getIsSelected, getC
     />
   );
 };
-
-const StyledButton = styled(Button)`
-  flex-grow: 0;
-  width: fit-content;
-  align-self: flex-end;
-  justify-self: right;
-`;
-
-const Header = styled.div`
-  display: grid;
-  grid-template-columns: min-content min-content 1fr;
-  grid-gap: 4px;
-  white-space: nowrap;
-`;

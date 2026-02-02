@@ -5,7 +5,6 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { DEFAULT_SVARBREV_NAME, useSetSvarbrevTitleMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { TextField } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 const ID = 'svarbrev-dokumentnavn';
 const LABEL = 'Dokumentnavn';
@@ -33,7 +32,8 @@ export const SetTitle = () => {
   }
 
   return (
-    <StyledTextField
+    <TextField
+      className="w-full [&>input]:w-full"
       label={LABEL}
       id={ID}
       htmlSize={45}
@@ -45,11 +45,3 @@ export const SetTitle = () => {
     />
   );
 };
-
-const StyledTextField = styled(TextField)`
-  width: 100%;
-
-  && > input {
-    width: 100%;
-  }
-`;

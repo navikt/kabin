@@ -105,6 +105,7 @@ const RowComponent = ({
       getCanBeSelected={getCanBeSelected}
       style={style}
       ariaAttributes={ariaAttributes}
+      isOdd={index % 2 === 1}
     />
   );
 };

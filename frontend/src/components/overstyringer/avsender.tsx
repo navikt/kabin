@@ -1,7 +1,7 @@
 import { StyledAvsenderIcon } from '@app/components/overstyringer/icons';
+import { PartContent, States, StyledContainer } from '@app/components/overstyringer/layout';
 import { Part } from '@app/components/overstyringer/part';
 import type { ISetPart } from '@app/components/overstyringer/part-read/types';
-import { PartContent, States, StyledContainer } from '@app/components/overstyringer/styled-components';
 import { FieldNames } from '@app/components/overstyringer/types';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -26,7 +26,7 @@ export const Avsender = ({ options }: Props) => {
 
   if (!journalpost.canChangeAvsender) {
     return (
-      <StyledContainer $state={States.UNSET}>
+      <StyledContainer state={States.UNSET}>
         <StyledAvsenderIcon aria-hidden />
         <PartContent>
           <Heading level="3" size="xsmall">

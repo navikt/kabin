@@ -1,6 +1,5 @@
 import { Button } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface BaseProps {
   onSelect: (suggestion: string) => void;
@@ -13,19 +12,23 @@ interface Props extends BaseProps {
 
 export const Suggestions = ({ suggestions, activeIndex, onSelect }: Props) =>
   suggestions.length === 0 ? (
-    <Container>
+    <ul className="absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded bg-ax-bg-default shadow-ax-shadow-dialog">
       <li>
-        <Option size="xsmall" variant="tertiary-neutral">
-          <NoOptionText>Ingen forslag</NoOptionText>
-        </Option>
+        <Button
+          className="w-full cursor-pointer justify-start overflow-hidden"
+          size="xsmall"
+          variant="tertiary-neutral"
+        >
+          <span className="block w-full truncate text-left font-normal italic">Ingen forslag</span>
+        </Button>
       </li>
-    </Container>
+    </ul>
   ) : (
-    <Container>
+    <ul className="absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded bg-ax-bg-default shadow-ax-shadow-dialog">
       {suggestions.map((suggestion, i) => (
         <Suggestion key={suggestion} isActive={i === activeIndex} suggestion={suggestion} onSelect={onSelect} />
       ))}
-    </Container>
+    </ul>
   );
 
 interface SuggestionProps extends BaseProps {
@@ -43,59 +46,15 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
   }, [isActive]);
 
   return (
-    <ListItem key={suggestion} ref={ref}>
-      <Option
+    <li key={suggestion} ref={ref} className="w-full overflow-hidden">
+      <Button
+        className="w-full cursor-pointer justify-start overflow-hidden"
         size="xsmall"
         variant={isActive ? 'primary' : 'tertiary-neutral'}
         onMouseDown={() => onSelect(suggestion)}
       >
-        <OptionText>{suggestion}</OptionText>
-      </Option>
-    </ListItem>
+        <span className="block w-full truncate text-left font-normal">{suggestion}</span>
+      </Button>
+    </li>
   );
 };
-
-const Container = styled.ul`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  width: fit-content;
-  background-color: var(--ax-bg-default);
-  border-radius: var(--ax-radius-4);
-  box-shadow: var(--ax-shadow-dialog);
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  z-index: 2;
-  max-height: 200px;
-  overflow-y: auto;
-  max-width: 400px;
-  overflow-x: hidden;
-`;
-
-const ListItem = styled.li`
-  width: 100%;
-  overflow: hidden;
-`;
-
-const Option = styled(Button)`
-  width: 100%;
-  justify-content: left;
-  cursor: pointer;
-  overflow: hidden;
-`;
-
-const OptionText = styled.span`
-  display: block;
-  text-align: left;
-  font-weight: normal;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-`;
-
-const NoOptionText = styled(OptionText)`
-  font-style: italic;
-`;

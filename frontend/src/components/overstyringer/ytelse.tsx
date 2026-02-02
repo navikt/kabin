@@ -12,7 +12,6 @@ import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Alert, Heading, Select, Skeleton, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 
 const ID = ValidationFieldNames.YTELSE_ID;
 const HEADING_ID = 'ytelse-heading';
@@ -52,7 +51,7 @@ const ReadOnly = () => {
   const ytelseId = useYtelseId();
 
   return (
-    <Container aria-labelledby={HEADING_ID}>
+    <section className="col-[1]" aria-labelledby={HEADING_ID}>
       {HEADING}
       {ytelseId === null ? (
         <Tag data-color="neutral" variant="outline" size="medium" data-testid={ID}>
@@ -61,15 +60,15 @@ const ReadOnly = () => {
       ) : (
         <YtelseTag ytelseId={ytelseId} data-testid={ID} />
       )}
-    </Container>
+    </section>
   );
 };
 
 const LoadingYtelse = () => (
-  <Container aria-labelledby={HEADING_ID}>
+  <section className="col-[1]" aria-labelledby={HEADING_ID}>
     {HEADING}
     <Skeleton variant="rounded" width={500} height={32} />
-  </Container>
+  </section>
 );
 
 interface PredefinedYtelseProps {
@@ -77,7 +76,7 @@ interface PredefinedYtelseProps {
 }
 
 const PredefinedYtelse = ({ ytelseId }: PredefinedYtelseProps) => (
-  <Container aria-labelledby={HEADING_ID}>
+  <section className="col-[1]" aria-labelledby={HEADING_ID}>
     {HEADING}
     {ytelseId === null ? (
       <Alert variant="error" size="small" inline data-testid={ID}>
@@ -86,7 +85,7 @@ const PredefinedYtelse = ({ ytelseId }: PredefinedYtelseProps) => (
     ) : (
       <YtelseTag ytelseId={ytelseId} data-testid={ID} />
     )}
-  </Container>
+  </section>
 );
 
 const CustomYtelse = () => {
@@ -102,10 +101,10 @@ const CustomYtelse = () => {
 
   if (ytelser.length === 1 && onlyYtelse !== undefined) {
     return (
-      <Container aria-labelledby={HEADING_ID}>
+      <section className="col-[1]" aria-labelledby={HEADING_ID}>
         {HEADING}
         <YtelseTag ytelseId={onlyYtelse.id} data-testid={ID} />
-      </Container>
+      </section>
     );
   }
 
@@ -116,9 +115,10 @@ const CustomYtelse = () => {
   ));
 
   return (
-    <Container aria-labelledby={HEADING_ID}>
+    <section className="col-[1]" aria-labelledby={HEADING_ID}>
       {HEADING}
-      <StyledSelect
+      <Select
+        className="h-8"
         error={error}
         label="Ytelse"
         hideLabel
@@ -129,8 +129,8 @@ const CustomYtelse = () => {
       >
         <NoneOption value={ytelseId} />
         {options}
-      </StyledSelect>
-    </Container>
+      </Select>
+    </section>
   );
 };
 
@@ -138,11 +138,3 @@ const NONE_SELECTED = 'NONE_SELECTED';
 
 const NoneOption = ({ value }: { value: string | null | undefined }) =>
   value === null || value === undefined ? <option value={NONE_SELECTED}>Ingen valgt</option> : null;
-
-const StyledSelect = styled(Select)`
-  height: 32px;
-`;
-
-const Container = styled.section`
-  grid-column: 1;
-`;

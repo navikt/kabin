@@ -1,5 +1,5 @@
 import { Card } from '@app/components/card/card';
-import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/styled-components';
+import { Header, StyledTable, TableWrapper, Thead } from '@app/components/selected/layout';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';

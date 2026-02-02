@@ -3,8 +3,7 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import type { Receiver } from '@app/redux/api/registreringer/types';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
-import { Box, Heading, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Box, Heading, HGrid, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
 
 const getHandlingLabel = (handling: HandlingEnum | null, utsendingskanal: Utsendingskanal) => {
   switch (handling) {
@@ -75,16 +74,9 @@ export const ReadOnlyReceivers = () => {
       <Label as={Heading} level="1" size="small" spacing>
         {list.length === 1 ? 'Mottaker' : 'Mottakere'}
       </Label>
-      <StyledList>{list}</StyledList>
+      <HGrid columns={2} gap="space-8" as="ul" className="list-none" style={{ margin: 0, padding: 0 }}>
+        {list}
+      </HGrid>
     </section>
   );
 };
-
-const StyledList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
-  grid-template-columns: 1fr 1fr;
-`;

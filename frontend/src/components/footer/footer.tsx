@@ -4,9 +4,8 @@ import { ValidationSummaryPopup } from '@app/components/footer/validation-summar
 import { useIsOwner } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const Footer = () => {
   const isOwner = useIsOwner();
@@ -17,18 +16,20 @@ export const Footer = () => {
 
   if (!isOwner) {
     return (
-      <StyledFooter $isFinished={isFinished} $hasError={isError}>
-        <Buttons>{isFinished ? <StatusButton /> : null}</Buttons>
+      <StyledFooter hasError={isError} isFinished={isFinished}>
+        <HStack gap="space-8" wrap={false}>
+          {isFinished ? <StatusButton /> : null}
+        </HStack>
       </StyledFooter>
     );
   }
 
   return (
-    <StyledFooter $hasError={isError} $isFinished={isFinished}>
-      <Buttons>
+    <StyledFooter hasError={isError} isFinished={isFinished}>
+      <HStack gap="space-8" wrap={false}>
         {isFinished ? <StatusButton /> : <FinishButton />}
         {isFinished ? null : <DeleteButton />}
-      </Buttons>
+      </HStack>
       <ValidationSummaryPopup />
     </StyledFooter>
   );
@@ -44,55 +45,43 @@ const StatusButton = () => {
   );
 };
 
-const Buttons = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-interface IStyleProps {
-  $hasError: boolean;
-  $isFinished: boolean;
+interface StyledFooterProps {
+  hasError: boolean;
+  isFinished: boolean;
+  children: React.ReactNode;
 }
 
-const StyledFooter = styled.div<IStyleProps>`
-  position: relative;
-  display: flex;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 8px;
-  padding-top: 8px;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  z-index: 1;
+const StyledFooter = ({ hasError, isFinished, children }: StyledFooterProps) => {
+  const getBorderColor = () => {
+    if (hasError) {
+      return 'border-ax-border-warning';
+    }
+    if (isFinished) {
+      return 'border-ax-border-success';
+    }
+    return 'border-ax-border-accent';
+  };
 
-  border-top: 1px solid ${({ $hasError, $isFinished }) => getBorderColor($hasError, $isFinished)};
-  background-color: ${({ $hasError, $isFinished }) => getBackgroundColor($hasError, $isFinished)};
-`;
+  const getBackgroundColor = () => {
+    if (hasError) {
+      return 'bg-ax-bg-warning-soft';
+    }
+    if (isFinished) {
+      return 'bg-ax-bg-success-soft';
+    }
+    return 'bg-ax-bg-accent-soft';
+  };
 
-const getBackgroundColor = (hasError: boolean, isFinished: boolean) => {
-  if (hasError) {
-    return 'var(--ax-bg-warning-soft)';
-  }
-
-  if (isFinished) {
-    return 'var(--ax-bg-success-soft)';
-  }
-
-  return 'var(--ax-bg-accent-soft)';
-};
-
-const getBorderColor = (hasError: boolean, isFinished: boolean) => {
-  if (hasError) {
-    return 'var(--ax-border-warning)';
-  }
-
-  if (isFinished) {
-    return 'var(--ax-border-success)';
-  }
-
-  return 'var(--ax-border-accent)';
+  return (
+    <HStack
+      align="center"
+      justify="space-between"
+      width="100%"
+      paddingInline="space-16"
+      paddingBlock="space-8"
+      className={`relative bottom-0 left-0 z-1 border-t ${getBorderColor()} ${getBackgroundColor()}`}
+    >
+      {children}
+    </HStack>
+  );
 };

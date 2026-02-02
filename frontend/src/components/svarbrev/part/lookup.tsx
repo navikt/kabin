@@ -1,8 +1,7 @@
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { IdType, type IPart } from '@app/types/common';
-import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BodyShort, Button, Loader, Tag, VStack } from '@navikt/ds-react';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IPart | undefined;
@@ -29,23 +28,18 @@ interface ResultProps {
 }
 
 const Result = ({ part, isLoading, onChange, buttonText = 'Bruk' }: ResultProps) => (
-  <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
-    <BodyShort>
-      {part.name} (
-      {part.type === IdType.FNR ? formatFoedselsnummer(part.identifikator) : formatOrgNum(part.identifikator)})
-    </BodyShort>
+  <VStack align="start" gap="space-8" asChild>
+    <Tag variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
+      <BodyShort>
+        {part.name} (
+        {part.type === IdType.FNR ? formatFoedselsnummer(part.identifikator) : formatOrgNum(part.identifikator)})
+      </BodyShort>
 
-    <PartStatusList statusList={part.statusList} />
+      <PartStatusList statusList={part.statusList} />
 
-    <Button data-color="neutral" onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-      {buttonText}
-    </Button>
-  </StyledResult>
+      <Button data-color="neutral" onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
+        {buttonText}
+      </Button>
+    </Tag>
+  </VStack>
 );
-
-const StyledResult = styled(Tag)`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 8px;
-`;

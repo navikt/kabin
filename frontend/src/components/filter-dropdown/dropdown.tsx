@@ -1,8 +1,8 @@
 import { FilterList } from '@app/components/filter-dropdown/filter-list';
 import { Header } from '@app/components/filter-dropdown/header';
 import type { BaseProps, DropdownProps } from '@app/components/filter-dropdown/props';
+import { VStack } from '@navikt/ds-react';
 import { type JSX, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 
@@ -51,7 +51,14 @@ export const Dropdown = <T extends string>({
   const focusedOption = filteredOptions[focused] ?? null;
 
   return (
-    <StyledDropdown data-testid="filter-dropdown">
+    <VStack
+      data-testid="filter-dropdown"
+      className="z-1 rounded"
+      maxHeight="100%"
+      width="100%"
+      overflowY="auto"
+      maxWidth="100%"
+    >
       <Header
         onFocusChange={setFocused}
         onFilterChange={setFilter}
@@ -63,19 +70,6 @@ export const Dropdown = <T extends string>({
         showFjernAlle
       />
       <FilterList options={filteredOptions} selected={selected} onChange={onChange} focused={focusedOption} />
-    </StyledDropdown>
+    </VStack>
   );
 };
-
-const StyledDropdown = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  border-radius: 4px;
-  z-index: 1;
-  width: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
-`;

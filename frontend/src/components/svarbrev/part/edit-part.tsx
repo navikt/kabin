@@ -4,9 +4,8 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useTemaId } from '@app/hooks/use-tema-id';
 import { useLazyGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { IPart } from '@app/types/common';
-import { Search, Tag } from '@navikt/ds-react';
+import { Search, Tag, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 interface EditPartProps {
   onChange: (part: IPart) => void;
@@ -73,7 +72,7 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
   };
 
   return (
-    <StyledEditPart id={id}>
+    <VStack gap="space-8" id={id}>
       <Search
         label="Søk"
         size="small"
@@ -96,7 +95,7 @@ export const EditPart = ({ onChange, isAdding, buttonText, autoFocus, onClose, i
         isSearching={isFetching}
         buttonText={buttonText}
       />
-    </StyledEditPart>
+    </VStack>
   );
 };
 
@@ -125,9 +124,3 @@ const Result = ({ part, onChange, isLoading, isSearching, buttonText }: ResultPr
     <Lookup isSearching={isSearching} part={part} onChange={onChange} isLoading={isLoading} buttonText={buttonText} />
   );
 };
-
-const StyledEditPart = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`;

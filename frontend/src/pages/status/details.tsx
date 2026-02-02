@@ -3,8 +3,8 @@ import { NavEmployee, Part } from '@app/pages/status/common-components';
 import { DateInfoItem, getDifference } from '@app/pages/status/date';
 import { getDuration } from '@app/pages/status/duration';
 import { Journalpost } from '@app/pages/status/journalpost';
+import { StyledCard } from '@app/pages/status/layout';
 import { Mulighet } from '@app/pages/status/mulighet';
-import { StyledCard } from '@app/pages/status/styled-components';
 import { Svarbrev } from '@app/pages/status/svarbrev';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
@@ -69,7 +69,7 @@ export const StatusDetails = ({ id, status }: Props) => {
     <>
       <Journalpost title={journalpostTitle} journalpost={journalpost} />
 
-      <StyledCard title="Saksinfo" $gridArea="case" titleSize="medium">
+      <StyledCard title="Saksinfo" gridArea="case" titleSize="medium">
         {typeId === SaksTypeEnum.KLAGE ? (
           <DateInfoItem label="Mottatt vedtaksinstans" date={status.mottattVedtaksinstans} />
         ) : null}

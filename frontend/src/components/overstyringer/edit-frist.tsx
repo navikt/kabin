@@ -6,9 +6,8 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetBehandlingstidMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { getDefaultBehandlingstid } from '@app/redux/api/svarbrev/svarbrev';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/calculate-frist';
-import { Heading, Label } from '@navikt/ds-react';
+import { Box, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { styled } from 'styled-components';
 
 export const EditFrist = () => {
   const { typeId } = useRegistrering();
@@ -46,39 +45,27 @@ const LoadedEditFrist = () => {
   const units = behandlingstid?.units ?? getDefaultBehandlingstid(typeId, unitType);
 
   return (
-    <Container aria-labelledby="fristIKabal">
-      <Label as={Heading} size="small" id="fristIKabal">
-        Frist i Kabal
-      </Label>
+    <Box asChild borderColor="neutral-subtle" borderWidth="0 0 0 1" paddingInline="space-16 space-0">
+      <VStack as="section" gap="space-8" aria-labelledby="fristIKabal">
+        <Label as={Heading} size="small" id="fristIKabal">
+          Frist i Kabal
+        </Label>
 
-      <Row>
-        {canEdit ? (
-          <>
-            <Units label="Antall" value={units} onChange={onUnitChange} />
-            <UnitType value={unitType} onChange={onUnitTypeChange} />
-          </>
-        ) : (
-          <span>
-            {units} {BEHANDLINGSTID_UNIT_TYPE_NAMES[unitType]}
-          </span>
-        )}
+        <HStack align="center" gap="space-16" wrap={false}>
+          {canEdit ? (
+            <>
+              <Units label="Antall" value={units} onChange={onUnitChange} />
+              <UnitType value={unitType} onChange={onUnitTypeChange} />
+            </>
+          ) : (
+            <span>
+              {units} {BEHANDLINGSTID_UNIT_TYPE_NAMES[unitType]}
+            </span>
+          )}
 
-        <Fristdato date={overstyringer?.calculatedFrist} />
-      </Row>
-    </Container>
+          <Fristdato date={overstyringer?.calculatedFrist} />
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  padding-left: 16px;
-  border-left: var(--ax-border-neutral-subtle) solid 1px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 16px;
-`;

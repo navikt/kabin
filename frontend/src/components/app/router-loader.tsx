@@ -1,17 +1,7 @@
-import { Loader } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Loader } from '@navikt/ds-react';
 
 export const RouterLoader = () => (
-  <LoaderWrapper>
+  <HStack align="center" justify="center" height="100vh" width="100vw" className="bg-ax-bg-default" wrap={false}>
     <Loader size="2xlarge" variant="interaction" transparent title="Laster siden..." />
-  </LoaderWrapper>
+  </HStack>
 );
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: var(--ax-bg-default);
-`;

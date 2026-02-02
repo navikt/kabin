@@ -1,7 +1,6 @@
 import { RoleItem } from '@app/components/role-list/role-list-item';
 import type { Role } from '@app/types/bruker';
 import { BodyShort, Heading, List, type TagProps, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   roles: Role[];
@@ -13,12 +12,12 @@ interface Props {
 export const RoleList = ({ roles, variant, title, description }: Props) => {
   if (roles.length === 0) {
     return (
-      <StyledSection>
+      <section className="my-12">
         <Heading level="3" size="xsmall" spacing>
           {title}
         </Heading>
         <em>Ingen roller</em>
-      </StyledSection>
+      </section>
     );
   }
 
@@ -26,25 +25,13 @@ export const RoleList = ({ roles, variant, title, description }: Props) => {
     <VStack>
       <Heading size="small">{title}</Heading>
       <BodyShort>{description}</BodyShort>
-      <StyledList size="small">
+      <List size="small" className="w-fit">
         {roles.map((r) => (
-          <StyledListItem key={r}>
+          <List.Item key={r} className="w-fit">
             <RoleItem key={r} role={r} variant={variant} />
-          </StyledListItem>
+          </List.Item>
         ))}
-      </StyledList>
+      </List>
     </VStack>
   );
 };
-
-const StyledList = styled(List)`
-  width: fit-content;
-`;
-
-const StyledListItem = styled(List.Item)`
-  width: fit-content;
-`;
-
-const StyledSection = styled.section`
-  margin-block: var(--ax-space-12);
-`;

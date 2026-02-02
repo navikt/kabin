@@ -4,9 +4,8 @@ import type { Receiver } from '@app/redux/api/registreringer/types';
 import { type IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   part: Receiver['part'];
@@ -49,7 +48,7 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
 
   return (
     <>
-      <Row>
+      <HStack align="center" gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         <ToggleGroup
           size="small"
           value={isLoading ? HandlingEnum.AUTO : handling}
@@ -83,14 +82,14 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
             />
           </Tooltip>
         )}
-      </Row>
-      <Row>
+      </HStack>
+      <HStack align="center" gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
           <Alert size="small" variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
           </Alert>
         ) : null}
-      </Row>
+      </HStack>
       {showAddress ? (
         <Address
           part={part}
@@ -104,15 +103,6 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
     </>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 4px;
-`;
 
 const ensureIsHandling = (handling: string): HandlingEnum => {
   if (

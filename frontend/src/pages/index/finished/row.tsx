@@ -10,8 +10,7 @@ import { Type } from '@app/pages/index/table-components/type';
 import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
 import { usePrefetch } from '@app/redux/api/status';
 import { SaksTypeEnum } from '@app/types/common';
-import { Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Table } from '@navikt/ds-react';
 
 export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreringListItem }) => {
   const { id, sakenGjelderValue, typeId, ytelseId, created, finished, behandlingId } = registrering;
@@ -40,11 +39,11 @@ export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreri
       </Table.DataCell>
 
       <Table.DataCell>
-        <Buttons>
+        <HStack justify="center" gap="space-4">
           <OpenButton path={path}>Status</OpenButton>
           <SeUtfylling registreringId={registrering.id} />
           <OpenKabal {...registrering} />
-        </Buttons>
+        </HStack>
       </Table.DataCell>
     </TableRow>
   );
@@ -59,9 +58,3 @@ const OpenKabal = ({ typeId, behandlingId }: FinishedRegistreringListItem) => (
     Åpne behandling i Kabal
   </ExternalLinkButton>
 );
-
-const Buttons = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-`;

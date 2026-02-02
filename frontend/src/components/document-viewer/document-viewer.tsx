@@ -6,9 +6,8 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
 import { type IArkivertDocument, VariantFormat } from '@app/types/dokument';
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 const DEFAULT_NAME = '<Mangler navn>';
 
@@ -18,20 +17,20 @@ export const DocumentViewer = () => {
   if (dokument === null) {
     return (
       <CardFullHeight>
-        <Container>
+        <VStack position="relative" width="100%" flexGrow="1" className="rounded">
           <Placeholder>
             <FileTextIcon aria-hidden />
           </Placeholder>
-        </Container>
+        </VStack>
       </CardFullHeight>
     );
   }
 
   return (
     <CardFullHeight>
-      <Container>
+      <VStack position="relative" width="100%" flexGrow="1" className="rounded">
         <Content dokument={dokument} />
-      </Container>
+      </VStack>
     </CardFullHeight>
   );
 };
@@ -75,42 +74,16 @@ const PDF = ({ url, tittel }: PDFProps) => {
 
   return (
     <>
-      <StyledLoader size="3xlarge" />
-      <StyledObject
+      <Loader size="3xlarge" className="absolute top-[30%] left-[42.5%] z-0 w-[15%]" />
+      <object
+        className="relative z-1 w-full grow"
         data={`${url}#toolbar=1&view=fitH&zoom=page-width`}
-        role="document"
         type="application/pdf"
         name={tittel ?? DEFAULT_NAME}
         id="document-viewer"
         style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+        aria-label={tittel ?? DEFAULT_NAME}
       />
     </>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  border-radius: 4px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const LOADER_WIDTH = 15;
-const LOADER_LEFT = (100 - LOADER_WIDTH) / 2;
-
-const StyledLoader = styled(Loader)`
-  position: absolute;
-  width: ${LOADER_WIDTH}%;
-  top: 30%;
-  left: ${LOADER_LEFT}%;
-  z-index: 0;
-`;
-
-const StyledObject = styled.object`
-  position: relative; 
-  width: 100%;
-  flex-grow: 1;
-  z-index: 1;
-`;

@@ -1,7 +1,7 @@
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
 import { InfoItem, Part, Sak } from '@app/pages/status/common-components';
-import { StyledCard } from '@app/pages/status/styled-components';
+import { StyledCard } from '@app/pages/status/layout';
 import type { IPart } from '@app/types/common';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, fagsystemId, fagsakId }: Props) => (
-  <StyledCard title={title} $gridArea="mulighet" titleSize="medium">
+  <StyledCard title={title} gridArea="mulighet" titleSize="medium">
     <Part title="Saken gjelder" part={sakenGjelder} />
 
     <InfoItem label="Vedtaksdato">

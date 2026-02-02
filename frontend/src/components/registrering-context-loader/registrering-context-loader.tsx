@@ -3,18 +3,18 @@ import { LoadingStatus } from '@app/components/loading-status/loading-status';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
 import type { Registrering } from '@app/redux/api/registreringer/types';
+import { VStack } from '@navikt/ds-react';
 import { createContext } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const RegistreringContext = createContext<Registrering>({} as Registrering);
 
 export const RegistreringContextLoader = () => (
-  <PageWrapper>
+  <VStack width="100%" flexGrow="1" align="center" overflow="auto">
     <RegistreringLoader>
       <Outlet />
     </RegistreringLoader>
-  </PageWrapper>
+  </VStack>
 );
 
 interface Props {
@@ -40,12 +40,3 @@ const RegistreringLoader = ({ children }: Props) => {
 
   return <RegistreringContext.Provider value={data}>{children}</RegistreringContext.Provider>;
 };
-
-const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: center;
-  width: 100%;
-  overflow: auto;
-`;

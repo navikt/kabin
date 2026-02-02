@@ -1,11 +1,10 @@
 import { CopyPartIdButton, StyledCopyButton } from '@app/components/copy-button/copy-part-id';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useFagsystemName } from '@app/hooks/kodeverk';
-import { StyledPart } from '@app/pages/status/styled-components';
+import { StyledPart } from '@app/pages/status/layout';
 import type { IPart, ISaksbehandler } from '@app/types/common';
 import type { IJournalpostAvsenderMottaker, ISak } from '@app/types/dokument';
-import { BodyShort, Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 
 interface InfoProps {
   label: string;
@@ -13,27 +12,14 @@ interface InfoProps {
 }
 
 export const InfoItem = ({ label, children }: InfoProps) => (
-  <StyledInfo>
-    <StyledLabel>
+  <VStack gap="space-2" width="100%" asChild>
+    <Label>
       {label}
 
       {typeof children === 'string' ? <BodyShort>{children}</BodyShort> : children}
-    </StyledLabel>
-  </StyledInfo>
+    </Label>
+  </VStack>
 );
-
-const StyledLabel = styled(Label)`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;
-
-const StyledInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 100%;
-`;
 
 export const Time = ({ dateTime, children }: TimeProps) => (
   <BodyShort>
@@ -54,19 +40,14 @@ export const Sak = ({ sak }: SakProps) => {
   const fagsystemName = useFagsystemName(sak?.fagsystemId);
 
   return (
-    <StyledSak>
+    <HStack gap="space-16">
       <InfoItem label="Fagsystem">{sak === null ? 'Ingen' : fagsystemName}</InfoItem>
       <InfoItem label="Saks-ID">
         {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.fagsakId} text={sak.fagsakId} size="xsmall" />}
       </InfoItem>
-    </StyledSak>
+    </HStack>
   );
 };
-
-const StyledSak = styled.div`
-  display: flex;
-  gap: 16px;
-`;
 
 const NoPart = ({ title }: { title: string }) => (
   <InfoItem label={title}>

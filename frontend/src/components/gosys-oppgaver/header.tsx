@@ -4,9 +4,8 @@ import { useGetGosysOppgaverQuery } from '@app/redux/api/oppgaver';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HelpText } from '@navikt/ds-react';
+import { Button, Heading, HelpText, HStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 
 export const Header = () => {
   const { id, typeId, overstyringer } = useRegistrering();
@@ -30,19 +29,21 @@ export const Header = () => {
   };
 
   return (
-    <StyledHeading level="2" size="small">
-      Velg oppgave i Gosys
-      <OppgaveHelpText typeId={typeId} />
-      <Button
-        data-color="neutral"
-        size="xsmall"
-        variant="tertiary"
-        onClick={onRefresh}
-        loading={isLoading}
-        title="Oppdater"
-        icon={<ArrowsCirclepathIcon aria-hidden />}
-      />
-    </StyledHeading>
+    <HStack align="center" gap="space-4" asChild wrap={false}>
+      <Heading level="2" size="small">
+        Velg oppgave i Gosys
+        <OppgaveHelpText typeId={typeId} />
+        <Button
+          data-color="neutral"
+          size="xsmall"
+          variant="tertiary"
+          onClick={onRefresh}
+          loading={isLoading}
+          title="Oppdater"
+          icon={<ArrowsCirclepathIcon aria-hidden />}
+        />
+      </Heading>
+    </HStack>
   );
 };
 
@@ -67,9 +68,3 @@ const OppgaveHelpText = ({ typeId }: { typeId: SaksTypeEnum | null }) => {
 
   return null;
 };
-
-const StyledHeading = styled(Heading)`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;

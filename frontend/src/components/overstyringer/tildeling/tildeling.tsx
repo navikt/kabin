@@ -5,7 +5,7 @@ import {
   PartContent,
   PartTextContent,
   StyledContainer,
-} from '@app/components/overstyringer/styled-components';
+} from '@app/components/overstyringer/layout';
 import { Content, useSaksbehandler, useSaksbehandlereParams } from '@app/components/overstyringer/tildeling/content';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -37,7 +37,7 @@ export const Tildeling = ({ saksbehandlerFromMulighetLabel }: Props) => {
 
   if (!canEdit) {
     return (
-      <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} $state={getState(saksbehandlerIdent, error)}>
+      <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} state={getState(saksbehandlerIdent, error)}>
         <StyledSaksbehandlerIcon aria-hidden />
         <PartContent>
           <ReadOnlyText id={ID} label={label} value={saksbehandler?.navn ?? null} />
@@ -47,7 +47,7 @@ export const Tildeling = ({ saksbehandlerFromMulighetLabel }: Props) => {
   }
 
   return (
-    <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} $state={getState(saksbehandlerIdent, error)}>
+    <StyledContainer id={ValidationFieldNames.SAKSBEHANDLER} state={getState(saksbehandlerIdent, error)}>
       <StyledSaksbehandlerIcon aria-hidden />
       <PartContent>
         <PartTextContent>

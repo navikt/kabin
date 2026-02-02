@@ -4,7 +4,6 @@ import { GridArea, GridButton } from '@app/components/documents/styled-grid-comp
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { CircleSlashIcon } from '@navikt/aksel-icons';
-import { styled } from 'styled-components';
 
 interface Props {
   selectJournalpost: SelectJournalpost;
@@ -19,7 +18,14 @@ export const SelectDocumentButton = ({ isSelected, dokument, selectJournalpost, 
   const [enabled] = canBeSelected;
 
   if (!canEdit) {
-    return isSelected ? <ReadOnlyCheckmark aria-label="Valgt" fontSize={20} /> : null;
+    return isSelected ? (
+      <CheckmarkCircleFillIconColored
+        aria-label="Valgt"
+        fontSize={20}
+        className="self-center justify-self-center"
+        style={{ gridArea: GridArea.SELECT }}
+      />
+    ) : null;
   }
 
   const [createOnMouseDown, isLoading] = selectJournalpost;
@@ -33,7 +39,7 @@ export const SelectDocumentButton = ({ isSelected, dokument, selectJournalpost, 
       onMouseDown={createOnMouseDown(dokument.journalpostId)}
       aria-pressed={isSelected}
       data-testid="select-document"
-      $gridArea={GridArea.SELECT}
+      gridArea={GridArea.SELECT}
       loading={isLoading && isSelected} // Works beause isSelected will be set optimistically
       title={getTitle(isSelected, canBeSelected)}
     >
@@ -65,9 +71,3 @@ const getIcon = (enabled: boolean, isSelected: boolean) => {
 
   return undefined;
 };
-
-const ReadOnlyCheckmark = styled(CheckmarkCircleFillIconColored)`
-  grid-area: ${GridArea.SELECT};
-  align-self: center;
-  justify-self: center;
-`;

@@ -5,7 +5,6 @@ import {
 } from '@app/redux/api/svarbrev/svarbrev';
 import { HStack, TextField, ToggleGroup } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Fritekst = () => {
   const { id, svarbrev } = useRegistrering();
@@ -40,7 +39,8 @@ export const Fritekst = () => {
         <ToggleGroup.Item value="false" label="Uendret" />
         <ToggleGroup.Item value="true" label="Overstyr" />
       </ToggleGroup>
-      <StyledFritekst
+      <TextField
+        className="grow"
         size="small"
         label="Fritekst"
         disabled={!svarbrev.overrideCustomText}
@@ -50,7 +50,3 @@ export const Fritekst = () => {
     </HStack>
   );
 };
-
-const StyledFritekst = styled(TextField)`
-  flex-grow: 1;
-`;
