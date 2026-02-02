@@ -1,7 +1,7 @@
 import { type Message, toast } from '@app/components/toast/store';
 import { Toast } from '@app/components/toast/toast';
+import { VStack } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
@@ -28,25 +28,17 @@ export const Toasts = () => {
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
 
   return (
-    <Container ref={ref} aria-live="polite" aria-relevant="additions text">
+    <VStack
+      ref={ref}
+      aria-live="polite"
+      aria-relevant="additions text"
+      gap="space-8"
+      overflowY="auto"
+      overflowX="visible"
+      marginBlock="space-8 space-0"
+      className="fixed right-0 bottom-2 z-[1000] max-h-[calc(100%-16px)] pr-2"
+    >
       {toastList}
-    </Container>
+    </VStack>
   );
 };
-
-const Container = styled.div`
-  position: fixed;
-  bottom: 8px;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  padding-right: 8px;
-  margin-right: 0;
-  margin-bottom: 0;
-  margin-top: 8px;
-  max-height: calc(100% - 16px);
-  overflow-y: auto;
-  overflow-x: visible;
-`;

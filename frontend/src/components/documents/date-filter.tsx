@@ -3,10 +3,9 @@ import { PRETTY_FORMAT } from '@app/domain/date-formats';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { DateRange } from '@app/types/common';
 import { ArrowCirclepathIcon, FunnelFillIcon, FunnelIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, DatePicker, type DatePickerProps } from '@navikt/ds-react';
+import { BodyShort, Box, Button, DatePicker, type DatePickerProps, HStack } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
   children: React.ReactNode;
@@ -28,7 +27,7 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
     : 'Velg periode';
 
   return (
-    <Container ref={ref}>
+    <div ref={ref} className="relative" style={{ gridArea: GridArea.DATE }}>
       <Button
         data-color="neutral"
         onClick={onClick}
@@ -39,10 +38,18 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
       >
         {children}
       </Button>
+
       {isOpen ? (
-        <DatepickerContainer>
-          <StyledHeader>
-            <StyledDateRange>{formatDateRange(selected)}</StyledDateRange>
+        <Box
+          background="raised"
+          shadow="dialog"
+          borderRadius="4"
+          position="absolute"
+          left="space-0"
+          className="top-full z-1"
+        >
+          <HStack align="center" gap="space-8" paddingInline="space-12" paddingBlock="space-12 space-0" wrap={false}>
+            <BodyShort className="grow">{formatDateRange(selected)}</BodyShort>
             <Button
               data-color="neutral"
               size="small"
@@ -62,11 +69,11 @@ export const DateFilter = ({ children, onChange, selected, ...datepickerProps }:
               title="Lukk"
               icon={<XMarkIcon aria-hidden />}
             />
-          </StyledHeader>
+          </HStack>
           <DatePicker.Standalone {...datepickerProps} selected={selected} mode="range" onSelect={onChange} />
-        </DatepickerContainer>
+        </Box>
       ) : null}
-    </Container>
+    </div>
   );
 };
 
@@ -94,31 +101,3 @@ interface TimeProps {
 }
 
 const Time = ({ date }: TimeProps) => <time dateTime={formatISO(date)}>{format(date, 'dd.MM.yyyy')}</time>;
-
-const Container = styled.div`
-  position: relative;
-  grid-area: ${GridArea.DATE};
-`;
-
-const DatepickerContainer = styled.div`
-  position: absolute;
-  left: 0;
-  top: 100%;
-  z-index: 1;
-  background-color: var(--ax-bg-raised);
-  border-radius: var(--ax-radius-4);
-  box-shadow: var(--ax-shadow-dialog);
-`;
-
-const StyledHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: var(--ax-space-12);
-  padding-bottom: 0;
-  column-gap: 8px;
-`;
-
-const StyledDateRange = styled(BodyShort)`
-  flex-grow: 1;
-`;

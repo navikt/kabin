@@ -1,4 +1,4 @@
-import { StyledTableHeader } from '@app/components/muligheter/common/styled-components';
+import { StyledTableHeader } from '@app/components/muligheter/common/table-components';
 import { Table } from '@navikt/ds-react';
 
 export const NonKlageTableHeaders = () => (

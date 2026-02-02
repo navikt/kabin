@@ -7,9 +7,8 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Table, Tag } from '@navikt/ds-react';
+import { Button, Heading, HStack, Table, Tag } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   onClick?: () => void;
@@ -36,7 +35,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
 
   return (
     <Card>
-      <Header>
+      <HStack justify="space-between">
         <Heading size="small" level="1">
           Valgt journalpost
         </Heading>
@@ -50,7 +49,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
             title="Vis alle journalposter"
           />
         )}
-      </Header>
+      </HStack>
       <Table zebraStripes size="small">
         <Table.Header>
           <Table.Row>
@@ -70,9 +69,9 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
             <Table.DataCell>{tittel}</Table.DataCell>
             <Table.DataCell>{vedlegg.length}</Table.DataCell>
             <Table.DataCell>
-              <StyledTag variant="alt3" size="small" title={temaName}>
-                <Ellipsis>{temaName}</Ellipsis>
-              </StyledTag>
+              <Tag className="max-w-37.5" variant="alt3" size="small" title={temaName}>
+                <div className="w-full truncate text-left">{temaName}</div>
+              </Tag>
             </Table.DataCell>
             <Table.DataCell>
               <time dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet) ?? ''}</time>
@@ -105,16 +104,11 @@ const ViewDocumentButton = ({ dokument }: VirewDocumentButtonProps) => {
     viewedDokument.journalpostId === dokument.journalpostId;
 
   return (
-    <StyledButton size="small" onClick={() => viewDokument(isViewing ? null : dokument)}>
+    <Button className="mt-auto w-33.75" size="small" onClick={() => viewDokument(isViewing ? null : dokument)}>
       {isViewing ? 'Skjul dokument' : 'Vis dokument'}
-    </StyledButton>
+    </Button>
   );
 };
-
-const StyledButton = styled(Button)`
-  margin-top: auto;
-  width: 135px;
-`;
 
 const getAvsenderMottakerTitle = (journalposttype: JournalposttypeEnum) => {
   switch (journalposttype) {
@@ -126,21 +120,3 @@ const getAvsenderMottakerTitle = (journalposttype: JournalposttypeEnum) => {
       return null;
   }
 };
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const Ellipsis = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-  width: 100%;
-`;
-
-const StyledTag = styled(Tag)`
-  max-width: 150px;
-`;

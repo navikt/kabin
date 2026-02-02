@@ -1,5 +1,5 @@
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
-import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/styled-components';
+import { StyledButtonCell, StyledTableRow } from '@app/components/muligheter/common/table-components';
 import { TypeName } from '@app/components/muligheter/common/type-name';
 import { UsedCount } from '@app/components/muligheter/common/used-count';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
@@ -88,9 +88,9 @@ const Row = ({ mulighet, setMulighetHook }: RowProps) => {
     <StyledTableRow
       selected={isSelected}
       onClick={selectMulighet}
-      $isValid={isValid}
-      $isSelected={isSelected}
-      $clickable={canEdit}
+      isValid={isValid}
+      isSelected={isSelected}
+      clickable={canEdit}
     >
       <Table.DataCell>
         <TypeName typeId={mulighet.typeId} />

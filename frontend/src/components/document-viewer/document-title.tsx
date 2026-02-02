@@ -6,7 +6,6 @@ import { Skjerming, VariantFormat } from '@app/types/dokument';
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Switch, Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends VariantProps {
   url: string;
@@ -23,7 +22,7 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
   const isSelected = journalpost?.journalpostId === dokument.journalpostId;
 
   return (
-    <StyledDocumentTitle>
+    <HStack align="center" gap="space-8" marginBlock="space-0 space-1" width="100%">
       <Tooltip content="Åpne i nytt vindu" placement="top">
         <Button
           data-color="neutral"
@@ -42,29 +41,17 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       <Variant {...props} />
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
       <Tooltip content="Lukk" placement="top">
-        <RightAlignedButton
+        <Button
+          className="ml-auto"
           variant="tertiary-neutral"
           size="small"
           icon={<XMarkIcon aria-hidden />}
           onClick={() => viewDokument(null)}
         />
       </Tooltip>
-    </StyledDocumentTitle>
+    </HStack>
   );
 };
-
-const StyledDocumentTitle = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  margin-bottom: 4px;
-`;
-
-const RightAlignedButton = styled(Button)`
-  margin-left: auto;
-`;
 
 interface VariantProps extends RedactedSwitchProps {
   format: VariantFormat;

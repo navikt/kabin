@@ -3,54 +3,53 @@ import { LoadingDocuments } from '@app/components/documents/loading-documents';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { LeftColumn, RightColumn, StyledMain } from '@app/pages/registrering/styled-components';
+import { LeftColumn, RightColumn, StyledMain } from '@app/pages/registrering/layout';
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Skeleton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Box, HStack, Skeleton, VStack } from '@navikt/ds-react';
 
 export const LoadingOverstyringer = () => (
   <Card>
-    <OverstyringerTop>
+    <HStack align="center" gap="space-16" wrap={false}>
       <Skeleton height={40} width={150} />
       <Skeleton height={40} width={70} />
       <Skeleton height={40} width={200} />
       <Skeleton height={24} width={100} />
-    </OverstyringerTop>
+    </HStack>
 
-    <YtelseHjemler>
+    <div className="grid grid-cols-2 gap-4">
       <Skeleton height={40} width={300} />
       <Skeleton height={40} />
-    </YtelseHjemler>
+    </div>
 
-    <Parts>
+    <div className="grid grid-cols-2 gap-4">
       <Part />
       <Part />
       <Part />
-    </Parts>
+    </div>
   </Card>
 );
 
 export const LoadingSvarbrev = () => (
-  <ToggleContainer>
+  <HStack gap="space-2" className="self-center" wrap={false}>
     <Skeleton height={40} width={125} />
     <Skeleton height={40} width={125} />
-  </ToggleContainer>
+  </HStack>
 );
 
 export const LoadingRegistrering = () => (
   <StyledMain>
-    <Person>
+    <HStack align="center" paddingBlock="space-8 space-0" paddingInline="space-16 space-0" wrap={false}>
       <Skeleton height={40} width={300} />
-    </Person>
+    </HStack>
     <LeftColumn>
       <CardMedium>
         <LoadingDocuments />
       </CardMedium>
 
-      <ToggleContainer>
+      <HStack gap="space-2" className="self-center" wrap={false}>
         <Skeleton height={40} width={75} />
         <Skeleton height={40} width={75} />
-      </ToggleContainer>
+      </HStack>
 
       <CardSmall>
         <LoadingKlagemuligheter />
@@ -72,52 +71,19 @@ export const LoadingRegistrering = () => (
   </StyledMain>
 );
 
-const Person = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 16px;
-  padding-top: 8px;
-`;
-
 const Part = () => (
-  <LoadingPart>
-    <Skeleton height={24} width={100} />
-    <Skeleton height={24} width={200} />
-    <Skeleton height={24} width={70} />
-  </LoadingPart>
+  <Box
+    asChild
+    borderRadius="4"
+    borderColor="neutral-subtle"
+    borderWidth="1"
+    paddingBlock="space-16 space-0"
+    paddingInline="space-32 space-0"
+  >
+    <VStack gap="space-16" height="166px">
+      <Skeleton height={24} width={100} />
+      <Skeleton height={24} width={200} />
+      <Skeleton height={24} width={70} />
+    </VStack>
+  </Box>
 );
-
-const ToggleContainer = styled.div`
-  display: flex;
-  gap: 2px;
-  align-self: center;
-`;
-
-const YtelseHjemler = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-`;
-
-const OverstyringerTop = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
-
-const LoadingPart = styled.div`
-  height: 166px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 16px;
-  padding-left: 32px;
-  border-radius: var(--ax-radius-4);
-  border: 1px solid var(--ax-border-neutral-subtle);
-`;
-
-const Parts = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-`;

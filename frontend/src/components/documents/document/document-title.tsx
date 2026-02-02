@@ -3,9 +3,8 @@ import { EditTitle } from '@app/components/documents/document/edit-document-titl
 import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   dokument: IArkivertDocument | ViewedVedlegg;
@@ -29,10 +28,14 @@ export const DocumentTitle = ({ dokument }: Props) => {
 
   if (!editMode) {
     return (
-      <StyledTitle>
-        <EllipsisTitle title={tittel} data-testid="document-title" $isActive={isActive}>
+      <HStack align="center" gap="space-4" height="2rem" overflow="hidden" wrap={false}>
+        <div
+          title={tittel}
+          data-testid="document-title"
+          className={`select-text truncate ${isActive ? 'font-bold' : 'font-normal'}`}
+        >
           {tittel}
-        </EllipsisTitle>
+        </div>
         <DocumentWarnings varianter={varianter} />
         <Button
           data-color="neutral"
@@ -43,31 +46,13 @@ export const DocumentTitle = ({ dokument }: Props) => {
           onClick={enterEditMode}
           onMouseDown={(e) => e.stopPropagation()}
         />
-      </StyledTitle>
+      </HStack>
     );
   }
 
   return (
-    <StyledTitle>
+    <HStack align="center" gap="space-4" height="2rem" overflow="hidden">
       <EditTitle exitEditMode={() => setEditMode(false)} dokument={{ ...dokument, journalpostId }} />
-    </StyledTitle>
+    </HStack>
   );
 };
-
-const StyledTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: left;
-  overflow: hidden;
-  column-gap: 4px;
-  height: 32px;
-`;
-
-const EllipsisTitle = styled.div<{ $isActive: boolean }>`
-  user-select: text;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: ${({ $isActive }) => ($isActive ? 'bold' : 'normal')};
-`;

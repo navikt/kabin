@@ -1,19 +1,19 @@
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { Tag, type TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   journalposttype: JournalposttypeEnum;
 }
 
 export const Journalposttype = ({ journalposttype }: Props) => (
-  <StyledTag
+  <Tag
+    className="w-6"
     variant={JOURNALPOST_TYPE_VARIANT[journalposttype]}
     size="small"
     title={JOURNALPOST_TYPE_NAME[journalposttype]}
   >
     {journalposttype}
-  </StyledTag>
+  </Tag>
 );
 
 const JOURNALPOST_TYPE_NAME: Record<JournalposttypeEnum, string> = {
@@ -27,7 +27,3 @@ const JOURNALPOST_TYPE_VARIANT: Record<JournalposttypeEnum, TagProps['variant']>
   [JournalposttypeEnum.INNGAAENDE]: 'alt2',
   [JournalposttypeEnum.UTGAAENDE]: 'alt3',
 };
-
-const StyledTag = styled(Tag)`
-  width: 24px;
-`;

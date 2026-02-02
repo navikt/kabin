@@ -1,9 +1,8 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { AddressField } from '@app/components/svarbrev/address/field';
 import { Row } from '@app/components/svarbrev/address/layout';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { useContext, useId } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   value: string | null;
@@ -32,33 +31,14 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
         pattern="^[0-9]{0,4}$"
         htmlSize={8}
       />
-      <PoststedContainer>
-        <StyledLabel size="small" htmlFor={poststedElementId}>
+      <VStack gap="space-8" justify="start">
+        <Label size="small" htmlFor={poststedElementId} className="flex min-h-6 items-center">
           Poststed
-        </StyledLabel>
-        <Poststed size="medium" id={poststedElementId}>
+        </Label>
+        <BodyShort size="medium" id={poststedElementId} className="flex h-8 items-center">
           {value === null ? 'Postnummer mangler' : (getPoststed(value) ?? 'Ukjent')}
-        </Poststed>
-      </PoststedContainer>
+        </BodyShort>
+      </VStack>
     </Row>
   );
 };
-
-const PoststedContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-items: start;
-  gap: var(--ax-space-8);
-`;
-
-const StyledLabel = styled(Label)`
-  display: flex;
-  align-items: center;
-  min-height: 24px;
-`;
-
-const Poststed = styled(BodyShort)`
-  display: flex;
-  align-items: center;
-  height: 32px;
-`;

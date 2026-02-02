@@ -1,13 +1,21 @@
-import { styled } from 'styled-components';
+import { HStack } from '@navikt/ds-react';
 
-export const Placeholder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ax-border-neutral-subtle);
-  flex-grow: 1;
-  width: 100%;
-  height: 100%;
-  font-size: 200px;
-  padding: 32px;
-`;
+interface PlaceholderProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export const Placeholder = ({ className = '', children }: PlaceholderProps) => (
+  <HStack
+    align="center"
+    justify="center"
+    wrap={false}
+    height="100%"
+    width="100%"
+    flexGrow="1"
+    padding="space-32"
+    className={`text-[200px] text-ax-border-neutral-subtle ${className}`}
+  >
+    {children}
+  </HStack>
+);

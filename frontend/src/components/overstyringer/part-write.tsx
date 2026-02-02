@@ -1,5 +1,5 @@
+import { PartContent, States, StyledContainer } from '@app/components/overstyringer/layout';
 import { SearchResult } from '@app/components/overstyringer/search-result';
-import { PartContent, States, StyledContainer } from '@app/components/overstyringer/styled-components';
 import { type BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { isValidOrgnr } from '@app/domain/orgnr';
@@ -14,11 +14,10 @@ import {
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
 import type { IPart } from '@app/types/common';
-import { Alert, Search } from '@navikt/ds-react';
+import { Alert, HStack, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends BaseProps {
   exitSearchMode: () => void;
@@ -120,10 +119,10 @@ const PartSearchInternal = ({
   const isPartInvalid = data !== undefined && data !== null && excludedPartIds.includes(data.identifikator);
 
   return (
-    <StyledContainer $state={part === null ? States.UNSET : States.SET} id={partField}>
+    <StyledContainer state={part === null ? States.UNSET : States.SET} id={partField}>
       {icon}
       <PartContent>
-        <StyledPartSearch>
+        <HStack align="start" wrap={false}>
           <Search
             label={label}
             placeholder="Søk på ID-nummer"
@@ -137,7 +136,7 @@ const PartSearchInternal = ({
             autoFocus
             id={partField}
           />
-        </StyledPartSearch>
+        </HStack>
 
         {isPartInvalid ? (
           <Alert variant="warning" size="small" inline>
@@ -160,10 +159,3 @@ const PartSearchInternal = ({
     </StyledContainer>
   );
 };
-
-const StyledPartSearch = styled.div`
-  display: flex;
-  flex-direction: row;
-  row-gap: 8px;
-  align-items: flex-start;
-`;

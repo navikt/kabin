@@ -1,14 +1,14 @@
 import { CopyPartIdButton } from '@app/components/copy-button/copy-part-id';
-import { Actions, type ActionsProps } from '@app/components/overstyringer/part-read/actions';
-import { Icon } from '@app/components/overstyringer/part-read/icon';
-import type { EnterSearchModeCallback } from '@app/components/overstyringer/part-read/types';
 import {
   getState,
   PartContent,
   PartTextContent,
   StyledContainer,
   StyledPartName,
-} from '@app/components/overstyringer/styled-components';
+} from '@app/components/overstyringer/layout';
+import { Actions, type ActionsProps } from '@app/components/overstyringer/part-read/actions';
+import { Icon } from '@app/components/overstyringer/part-read/icon';
+import type { EnterSearchModeCallback } from '@app/components/overstyringer/part-read/types';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { getSakspartName } from '@app/domain/name';
@@ -39,7 +39,7 @@ interface PartReadInternalProps extends Omit<PartReadProps, 'partField'> {
 }
 
 const PartReadInternal = ({ label, part, icon, children, error, id }: PartReadInternalProps) => (
-  <StyledContainer $state={getState(part, error)} id={id}>
+  <StyledContainer state={getState(part, error)} id={id}>
     {icon}
     <PartContent>
       <PartTextContent>

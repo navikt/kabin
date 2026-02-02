@@ -1,7 +1,7 @@
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { StyledReceiver } from '@app/components/svarbrev/address/layout';
+import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/layout';
 import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-options-warning';
-import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarbrev/styled-components';
 import { getTypeNames } from '@app/components/svarbrev/type-name';
 import type { PartSuggestedReceiver } from '@app/components/svarbrev/types';
 import { IdType } from '@app/types/common';

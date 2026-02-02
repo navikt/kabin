@@ -13,10 +13,9 @@ import { Journalposttype } from '@app/components/journalposttype/journalposttype
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { Tooltip } from '@navikt/ds-react';
+import { HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { CSSProperties } from 'react';
 import type { RowComponentProps } from 'react-window';
-import { styled } from 'styled-components';
 
 interface Props extends BaseSelectDocumentProps {
   dokument: IArkivertDocument;
@@ -24,6 +23,7 @@ interface Props extends BaseSelectDocumentProps {
   toggleExpanded: () => void;
   style: CSSProperties;
   ariaAttributes: RowComponentProps['ariaAttributes'];
+  isOdd?: boolean;
 }
 
 export const Dokument = ({
@@ -35,6 +35,7 @@ export const Dokument = ({
   getCanBeSelected,
   style,
   ariaAttributes,
+  isOdd = false,
 }: Props) => {
   const {
     dokumentInfoId,
@@ -72,10 +73,21 @@ export const Dokument = ({
     window.location.href = `/api/kabin-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
   };
 
+  const getBackgroundClass = () => {
+    if (isSelected) {
+      return 'bg-ax-bg-accent-soft';
+    }
+    if (isOdd) {
+      return 'bg-ax-bg-default';
+    }
+    return 'bg-ax-bg-neutral-moderate';
+  };
+
   return (
-    <DocumentListItem
-      $isSelected={isSelected}
-      $clickable={harTilgangTilArkivvariant}
+    <VStack
+      as="li"
+      gap="space-4"
+      className={`rounded ${harTilgangTilArkivvariant ? 'cursor-pointer' : 'cursor-default'} ${getBackgroundClass()} hover:bg-ax-bg-neutral-moderate-pressedA`}
       aria-label={title}
       style={style}
       {...ariaAttributes}
@@ -86,20 +98,22 @@ export const Dokument = ({
         data-journalpostid={journalpostId}
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
-        $showViewed={isViewed && !isSelected}
+        showViewed={isViewed && !isSelected}
         onMouseDown={onMouseDown}
       >
         {canExpand ? <ExpandButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} /> : null}
-        <TitleContainer aria-label="Dokumenttittel">
+        <div className="relative" style={{ gridArea: GridArea.TITLE }}>
           <DocumentTitle dokument={dokument} />
-        </TitleContainer>
-        <GridTag variant="alt3" size="small" title={temaName} $gridArea={GridArea.TEMA}>
-          <Ellipsis>{temaName}</Ellipsis>
+        </div>
+        <GridTag variant="alt3" size="small" title={temaName} gridArea={GridArea.TEMA}>
+          <span className="w-full truncate text-left">{temaName}</span>
         </GridTag>
-        <StyledDate dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet)}</StyledDate>
+        <HStack as="time" align="center" wrap={false} style={{ gridArea: GridArea.DATE }} dateTime={datoOpprettet}>
+          {isoDateTimeToPrettyDate(datoOpprettet)}
+        </HStack>
         <AvsenderMottakerNotatforer {...dokument} />
-        <StyledField $gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</StyledField>
-        <StyledField $gridArea={GridArea.TYPE}>
+        <StyledField gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</StyledField>
+        <StyledField gridArea={GridArea.TYPE}>
           <Journalposttype journalposttype={journalposttype} />
         </StyledField>
         <ViewDocumentButton
@@ -115,7 +129,7 @@ export const Dokument = ({
           getCanBeSelected={getCanBeSelected}
         />
         {dokument.alreadyUsed ? (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="flex items-center">
             <Tooltip content="Dette dokumentet er allerede brukt i en annen registrering.">
               <ExclamationmarkTriangleFillIconColored aria-hidden fontSize={20} />
             </Tooltip>
@@ -123,42 +137,6 @@ export const Dokument = ({
         ) : null}
       </StyledGrid>
       <AttachmentList dokument={dokument} isOpen={isExpanded} temaId={temaId} />
-    </DocumentListItem>
+    </VStack>
   );
 };
-
-const DocumentListItem = styled.li<{ $isSelected: boolean; $clickable: boolean }>`
-  display: flex;
-  flex-direction: column;
-  row-gap: 4px;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
-  border-radius: var(--ax-radius-4);
-  background-color: ${({ $isSelected }) => ($isSelected ? 'var(--ax-bg-accent-soft)' : 'var(--ax-bg-default)')};
-
-  &:nth-child(odd) {
-    background-color: ${({ $isSelected }) => ($isSelected ? 'var(--ax-bg-accent-soft)' : 'var(--ax-bg-neutral-moderate)')};
-  }
-
-  &:hover {
-    background-color: var(--ax-bg-neutral-moderate-pressedA);
-  }
-`;
-
-const Ellipsis = styled.span`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-  width: 100%;
-`;
-
-const StyledDate = styled.time`
-  display: flex;
-  align-items: center;
-  grid-area: ${GridArea.DATE};
-`;
-
-const TitleContainer = styled.div`
-  grid-area: ${GridArea.TITLE};
-  position: relative;
-`;

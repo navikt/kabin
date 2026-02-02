@@ -1,11 +1,10 @@
 import { toast } from '@app/components/toast/store';
 import { PersonDetails } from '@app/pages/registrering/person/details';
 import { useCreateRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { Loader, Search } from '@navikt/ds-react';
+import { HStack, Loader, Search, VStack } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { styled } from 'styled-components';
 
 const LABEL = 'Opprett ny registrering';
 
@@ -45,9 +44,14 @@ export const NewRegistrering = ({ orientation }: Props) => {
   const cleaned = removeWhitespace(fnr);
   const isValid = idnr(cleaned).status === 'valid';
 
+  const isVertical = orientation === 'vertical';
+
+  const Container = isVertical ? VStack : HStack;
+
   return (
-    <Container $orientation={orientation}>
-      <StyledSearch
+    <Container align="center" justify="start" gap="space-8" className={isVertical ? 'h-18' : undefined}>
+      <Search
+        className="w-fit"
         hideLabel
         label={LABEL}
         placeholder={LABEL}
@@ -63,40 +67,15 @@ export const NewRegistrering = ({ orientation }: Props) => {
         disabled={isLoading}
       />
 
-      <Loaders>
+      <HStack gap="space-8" align="center">
         {isValid ? <PersonDetails sakenGjelderValue={cleaned} /> : null}
         {isLoading ? (
-          <SpinnerContainer>
+          <HStack gap="space-4" align="center">
             <Loader />
             <span>Oppretter registrering ...</span>
-          </SpinnerContainer>
+          </HStack>
         ) : null}
-      </Loaders>
+      </HStack>
     </Container>
   );
 };
-
-const Loaders = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
-
-const SpinnerContainer = styled.div`
-  display: flex;
-  gap: 4px;
-  align-items: center;
-`;
-
-const StyledSearch = styled(Search)`
-  width: fit-content;
-`;
-
-const Container = styled.div<{ $orientation: Orientation }>`
-  display: flex;
-  flex-direction: ${({ $orientation }) => ($orientation === 'vertical' ? 'column' : 'row')};
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  height: ${({ $orientation }) => ($orientation === 'vertical' ? '72px' : 'auto')};
-`;

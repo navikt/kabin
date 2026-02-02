@@ -9,9 +9,8 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import { Alert, Loader, ToggleGroup } from '@navikt/ds-react';
+import { Alert, HStack, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 
 enum SvarbrevOptionEnum {
   SEND = 'SEND',
@@ -26,16 +25,16 @@ const SendSvarbrevToggle = () => {
 
   if (!canEdit) {
     return svarbrev.send === true ? null : (
-      <Row>
+      <HStack align="center" justify="center" height="42px" flexShrink="0">
         <Alert variant="info" size="small" inline>
           Svarbrev sendes ikke
         </Alert>
-      </Row>
+      </HStack>
     );
   }
 
   return (
-    <ToggleContainer>
+    <HStack align="center" justify="center" height="42px" flexShrink="0">
       <ToggleGroup
         size="small"
         value={svarbrev.send === true ? SvarbrevOptionEnum.SEND : SvarbrevOptionEnum.DONT_SEND}
@@ -44,7 +43,7 @@ const SendSvarbrevToggle = () => {
         <ToggleGroup.Item value={SvarbrevOptionEnum.SEND}>Send svarbrev</ToggleGroup.Item>
         <ToggleGroup.Item value={SvarbrevOptionEnum.DONT_SEND}>Ikke send svarbrev</ToggleGroup.Item>
       </ToggleGroup>
-    </ToggleContainer>
+    </HStack>
   );
 };
 
@@ -78,20 +77,20 @@ const SvarbrevInput = () => {
 
   if (ytelseId === null) {
     return (
-      <Row>
+      <HStack align="center" justify="center" height="42px" flexShrink="0">
         <Alert variant="info" size="small" inline>
           Velg ytelse
         </Alert>
-      </Row>
+      </HStack>
     );
   }
 
   if (svarbrevSetting === undefined) {
     return (
       <>
-        <Row>
+        <HStack align="center" justify="center" height="42px" flexShrink="0">
           <Loader size="small" />
-        </Row>
+        </HStack>
         <Card title="Svarbrev">
           <Placeholder>
             <EnvelopeOpenIcon aria-hidden />
@@ -107,21 +106,3 @@ const SvarbrevInput = () => {
     <VarsletFrist setting={svarbrevSetting} />
   );
 };
-
-const ToggleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  flex-shrink: 0;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  flex-shrink: 0;
-`;

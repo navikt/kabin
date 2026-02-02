@@ -5,7 +5,6 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetSvarbrevFullmektigFritekstMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { TextField } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 const ID = 'svarbrev-fullmektig-name';
 const LABEL = 'Navn på fullmektig i brevet';
@@ -50,7 +49,8 @@ const DebouncedTextField = ({ onChange }: DebouncedTextFieldProps) => {
   }, [onChange, svarbrev.fullmektigFritekst, value]);
 
   return (
-    <StyledTextField
+    <TextField
+      className="w-full [&>input]:w-full"
       label={LABEL}
       id={ID}
       htmlSize={45}
@@ -63,11 +63,3 @@ const DebouncedTextField = ({ onChange }: DebouncedTextFieldProps) => {
     />
   );
 };
-
-const StyledTextField = styled(TextField)`
-  width: 100%;
-
-  && > input {
-    width: 100%;
-  }
-`;

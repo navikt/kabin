@@ -1,59 +1,30 @@
-import { styled } from 'styled-components';
+import { type ComponentProps, forwardRef } from 'react';
 
-interface Props {
-  $open: boolean;
-  $minHeight?: string;
+interface Props extends ComponentProps<'button'> {
+  open: boolean;
+  minHeight?: string;
 }
 
-export const ToggleButton = styled.button<Props>`
-  border: 1px solid var(--ax-border-neutral);
-  padding: 0 1.75rem 0 0.5rem;
-  min-height: ${({ $minHeight }) => (typeof $minHeight === 'undefined' ? '2rem' : $minHeight)};
-  width: 100%;
-  white-space: nowrap;
-  border-radius: 0.25rem;
-  transition: box-shadow 0.1s ease;
-  cursor: pointer;
-  background: none;
-  user-select: none;
-  position: relative;
-  font-size: 14px;
-  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-  color: var(--ax-text-neutral);
+export const ToggleButton = forwardRef<HTMLButtonElement, Props>(
+  ({ open, minHeight, className = '', style, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`relative w-full cursor-pointer select-none whitespace-nowrap rounded border border-ax-border-neutral bg-transparent pr-7 pl-2 font-[Source_Sans_Pro,Arial,Helvetica,sans-serif] text-ax-text-neutral text-sm transition-shadow duration-100 ease-in-out before:absolute before:top-1/2 before:right-2 before:h-[1.5px] before:w-2 before:rounded-sm before:bg-ax-text-neutral before:transition-transform before:duration-100 before:ease-in-out before:content-[''] after:absolute after:top-1/2 after:right-2 after:h-[1.5px] after:w-2 after:rounded-sm after:bg-ax-text-neutral after:transition-transform after:duration-100 after:ease-in-out after:content-[''] focus:shadow-[0_0_0_3px_var(--ax-border-accent)] focus:outline-none active:shadow-[0_0_0_3px_var(--ax-border-accent)] active:outline-none disabled:cursor-not-allowed disabled:border-ax-border-neutral disabled:bg-ax-bg-neutral disabled:opacity-70 ${
+          open
+            ? 'before:-translate-x-[31%] before:-translate-y-1/2 before:-rotate-45 after:translate-x-[31%] after:-translate-y-1/2 after:rotate-45'
+            : 'before:-translate-x-[31%] before:-translate-y-1/2 before:rotate-45 after:translate-x-[31%] after:-translate-y-1/2 after:-rotate-45'
+        }
+          ${className}
+        `}
+        style={{
+          minHeight: minHeight ?? '2rem',
+          ...style,
+        }}
+        {...props}
+      />
+    );
+  },
+);
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 0.5rem;
-    border-radius: 2px;
-    height: 1.5px;
-    background: var(--ax-text-neutral);
-    right: 0.5rem;
-    top: 50%;
-    transition: transform 0.1s ease;
-  }
-
-  &::before {
-    transform: ${({ $open }) =>
-      $open ? 'translateX(-31%) translateY(-50%) rotate(-45deg)' : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
-  }
-
-  &::after {
-    transform: ${({ $open }) =>
-      $open ? 'translateX(31%) translateY(-50%) rotate(45deg)' : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
-  }
-
-  &:active,
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--ax-border-accent);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    border-color: var(--ax-border-neutral);
-    background: var(--ax-bg-neutral);
-    opacity: 0.7;
-  }
-`;
+ToggleButton.displayName = 'ToggleButton';

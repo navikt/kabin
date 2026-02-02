@@ -1,5 +1,4 @@
-import { Heading, type HeadingProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Box, Heading, type HeadingProps, VStack } from '@navikt/ds-react';
 
 interface Props extends CardContentProps {
   className?: string;
@@ -7,35 +6,36 @@ interface Props extends CardContentProps {
   id?: string;
 }
 
-export const Card = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
-  <StyledCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
-    <CardContent {...cardContentProps} />
-  </StyledCard>
+interface CardWrapperProps extends Props {
+  height?: string;
+  minHeight?: string;
+}
+
+const CardWrapper = ({ className = '', labelledBy, id, height, minHeight, ...cardContentProps }: CardWrapperProps) => (
+  <VStack asChild gap="space-16" flexShrink="0" className={className} style={{ height, minHeight }}>
+    <Box
+      as="section"
+      shadow="dialog"
+      borderRadius="4"
+      padding="space-16"
+      aria-label={cardContentProps.title}
+      aria-labelledby={labelledBy}
+      id={id}
+    >
+      <CardContent {...cardContentProps} />
+    </Box>
+  </VStack>
 );
 
-export const CardSmall = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
-  <StyledSmallCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
-    <CardContent {...cardContentProps} />
-  </StyledSmallCard>
-);
+export const Card = (props: Props) => <CardWrapper {...props} />;
 
-export const CardMedium = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
-  <StyledMediumCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
-    <CardContent {...cardContentProps} />
-  </StyledMediumCard>
-);
+export const CardSmall = (props: Props) => <CardWrapper {...props} height="300px" />;
 
-export const CardLarge = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
-  <StyledLargeCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
-    <CardContent {...cardContentProps} />
-  </StyledLargeCard>
-);
+export const CardMedium = (props: Props) => <CardWrapper {...props} height="500px" />;
 
-export const CardFullHeight = ({ className, labelledBy, id, ...cardContentProps }: Props) => (
-  <StyledFullHeightCard className={className} aria-label={cardContentProps.title} aria-labelledby={labelledBy} id={id}>
-    <CardContent {...cardContentProps} />
-  </StyledFullHeightCard>
-);
+export const CardLarge = (props: Props) => <CardWrapper {...props} minHeight="560px" />;
+
+export const CardFullHeight = (props: Props) => <CardWrapper {...props} height="100%" />;
 
 interface CardContentProps {
   children: React.ReactNode;
@@ -57,29 +57,3 @@ const CardContent = ({ title, children, titleSize = 'small' }: CardContentProps)
 
   return <>{children}</>;
 };
-
-const StyledCard = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
-  box-shadow: var(--ax-shadow-dialog);
-  border-radius: 4px;
-  padding: 16px;
-  flex-shrink: 0;
-`;
-
-const StyledSmallCard = styled(StyledCard)`
-  height: 300px;
-`;
-
-const StyledMediumCard = styled(StyledCard)`
-  height: 500px;
-`;
-
-const StyledLargeCard = styled(StyledCard)`
-  min-height: 560px;
-`;
-
-const StyledFullHeightCard = styled(StyledCard)`
-  height: 100%;
-`;

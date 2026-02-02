@@ -1,6 +1,5 @@
 import { DownloadIcon, GlassesFillIcon, GlassesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   harTilgangTilArkivvariant: boolean;
@@ -16,7 +15,8 @@ export const ViewDocumentButton = ({ viewDocument, isViewed, harTilgangTilArkivv
 
   return (
     <Tooltip content={getTooltip(isViewed, isDownload)} placement="top">
-      <StyledButton
+      <Button
+        className="[grid-area:view]"
         size="small"
         variant="tertiary-neutral"
         onMouseDown={viewDocument}
@@ -27,10 +27,6 @@ export const ViewDocumentButton = ({ viewDocument, isViewed, harTilgangTilArkivv
     </Tooltip>
   );
 };
-
-const StyledButton = styled(Button)`
-  grid-area: view;
-`;
 
 const getIcon = (isViewed: boolean, isDownload: boolean) => {
   if (isDownload) {

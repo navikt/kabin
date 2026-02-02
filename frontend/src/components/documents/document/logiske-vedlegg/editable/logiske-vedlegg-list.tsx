@@ -10,7 +10,6 @@ import type { LogiskVedlegg } from '@app/types/dokument';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends StyleProps {
   logiskeVedlegg: LogiskVedlegg[];
@@ -30,7 +29,8 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
       {!(hasLogiskeVedlegg || isOpen) ? (
         <LogiskeVedleggListItem key="none-create">
           <Tooltip content="Legg til logisk vedlegg">
-            <CreateButton
+            <Button
+              className="justify-start"
               size="xsmall"
               variant="tertiary-neutral"
               onClick={() => setIsOpen(true)}
@@ -38,7 +38,7 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
               iconPosition="right"
             >
               <NoAttachmentsText>Ingen logiske vedlegg</NoAttachmentsText>
-            </CreateButton>
+            </Button>
           </Tooltip>
         </LogiskeVedleggListItem>
       ) : (
@@ -80,7 +80,3 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
     </LogiskeVedleggList>
   );
 };
-
-const CreateButton = styled(Button)`
-  justify-content: flex-start;
-`;

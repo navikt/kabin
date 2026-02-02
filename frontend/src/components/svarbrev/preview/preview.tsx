@@ -11,7 +11,6 @@ import { SaksTypeEnum } from '@app/types/common';
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Preview = () => {
   const { overstyringer } = useRegistrering();
@@ -39,20 +38,13 @@ export const Preview = () => {
   }
 
   return (
-    <PdfContainer>
+    <div className="relative w-full bg-ax-bg-default" style={{ aspectRatio: PDF_ASPECT_RATIO }}>
       {rendered.toReversed().map((loader) => (
         <RenderPdf key={loader.key} loader={loader} />
       ))}
-    </PdfContainer>
+    </div>
   );
 };
-
-const PdfContainer = styled.div`
-  position: relative;
-  width: 100%;
-  aspect-ratio: ${PDF_ASPECT_RATIO};
-  background-color: var(--ax-bg-default);
-`;
 
 const useUrl = () => {
   const { svarbrev, overstyringer, sakenGjelderValue } = useRegistrering();

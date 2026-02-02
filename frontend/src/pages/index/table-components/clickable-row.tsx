@@ -1,6 +1,5 @@
 import { Table } from '@navikt/ds-react';
 import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 interface Props extends Omit<React.HTMLAttributes<HTMLTableRowElement>, 'onClick'> {
   path: string;
@@ -11,12 +10,8 @@ export const TableRow = ({ path, children, ...props }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <StyledTableRow {...props} onClick={() => navigate(path)}>
+    <Table.Row className="cursor-pointer" {...props} onClick={() => navigate(path)}>
       {children}
-    </StyledTableRow>
+    </Table.Row>
   );
 };
-
-const StyledTableRow = styled(Table.Row)`
-  cursor: pointer;
-`;

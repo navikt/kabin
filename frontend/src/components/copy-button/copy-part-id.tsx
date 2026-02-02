@@ -1,6 +1,5 @@
 import { formatId } from '@app/functions/format-id';
 import { CopyButton, type CopyButtonProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   id: string | null;
@@ -25,8 +24,6 @@ export const CopyPartIdButton = ({ id, size = 'small' }: Props) => {
   );
 };
 
-export const StyledCopyButton = styled(CopyButton)`
-  border: 2px solid var(--ax-border-neutral);
-  white-space: nowrap;
-  align-self: flex-start;
-`;
+export const StyledCopyButton = ({ className = '', ...props }: CopyButtonProps) => (
+  <CopyButton className={`self-start whitespace-nowrap border-2 border-ax-border-neutral ${className}`} {...props} />
+);

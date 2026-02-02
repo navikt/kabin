@@ -7,8 +7,7 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ValidationFieldNames } from '@app/types/validation';
-import { ErrorMessage, HGrid } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { ErrorMessage, HGrid, VStack } from '@navikt/ds-react';
 
 export const Receivers = () => {
   const { svarbrev } = useRegistrering();
@@ -27,7 +26,7 @@ export const Receivers = () => {
   const onlyOneReceiver = suggestedReceivers.length === 1 && customReceivers.length === 0 && receiver !== undefined;
 
   return (
-    <Container>
+    <VStack gap="space-8">
       <HGrid columns={2} gap="space-8">
         {onlyOneReceiver ? (
           <SingleReceiver receiver={receiver} />
@@ -38,12 +37,6 @@ export const Receivers = () => {
         <CustomReceivers receivers={customReceivers} />
       </HGrid>
       {error ? <ErrorMessage>{error}</ErrorMessage> : null}
-    </Container>
+    </VStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;

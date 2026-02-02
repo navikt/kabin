@@ -1,11 +1,10 @@
 import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
-import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/styled-components';
+import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/layout';
 import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 import { useGetStatusQuery } from '@app/redux/api/status';
 import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { Alert } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   registrering: FinishedRegistrering;
@@ -19,7 +18,7 @@ export const Status = ({ registrering, alertText, headingText }: Props) => {
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
-    <StyledMain>
+    <main className="pt-4">
       <StatusHeading
         alertText={alertText}
         headingText={headingText}
@@ -30,13 +29,9 @@ export const Status = ({ registrering, alertText, headingText }: Props) => {
       <Container>
         <DetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />
       </Container>
-    </StyledMain>
+    </main>
   );
 };
-
-const StyledMain = styled.main`
-  padding-top: 16px;
-`;
 
 interface DetailsLoaderProps {
   data: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | IBegjæringOmGjenopptakStatus | undefined;

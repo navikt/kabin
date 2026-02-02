@@ -1,6 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
 import { type JSX, useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface FilterProps<T extends string> {
   onChange: (id: T, active: boolean) => void;
@@ -26,7 +25,8 @@ export const Filter = <T extends string>({
   }, [focused]);
 
   return (
-    <StyledCheckbox
+    <Checkbox
+      className="w-full overflow-hidden text-ellipsis"
       data-testid="filter"
       data-filterid={filterId}
       data-label={children}
@@ -38,14 +38,8 @@ export const Filter = <T extends string>({
       title={children}
     >
       <span title={children}>{children}</span>
-    </StyledCheckbox>
+    </Checkbox>
   );
 };
 
 Filter.displayName = 'Filter';
-
-const StyledCheckbox = styled(Checkbox)`
-  width: 100%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;

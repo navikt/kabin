@@ -4,9 +4,8 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useDeleteLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux/api/logiske-vedlegg';
 import type { LogiskVedlegg } from '@app/types/dokument';
 import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
+import { Button, CopyButton, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   dokumentInfoId: string;
@@ -53,18 +52,30 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   }
 
   return (
-    <EditableTag size="small" variant="neutral" title={logiskVedlegg.tittel}>
-      <Title $isFocused={isFocused} data-testid="logisk-vedlegg">
+    <ReadOnlyTag size="small" variant="neutral" title={logiskVedlegg.tittel} className="group min-w-22">
+      <span
+        className={`cursor-text truncate ${isFocused ? 'opacity-0' : 'opacity-100'} group-hover:opacity-0`}
+        data-testid="logisk-vedlegg"
+      >
         {logiskVedlegg.tittel}
-      </Title>
-      <AbsoluteTitle $isFocused={isFocused} aria-hidden role="presentation">
+      </span>
+      <span
+        className={`absolute right-20 left-2 cursor-text truncate ${isFocused ? 'opacity-100' : 'opacity-0'} group-hover:opacity-100`}
+        aria-hidden
+        role="presentation"
+      >
         {logiskVedlegg.tittel}
-      </AbsoluteTitle>
-      <ButtonContainer $isFocused={isFocused}>
+      </span>
+      <HStack
+        position="absolute"
+        right="space-8"
+        wrap={false}
+        className={`select-none ${isFocused ? 'opacity-100' : 'opacity-0'} group-hover:opacity-100`}
+      >
         <Tooltip content="Kopier" placement="top">
           <CopyButton
             size="xsmall"
-            variant="neutral"
+            data-color="neutral"
             copyText={logiskVedlegg.tittel}
             icon={<FilesIcon aria-hidden />}
             onFocus={() => setIsFocused(true)}
@@ -100,57 +111,10 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
             onBlur={() => setIsFocused(false)}
           />
         </Tooltip>
-      </ButtonContainer>
-    </EditableTag>
+      </HStack>
+    </ReadOnlyTag>
   );
 };
 
 const getIsFocused = ({ current }: React.RefObject<HTMLElement | null>) =>
   current?.contains(document.activeElement) ?? false;
-
-interface StyleProps {
-  $isFocused: boolean;
-}
-
-const Title = styled.span<StyleProps>`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: ${({ $isFocused }) => ($isFocused ? 0 : 1)};
-  cursor: text;
-`;
-
-const AbsoluteTitle = styled.span<StyleProps>`
-  position: absolute;
-  left: 8px;
-  right: 80px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0)};
-  cursor: text;
-`;
-
-const ButtonContainer = styled.div<StyleProps>`
-  display: flex;
-  flex-direction: row;
-  column-gap: 0;
-  opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0)};
-  position: absolute;
-  right: 8px;
-  user-select: none;
-`;
-
-const EditableTag = styled(ReadOnlyTag)`
-  min-width: 88px;
-
-  &:hover {
-    ${Title} {
-      opacity: 0;
-    }
-
-    ${AbsoluteTitle}, ${ButtonContainer} {
-      opacity: 1;
-    }
-  }
-`;

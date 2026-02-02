@@ -1,6 +1,6 @@
 import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedTable } from '@app/pages/index/finished/table';
-import { Container } from '@app/pages/index/styled-components';
+import { Container } from '@app/pages/index/layout';
 import { useGetFerdigeRegistreringerQuery } from '@app/redux/api/registreringer/queries';
 import { GET_FERDIGE_REGISTRERINGER_PARAMS } from '@app/redux/api/registreringer/types';
 import { Heading, Skeleton, type SortState, Table } from '@navikt/ds-react';

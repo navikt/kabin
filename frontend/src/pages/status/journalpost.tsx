@@ -3,10 +3,9 @@ import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { AvsenderMottaker, InfoItem, Sak, Time } from '@app/pages/status/common-components';
-import { StyledCard } from '@app/pages/status/styled-components';
+import { StyledCard } from '@app/pages/status/layout';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { BodyShort, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface JournalpostProps {
   title: string;
@@ -20,13 +19,15 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
   const temaName = useFullTemaNameFromId(temaId);
 
   return (
-    <StyledCard title={title} $gridArea="journalpost" titleSize="medium">
+    <StyledCard title={title} gridArea="journalpost" titleSize="medium">
       <InfoItem label="Tittel">{tittel ?? '-'}</InfoItem>
 
       <InfoItem label="Tema">
-        <StyledTag variant="alt3">
-          <Ellipsis title={temaName}>{temaName}</Ellipsis>
-        </StyledTag>
+        <Tag variant="alt3" className="w-fit max-w-full">
+          <div className="truncate" title={temaName}>
+            {temaName}
+          </div>
+        </Tag>
       </InfoItem>
 
       <InfoItem label="Dato">
@@ -48,40 +49,19 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
         {vedlegg.length === 0 ? (
           <BodyShort>Ingen vedlegg</BodyShort>
         ) : (
-          <List data-testid="status-journalpost-vedlegg-list">
+          <ul className="pl-4" data-testid="status-journalpost-vedlegg-list">
             {vedlegg.map((v) => (
-              <ListItem key={v.dokumentInfoId}>
+              <li key={v.dokumentInfoId} className="text-lg">
                 <span>{v.tittel ?? 'Ingen tittel'}</span>
                 <ReadOnlyLogiskeVedlegg logiskeVedlegg={v.logiskeVedlegg} />
-              </ListItem>
+              </li>
             ))}
-          </List>
+          </ul>
         )}
       </InfoItem>
     </StyledCard>
   );
 };
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  padding-left: 16px;
-`;
-
-const ListItem = styled.li`
-  font-size: 18px;
-`;
-
-const StyledTag = styled(Tag)`
-  width: fit-content;
-  max-width: 100%;
-`;
-
-const Ellipsis = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
 
 const getJournalposttype = (type: JournalposttypeEnum) => {
   switch (type) {

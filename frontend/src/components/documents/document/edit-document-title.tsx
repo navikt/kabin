@@ -4,9 +4,8 @@ import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registreri
 import { useSetArkivertDokumentTitleMutation } from '@app/redux/api/journalposter';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, TextField } from '@navikt/ds-react';
+import { Button, HStack, TextField } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   exitEditMode: () => void;
@@ -71,7 +70,8 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
 
   return (
     <>
-      <StyledTextField
+      <TextField
+        className="overflow-hidden [&>input]:w-full [&>input]:overflow-hidden"
         value={newTitle}
         onChange={({ target }) => setNewTitle(target.value)}
         label="Endre tittel"
@@ -82,7 +82,7 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
         onMouseDown={(e) => e.stopPropagation()}
         htmlSize={newTitle.length + 1}
       />
-      <ButtonContainer>
+      <HStack align="center" wrap={false}>
         <Button
           data-color="neutral"
           variant="tertiary"
@@ -111,21 +111,7 @@ export const EditTitle = ({ exitEditMode, dokument }: Props) => {
           }}
           onMouseDown={(e) => e.stopPropagation()}
         />
-      </ButtonContainer>
+      </HStack>
     </>
   );
 };
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledTextField = styled(TextField)`
-  overflow: hidden;
-
-  && > input {
-    overflow: hidden;
-    width: 100%;
-  }
-`;
