@@ -54,10 +54,7 @@ export const useMulighet = ():
   const {
     typeId,
     mulighet,
-    ankemuligheter,
-    klagemuligheter,
-    omgjoeringskravmuligheter,
-    gjenopptaksmuligheter,
+    muligheter: { ankemuligheter, klagemuligheter, omgjoeringskravmuligheter, gjenopptaksmuligheter },
     mulighetIsBasedOnJournalpost,
   } = useRegistrering();
 

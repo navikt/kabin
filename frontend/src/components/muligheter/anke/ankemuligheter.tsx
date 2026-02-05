@@ -52,7 +52,7 @@ const ReadOnlyAnkemulighet = () => {
 const EditableAnkemuligheter = () => {
   const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();
-  const { ankemuligheter, id } = useRegistrering();
+  const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
@@ -85,7 +85,7 @@ const EditableAnkemuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content ankemuligheter={ankemuligheter} isLoading={isLoading} />
+      <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
