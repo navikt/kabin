@@ -2,7 +2,6 @@ import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
-import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import { HouseIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -10,12 +9,11 @@ import { Link as RouterLink } from 'react-router-dom';
 interface StatusHeadingProps {
   headingText: string;
   alertText: string;
-  type: RegistreringType;
   behandlingId: string;
   registreringId: string;
 }
 
-export const StatusHeading = ({ headingText, alertText, type, behandlingId, registreringId }: StatusHeadingProps) => (
+export const StatusHeading = ({ headingText, alertText, behandlingId, registreringId }: StatusHeadingProps) => (
   <Box
     background="default"
     padding="space-12"
@@ -51,7 +49,7 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
           Åpne Kabal søk
         </ExternalLinkButton>
 
-        <ExternalLinkButton href={getKabalUrl(type, behandlingId)} variant="secondary-neutral" size="small">
+        <ExternalLinkButton href={`${KABAL_URL}/behandling/${behandlingId}`} variant="secondary-neutral" size="small">
           Åpne behandling i Kabal
         </ExternalLinkButton>
 
@@ -60,16 +58,3 @@ export const StatusHeading = ({ headingText, alertText, type, behandlingId, regi
     </VStack>
   </Box>
 );
-
-const getKabalUrl = (type: RegistreringType, behandlingId: string) => {
-  switch (type) {
-    case SaksTypeEnum.KLAGE:
-      return `${KABAL_URL}/klagebehandling/${behandlingId}`;
-    case SaksTypeEnum.ANKE:
-      return `${KABAL_URL}/ankebehandling/${behandlingId}`;
-    case SaksTypeEnum.OMGJØRINGSKRAV:
-      return `${KABAL_URL}/omgjøringskravbehandling/${behandlingId}`;
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
-      return `${KABAL_URL}/begjaering-om-gjenopptak-behandling/${behandlingId}`;
-  }
-};

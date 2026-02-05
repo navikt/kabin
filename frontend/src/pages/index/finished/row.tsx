@@ -49,12 +49,8 @@ export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreri
   );
 };
 
-const OpenKabal = ({ typeId, behandlingId }: FinishedRegistreringListItem) => (
-  <ExternalLinkButton
-    href={`${KABAL_URL}/${typeId === SaksTypeEnum.ANKE ? 'ankebehandling' : 'klagebehandling'}/${behandlingId}`}
-    variant="secondary-neutral"
-    size="small"
-  >
+const OpenKabal = ({ behandlingId }: FinishedRegistreringListItem) => (
+  <ExternalLinkButton href={`${KABAL_URL}/behandling/${behandlingId}`} variant="secondary-neutral" size="small">
     Åpne behandling i Kabal
   </ExternalLinkButton>
 );
