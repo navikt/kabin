@@ -52,7 +52,7 @@ const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
 const EditableBegjæringOmGjenopptakMuligheter = () => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { journalpost } = useJournalpost();
-  const { gjenopptaksmuligheter, id } = useRegistrering();
+  const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
@@ -90,7 +90,7 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content begjæringOmGjenopptakMuligheter={gjenopptaksmuligheter} isLoading={isLoading} />
+      <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };

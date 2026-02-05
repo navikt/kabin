@@ -31,10 +31,13 @@ export interface BaseRegistrering {
   created: string;
   modified: string;
   createdBy: string;
-  klagemuligheter: IKlagemulighet[];
-  ankemuligheter: IAnkemulighet[];
-  omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
-  gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
+  muligheter: {
+    klagemuligheter: IKlagemulighet[];
+    ankemuligheter: IAnkemulighet[];
+    omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
+    gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
+    muligheterFetched: string; // DateTime
+  };
 }
 
 export interface DraftRegistrering extends BaseRegistrering {

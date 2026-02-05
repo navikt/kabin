@@ -52,7 +52,7 @@ const ReadOnlyOmgjøringskravmulighet = () => {
 const EditableOmgjøringskravmuligheter = () => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { journalpost } = useJournalpost();
-  const { omgjoeringskravmuligheter, id } = useRegistrering();
+  const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
@@ -85,7 +85,7 @@ const EditableOmgjøringskravmuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content omgjøringskravmuligheter={omgjoeringskravmuligheter} isLoading={isLoading} />
+      <Content omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };

@@ -10,11 +10,19 @@ import {
   type Svarbrev,
 } from '@app/redux/api/registreringer/types';
 import { reduxStore } from '@app/redux/configure-store';
-import type { IAnkemulighet, IKlagemulighet } from '@app/types/mulighet';
+import type {
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IKlagemulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 
 interface MuligheterResponse {
   klagemuligheter: IKlagemulighet[];
   ankemuligheter: IAnkemulighet[];
+  omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
+  gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
+  muligheterFetched: string;
 }
 
 const queriesSlice = registreringApi.injectEndpoints({
@@ -31,30 +39,8 @@ const queriesSlice = registreringApi.injectEndpoints({
 
         for (const registrering of data) {
           setRegistrering(registrering.id, registrering);
-          dispatch(
-            queriesSlice.util.upsertQueryData('getMuligheter', registrering.id, {
-              klagemuligheter: registrering.klagemuligheter,
-              ankemuligheter: registrering.ankemuligheter,
-            }),
-          );
 
-          const { mulighet } = registrering;
-
-          if (mulighet === null) {
-            continue;
-          }
-
-          const klagemulighet = registrering.klagemuligheter.find((k) => k.id === mulighet.id);
-
-          if (klagemulighet !== undefined) {
-            dispatch(queriesSlice.util.upsertQueryData('getRegistreringKlagemulighet', registrering.id, klagemulighet));
-          }
-
-          const ankemulighet = registrering.ankemuligheter.find((a) => a.id === mulighet.id);
-
-          if (ankemulighet !== undefined) {
-            dispatch(queriesSlice.util.upsertQueryData('getRegistreringAnkemulighet', registrering.id, ankemulighet));
-          }
+          dispatch(queriesSlice.util.upsertQueryData('getMuligheter', registrering.id, registrering.muligheter));
         }
       },
     }),
@@ -65,30 +51,7 @@ const queriesSlice = registreringApi.injectEndpoints({
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 
-        dispatch(
-          queriesSlice.util.upsertQueryData('getMuligheter', data.id, {
-            klagemuligheter: data.klagemuligheter,
-            ankemuligheter: data.ankemuligheter,
-          }),
-        );
-
-        const { mulighet } = data;
-
-        if (mulighet === null) {
-          return;
-        }
-
-        const klagemulighet = data.klagemuligheter.find((k) => k.id === mulighet.id);
-
-        if (klagemulighet !== undefined) {
-          dispatch(queriesSlice.util.upsertQueryData('getRegistreringKlagemulighet', data.id, klagemulighet));
-        }
-
-        const ankemulighet = data.ankemuligheter.find((a) => a.id === mulighet.id);
-
-        if (ankemulighet !== undefined) {
-          dispatch(queriesSlice.util.upsertQueryData('getRegistreringAnkemulighet', data.id, ankemulighet));
-        }
+        dispatch(queriesSlice.util.upsertQueryData('getMuligheter', data.id, data.muligheter));
       },
     }),
 
@@ -98,39 +61,12 @@ const queriesSlice = registreringApi.injectEndpoints({
         const { data } = await queryFulfilled;
 
         dispatch(
-          queriesSlice.util.updateQueryData('getRegistrering', id, (draft) => {
-            const { mulighet } = draft;
-
-            if (mulighet === null) {
-              return { ...draft, ...data };
-            }
-
-            const klagemulighet = data.klagemuligheter.find((k) => k.id === mulighet.id);
-
-            if (klagemulighet !== undefined) {
-              dispatch(queriesSlice.util.upsertQueryData('getRegistreringKlagemulighet', id, klagemulighet));
-
-              return { ...draft, ...data };
-            }
-
-            const ankemulighet = data.ankemuligheter.find((a) => a.id === mulighet.id);
-
-            if (ankemulighet !== undefined) {
-              dispatch(queriesSlice.util.upsertQueryData('getRegistreringAnkemulighet', id, ankemulighet));
-
-              return { ...draft, ...data };
-            }
-          }),
+          queriesSlice.util.updateQueryData('getRegistrering', id, (draft) => ({
+            ...draft,
+            muligheter: { ...draft.muligheter, ...data },
+          })),
         );
       },
-    }),
-
-    getRegistreringKlagemulighet: builder.query<IKlagemulighet, string>({
-      query: (id) => `/registreringer/${id}/klagemulighet`,
-    }),
-
-    getRegistreringAnkemulighet: builder.query<IAnkemulighet, string>({
-      query: (id) => `/registreringer/${id}/ankemulighet`,
     }),
   }),
 });

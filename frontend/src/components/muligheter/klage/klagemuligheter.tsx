@@ -45,7 +45,7 @@ const ReadOnlyKlagemulighet = () => {
 
 const EditableKlagemuligheter = () => {
   const { typeId, mulighet } = useMulighet();
-  const { klagemuligheter, id } = useRegistrering();
+  const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.VEDTAK);
@@ -76,7 +76,7 @@ const EditableKlagemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.VEDTAK} />
 
-      <Content klagemuligheter={klagemuligheter} isLoading={isLoading} />
+      <Content klagemuligheter={muligheter.klagemuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
