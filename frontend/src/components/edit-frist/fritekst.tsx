@@ -14,7 +14,7 @@ export const Fritekst = () => {
 
   useEffect(() => {
     if (!svarbrev.overrideCustomText) {
-      return setValue('');
+      return;
     }
 
     if (value === (svarbrev.customText ?? '')) {
