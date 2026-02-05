@@ -13,19 +13,13 @@ interface Props {
 }
 
 export const Status = ({ registrering, alertText, headingText }: Props) => {
-  const { id, typeId, behandlingId } = registrering;
+  const { id, behandlingId } = registrering;
   const { data, isLoading, isError } = useGetStatusQuery(behandlingId);
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
     <main className="pt-4">
-      <StatusHeading
-        alertText={alertText}
-        headingText={headingText}
-        type={typeId}
-        behandlingId={behandlingId}
-        registreringId={id}
-      />
+      <StatusHeading alertText={alertText} headingText={headingText} behandlingId={behandlingId} registreringId={id} />
       <Container>
         <DetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />
       </Container>
