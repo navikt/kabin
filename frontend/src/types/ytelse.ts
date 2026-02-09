@@ -40,7 +40,7 @@ export enum Ytelse {
   UFO_TVF = 'UFO_TVF',
   OPP_OPP = 'OPP_OPP',
   AAR_AAR = 'AAR_AAR',
-  TSR_TSR = 'TSR_TSR',
+  HJE_AUR = 'HJE_AUR',
   FRI_FRI = 'FRI_FRI',
   TSO_TSO = 'TSO_TSO',
   FAR_FAR = 'FAR_FAR',
