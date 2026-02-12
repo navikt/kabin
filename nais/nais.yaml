@@ -53,6 +53,7 @@ spec:
         - application: klage-kodeverk-api
       external:
         - host: login.microsoftonline.com
+        - host: hooks.slack.com
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
