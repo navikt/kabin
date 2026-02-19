@@ -17,7 +17,7 @@ export const saksbehandlereApi = createApi({
   endpoints: (builder) => ({
     getSaksbehandlere: builder.query<ISaksbehandlereResponse, ISaksbehandlereParams>({
       query: (body) => ({
-        url: '/search/saksbehandlere',
+        url: '/search/saksbehandlere-for-bruker',
         method: 'POST',
         body,
       }),
