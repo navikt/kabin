@@ -14,4 +14,4 @@ export const statusApi = createApi({
   }),
 });
 
-export const { useGetStatusQuery, usePrefetch } = statusApi;
+export const { useGetStatusQuery } = statusApi;
