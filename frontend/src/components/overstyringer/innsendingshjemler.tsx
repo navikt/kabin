@@ -23,14 +23,12 @@ export const Innsendingshjemler = () => {
   const error = useValidationError(ID);
 
   const options = useMemo(() => {
-    if (typeId === null || ytelseId === null) {
-      return [];
-    }
+    const ytelse = data.find(({ id }) => id === ytelseId);
 
-    return (
-      data.find((y) => y.id === ytelseId)?.innsendingshjemler.map((h) => ({ value: h.id, label: h.beskrivelse })) ?? []
-    );
-  }, [data, typeId, ytelseId]);
+    return ytelse === undefined
+      ? []
+      : ytelse.innsendingshjemler.filter((i) => !i.utfases).map((i) => ({ value: i.id, label: i.beskrivelse }));
+  }, [data, ytelseId]);
 
   if (typeId === null) {
     return null;
