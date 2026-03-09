@@ -1,4 +1,4 @@
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:25-slim@sha256:61efefe604b3d5d6bd68bf5c69657087a03824bc0564e32b11f3ab3ece8ef408
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:25-slim@sha256:9aaa1f29ee5dc1d0f4a78db140bc58897058d1bb8f1cda114e5b1547648b9379
 
 ENV NODE_ENV=production
 ENV NPM_CONFIG_CACHE=/tmp
