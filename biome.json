@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
   "root": true,
   "vcs": {
     "enabled": true,
@@ -97,6 +97,7 @@
         }
       },
       "suspicious": {
+        "noImportCycles": "on",
         "noConsole": {
           "level": "error",
           "options": {
@@ -111,8 +112,7 @@
         },
         "noReactSpecificProps": "off",
         "noEmptyBlockStatements": "error",
-        "noFocusedTests": "error",
-        "noImportCycles": "on"
+        "noFocusedTests": "error"
       },
       "complexity": {
         "useSimplifiedLogicExpression": "off",
