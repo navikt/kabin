@@ -1,5 +1,4 @@
 import { useAppTheme } from '@app/app-theme';
-import '@app/global-styles.css';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { RouterLoader } from '@app/components/app/router-loader';
 import { NavHeader } from '@app/components/header/header';
