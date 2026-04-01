@@ -3,9 +3,9 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["@types/bun"],
     "module": "ESNext",
     "skipLibCheck": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -14,22 +14,17 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
     /* Paths */
-    "baseUrl": "./src",
     "paths": {
-      "@app/*": ["*"]
+      "@app/*": ["./src/*"]
     },
-
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
-    "types": ["@navikt/ds-react/types/theme", "bun"]
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": ["src"]
 }
