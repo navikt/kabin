@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
   "root": true,
   "vcs": {
     "enabled": true,
@@ -14,9 +14,7 @@
         "organizeImports": {
           "level": "on",
           "options": {
-            "groups": [
-              "**"
-            ]
+            "groups": ["**"]
           }
         }
       }
@@ -97,17 +95,11 @@
         }
       },
       "suspicious": {
-        "noImportCycles": "on",
+        "noImportCycles": "error",
         "noConsole": {
           "level": "error",
           "options": {
-            "allow": [
-              "debug",
-              "info",
-              "warn",
-              "error",
-              "[level]"
-            ]
+            "allow": ["debug", "info", "warn", "error", "[level]"]
           }
         },
         "noReactSpecificProps": "off",
@@ -181,10 +173,6 @@
     }
   },
   "files": {
-    "includes": [
-      "**",
-      "!**/*.css",
-      "!.bruno"
-    ]
+    "includes": ["**", "!**/*.css", "!.bruno"]
   }
 }
