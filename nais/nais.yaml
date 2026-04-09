@@ -75,4 +75,4 @@ spec:
   observability:
     autoInstrumentation:
       enabled: true
-      runtime: nodejs
+      runtime: sdk

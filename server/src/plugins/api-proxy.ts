@@ -1,6 +1,7 @@
 import { DEV_URL, isDeployed } from '@app/config/env';
 import { getDuration } from '@app/helpers/duration';
 import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
+import { getTraceContext } from '@app/helpers/trace-context';
 import { getLogger } from '@app/logger';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
@@ -34,7 +35,8 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         return;
       }
 
-      const { method, url, trace_id, span_id, tab_id, client_version, proxyStartTime } = req;
+      const { trace_id, span_id } = getTraceContext(req);
+      const { method, url, tab_id, client_version, proxyStartTime } = req;
       const responseTime = getDuration(proxyStartTime);
 
       log.info({
@@ -68,8 +70,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
           log.info({
             msg: `Proxy request (${appName}) ${req.method} ${req.url}`,
             tab_id: req.tab_id,
-            trace_id: req.trace_id,
-            span_id: req.span_id,
+            ...getTraceContext(req),
             data: {
               method: req.method,
               contentType: req.headers['content-type'],

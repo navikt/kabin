@@ -2,6 +2,7 @@ import { isDeployed } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
 import { EmojiIcons, sendToSlack } from '@app/slack';
+import { shutdownTracing } from '@app/tracing';
 
 const log = getLogger('process-errors');
 
@@ -22,6 +23,7 @@ export const processErrors = () => {
       } else {
         log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down now.` });
       }
+      await shutdownTracing();
       process.exit(0);
     })
     .on('SIGINT', async (signal) => {
@@ -33,6 +35,7 @@ export const processErrors = () => {
         const error = new Error(`Process ${process.pid} has been interrupted, ${signal}. Shutting down now.`);
         log.error({ error });
       }
+      await shutdownTracing();
       process.exit(0);
     })
     .on('beforeExit', async (code) => {
