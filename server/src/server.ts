@@ -16,10 +16,10 @@ import { serveAssetsPlugin } from '@app/plugins/serve-assets';
 import { serveIndexPlugin } from '@app/plugins/serve-index';
 import { serverTimingPlugin } from '@app/plugins/server-timing';
 import { tabIdPlugin } from '@app/plugins/tab-id';
-import { traceparentPlugin } from '@app/plugins/traceparent/traceparent';
 import { versionPlugin } from '@app/plugins/version/version';
 import { processErrors } from '@app/process-errors';
 import { EmojiIcons, sendToSlack } from '@app/slack';
+import { fastifyOtelInstrumentation } from '@app/tracing';
 import cors from '@fastify/cors';
 import { fastify } from 'fastify';
 import metricsPlugin from 'fastify-metrics';
@@ -36,7 +36,11 @@ if (isDeployed) {
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } })
+const app = fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } });
+
+await app.register(fastifyOtelInstrumentation.plugin());
+
+app
   .register(cors, corsOptions)
   .register(healthPlugin)
   .register(metricsPlugin, {
@@ -46,7 +50,6 @@ fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } })
     },
   })
   .register(proxyVersionPlugin)
-  .register(traceparentPlugin)
   .register(tabIdPlugin)
   .register(clientVersionPlugin)
   .register(serverTimingPlugin, { enableAutoTotal: true })

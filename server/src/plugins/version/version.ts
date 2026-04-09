@@ -1,5 +1,6 @@
 import { PROXY_VERSION } from '@app/config/config';
 import { formatDuration, getDuration } from '@app/helpers/duration';
+import { getTraceContext } from '@app/helpers/trace-context';
 import { getLogger } from '@app/logger';
 import { histogram } from '@app/plugins/version/session-histogram';
 import { startUserSession, stopTimerList } from '@app/plugins/version/unique-users-gauge';
@@ -16,7 +17,7 @@ export const versionPlugin = fastifyPlugin(
     const VERSION_SSE = formatSseEvent(EventNames.SERVER_VERSION, PROXY_VERSION);
 
     app.get('/version', async (req, reply) => {
-      const { trace_id, span_id } = req;
+      const { trace_id, span_id } = getTraceContext(req);
 
       if (req.headers.accept !== 'text/event-stream') {
         log.warn({

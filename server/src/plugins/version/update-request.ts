@@ -1,4 +1,5 @@
 import { PROXY_VERSION } from '@app/config/config';
+import { getTraceContext } from '@app/helpers/trace-context';
 import { getLogger } from '@app/logger';
 import type { FastifyRequest } from 'fastify';
 
@@ -29,7 +30,8 @@ if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION || UPDATE_OPTIONAL_THRESHOLD > PRO
 }
 
 export const getUpdateRequest = (req: FastifyRequest): UpdateRequest => {
-  const { client_version, trace_id, span_id } = req;
+  const { client_version } = req;
+  const { trace_id, span_id } = getTraceContext(req);
 
   // If the client version is not provided, the client must update.
   if (client_version === undefined) {

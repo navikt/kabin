@@ -1,10 +1,12 @@
 import { ENVIRONMENT } from '@app/environment';
-import { getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
-import { faro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
+import { createReactRouterV7Options, ReactIntegration } from '@grafana/faro-react';
+import { faro, getWebInstrumentations, initializeFaro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
 
-const getUrl = () => {
+const SERVICE_NAME = 'kabin-frontend-client';
+
+const getTelemetryCollectorURL = (): string | undefined => {
   if (ENVIRONMENT.isProduction) {
     return 'https://telemetry.nav.no/collect';
   }
@@ -13,35 +15,41 @@ const getUrl = () => {
     return 'https://telemetry.ekstern.dev.nav.no/collect';
   }
 
-  return '/collect';
+  if (window.location.hostname === 'localhost') {
+    return '/collect';
+  }
+
+  return undefined;
 };
 
-initializeFaro({
-  url: getUrl(),
-  app: { name: 'kabin-frontend', version: ENVIRONMENT.version },
-  paused: ENVIRONMENT.isLocal,
-  batching: {
-    enabled: true,
-    sendTimeout: ENVIRONMENT.isProduction ? 250 : 30000,
-    itemLimit: ENVIRONMENT.isProduction ? 50 : 100,
-  },
-  instrumentations: [
-    ...getWebInstrumentations({ captureConsole: false }),
-    new TracingInstrumentation(),
-    new ReactIntegration({
-      router: {
-        version: ReactRouterVersion.V6,
-        dependencies: {
+const collectorUrl = getTelemetryCollectorURL();
+
+if (collectorUrl !== undefined) {
+  initializeFaro({
+    url: collectorUrl,
+    app: {
+      name: SERVICE_NAME,
+      version: ENVIRONMENT.version,
+    },
+    sessionTracking: {
+      enabled: true,
+      persistent: true,
+    },
+    instrumentations: [
+      ...getWebInstrumentations(),
+      new TracingInstrumentation(),
+      new ReactIntegration({
+        router: createReactRouterV7Options({
           createRoutesFromChildren,
           matchRoutes,
           Routes,
           useLocation,
           useNavigationType,
-        },
-      },
-    }),
-  ],
-});
+        }),
+      }),
+    ],
+  });
+}
 
 export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) =>
   faro.api.pushEvent(name, attributes, domain, { skipDedupe: true });

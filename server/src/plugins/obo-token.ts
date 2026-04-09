@@ -1,6 +1,7 @@
 import { KLAGE_KODEVERK_API, NAIS_CLUSTER_NAME } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { getDuration } from '@app/helpers/duration';
+import { getTraceContext } from '@app/helpers/trace-context';
 import { getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
@@ -79,7 +80,8 @@ export const oboAccessTokenPlugin = fastifyPlugin(
 type GetOboToken = (appName: string, req: FastifyRequest, reply?: FastifyReply) => Promise<string | undefined>;
 
 const getOboToken: GetOboToken = async (appName, req, reply) => {
-  const { trace_id, span_id, accessToken, url, client_version, tab_id } = req;
+  const { trace_id, span_id } = getTraceContext(req);
+  const { accessToken, url, client_version, tab_id } = req;
   const logParams = { trace_id, span_id, client_version, tab_id, data: { route: url } };
 
   log.debug({ msg: `Getting OBO token for "${appName}".`, ...logParams });
