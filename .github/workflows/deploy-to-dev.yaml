@@ -56,15 +56,16 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      
+          registries: |
+            https://registry.npmjs.org/
+            @navikt:https://npm.pkg.github.com|$BUN_AUTH_TOKEN
+
       - name: Install frontend dependencies
         shell: bash
+        working-directory: frontend
         env:
           BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          cd frontend
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile --ignore-scripts
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build frontend
         shell: bash
@@ -82,12 +83,10 @@ jobs:
       
       - name: Install server dependencies
         shell: bash
+        working-directory: server
         env:
           BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          cd server
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile --ignore-scripts
+        run: bun install --frozen-lockfile --ignore-scripts
       
       - name: Test server
         shell: bash
