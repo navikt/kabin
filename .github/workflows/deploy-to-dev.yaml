@@ -48,6 +48,9 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       version: ${{ steps.version.outputs.version }}
+    env:
+      BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      XDG_CONFIG_HOME: ${{ github.workspace }}  
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,14 +60,14 @@ jobs:
         with:
           bun-version: latest
           registries: |
-            https://registry.npmjs.org/
-            @navikt:https://npm.pkg.github.com|$BUN_AUTH_TOKEN
+            @navikt:https://npm.pkg.github.com/|$BUN_AUTH_TOKEN
+
+      - name: Rename bunfig to global config name
+        run: mv bunfig.toml .bunfig.toml
 
       - name: Install frontend dependencies
         shell: bash
         working-directory: frontend
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build frontend
@@ -84,8 +87,6 @@ jobs:
       - name: Install server dependencies
         shell: bash
         working-directory: server
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: bun install --frozen-lockfile --ignore-scripts
       
       - name: Test server
