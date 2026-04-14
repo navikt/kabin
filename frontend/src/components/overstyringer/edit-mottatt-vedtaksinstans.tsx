@@ -8,7 +8,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetMottattVedtaksinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { parseISO } from 'date-fns';
+import { parseISO, subYears } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 
 const ID = ValidationFieldNames.MOTTATT_VEDTAKSINSTANS;
@@ -72,6 +72,9 @@ const RenderEditMottattNav = ({ toDate }: Props) => {
       toDate={parsedToDate}
       id={ID}
       error={error}
+      warningThreshhold={ONE_YEAR_AGO}
     />
   );
 };
+
+const ONE_YEAR_AGO = subYears(new Date(), 1);
