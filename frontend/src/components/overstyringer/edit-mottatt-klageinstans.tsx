@@ -106,7 +106,7 @@ const RenderEditMottattNav = ({ value, toDate, fromDate }: Props) => {
       fromDate={fromDate}
       id={ValidationFieldNames.MOTTATT_KLAGEINSTANS}
       error={error}
-      warningThreshhold={SIX_MONTHS_AGO}
+      warningThreshold={SIX_MONTHS_AGO}
     />
   );
 };

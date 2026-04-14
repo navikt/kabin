@@ -17,7 +17,7 @@ interface Props {
   size?: DateInputProps['size'];
   toDate?: Date;
   value?: Date;
-  warningThreshhold?: Date;
+  warningThreshold?: Date;
   className?: string;
 }
 
@@ -34,7 +34,7 @@ export const Datepicker = ({
   value = undefined,
   size,
   centuryThreshold = 50,
-  warningThreshhold,
+  warningThreshold,
   className,
 }: Props) => {
   const [input, setInput] = useState<string>(value === undefined ? '' : format(value, PRETTY_FORMAT));
@@ -102,7 +102,7 @@ export const Datepicker = ({
         onBlur={onBlur}
         size={size}
       />
-      <Warning date={value} threshhold={warningThreshhold} />
+      <Warning date={value} threshold={warningThreshold} />
     </DatePicker>
   );
 };

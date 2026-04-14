@@ -3,15 +3,15 @@ import { isAfter } from 'date-fns';
 
 interface WarningProps {
   date: Date | undefined;
-  threshhold: Date | undefined;
+  threshold: Date | undefined;
 }
 
-export const Warning = ({ date, threshhold }: WarningProps) => {
-  if (date === undefined || threshhold === undefined) {
+export const Warning = ({ date, threshold }: WarningProps) => {
+  if (date === undefined || threshold === undefined) {
     return null;
   }
 
-  if (isAfter(date, threshhold)) {
+  if (isAfter(date, threshold)) {
     return null;
   }
 

@@ -72,7 +72,7 @@ const RenderEditMottattNav = ({ toDate }: Props) => {
       toDate={parsedToDate}
       id={ID}
       error={error}
-      warningThreshhold={ONE_YEAR_AGO}
+      warningThreshold={ONE_YEAR_AGO}
     />
   );
 };
