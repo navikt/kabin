@@ -16,11 +16,11 @@
     "knip": "knip"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.11",
-    "@types/bun": "1.3.12",
+    "@biomejs/biome": "2.4.13",
+    "@types/bun": "1.3.13",
     "@types/node": "25.6.0",
-    "knip": "6.4.1",
-    "typescript": "6.0.2"
+    "knip": "6.6.2",
+    "typescript": "6.0.3"
   },
   "dependencies": {
     "@fastify/cors": "11.2.0",
@@ -28,14 +28,14 @@
     "@fastify/otel": "0.18.1",
     "@navikt/oasis": "4.1.4",
     "@opentelemetry/api": "1.9.1",
-    "@opentelemetry/exporter-trace-otlp-grpc": "0.214.0",
-    "@opentelemetry/instrumentation-dns": "0.57.0",
-    "@opentelemetry/instrumentation-http": "0.214.0",
-    "@opentelemetry/instrumentation-net": "0.58.0",
-    "@opentelemetry/instrumentation-undici": "0.24.0",
-    "@opentelemetry/resources": "2.6.1",
-    "@opentelemetry/sdk-node": "0.214.0",
-    "@opentelemetry/sdk-trace-node": "2.6.1",
+    "@opentelemetry/exporter-trace-otlp-grpc": "0.215.0",
+    "@opentelemetry/instrumentation-dns": "0.58.0",
+    "@opentelemetry/instrumentation-http": "0.215.0",
+    "@opentelemetry/instrumentation-net": "0.59.0",
+    "@opentelemetry/instrumentation-undici": "0.25.0",
+    "@opentelemetry/resources": "2.7.0",
+    "@opentelemetry/sdk-node": "0.215.0",
+    "@opentelemetry/sdk-trace-node": "2.7.0",
     "@opentelemetry/semantic-conventions": "1.40.0",
     "fastify": "5.8.5",
     "fastify-metrics": "13.2.0",
