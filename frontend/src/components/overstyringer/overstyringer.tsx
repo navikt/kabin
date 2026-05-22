@@ -23,13 +23,13 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { useMulighet } from '@app/hooks/use-mulighet';
+import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
-import { type IPart, SaksTypeEnum } from '@app/types/common';
+import type { IPart } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
@@ -64,7 +64,6 @@ const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | type
 const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
   const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
-  const { typeId, mulighet } = useMulighet();
   const { journalpost } = useJournalpost();
   const avsenderMottakerParams = useAvsenderMottakerParams();
   const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
@@ -72,6 +71,8 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
+
+  const defaultMulighetFullmektig = useNonKlagemulighetProp('fullmektig');
 
   if (isLoading) {
     return (
@@ -133,12 +134,12 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   };
 
   const mulighetFullmektig: ISetPart<IPart> | null =
-    typeId === SaksTypeEnum.ANKE && mulighet?.fullmektig !== undefined && mulighet?.fullmektig !== null
+    defaultMulighetFullmektig !== null
       ? {
-          label: 'Fullmektig fra mulighet',
-          defaultPart: mulighet.fullmektig,
-          title: 'Fullmektig fra mulighet',
-          icon: <StyledFullmektigIcon aria-hidden />,
+          label: 'Fullmektig fra forrige sak',
+          defaultPart: defaultMulighetFullmektig,
+          title: 'Fullmektig fra forrige sak',
+          icon: <StyledFullmektigIcon aria-hidden />, 
         }
       : null;
 
@@ -187,6 +188,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
           icon={<StyledKlagerIcon aria-hidden />}
           error={klagerError}
           options={options}
+          excludedPartIds={[defaultMulighetFullmektig?.identifikator]}
         />
 
         <Part

@@ -1,4 +1,4 @@
-import { Card, CardSmall } from '@app/components/card/card';
+import { Card } from '@app/components/card/card';
 import { LoadingNonKlagemuligheter } from '@app/components/muligheter/common/loading-non-klage-muligheter';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
 import { MulighetTable } from '@app/components/muligheter/common/table';
@@ -10,102 +10,100 @@ import {
   SelectedNonKlageMulighetBody,
 } from '@app/components/selected/selected-non-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
+import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
-import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
-import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet } from '@app/types/mulighet';
+import { useSetAdditionalKabalMulighetMutation } from '@app/redux/api/registreringer/mutations';
+import { useLazyGetAdditionalKabalMuligheterQuery } from '@app/redux/api/registreringer/queries';
+import type { IAdditionalKabalMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
 import { BodyShort } from '@navikt/ds-react';
 import { useState } from 'react';
 
-export const Ankemuligheter = () => {
+export const AdditionalKabalMuligheter = () => {
   const canEdit = useCanEdit();
 
   if (canEdit) {
-    return <EditableAnkemuligheter />;
+    return <EditableAdditionalKabalMuligheter />;
   }
 
-  return <ReadOnlyAnkemulighet />;
+  return <ReadOnlyAdditionalKabalMuligheter />;
 };
 
-const ReadOnlyAnkemulighet = () => {
-  const { typeId, mulighet } = useMulighet();
+const ReadOnlyAdditionalKabalMuligheter = () => {
+  const mulighet = useAdditionalKabalMulighet();
 
-  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
+  if (mulighet === null) {
     return null;
   }
 
   return (
     <Card>
-      <HeaderReadOnly>Vedtaket anken gjelder</HeaderReadOnly>
+      <HeaderReadOnly>Vedtaket saken gjelder</HeaderReadOnly>
       <SelectedNonKlageMulighetBody {...mulighet} />
     </Card>
   );
 };
 
-const EditableAnkemuligheter = () => {
-  const { typeId, mulighet } = useMulighet();
+const EditableAdditionalKabalMuligheter = () => {
+  const mulighet = useAdditionalKabalMulighet();
   const { journalpost } = useJournalpost();
-  const { muligheter, id } = useRegistrering();
-  const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
+  const { id, additionalKabalMuligheter } = useRegistrering();
+  const [refetch, { isFetching, isLoading }] = useLazyGetAdditionalKabalMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
 
-  if (mulighet === undefined && !isExpanded) {
+  if (mulighet === null && !isExpanded) {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.ANKE) {
-    return null;
-  }
-
-  if (!isExpanded && mulighet !== undefined) {
-    return <SelectedNonKlageMulighet onClick={() => setIsExpanded(true)} label="Vis alle ankemuligheter" />;
+  if (!isExpanded && mulighet !== null) {
+    return (
+      <SelectedNonKlageMulighet onClick={() => setIsExpanded(true)} label="Vis alle tidligere behandlinger i Kabal" />
+    );
   }
 
   return (
-    <CardSmall>
+    <Card>
       <HeaderEditable
         toggleExpanded={() => setIsExpanded(!isExpanded)}
         refetch={refetch}
         isFetching={isFetching}
-        mulighet={mulighet}
+        mulighet={mulighet ?? undefined}
         id={id}
-        label="Velg vedtaket anken gjelder"
-        showOnlySelectedLabel="Vis kun valgt ankemulighet"
+        label="Velg tidligere behandling i Kabal som anken gjelder"
+        showOnlySelectedLabel="Vis kun valgt tidligere behandling i Kabal"
       />
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} selectedMulighet={mulighet} />
-    </CardSmall>
+      <Content muligheter={additionalKabalMuligheter} isLoading={isLoading} />
+    </Card>
   );
 };
 
 interface ContentProps {
-  ankemuligheter: IAnkemulighet[] | undefined;
+  muligheter: IAdditionalKabalMulighet[] | undefined;
   isLoading: boolean;
-  selectedMulighet: IAnkemulighet | undefined;
 }
 
-const Content = ({ ankemuligheter, isLoading, selectedMulighet }: ContentProps) => {
+const Content = ({ muligheter, isLoading }: ContentProps) => {
+  const mulighet = useAdditionalKabalMulighet();
+
   if (isLoading) {
     return (
-      <LoadingNonKlagemuligheter label="Ankemuligheter">
+      <LoadingNonKlagemuligheter label="Tidligere behandlinger i Kabal som anken gjelder">
         <NonKlageTableHeaders />
       </LoadingNonKlagemuligheter>
     );
   }
 
-  if (ankemuligheter === undefined) {
+  if (muligheter === undefined) {
     return (
       <Placeholder>
         <ParagraphIcon aria-hidden />
@@ -113,18 +111,18 @@ const Content = ({ ankemuligheter, isLoading, selectedMulighet }: ContentProps) 
     );
   }
 
-  if (ankemuligheter.length === 0) {
-    return <BodyShort>Ingen ankemuligheter</BodyShort>;
+  if (muligheter.length === 0) {
+    return <BodyShort>Ingen tidligere behandlinger i Kabal</BodyShort>;
   }
 
   return (
     <MulighetTable
-      label="Ankemuligheter"
+      label="Kabal-muligheter"
       headers={<NonKlageTableHeaders />}
-      muligheter={ankemuligheter}
+      muligheter={muligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      setMulighetHook={useSetAnkemulighetMutation}
-      selectedMulighet={selectedMulighet ?? null}
+      setMulighetHook={useSetAdditionalKabalMulighetMutation}
+      selectedMulighet={mulighet}
     />
   );
 };

@@ -11,12 +11,11 @@ import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
-import { useMulighet } from '@app/hooks/use-mulighet';
+import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
-import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
@@ -66,22 +65,18 @@ export const Tildeling = ({ saksbehandlerFromMulighetLabel }: Props) => {
 };
 
 const Actions = ({ saksbehandlerFromMulighetLabel }: Props) => {
-  const { typeId, mulighet } = useMulighet();
-
-  if (typeId === null || mulighet === undefined) {
-    return null;
-  }
+  const previousSaksbehandler = useNonKlagemulighetProp('previousSaksbehandler');
 
   return (
     <PartActionsContainer>
       <SetButton label="Fjern" title="Fjern" icon={<TrashIcon aria-hidden />} saksbehandlerIdent={null} />
-      {typeId === SaksTypeEnum.ANKE && mulighet.previousSaksbehandler !== null ? (
+      {previousSaksbehandler === null ? null : (
         <SetButton
           label={saksbehandlerFromMulighetLabel}
-          title={mulighet.previousSaksbehandler.navn}
-          saksbehandlerIdent={mulighet.previousSaksbehandler.navIdent}
+          title={previousSaksbehandler.navn}
+          saksbehandlerIdent={previousSaksbehandler.navIdent}
         />
-      ) : null}
+      )}
     </PartActionsContainer>
   );
 };

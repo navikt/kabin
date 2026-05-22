@@ -27,6 +27,7 @@ export enum ValidationFieldNames {
   SAKSBEHANDLER = 'saksbehandlerId',
   VEDTAK = 'vedtak',
   SVARBREV_INPUT = 'svarbrevInput',
+  ADDITIONAL_KABAL_MULIGHET = 'additionalKabalMulighetId',
   // Frontend specific
   MULIGHET = 'mulighet',
   ENHET = 'enhet',

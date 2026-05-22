@@ -1,5 +1,6 @@
 import type { RegistreringType } from '@app/types/common';
 import type {
+  IAdditionalKabalMulighet,
   IAnkemulighet,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
@@ -23,6 +24,11 @@ export interface SetAnkemulighetParams {
 export interface SetNonAnkemulighetParams {
   id: string;
   mulighet: IKlagemulighet | IOmgjøringskravmulighet | IBegjæringOmGjenopptakMulighet;
+}
+
+export interface SetAdditionalKabalMulighetParams {
+  id: string;
+  mulighet: IAdditionalKabalMulighet;
 }
 
 export interface SearchPartWithUtsendingskanalParams {

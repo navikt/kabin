@@ -1,4 +1,5 @@
 import { useMulighet } from '@app/hooks/use-mulighet';
+import { useBasemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useLazyGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
@@ -35,13 +36,14 @@ type NotEnoughDataPart = {
 
 export const useSakenGjelderPart = (): LoadedPart | LoadingPart | NotFoundPart | NotEnoughDataPart => {
   const { sakenGjelderValue } = useRegistrering();
-  const { mulighet, fromJournalpost } = useMulighet();
+  const { fromJournalpost } = useMulighet();
   const ytelseId = useYtelseId();
   const [getPart, { isFetching, isSuccess, isError }] = useLazyGetPartWithUtsendingskanalQuery();
   const [fetchedPart, setFetchedPart] = useState<IPart | null>();
+  const sakenGjelder = useBasemulighetProp('sakenGjelder');
 
-  if (mulighet !== undefined && !fromJournalpost) {
-    return { sakenGjelder: mulighet.sakenGjelder, isLoading: false };
+  if (!fromJournalpost && sakenGjelder !== null) {
+    return { sakenGjelder, isLoading: false };
   }
 
   if (sakenGjelderValue === null) {

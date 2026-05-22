@@ -1,4 +1,5 @@
 import { useMulighet } from '@app/hooks/use-mulighet';
+import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
@@ -14,22 +15,15 @@ interface Props {
 
 export const Warning = ({ unitTypeId, units }: Props) => {
   const ytelseId = useYtelseId();
-  const { typeId, mulighet, fromJournalpost } = useMulighet();
+  const { typeId, fromJournalpost } = useMulighet();
+  const vedtakDate = useNonKlagemulighetProp('vedtakDate');
   const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
   );
 
-  if (
-    typeId === null ||
-    svarbrevSetting === undefined ||
-    typeId === SaksTypeEnum.KLAGE ||
-    mulighet === undefined ||
-    fromJournalpost
-  ) {
+  if (typeId === null || svarbrevSetting === undefined || typeId === SaksTypeEnum.KLAGE || fromJournalpost) {
     return null;
   }
-
-  const { vedtakDate } = mulighet;
 
   if (vedtakDate === null) {
     return null;

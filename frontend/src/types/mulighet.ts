@@ -7,7 +7,7 @@ export enum FagsystemId {
   INFOTRYGD = '7',
 }
 
-interface IBasemulighet {
+export interface IBasemulighet {
   readonly id: string;
   readonly fagsakId: string;
   readonly sakenGjelder: IPart;
@@ -36,6 +36,8 @@ export interface IAnkemulighet extends IBasemulighet {
 export interface IOmgjøringskravmulighet extends IAnkemulighet {}
 
 export interface IBegjæringOmGjenopptakMulighet extends IAnkemulighet {}
+
+export interface IAdditionalKabalMulighet extends IAnkemulighet {}
 
 export interface ExistingBehandling {
   /** UUID */

@@ -4,6 +4,7 @@ import { PDF_MANAGER } from '@app/components/svarbrev/preview/pdf-manager';
 import { RenderPdf } from '@app/components/svarbrev/preview/pdf-render';
 import { defaultString } from '@app/functions/empty-string';
 import { useMulighet } from '@app/hooks/use-mulighet';
+import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
@@ -48,7 +49,8 @@ export const Preview = () => {
 
 const useUrl = () => {
   const { svarbrev, overstyringer, sakenGjelderValue } = useRegistrering();
-  const { typeId, mulighet } = useMulighet();
+  const { typeId } = useMulighet();
+  const mulighetYtelse = useNonKlagemulighetProp('ytelseId');
 
   const selectedYtelseId = overstyringer.ytelseId;
   const { mottattKlageinstans, fullmektig, klager } = overstyringer;
@@ -59,8 +61,7 @@ const useUrl = () => {
 
   const [loaders, setLoaders] = useState<PdfLoader[]>([]);
 
-  const ytelseId: string | null =
-    (typeId === SaksTypeEnum.ANKE ? (selectedYtelseId ?? mulighet?.ytelseId) : selectedYtelseId) ?? null;
+  const ytelseId = typeId === SaksTypeEnum.KLAGE ? selectedYtelseId : (selectedYtelseId ?? mulighetYtelse);
 
   useEffect(() => {
     if (

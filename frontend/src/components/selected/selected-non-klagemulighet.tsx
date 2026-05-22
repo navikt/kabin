@@ -7,7 +7,12 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import type { IAnkemulighet, IBegjæringOmGjenopptakMulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
+import type {
+  IAdditionalKabalMulighet,
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
 
@@ -16,7 +21,7 @@ interface Props {
   label: string;
 }
 
-type Mulighet = IOmgjøringskravmulighet | IAnkemulighet | IBegjæringOmGjenopptakMulighet;
+type Mulighet = IOmgjøringskravmulighet | IAnkemulighet | IBegjæringOmGjenopptakMulighet | IAdditionalKabalMulighet;
 
 export const SelectedNonKlageMulighet = ({ onClick, label }: Props) => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();

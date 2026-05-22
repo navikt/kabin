@@ -43,7 +43,7 @@ const ReadOnlyOmgjøringskravmulighet = () => {
 
   return (
     <Card>
-      <HeaderReadOnly />
+      <HeaderReadOnly>Vedtaket omgjøringskravet gjelder</HeaderReadOnly>
       <SelectedNonKlageMulighetBody {...mulighet} />
     </Card>
   );
@@ -85,7 +85,11 @@ const EditableOmgjøringskravmuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter} isLoading={isLoading} />
+      <Content
+        omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter}
+        isLoading={isLoading}
+        selectedMulighet={mulighet}
+      />
     </CardSmall>
   );
 };
@@ -93,9 +97,10 @@ const EditableOmgjøringskravmuligheter = () => {
 interface ContentProps {
   omgjøringskravmuligheter: IOmgjøringskravmulighet[] | undefined;
   isLoading: boolean;
+  selectedMulighet: IOmgjøringskravmulighet | undefined;
 }
 
-const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
+const Content = ({ omgjøringskravmuligheter, isLoading, selectedMulighet }: ContentProps) => {
   if (isLoading) {
     return (
       <LoadingNonKlagemuligheter label="Omgjøringskravmuligheter">
@@ -123,6 +128,7 @@ const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
       muligheter={omgjøringskravmuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
       setMulighetHook={useSetNonAnkemulighetMutation}
+      selectedMulighet={selectedMulighet ?? null}
     />
   );
 };

@@ -49,10 +49,10 @@ export const HeaderEditable = ({
   </div>
 );
 
-export const HeaderReadOnly = () => (
+export const HeaderReadOnly = ({ children }: { children: string }) => (
   <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
     <Heading level="1" size="small">
-      Vedtaket klagen gjelder
+      {children}
     </Heading>
   </div>
 );
