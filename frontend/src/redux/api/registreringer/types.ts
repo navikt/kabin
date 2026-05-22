@@ -2,6 +2,7 @@ import { ENVIRONMENT } from '@app/environment';
 import type { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IAddress, IPart, RegistreringType } from '@app/types/common';
 import type {
+  IAdditionalKabalMulighet,
   IAnkemulighet,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
@@ -38,6 +39,8 @@ export interface BaseRegistrering {
     gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
     muligheterFetched: string; // DateTime
   };
+  additionalKabalMuligheter: IAdditionalKabalMulighet[];
+  additionalKabalMulighet: { id: string } | null;
 }
 
 export interface DraftRegistrering extends BaseRegistrering {

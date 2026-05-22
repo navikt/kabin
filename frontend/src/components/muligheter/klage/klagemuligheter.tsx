@@ -37,7 +37,7 @@ const ReadOnlyKlagemulighet = () => {
 
   return (
     <Card>
-      <HeaderReadOnly />
+      <HeaderReadOnly>Vedtaket klagen gjelder</HeaderReadOnly>
       <SelectedKlagemulighetBody {...mulighet} />
     </Card>
   );

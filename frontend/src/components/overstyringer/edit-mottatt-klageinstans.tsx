@@ -1,6 +1,7 @@
 import { Datepicker } from '@app/components/date-picker/date-picker';
 import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
 import { FORMAT } from '@app/domain/date-formats';
+import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useJournalpost } from '@app/hooks/use-journalpost';
@@ -54,17 +55,25 @@ const FromJournalpostToNow = () => {
   return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
 
+const useFromDate = () => {
+  const { mulighet, fromJournalpost } = useMulighet();
+  const additionalKabalMulighet = useAdditionalKabalMulighet();
+
+  if (fromJournalpost) {
+    return undefined;
+  }
+
+  const vedtakDate = additionalKabalMulighet?.vedtakDate ?? mulighet?.vedtakDate;
+
+  return typeof vedtakDate === 'string' ? parseISO(vedtakDate) : undefined;
+};
+
 const FromVedtakToJournalpost = () => {
   const { overstyringer } = useRegistrering();
   const { journalpost } = useJournalpost();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
-  const { mulighet, fromJournalpost } = useMulighet();
-
-  const fromDate =
-    mulighet === undefined || fromJournalpost || mulighet.vedtakDate === null
-      ? undefined
-      : parseISO(mulighet.vedtakDate);
+  const fromDate = useFromDate();
 
   const toDate =
     journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));

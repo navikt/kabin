@@ -9,13 +9,22 @@ import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import type { SetAnkemulighetParams, SetNonAnkemulighetParams } from '@app/redux/api/registreringer/param-types';
-import type { IAnkemulighet, IBegjæringOmGjenopptakMulighet, IOmgjøringskravmulighet } from '@app/types/mulighet';
+import type {
+  SetAdditionalKabalMulighetParams,
+  SetAnkemulighetParams,
+  SetNonAnkemulighetParams,
+} from '@app/redux/api/registreringer/param-types';
+import type {
+  IAdditionalKabalMulighet,
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 import type { ValidationFieldNames } from '@app/types/validation';
 import { Table, Tag } from '@navikt/ds-react';
 import { type ReactNode, useCallback, useMemo } from 'react';
 
-type Mulighet = IAnkemulighet | IOmgjøringskravmulighet | IBegjæringOmGjenopptakMulighet;
+type Mulighet = IAnkemulighet | IOmgjøringskravmulighet | IBegjæringOmGjenopptakMulighet | IAdditionalKabalMulighet;
 
 interface Props extends CommonProps {
   label: string;
@@ -25,18 +34,25 @@ interface Props extends CommonProps {
 }
 
 interface CommonProps {
+  selectedMulighet: Mulighet | null;
   setMulighetHook: () =>
-    | readonly [(p: SetNonAnkemulighetParams | SetAnkemulighetParams) => void, { isLoading: boolean }]
-    | readonly [(p: SetAnkemulighetParams) => void, { isLoading: boolean }];
+    | readonly [(p: SetNonAnkemulighetParams) => void, { isLoading: boolean }]
+    | readonly [(p: SetAnkemulighetParams) => void, { isLoading: boolean }]
+    | readonly [(p: SetAdditionalKabalMulighetParams) => void, { isLoading: boolean }];
 }
 
-export const MulighetTable = ({ label, headers, muligheter, fieldName, setMulighetHook }: Props) => (
+export const MulighetTable = ({ label, headers, muligheter, fieldName, setMulighetHook, selectedMulighet }: Props) => (
   <div className="overflow-y-auto">
     <Table zebraStripes size="small" id={fieldName} aria-label={label}>
       {headers}
       <Table.Body>
         {muligheter.map((mulighet) => (
-          <Row key={mulighet.id} mulighet={mulighet} setMulighetHook={setMulighetHook} />
+          <Row
+            key={mulighet.id}
+            mulighet={mulighet}
+            setMulighetHook={setMulighetHook}
+            selectedMulighet={selectedMulighet}
+          />
         ))}
       </Table.Body>
     </Table>
@@ -47,15 +63,15 @@ interface RowProps extends CommonProps {
   mulighet: Mulighet;
 }
 
-const Row = ({ mulighet, setMulighetHook }: RowProps) => {
-  const { id, mulighet: registreringMulighet } = useRegistrering();
+const Row = ({ mulighet, setMulighetHook, selectedMulighet }: RowProps) => {
+  const { id } = useRegistrering();
   const { journalpost } = useJournalpost();
   const [setMulighet, { isLoading }] = setMulighetHook();
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const fagsystemName = useFagsystemName(mulighet.originalFagsystemId);
   const canEdit = useCanEdit();
 
-  const isSelected = registreringMulighet?.id === mulighet.id;
+  const isSelected = selectedMulighet?.id === mulighet.id;
 
   const isValid = useMemo(() => {
     if (journalpost === undefined) {
@@ -77,11 +93,11 @@ const Row = ({ mulighet, setMulighetHook }: RowProps) => {
         return;
       }
 
-      if (registreringMulighet === null || registreringMulighet?.id !== mulighet.id) {
+      if (selectedMulighet === null || selectedMulighet?.id !== mulighet.id) {
         setMulighet({ id, mulighet });
       }
     },
-    [isValid, registreringMulighet, mulighet, id, setMulighet],
+    [isValid, selectedMulighet, mulighet, id, setMulighet],
   );
 
   return (

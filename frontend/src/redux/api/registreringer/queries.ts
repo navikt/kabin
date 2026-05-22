@@ -11,6 +11,7 @@ import {
 } from '@app/redux/api/registreringer/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type {
+  IAdditionalKabalMulighet,
   IAnkemulighet,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
@@ -68,10 +69,29 @@ const queriesSlice = registreringApi.injectEndpoints({
         );
       },
     }),
+
+    getAdditionalKabalMuligheter: builder.query<IAdditionalKabalMulighet[], string>({
+      query: (id) => `/registreringer/${id}/additional-kabal-muligheter`,
+      onQueryStarted: async (id, { queryFulfilled, dispatch }) => {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          queriesSlice.util.updateQueryData('getRegistrering', id, (draft) => ({
+            ...draft,
+            additionalKabalMuligheter: data,
+          })),
+        );
+      },
+    }),
   }),
 });
 
-export const { useLazyGetMuligheterQuery, useGetFerdigeRegistreringerQuery, useGetRegistreringQuery } = queriesSlice;
+export const {
+  useLazyGetMuligheterQuery,
+  useGetFerdigeRegistreringerQuery,
+  useGetRegistreringQuery,
+  useLazyGetAdditionalKabalMuligheterQuery,
+} = queriesSlice;
 
 // Registrering
 export const updateRegistrering = (id: string, update: UpdateFn<Registrering>) =>

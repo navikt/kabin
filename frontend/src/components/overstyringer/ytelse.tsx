@@ -1,6 +1,7 @@
 import { YtelseTag } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
+import { useBasemulighetProp, useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useTemaId } from '@app/hooks/use-tema-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -10,32 +11,24 @@ import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyring
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, Heading, Select, Skeleton, Tag } from '@navikt/ds-react';
+import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 const ID = ValidationFieldNames.YTELSE_ID;
 const HEADING_ID = 'ytelse-heading';
 
 export const Ytelse = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId } = useMulighet();
+  const currentFagsystemId = useBasemulighetProp('currentFagsystemId');
+  const ytelseId = useNonKlagemulighetProp('ytelseId');
   const canEdit = useCanEdit();
-
-  if (typeId === null) {
-    return null;
-  }
 
   if (!canEdit) {
     return <ReadOnly />;
   }
 
-  if (typeId === SaksTypeEnum.ANKE) {
-    if (mulighet === undefined) {
-      return <LoadingYtelse />;
-    }
-
-    if (mulighet.currentFagsystemId === FagsystemId.KABAL) {
-      return <PredefinedYtelse ytelseId={mulighet.ytelseId} />;
-    }
+  if (typeId !== SaksTypeEnum.KLAGE && currentFagsystemId === FagsystemId.KABAL) {
+    return <PredefinedYtelse ytelseId={ytelseId} />;
   }
 
   return <CustomYtelse />;
@@ -63,13 +56,6 @@ const ReadOnly = () => {
     </section>
   );
 };
-
-const LoadingYtelse = () => (
-  <section className="col-[1]" aria-labelledby={HEADING_ID}>
-    {HEADING}
-    <Skeleton variant="rounded" width={500} height={32} />
-  </section>
-);
 
 interface PredefinedYtelseProps {
   ytelseId: string | null;

@@ -2,6 +2,7 @@ import { CardLarge, CardSmall } from '@app/components/card/card';
 import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
+import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional-kabal-mulighet/additional-kabal-mulighet';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
 import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
@@ -12,6 +13,7 @@ import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
 import { getKlagerTitle } from '@app/functions/get-klager-name';
+import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -172,6 +174,7 @@ export const TypeInput = () => {
       <>
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
+        <AdditionalKabalMuligheter />
         <GosysOppgaver />
         <Overstyringer title="Tilpass anken" klagerLabel={klagerLabel} saksbehandlerFromMulighetLabel="Fra klagen" />
         <Svarbrev />
@@ -258,8 +261,8 @@ const WillCreateNewJournalpostInfo = () => {
     return null;
   }
 
-  const fromId = <b>{journalpostAndMulighet.journalpost.sak?.fagsakId ?? 'ukjent'}</b>;
-  const toId = <b>{journalpostAndMulighet.mulighet.fagsakId}</b>;
+  const fromId = <b>{journalpostAndMulighet.fromId ?? 'ukjent'}</b>;
+  const toId = <b>{journalpostAndMulighet.toId ?? 'ukjent'}</b>;
 
   return (
     <Alert variant="info" size="small">
@@ -272,10 +275,14 @@ const WillCreateNewJournalpostInfo = () => {
 const useJournalpostAndMulighet = () => {
   const { journalpost } = useJournalpost();
   const { mulighet, fromJournalpost } = useMulighet();
+  const additionalKabalMulighet = useAdditionalKabalMulighet();
 
   if (journalpost === undefined || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
-  return { journalpost, mulighet };
+  return {
+    fromId: journalpost.sak?.fagsakId ?? null,
+    toId: additionalKabalMulighet?.fagsakId ?? mulighet.fagsakId,
+  };
 };

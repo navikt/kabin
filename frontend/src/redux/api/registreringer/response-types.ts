@@ -17,4 +17,10 @@ export interface SetMulighetResponse extends BaseResponse {
   svarbrev: Svarbrev;
 }
 
+export interface SetAdditionalKabalMulighetResponse {
+  id: string;
+  additionalMulighetId: string;
+  ytelseId: string;
+}
+
 export type FerdigstiltRegistreringResponse = BaseResponse & Pick<FinishedRegistrering, 'finished' | 'behandlingId'>;

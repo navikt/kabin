@@ -1,12 +1,17 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import type {
+  SetAdditionalKabalMulighetParams,
   SetAnkemulighetParams,
   SetNonAnkemulighetParams,
   SetTypeParams,
 } from '@app/redux/api/registreringer/param-types';
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
-import type { SetMulighetResponse, SetTypeResponse } from '@app/redux/api/registreringer/response-types';
+import type {
+  SetAdditionalKabalMulighetResponse,
+  SetMulighetResponse,
+  SetTypeResponse,
+} from '@app/redux/api/registreringer/response-types';
 import type { DraftRegistrering } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
@@ -159,6 +164,25 @@ const mutationsSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+
+    setAdditionalKabalMulighet: builder.mutation<SetAdditionalKabalMulighetResponse, SetAdditionalKabalMulighetParams>({
+      query: ({ id, mulighet }) => ({
+        url: `/registreringer/${id}/additional-kabal-mulighet`,
+        method: 'PUT',
+        body: { mulighetId: mulighet.id },
+      }),
+      onQueryStarted: async ({ id, mulighet }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({ ...draft, additionalKabalMulighet: { id: mulighet.id } }));
+
+        try {
+          const { data } = await queryFulfilled;
+
+          pessimisticUpdate(id, { overstyringer: { ytelseId: data.ytelseId } });
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -170,4 +194,5 @@ export const {
   useSetMulighetIsBasedOnJournalpostMutation,
   useSetMulighetBasedOnJournalpostMutation,
   useSetNonAnkemulighetMutation,
+  useSetAdditionalKabalMulighetMutation,
 } = mutationsSlice;

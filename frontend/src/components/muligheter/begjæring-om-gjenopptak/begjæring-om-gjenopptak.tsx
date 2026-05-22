@@ -43,7 +43,7 @@ const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
 
   return (
     <Card>
-      <HeaderReadOnly />
+      <HeaderReadOnly>Vedtaket begjæringen om gjenopptak gjelder</HeaderReadOnly>
       <SelectedNonKlageMulighetBody {...mulighet} />
     </Card>
   );
@@ -90,7 +90,11 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
+      <Content
+        begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter}
+        isLoading={isLoading}
+        selectedMulighet={mulighet}
+      />
     </CardSmall>
   );
 };
@@ -98,9 +102,10 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 interface ContentProps {
   begjæringOmGjenopptakMuligheter: IBegjæringOmGjenopptakMulighet[] | undefined;
   isLoading: boolean;
+  selectedMulighet: IBegjæringOmGjenopptakMulighet | undefined;
 }
 
-const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) => {
+const Content = ({ begjæringOmGjenopptakMuligheter, isLoading, selectedMulighet }: ContentProps) => {
   if (isLoading) {
     return (
       <LoadingNonKlagemuligheter label="Muligheter for beegjæring om gjenopptak">
@@ -128,6 +133,7 @@ const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) 
       muligheter={begjæringOmGjenopptakMuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
       setMulighetHook={useSetNonAnkemulighetMutation}
+      selectedMulighet={selectedMulighet ?? null}
     />
   );
 };
