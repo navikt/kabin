@@ -139,7 +139,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
           label: 'Fullmektig fra forrige sak',
           defaultPart: defaultMulighetFullmektig,
           title: 'Fullmektig fra forrige sak',
-          icon: <StyledFullmektigIcon aria-hidden />, 
+          icon: <StyledFullmektigIcon aria-hidden />,
         }
       : null;
 
