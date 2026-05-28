@@ -35,9 +35,9 @@ export const Ankemuligheter = () => {
 };
 
 const ReadOnlyAnkemulighet = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.ANKE || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
@@ -50,7 +50,7 @@ const ReadOnlyAnkemulighet = () => {
 };
 
 const EditableAnkemuligheter = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { journalpost } = useJournalpost();
   const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
@@ -61,7 +61,7 @@ const EditableAnkemuligheter = () => {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.ANKE) {
+  if (typeId !== SaksTypeEnum.ANKE || fromJournalpost) {
     return null;
   }
 

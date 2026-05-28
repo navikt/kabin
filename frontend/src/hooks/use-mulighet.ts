@@ -33,7 +33,7 @@ interface BegjæringOmGjenopptakResult {
 }
 
 interface JournalpostmulighetResult {
-  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK | SaksTypeEnum.OMGJØRINGSKRAV;
+  typeId: SaksTypeEnum;
   fromJournalpost: true;
   mulighet: Mulighet | undefined;
 }
@@ -63,10 +63,7 @@ export const useMulighet = ():
   const omgjøringskravmulighet = selectMulighet(omgjoeringskravmuligheter, mulighet);
   const gjenopptaksmulighet = selectMulighet(gjenopptaksmuligheter, mulighet);
 
-  if (
-    mulighetIsBasedOnJournalpost &&
-    (typeId === SaksTypeEnum.OMGJØRINGSKRAV || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK)
-  ) {
+  if (mulighetIsBasedOnJournalpost && typeId !== null) {
     return { typeId, mulighet: mulighet ?? undefined, fromJournalpost: true };
   }
 

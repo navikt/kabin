@@ -29,9 +29,9 @@ export const Klagemuligheter = () => {
 };
 
 const ReadOnlyKlagemulighet = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
@@ -44,7 +44,7 @@ const ReadOnlyKlagemulighet = () => {
 };
 
 const EditableKlagemuligheter = () => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
   const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -54,7 +54,7 @@ const EditableKlagemuligheter = () => {
     setIsExpanded(true);
   }
 
-  if (typeId !== SaksTypeEnum.KLAGE) {
+  if (typeId !== SaksTypeEnum.KLAGE || fromJournalpost) {
     return null;
   }
 

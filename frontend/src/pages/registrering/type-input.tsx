@@ -109,9 +109,7 @@ export const TypeSelect = () => {
         <ToggleGroup.Item value={SaksTypeEnum.OMGJØRINGSKRAV}>Omgjøringskrav</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK}>Begjæring om gjenopptak</ToggleGroup.Item>
       </ToggleGroup>
-      {value === SaksTypeEnum.OMGJØRINGSKRAV || value === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? (
-        <FraJournalpostCheckbox />
-      ) : null}
+      <FraJournalpostCheckbox />
     </HStack>
   );
 };
@@ -170,7 +168,20 @@ export const TypeInput = () => {
   const klagerLabel = getKlagerTitle(typeId);
 
   if (typeId === SaksTypeEnum.ANKE) {
-    return (
+    return mulighetIsBasedOnJournalpost ? (
+      <>
+        <Journalpostmuligheter title="Velg vedtaket som anken gjelder" />
+        <WillCreateNewJournalpostInfo />
+        <AdditionalKabalMuligheter />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass anken"
+          klagerLabel={klagerLabel}
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
       <>
         <Ankemuligheter />
         <WillCreateNewJournalpostInfo />
@@ -183,7 +194,19 @@ export const TypeInput = () => {
   }
 
   if (typeId === SaksTypeEnum.KLAGE) {
-    return (
+    return mulighetIsBasedOnJournalpost ? (
+      <>
+        <Journalpostmuligheter title="Velg vedtaket som klagen gjelder" />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass klagen"
+          klagerLabel={klagerLabel}
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
       <>
         <Klagemuligheter />
         <WillCreateNewJournalpostInfo />
