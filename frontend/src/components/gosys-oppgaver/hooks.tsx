@@ -1,5 +1,5 @@
+import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { useBasemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useTemaId } from '@app/hooks/use-tema-id';
 import type { IGetGosysOppgaverParams } from '@app/redux/api/oppgaver';
@@ -18,11 +18,11 @@ export const useParams = (): IGetGosysOppgaverParams | typeof skipToken => {
 
 export const useIsEnabled = () => {
   const { mulighet, fromJournalpost } = useMulighet();
-  const requiresGosysOppgave = useBasemulighetProp('requiresGosysOppgave');
+  const additionalKabalMulighet = useAdditionalKabalMulighet();
 
   if (fromJournalpost) {
-    return typeof mulighet?.id === 'string';
+    return typeof additionalKabalMulighet?.id === 'string' || typeof mulighet?.id === 'string';
   }
 
-  return requiresGosysOppgave === true;
+  return mulighet?.requiresGosysOppgave === true;
 };
