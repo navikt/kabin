@@ -20,7 +20,6 @@ import { useLazyGetAdditionalKabalMuligheterQuery } from '@app/redux/api/registr
 import type { IAdditionalKabalMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const AdditionalKabalMuligheter = () => {
@@ -55,6 +54,10 @@ const EditableAdditionalKabalMuligheter = () => {
   const [refetch, { isFetching, isLoading }] = useLazyGetAdditionalKabalMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
   const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
+
+  if (additionalKabalMuligheter.length === 0) {
+    return null;
+  }
 
   if (mulighet === null && !isExpanded) {
     setIsExpanded(true);
@@ -109,10 +112,6 @@ const Content = ({ muligheter, isLoading }: ContentProps) => {
         <ParagraphIcon aria-hidden />
       </Placeholder>
     );
-  }
-
-  if (muligheter.length === 0) {
-    return <BodyShort>Ingen tidligere behandlinger i Kabal</BodyShort>;
   }
 
   return (
