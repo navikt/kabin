@@ -13,9 +13,9 @@ interface Props {
 }
 
 export const SelectedKlagemulighet = ({ onClick }: Props) => {
-  const { typeId, mulighet } = useMulighet();
+  const { typeId, mulighet, fromJournalpost } = useMulighet();
 
-  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined) {
+  if (typeId !== SaksTypeEnum.KLAGE || mulighet === undefined || fromJournalpost) {
     return null;
   }
 
