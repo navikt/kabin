@@ -16,6 +16,7 @@ export default defineConfig(({ command }) => ({
     proxy: {
       '/api': 'https://kabin.intern.dev.nav.no',
       '/version': 'https://kabin.intern.dev.nav.no',
+      '/feature-toggle': 'https://kabin.intern.dev.nav.no',
     },
   },
 }));

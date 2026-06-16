@@ -51,6 +51,7 @@ spec:
         - application: kabal-api
         - application: kabal-innstillinger
         - application: klage-kodeverk-api
+        - application: klage-unleash-proxy
       external:
         - host: login.microsoftonline.com
         - host: hooks.slack.com

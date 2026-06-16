@@ -26,6 +26,7 @@
     "@fastify/cors": "11.2.0",
     "@fastify/http-proxy": "11.4.4",
     "@fastify/otel": "0.18.1",
+    "@fastify/type-provider-typebox": "6.1.0",
     "@navikt/oasis": "4.1.4",
     "@opentelemetry/api": "1.9.1",
     "@opentelemetry/exporter-trace-otlp-grpc": "0.217.0",
@@ -40,6 +41,7 @@
     "fastify": "5.8.5",
     "fastify-metrics": "13.2.0",
     "fastify-plugin": "5.1.0",
-    "prom-client": "15.1.3"
+    "prom-client": "15.1.3",
+    "typebox": "1.2.8"
   }
 }

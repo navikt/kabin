@@ -18,6 +18,7 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetFeatureToggleQuery } from '@app/redux/api/feature-toggles';
 import {
   useSetMulighetIsBasedOnJournalpostMutation,
   useSetTypeMutation,
@@ -115,8 +116,16 @@ export const TypeSelect = () => {
 };
 
 const FraJournalpostCheckbox = () => {
-  const { mulighetIsBasedOnJournalpost, id } = useRegistrering();
+  const { mulighetIsBasedOnJournalpost, id, typeId } = useRegistrering();
   const [setMulighetBasedOnJournalpost, { isLoading }] = useSetMulighetIsBasedOnJournalpostMutation();
+  const { data } = useGetFeatureToggleQuery('mulighet-is-based-on-journalpost');
+
+  const enabled =
+    data?.enabled === true || typeId === SaksTypeEnum.OMGJØRINGSKRAV || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+
+  if (!enabled) {
+    return null;
+  }
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (mulighetIsBasedOnJournalpost === event.target.checked) {
