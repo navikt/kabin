@@ -31,7 +31,6 @@ export const UnitType = ({ disabled = false, value, onChange }: Props) => (
         key={t}
         value={t}
         label={BEHANDLINGSTID_UNIT_TYPE_NAMES[t]}
-        // @ts-expect-error missing type in ds-react
         disabled={disabled}
         className={disabled ? 'pointer-events-none' : 'pointer-events-auto'}
         aria-disabled={disabled}
