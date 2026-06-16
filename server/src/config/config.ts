@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { isLocal } from '@app/config/env';
+import { isLocal, isTest } from '@app/config/env';
 import { requiredEnvString } from '@app/config/env-var';
 
 const KABIN_API = 'kabin-api';
@@ -14,8 +14,10 @@ const serverDirectoryPath = cwd;
 const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');
 
-const defaultValue = isLocal ? 'local' : undefined;
+const defaultValue = isLocal || isTest ? 'local' : undefined;
 
 export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);
+export const NAIS_APP_NAME = requiredEnvString('NAIS_APP_NAME', defaultValue);
+export const NAIS_POD_NAME = requiredEnvString('NAIS_POD_NAME', defaultValue);
 export const START_TIME = Date.now();

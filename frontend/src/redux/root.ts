@@ -1,3 +1,4 @@
+import { featureToggleApi } from '@app/redux/api/feature-toggles';
 import { arkiverteDokumenterApi } from '@app/redux/api/journalposter';
 import { kodeverkApi } from '@app/redux/api/kodeverk';
 import { gosysOppgaverApi } from '@app/redux/api/oppgaver';
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
   [saksbehandlereApi.reducerPath]: saksbehandlereApi.reducer,
   [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [statusApi.reducerPath]: statusApi.reducer,
+  [featureToggleApi.reducerPath]: featureToggleApi.reducer,
 });

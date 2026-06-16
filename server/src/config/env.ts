@@ -1,5 +1,6 @@
 import { requiredEnvString } from '@app/config/env-var';
 import { serverConfig } from '@app/config/server-config';
+import { hasOwn } from '@app/functions/functions';
 
 const getEnvironmentVersion = <T>(local: T, development: T, production: T): T => {
   if (isDeployedToDev) {
@@ -17,6 +18,7 @@ const isDeployedToDev = serverConfig.cluster === 'dev-gcp';
 const isDeployedToProd = serverConfig.cluster === 'prod-gcp';
 export const isDeployed = isDeployedToDev || isDeployedToProd;
 export const isLocal = !isDeployed;
+export const isTest = hasOwn(process.env, 'NODE_ENV') && process.env.NODE_ENV === 'test';
 
 export const ENVIRONMENT = getEnvironmentVersion('local', 'development', 'production');
 

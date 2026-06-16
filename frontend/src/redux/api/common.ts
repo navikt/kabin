@@ -106,6 +106,8 @@ const staggeredBaseQuery = (baseUrl: string) => {
 
 const API_PATH = '/api';
 
+export const ROOT_BASE_QUERY = staggeredBaseQuery('/');
+
 export const KABIN_API_BASE_PATH = `${API_PATH}/kabin-api`;
 export const KABIN_API_BASE_QUERY = staggeredBaseQuery(KABIN_API_BASE_PATH);
 
