@@ -3,6 +3,7 @@ import { DocumentsBase } from '@app/components/documents/documents-base';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
+import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { skipToken } from '@reduxjs/toolkit/query';
 
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const Journalpostmuligheter = ({ title }: Props) => {
-  const { sakenGjelderValue, mulighet, journalpostId } = useRegistrering();
+  const { sakenGjelderValue, mulighet, journalpostId, typeId } = useRegistrering();
   const { data, isLoading, isFetching, refetch } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
   const { id } = useRegistrering();
   const [setJournalpostId, { isLoading: selectIsLoading }] = useSetMulighetBasedOnJournalpostMutation();
@@ -28,11 +29,18 @@ export const Journalpostmuligheter = ({ title }: Props) => {
 
   const getCanBeSelected = (document: IArkivertDocument): CanBeSelected => {
     if (!document.harTilgangTilArkivvariant) {
-      return [false, 'Du har ikke tilgang til dette dokumentet'];
+      return [false, 'Du har ikke tilgang til dette dokumentet.'];
     }
 
     if (typeof document.sak?.fagsakId !== 'string') {
-      return [false, 'Ingen fagsak tilknyttet'];
+      return [false, 'Ingen fagsak tilknyttet.'];
+    }
+
+    if (
+      (typeId === SaksTypeEnum.KLAGE || typeId === SaksTypeEnum.ANKE) &&
+      document.sak.fagsystemId !== FAGSYSTEM_ARENA
+    ) {
+      return [false, 'Opprettelse av klage eller anke basert på journalpost er bare tilgjengelig for saker fra Arena.'];
     }
 
     return [true, undefined];
@@ -50,3 +58,5 @@ export const Journalpostmuligheter = ({ title }: Props) => {
     />
   );
 };
+
+const FAGSYSTEM_ARENA = '3';
