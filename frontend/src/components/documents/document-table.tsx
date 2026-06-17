@@ -24,6 +24,7 @@ export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, ge
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
   const [selectedSaksIds, setSelectedSaksIds] = useState<string[]>([]);
+  const [selectedFagsystemIds, setSelectedFagsystemIds] = useState<string[]>([]);
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(undefined);
   const [expanded, setExpanded] = useState(getExpandedRecords(dokumenter, true));
   const someExpanded = useMemo(() => Object.values(expanded).some((e) => e), [expanded]);
@@ -35,6 +36,7 @@ export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, ge
     selectedSaksIds,
     selectedTemaer,
     selectedTypes,
+    selectedFagsystemIds,
     search,
   );
 
@@ -53,6 +55,8 @@ export const DocumentTable = ({ dokumenter, selectJournalpost, getIsSelected, ge
         setSelectedAvsenderMottakere={setSelectedAvsenderMottakere}
         selectedSaksIds={selectedSaksIds}
         setSelectedSaksIds={setSelectedSaksIds}
+        selectedFagsystemIds={selectedFagsystemIds}
+        setSelectedFagsystemIds={setSelectedFagsystemIds}
         selectedDateRange={selectedDateRange}
         setSelectedDateRange={setSelectedDateRange}
         documents={dokumenter}

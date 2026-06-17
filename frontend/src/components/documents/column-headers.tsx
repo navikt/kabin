@@ -1,5 +1,9 @@
 import { DateFilter } from '@app/components/documents/date-filter';
-import { getSaksIdOptions, useAvsenderMottakerNoteurOptions } from '@app/components/documents/filter-helpers';
+import {
+  getSaksIdOptions,
+  useAvsenderMottakerNoteurOptions,
+  useFagsystemOptions,
+} from '@app/components/documents/filter-helpers';
 import { GridArea, GridSearch, StyledGrid } from '@app/components/documents/styled-grid-components';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
@@ -29,6 +33,8 @@ interface Props {
   setSelectedAvsenderMottakere: (value: string[]) => void;
   selectedSaksIds: string[];
   setSelectedSaksIds: (value: string[]) => void;
+  selectedFagsystemIds: string[];
+  setSelectedFagsystemIds: (value: string[]) => void;
   selectedDateRange: DateRange | undefined;
   setSelectedDateRange: (range: DateRange | undefined) => void;
   someExpanded: boolean;
@@ -44,11 +50,13 @@ export const ColumnHeaders = ({
   selectedSaksIds,
   selectedTemaer,
   selectedTypes,
+  selectedFagsystemIds,
   setSelectedAvsenderMottakere,
   setSelectedDateRange,
   setSelectedSaksIds,
   setSelectedTemaer,
   setSelectedTypes,
+  setSelectedFagsystemIds,
   someExpanded,
   toggleExpandAll,
 }: Props) => {
@@ -59,6 +67,7 @@ export const ColumnHeaders = ({
     [allTemaer],
   );
 
+  const fagsystemOptions = useFagsystemOptions(documents);
   const avsenderMottakerOptions = useAvsenderMottakerNoteurOptions(documents);
   const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
 
@@ -69,6 +78,7 @@ export const ColumnHeaders = ({
     setSelectedAvsenderMottakere([]);
     setSelectedSaksIds([]);
     setSelectedDateRange(undefined);
+    setSelectedFagsystemIds([]);
   };
 
   const resetFiltersDisabled = useMemo(
@@ -78,7 +88,8 @@ export const ColumnHeaders = ({
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
-      selectedDateRange === undefined,
+      selectedDateRange === undefined &&
+      selectedFagsystemIds.length === 0,
     [
       search.length,
       selectedAvsenderMottakere.length,
@@ -86,6 +97,7 @@ export const ColumnHeaders = ({
       selectedSaksIds.length,
       selectedTemaer.length,
       selectedTypes.length,
+      selectedFagsystemIds.length,
     ],
   );
 
@@ -153,6 +165,16 @@ export const ColumnHeaders = ({
           style={{ gridArea: GridArea.SAKS_ID }}
         >
           Saks-ID
+        </FilterDropdown>
+
+        <FilterDropdown
+          options={fagsystemOptions}
+          onChange={setSelectedFagsystemIds}
+          selected={selectedFagsystemIds}
+          align="left"
+          style={{ gridArea: GridArea.FAGSYSTEM }}
+        >
+          Fagsystem
         </FilterDropdown>
 
         <FilterDropdown

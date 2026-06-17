@@ -26,7 +26,7 @@ export const LeftColumn = ({ className = '', style, ...props }: ColumnProps) => 
   <VStack
     gap="space-16"
     height="100%"
-    width="1150px"
+    width="1250px"
     overflowX="auto"
     overflowY="auto"
     paddingBlock="space-8 space-16"

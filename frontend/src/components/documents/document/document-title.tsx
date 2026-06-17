@@ -3,7 +3,7 @@ import { EditTitle } from '@app/components/documents/document/edit-document-titl
 import { DocumentViewerContext, type ViewedVedlegg } from '@app/pages/registrering/document-viewer-context';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
 interface Props {
@@ -28,25 +28,26 @@ export const DocumentTitle = ({ dokument }: Props) => {
 
   if (!editMode) {
     return (
-      <HStack align="center" gap="space-4" height="2rem" overflow="hidden" wrap={false}>
-        <div
-          title={tittel}
-          data-testid="document-title"
-          className={`select-text truncate ${isActive ? 'font-bold' : 'font-normal'}`}
-        >
-          {tittel}
-        </div>
-        <DocumentWarnings varianter={varianter} />
-        <Button
-          data-color="neutral"
-          size="xsmall"
-          variant="tertiary"
-          icon={<PencilIcon aria-hidden />}
-          title="Endre"
-          onClick={enterEditMode}
-          onMouseDown={(e) => e.stopPropagation()}
-        />
-      </HStack>
+      <Tooltip content={tittel}>
+        <HStack align="center" gap="space-4" height="2rem" overflow="hidden" wrap={false}>
+          <div
+            data-testid="document-title"
+            className={`select-text truncate ${isActive ? 'font-bold' : 'font-normal'}`}
+          >
+            {tittel}
+          </div>
+          <DocumentWarnings varianter={varianter} />
+          <Button
+            data-color="neutral"
+            size="xsmall"
+            variant="tertiary"
+            icon={<PencilIcon aria-hidden />}
+            title="Endre"
+            onClick={enterEditMode}
+            onMouseDown={(e) => e.stopPropagation()}
+          />
+        </HStack>
+      </Tooltip>
     );
   }
 

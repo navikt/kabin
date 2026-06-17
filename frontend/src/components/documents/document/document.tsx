@@ -8,10 +8,16 @@ import { SelectDocumentButton } from '@app/components/documents/document/select-
 import type { BaseSelectDocumentProps } from '@app/components/documents/document/types';
 import { useViewDocument } from '@app/components/documents/document/use-view-document';
 import { ViewDocumentButton } from '@app/components/documents/document/view-document-button';
-import { GridArea, GridTag, StyledField, StyledGrid } from '@app/components/documents/styled-grid-components';
+import {
+  CustomTooltipField,
+  GridArea,
+  GridTag,
+  SimpleTextField,
+  StyledGrid,
+} from '@app/components/documents/styled-grid-components';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
-import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
+import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { CSSProperties } from 'react';
@@ -49,6 +55,7 @@ export const Dokument = ({
   } = dokument;
 
   const temaName = useFullTemaNameFromId(temaId);
+  const fagsystemName = useFagsystemName(sak?.fagsystemId);
 
   const isSelected = getIsSelected(journalpostId);
 
@@ -105,17 +112,20 @@ export const Dokument = ({
         <div className="relative" style={{ gridArea: GridArea.TITLE }}>
           <DocumentTitle dokument={dokument} />
         </div>
-        <GridTag variant="alt3" size="small" title={temaName} gridArea={GridArea.TEMA}>
-          <span className="w-full truncate text-left">{temaName}</span>
-        </GridTag>
+        <Tooltip content={temaName}>
+          <GridTag variant="alt3" size="small" gridArea={GridArea.TEMA}>
+            <span className="w-full truncate text-left">{temaName}</span>
+          </GridTag>
+        </Tooltip>
         <HStack as="time" align="center" wrap={false} style={{ gridArea: GridArea.DATE }} dateTime={datoOpprettet}>
           {isoDateTimeToPrettyDate(datoOpprettet)}
         </HStack>
         <AvsenderMottakerNotatforer {...dokument} />
-        <StyledField gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</StyledField>
-        <StyledField gridArea={GridArea.TYPE}>
+        <SimpleTextField gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</SimpleTextField>
+        <SimpleTextField gridArea={GridArea.FAGSYSTEM}>{sak === null ? 'Ingen' : fagsystemName}</SimpleTextField>
+        <CustomTooltipField gridArea={GridArea.TYPE} tooltip={journalposttype}>
           <Journalposttype journalposttype={journalposttype} />
-        </StyledField>
+        </CustomTooltipField>
         <ViewDocumentButton
           viewDocument={onMouseDown}
           isViewed={isViewed}

@@ -1,4 +1,4 @@
-import { Button, HStack, Search, Tag } from '@navikt/ds-react';
+import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
 import type { ComponentProps } from 'react';
 
 export enum GridArea {
@@ -8,6 +8,7 @@ export enum GridArea {
   DATE = 'date',
   AVSENDER_MOTTAKER = 'avsenderMottaker',
   SAKS_ID = 'saksId',
+  FAGSYSTEM = 'fagsystem',
   TYPE = 'type',
   VIEW = 'view',
   SELECT = 'select',
@@ -21,6 +22,7 @@ const gridTemplateAreas = [
   GridArea.DATE,
   GridArea.AVSENDER_MOTTAKER,
   GridArea.SAKS_ID,
+  GridArea.FAGSYSTEM,
   GridArea.TYPE,
   GridArea.VIEW,
   GridArea.SELECT,
@@ -44,7 +46,7 @@ export const StyledGrid = ({
     style={{
       gridTemplateRows: 'min-content min-content',
       gridTemplateColumns:
-        '32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(170px, 2fr) 110px 90px 30px 55px 20px',
+        '32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(170px, 2fr) 110px 100px 90px 30px 55px 20px',
       gridTemplateAreas: `'${gridTemplateAreas.join(' ')}' '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}'`,
       ...style,
     }}
@@ -62,12 +64,27 @@ export const GridSearch = ({ gridArea, style, ...props }: GridSearchProps) => (
   <Search style={{ gridArea, ...style }} {...props} />
 );
 
-interface StyledFieldProps extends ComponentProps<'span'>, GridAreaProps {}
+interface StyledFieldProps extends GridAreaProps {
+  children: string;
+}
 
-export const StyledField = ({ gridArea, className = '', style, ...props }: StyledFieldProps) => (
-  <HStack asChild align="center" className="truncate text-left">
-    <span className={className} style={{ gridArea, ...style }} {...props} />
-  </HStack>
+export const SimpleTextField = ({ gridArea, children }: StyledFieldProps) => (
+  <CustomTooltipField gridArea={gridArea} tooltip={children}>
+    {children}
+  </CustomTooltipField>
+);
+
+interface CustomTooltipFieldProps extends GridAreaProps {
+  children: React.ReactNode;
+  tooltip: string;
+}
+
+export const CustomTooltipField = ({ gridArea, children, tooltip }: CustomTooltipFieldProps) => (
+  <Tooltip content={tooltip}>
+    <span style={{ gridArea }} className="truncate">
+      {children}
+    </span>
+  </Tooltip>
 );
 
 interface GridButtonProps extends GridAreaProps {
