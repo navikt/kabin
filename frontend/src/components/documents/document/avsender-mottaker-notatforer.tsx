@@ -1,5 +1,5 @@
 import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
-import { GridArea, StyledField } from '@app/components/documents/styled-grid-components';
+import { CustomTooltipField, GridArea } from '@app/components/documents/styled-grid-components';
 import { useGetKlageenheterQuery } from '@app/redux/api/kodeverk';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { useMemo } from 'react';
@@ -21,25 +21,27 @@ export const AvsenderMottakerNotatforer = ({
     [enheter, journalfoerendeEnhet],
   );
 
-  const [text, title] = useMemo<[string, string | undefined]>(() => {
+  const [text, tooltip] = useMemo<[string, string]>(() => {
     if (journalposttype === JournalposttypeEnum.NOTAT) {
       if (journalfortAvNavn === null) {
         if (typeof enhetNavn === 'string') {
-          return [enhetNavn, undefined];
+          return [enhetNavn, enhetNavn];
         }
 
-        return ['Ukjent', undefined];
+        return ['Ukjent', 'Ukjent'];
       }
 
-      return [journalfortAvNavn, enhetNavn];
+      return [journalfortAvNavn, `${journalfortAvNavn}${enhetNavn === undefined ? '' : ` (${enhetNavn})`}`];
     }
 
-    return [formatAvsenderMottaker(avsenderMottaker), undefined];
+    const formatted = formatAvsenderMottaker(avsenderMottaker);
+
+    return [formatted, formatted];
   }, [avsenderMottaker, enhetNavn, journalfortAvNavn, journalposttype]);
 
   return (
-    <StyledField gridArea={GridArea.AVSENDER_MOTTAKER} title={title}>
+    <CustomTooltipField gridArea={GridArea.AVSENDER_MOTTAKER} tooltip={tooltip}>
       {text}
-    </StyledField>
+    </CustomTooltipField>
   );
 };

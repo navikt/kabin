@@ -1,6 +1,6 @@
 import { fuzzySearch } from '@app/components/fuzzy-search/fuzzy-search';
 import { splitQuery } from '@app/components/fuzzy-search/split-query';
-import { useGetKlageenheterQuery, useGetVedtaksenheterQuery } from '@app/redux/api/kodeverk';
+import { useGetFagsystemerQuery, useGetKlageenheterQuery, useGetVedtaksenheterQuery } from '@app/redux/api/kodeverk';
 import { AvsenderMottakerType, type DateRange } from '@app/types/common';
 import { type IArkivertDocument, type IVedlegg, JournalposttypeEnum } from '@app/types/dokument';
 import { isWithinInterval, parseISO } from 'date-fns';
@@ -120,6 +120,35 @@ interface ScoredArkivertDocument extends IArkivertDocument {
   vedlegg: ScoredVedlegg[];
 }
 
+export const useFagsystemOptions = (documents: IArkivertDocument[]): IOption<string>[] => {
+  const { data: fagsystemer = [] } = useGetFagsystemerQuery();
+
+  return useMemo(
+    () =>
+      documents.reduce<IOption<string>[]>((acc, { sak }) => {
+        if (sak === null) {
+          if (acc.every((o) => o.value !== NONE)) {
+            acc.push({ label: 'Ingen', value: NONE });
+          }
+
+          return acc;
+        }
+
+        const { fagsystemId } = sak;
+
+        if (acc.some((o) => o.value === fagsystemId)) {
+          return acc;
+        }
+
+        const label = fagsystemer.find(({ id }) => id === fagsystemId)?.beskrivelse ?? fagsystemId;
+        acc.push({ label, value: fagsystemId });
+
+        return acc;
+      }, []),
+    [documents, fagsystemer],
+  );
+};
+
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
@@ -127,6 +156,7 @@ export const useFilteredDocuments = (
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
+  selectedFagsystemIds: string[],
   search: string,
 ): IArkivertDocument[] =>
   useMemo(() => {
@@ -139,7 +169,8 @@ export const useFilteredDocuments = (
             avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
           )) &&
         (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : (sak.fagsakId ?? UNKNOWN))) &&
-        (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)),
+        (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
+        (selectedFagsystemIds.length === 0 || selectedFagsystemIds.includes(sak === null ? NONE : sak.fagsystemId)),
     );
 
     if (search.length === 0) {
@@ -173,7 +204,16 @@ export const useFilteredDocuments = (
     }
 
     return scored.toSorted((a, b) => b.score - a.score);
-  }, [documents, search, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]);
+  }, [
+    documents,
+    search,
+    selectedAvsenderMottakere,
+    selectedDateRange,
+    selectedSaksIds,
+    selectedTemaer,
+    selectedTypes,
+    selectedFagsystemIds,
+  ]);
 
 const checkDateInterval = (date: string, { from, to }: DateRange) => {
   if (from !== undefined && to !== undefined) {
