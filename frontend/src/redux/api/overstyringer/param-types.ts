@@ -33,3 +33,8 @@ export interface SetGosysOppgaveIdParams {
   id: string;
   gosysOppgaveId: number | null;
 }
+
+export interface SetForrigeBehandlendeEnhetIdParams {
+  id: string;
+  forrigeBehandlendeEnhetId: string;
+}

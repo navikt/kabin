@@ -96,6 +96,7 @@ export interface Overstyringer {
   /** Nav ident */
   saksbehandlerIdent: string | null;
   gosysOppgaveId: number | null;
+  forrigeBehandlendeEnhetId: string | null;
 }
 
 export interface Svarbrev {

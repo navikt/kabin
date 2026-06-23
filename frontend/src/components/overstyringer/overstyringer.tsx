@@ -3,6 +3,7 @@ import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditFrist } from '@app/components/overstyringer/edit-frist';
 import { EditMottattKlageinstans } from '@app/components/overstyringer/edit-mottatt-klageinstans';
 import { EditMottattVedtaksinstans } from '@app/components/overstyringer/edit-mottatt-vedtaksinstans';
+import { Enhet } from '@app/components/overstyringer/enhet';
 import {
   AvsenderIcon,
   SakenGjelderIcon,
@@ -237,6 +238,7 @@ export const Overstyringer = ({ title, ...props }: Props) => {
       <div className="grid grid-cols-2 gap-2">
         <Ytelse />
         <Innsendingshjemler />
+        <Enhet />
       </div>
       {ytelseId === null ? (
         <Placeholder>
