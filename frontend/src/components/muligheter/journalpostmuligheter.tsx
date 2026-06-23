@@ -5,6 +5,7 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
+import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -58,5 +59,3 @@ export const Journalpostmuligheter = ({ title }: Props) => {
     />
   );
 };
-
-const FAGSYSTEM_ARENA = '3';

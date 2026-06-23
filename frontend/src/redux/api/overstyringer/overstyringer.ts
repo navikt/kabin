@@ -1,6 +1,7 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
 import type {
   SetBehandlingstidParams,
+  SetForrigeBehandlendeEnhetIdParams,
   SetGosysOppgaveIdParams,
   SetHjemmelIdListParams,
   SetMottattKlageinstansParams,
@@ -11,6 +12,7 @@ import type {
 import type {
   SetAvsenderResponse,
   SetBehandlingstidResponse,
+  SetForrigeBehandlendeEnhetIdResponse,
   SetFullmektigResponse,
   SetGosysOppgaveIdResponse,
   SetHjemmelIdListResponse,
@@ -282,6 +284,29 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+    setForrigeBehandlendeEnhetId: builder.mutation<
+      SetForrigeBehandlendeEnhetIdResponse,
+      SetForrigeBehandlendeEnhetIdParams
+    >({
+      query: ({ id, forrigeBehandlendeEnhetId }) => ({
+        url: `/registreringer/${id}/overstyringer/forrige-behandlende-enhet-id`,
+        method: 'PUT',
+        body: { forrigeBehandlendeEnhetId },
+      }),
+      onQueryStarted: async ({ id, forrigeBehandlendeEnhetId: enhet }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({
+          ...draft,
+          overstyringer: { ...draft.overstyringer, forrigeBehandlendeEnhetId: enhet },
+        }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -296,4 +321,5 @@ export const {
   useSetOppgaveIdMutation,
   useSetSaksbehandlerIdentMutation,
   useSetYtelseIdMutation,
+  useSetForrigeBehandlendeEnhetIdMutation,
 } = overstyringerSlice;

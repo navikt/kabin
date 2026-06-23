@@ -37,3 +37,7 @@ export interface SetKlagerResponse extends BaseResponse {
     klageDato: string;
   };
 }
+
+export type SetForrigeBehandlendeEnhetIdResponse = OverstyringerResponse<{
+  forrigeBehandlendeEnhetId: string;
+}>;
