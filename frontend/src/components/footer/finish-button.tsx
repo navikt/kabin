@@ -1,9 +1,13 @@
+import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
+import { useMulighet } from '@app/hooks/use-mulighet';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useDeleteRegistreringMutation, useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
+import type { IArkivertDocument } from '@app/types/dokument';
+import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Checkbox, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,8 +43,11 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const registrering = useRegistrering();
   const { id, typeId, journalpostId, mulighet, sakenGjelderValue, svarbrev } = registrering;
   const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const [arenaBekreft, setArenaBekreft] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
+  const mulighetResult = useMulighet();
+  const { journalpost } = useJournalpostFromMulighet();
 
   if (typeId === null) {
     return null;
@@ -49,7 +56,8 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const text = getText(typeId, svarbrev?.send === true);
 
   const error = journalpostId === null || mulighet === null || sakenGjelderValue === null;
-  const disabled = error || isLoading;
+  const isArenaAnke = typeId === SaksTypeEnum.ANKE && getIsArenaFagsystem(mulighetResult, journalpost);
+  const disabled = error || isLoading || (isArenaAnke && !arenaBekreft);
 
   return (
     <Box
@@ -84,6 +92,11 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
             </ErrorSummary>
           ) : null}
         </Alert>
+        {isArenaAnke ? (
+          <Checkbox checked={arenaBekreft} onChange={(e) => setArenaBekreft(e.target.checked)} size="small">
+            Jeg bekrefter at jeg har opprettet en anke i Arena
+          </Checkbox>
+        ) : null}
         <HStack justify="space-between" wrap={false}>
           <Button
             variant="primary"
@@ -149,4 +162,19 @@ const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
       return 'Du fullfører nå registrering av begjæringen om gjenopptak av Trygderettens kjennelse. Begjæringen blir journalført og klar for saksbehandling i Kabal. Bekreft at du ønsker å fullføre registrering av begjæringen om gjenopptak.';
     }
   }
+};
+
+const getIsArenaFagsystem = (
+  mulighetResult: ReturnType<typeof useMulighet>,
+  journalpost: IArkivertDocument | undefined,
+): boolean => {
+  if (mulighetResult.fromJournalpost) {
+    return journalpost?.sak?.fagsystemId === FAGSYSTEM_ARENA;
+  }
+
+  if (mulighetResult.typeId === SaksTypeEnum.ANKE) {
+    return mulighetResult.mulighet?.originalFagsystemId === FAGSYSTEM_ARENA;
+  }
+
+  return false;
 };
