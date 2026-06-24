@@ -4,7 +4,8 @@
   "description": "Kabin",
   "type": "module",
   "scripts": {
-    "start": "vite --host 0.0.0.0 & tsc --watch",
+    "dev": "vite --host 0.0.0.0 & tsc --watch",
+    "start": "bun dev",
     "build": "vite build",
     "typecheck": "tsc",
     "lint": "biome check",
