@@ -1,3 +1,7 @@
+import {
+  type Entry,
+  SearchableSelect,
+} from '@app/components/searchable-select/searchable-single-select/searchable-single-select';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -9,7 +13,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import type { IKodeverkSimpleValue, IYtelserLatest } from '@app/types/kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
-import { InlineMessage, Label, Select, Skeleton } from '@navikt/ds-react';
+import { InlineMessage, Label, Skeleton, Tag } from '@navikt/ds-react';
 
 const FIELD_NAME = ValidationFieldNames.FORRIGE_BEHANDLENDE_ENHET_ID;
 
@@ -47,7 +51,7 @@ const EnhetInternal = ({ typeId }: { typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.A
     );
   }
 
-  const ytelse = data.find(({ id }) => id === overstyringer.ytelseId);
+  const ytelse = data.find(({ id: ytelseId }) => ytelseId === overstyringer.ytelseId);
 
   if (!ytelserIsSuccess || ytelse === undefined) {
     return (
@@ -57,31 +61,42 @@ const EnhetInternal = ({ typeId }: { typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.A
     );
   }
 
-  const value = overstyringer.forrigeBehandlendeEnhetId ?? NONE;
+  const enheter = getEnheter(typeId, ytelse);
+  const options: Entry<string>[] = enheter.map((e) => enhetToEntry(e));
+  const selectedEntry = options.find((o) => o.value === overstyringer.forrigeBehandlendeEnhetId) ?? null;
 
   return (
-    <Select
-      size="small"
-      label={FIELD_NAMES.forrigeBehandlendeEnhetId}
-      value={value}
-      onChange={(event) => setEnhet({ id, forrigeBehandlendeEnhetId: event.currentTarget.value })}
-      disabled={isLoading}
-      error={error}
-    >
-      {value === NONE ? (
-        <option value={NONE} disabled>
-          Ikke valgt
-        </option>
-      ) : null}
-
-      {getEnheter(typeId, ytelse).map((e) => (
-        <option key={e.id} value={e.id}>
-          {e.navn}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-2">
+      <Label size="small" htmlFor={FIELD_NAME}>
+        {FIELD_NAMES.forrigeBehandlendeEnhetId}
+      </Label>
+      <SearchableSelect
+        id={FIELD_NAME}
+        label={FIELD_NAMES.forrigeBehandlendeEnhetId}
+        options={options}
+        value={selectedEntry}
+        onChange={(enhetId) => setEnhet({ id, forrigeBehandlendeEnhetId: enhetId })}
+        disabled={isLoading}
+        error={error}
+        nullLabel="Ikke valgt"
+      />
+    </div>
   );
 };
+
+const enhetToEntry = (enhet: IKodeverkSimpleValue): Entry<string> => ({
+  value: enhet.id,
+  key: enhet.id,
+  plainText: `${enhet.id} ${enhet.navn}`,
+  label: (
+    <span className="flex items-center gap-2">
+      <Tag variant="outline" data-color="meta-purple" size="xsmall">
+        {enhet.id}
+      </Tag>
+      {enhet.navn}
+    </span>
+  ),
+});
 
 const getEnheter = (typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, ytelse: IYtelserLatest): IKodeverkSimpleValue[] => {
   switch (typeId) {
@@ -91,5 +106,3 @@ const getEnheter = (typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, ytelse: IYte
       return ytelse.klageenheter;
   }
 };
-
-const NONE = 'NONE';
