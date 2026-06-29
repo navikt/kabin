@@ -177,7 +177,7 @@ const mutationsSlice = registreringApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          pessimisticUpdate(id, { overstyringer: { ytelseId: data.ytelseId } });
+          pessimisticUpdate(id, { overstyringer: { ytelseId: data.ytelseId, hjemmelIdList: data.hjemmelIdList } });
         } catch {
           undo();
         }

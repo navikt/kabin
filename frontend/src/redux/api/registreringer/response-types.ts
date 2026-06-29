@@ -21,6 +21,7 @@ export interface SetAdditionalKabalMulighetResponse {
   id: string;
   additionalMulighetId: string;
   ytelseId: string;
+  hjemmelIdList: string[];
 }
 
 export type FerdigstiltRegistreringResponse = BaseResponse & Pick<FinishedRegistrering, 'finished' | 'behandlingId'>;
