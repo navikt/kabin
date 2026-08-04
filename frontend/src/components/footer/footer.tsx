@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router';
 export const Footer = () => {
   const isOwner = useIsOwner();
   const { id, finished } = useRegistrering();
-  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const [, { isError }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}:finish` });
 
   const isFinished = finished !== null;
 

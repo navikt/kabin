@@ -1,4 +1,5 @@
 import { AppTheme, isValidUserTheme, setUserTheme, UserTheme, useSystemTheme, useUserTheme } from '@app/app-theme';
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { MonitorFillIcon, MonitorIcon, MoonIcon, SunFillIcon } from '@navikt/aksel-icons';
 import { ToggleGroup } from '@navikt/ds-react';
 
@@ -15,9 +16,9 @@ export const AppThemeSwitcher = () => {
       className="whitespace-nowrap"
       aria-label="Velg tema"
     >
-      <ToggleGroup.Item value={UserTheme.LIGHT} label="Lyst" icon={<SunFillIcon />} />
-      <ToggleGroup.Item value={UserTheme.DARK} label="Mørkt" icon={<MoonIcon />} />
-      <ToggleGroup.Item
+      <ToggleItem value={UserTheme.LIGHT} label="Lyst" icon={<SunFillIcon />} />
+      <ToggleItem value={UserTheme.DARK} label="Mørkt" icon={<MoonIcon />} />
+      <ToggleItem
         value={UserTheme.SYSTEM}
         label="System"
         icon={systemTheme === AppTheme.DARK ? <MonitorIcon /> : <MonitorFillIcon />}

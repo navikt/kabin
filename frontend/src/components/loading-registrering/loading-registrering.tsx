@@ -1,5 +1,5 @@
 import { Card, CardFullHeight, CardMedium, CardSmall } from '@app/components/card/card';
-import { LoadingDocuments } from '@app/components/documents/loading-documents';
+import { LoadingDocuments } from '@app/components/documents/journalpost/loading-documents';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
 import { Placeholder } from '@app/components/placeholder/placeholder';

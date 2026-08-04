@@ -14,6 +14,77 @@ export interface Mulighet {
   id: string;
 }
 
+export enum DokumentStatus {
+  UPLOADING = 'UPLOADING',
+  UPLOADING_DONE = 'UPLOADING_DONE',
+  VIRUS_SCANNING = 'VIRUS_SCANNING',
+  VIRUS_SCANNING_DONE = 'VIRUS_SCANNING_DONE',
+  CONVERTING = 'CONVERTING',
+  CONVERTING_DONE = 'CONVERTING_DONE',
+  DONE = 'DONE',
+  VIRUS_FOUND = 'VIRUS_FOUND',
+  VIRUS_SCAN_FAILED = 'VIRUS_SCAN_FAILED',
+  CONVERSION_FAILED = 'CONVERSION_FAILED',
+  UNSUPPORTED_TYPE = 'UNSUPPORTED_TYPE',
+  UNEXPECTED_ERROR = 'UNEXPECTED_ERROR',
+}
+
+export const DOKUMENT_FAILED_STATUSES: DokumentStatus[] = [
+  DokumentStatus.VIRUS_FOUND,
+  DokumentStatus.VIRUS_SCAN_FAILED,
+  DokumentStatus.CONVERSION_FAILED,
+  DokumentStatus.UNSUPPORTED_TYPE,
+  DokumentStatus.UNEXPECTED_ERROR,
+];
+
+export const DOKUMENT_TERMINAL_STATUSES: DokumentStatus[] = [DokumentStatus.DONE, ...DOKUMENT_FAILED_STATUSES];
+
+/** Failed statuses that can be retried by re-processing the already-uploaded file server-side,
+ * as opposed to `VIRUS_FOUND` and `UNSUPPORTED_TYPE`, which are permanent outcomes for the
+ * uploaded file and require the user to delete it and upload a new one instead. */
+export const DOKUMENT_RETRYABLE_STATUSES: DokumentStatus[] = [
+  DokumentStatus.VIRUS_SCAN_FAILED,
+  DokumentStatus.CONVERSION_FAILED,
+  DokumentStatus.UNEXPECTED_ERROR,
+];
+
+export interface RegistreringDokument {
+  id: string;
+  name: string;
+  size: number;
+  created: string;
+  status: DokumentStatus;
+  contentType: string;
+  /** Determines document order: ascending, lowest first. The document with the lowest
+   * `sortIndex` is the hoveddokument - there is no separate field or concept for it. */
+  sortIndex: number;
+}
+
+export enum Source {
+  JOURNALPOST = 'JOURNALPOST',
+  UPLOADED_DOCUMENTS = 'UPLOADED_DOCUMENTS',
+  /** Anke received through Altinn. Behaves like `UPLOADED_DOCUMENTS`, except `inngaaendeKanal`,
+   * `typeId` and `overstyringer.avsender` are set by the API when the source is selected, and
+   * cannot be changed by the user. */
+  ANKE = 'ANKE',
+}
+
+/** Sources whose documents are uploaded files rather than an existing journalpost. */
+export type UploadSource = Source.UPLOADED_DOCUMENTS | Source.ANKE;
+
+export const isUploadSource = (source: Source): source is UploadSource =>
+  source === Source.UPLOADED_DOCUMENTS || source === Source.ANKE;
+
+export enum InngaaendeKanal {
+  ALTINN_INNBOKS = 'ALTINN_INNBOKS',
+  E_POST = 'E_POST',
+}
+
+export interface UploadedDocuments {
+  dokumenter: RegistreringDokument[];
+  inngaaendeKanal: InngaaendeKanal | null;
+}
+
 export interface BaseRegistrering {
   id: string;
   mulighetIsBasedOnJournalpost: boolean;
@@ -41,6 +112,8 @@ export interface BaseRegistrering {
   };
   additionalKabalMuligheter: IAdditionalKabalMulighet[];
   additionalKabalMulighet: { id: string } | null;
+  source: Source;
+  uploadedDocuments: UploadedDocuments;
 }
 
 export interface DraftRegistrering extends BaseRegistrering {
@@ -50,7 +123,10 @@ export interface DraftRegistrering extends BaseRegistrering {
 
 export interface FinishedRegistrering extends BaseRegistrering {
   sakenGjelderValue: string;
-  journalpostId: string;
+  /** `null` when `source` is an upload source - nothing can be derived from `journalpostId` in
+   * that case, since the registrering's documents were uploaded rather than selected from an
+   * existing journalpost. */
+  journalpostId: string | null;
   typeId: RegistreringType; // Samme type-IDer som i Kodeverket.
   mulighet: Mulighet;
   /** When the registration was finished.

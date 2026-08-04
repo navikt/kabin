@@ -6,6 +6,7 @@ import { UnitType } from '@app/components/edit-frist/unit-type';
 import { Units } from '@app/components/edit-frist/units';
 import { Warning } from '@app/components/edit-frist/warning';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
@@ -52,8 +53,8 @@ export const EditVarsletFrist = ({ setting }: Props) => {
             size="small"
             label="Frist i svarbrev"
           >
-            <ToggleGroup.Item value="false" label="Uendret" />
-            <ToggleGroup.Item value="true" label="Overstyr" />
+            <ToggleItem value="false" label="Uendret" />
+            <ToggleItem value="true" label="Overstyr" />
           </ToggleGroup>
           <Fristdato date={svarbrev.calculatedFrist} />
         </HStack>

@@ -3,7 +3,7 @@ import { PartContent, States, StyledContainer } from '@app/components/overstyrin
 import { Part } from '@app/components/overstyringer/part';
 import type { ISetPart } from '@app/components/overstyringer/part-read/types';
 import { FieldNames } from '@app/components/overstyringer/types';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useIsAnkeSource, useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { JournalposttypeEnum } from '@app/types/dokument';
@@ -18,7 +18,24 @@ export const Avsender = ({ options }: Props) => {
   const { overstyringer } = useRegistrering();
   const { avsender } = overstyringer;
   const { journalpost } = useJournalpost();
+  const isUploadedDocuments = useIsUploadedDocuments();
+  const isAnkeSource = useIsAnkeSource();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
+
+  if (isUploadedDocuments) {
+    return (
+      <Part
+        partField={FieldNames.AVSENDER}
+        part={avsender}
+        label="Avsender"
+        icon={<StyledAvsenderIcon aria-hidden />}
+        error={error}
+        options={options}
+        // For `Source.ANKE` the API sets avsender as a side effect of selecting the source.
+        readOnly={isAnkeSource}
+      />
+    );
+  }
 
   if (journalpost === undefined || journalpost.journalposttype !== JournalposttypeEnum.INNGAAENDE) {
     return null;

@@ -4,7 +4,7 @@ import { FORMAT } from '@app/domain/date-formats';
 import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -40,10 +40,13 @@ export const EditMottattKlageinstans = (): JSX.Element | null => {
 const FromJournalpostToNow = () => {
   const { overstyringer } = useRegistrering();
   const { journalpost } = useJournalpost();
+  const isUploadedDocuments = useIsUploadedDocuments();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
   const fromDate =
-    journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+    isUploadedDocuments || journalpost === undefined
+      ? undefined
+      : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   const toDate = useMemo(() => {
     const now = new Date();
@@ -71,12 +74,16 @@ const useFromDate = () => {
 const FromVedtakToJournalpost = () => {
   const { overstyringer } = useRegistrering();
   const { journalpost } = useJournalpost();
+  const isUploadedDocuments = useIsUploadedDocuments();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
   const fromDate = useFromDate();
 
-  const toDate =
-    journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const toDate = isUploadedDocuments
+    ? new Date()
+    : journalpost === undefined
+      ? undefined
+      : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
   return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };

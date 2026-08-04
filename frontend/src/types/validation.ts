@@ -14,6 +14,8 @@ export interface IValidationSection {
 }
 
 export enum ValidationFieldNames {
+  INNGAAENDE_KANAL = 'inngaaendeKanal',
+  DOKUMENTER = 'dokumenter',
   MOTTATT_KLAGEINSTANS = 'mottattKlageinstans',
   MOTTATT_VEDTAKSINSTANS = 'mottattVedtaksinstans',
   FRIST = 'frist',

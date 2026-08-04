@@ -3,7 +3,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import { SectionNames } from '@app/types/validation';
 
 const ANKE_SECTIONS: Record<SectionNames, string> = {
-  [SectionNames.SAKSDATA]: 'Tilpasninger for anken',
+  [SectionNames.SAKSDATA]: 'Saksdata',
   [SectionNames.SVARBREV]: 'Svarbrev',
 };
 

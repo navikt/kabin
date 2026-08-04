@@ -1,6 +1,6 @@
 import { Box, Heading, type HeadingProps, VStack } from '@navikt/ds-react';
 
-interface Props extends CardContentProps {
+interface Props extends CardContentProps, Partial<Omit<HTMLDivElement, 'children'>> {
   className?: string;
   labelledBy?: string;
   id?: string;
@@ -11,14 +11,22 @@ interface CardWrapperProps extends Props {
   minHeight?: string;
 }
 
-const CardWrapper = ({ className = '', labelledBy, id, height, minHeight, ...cardContentProps }: CardWrapperProps) => (
+const CardWrapper = ({
+  className = '',
+  labelledBy,
+  ariaLabel,
+  id,
+  height,
+  minHeight,
+  ...cardContentProps
+}: CardWrapperProps) => (
   <VStack asChild gap="space-16" flexShrink="0" className={className} style={{ height, minHeight }}>
     <Box
       as="section"
       shadow="dialog"
       borderRadius="4"
       padding="space-16"
-      aria-label={cardContentProps.title}
+      aria-label={ariaLabel ?? cardContentProps.title}
       aria-labelledby={labelledBy}
       id={id}
     >

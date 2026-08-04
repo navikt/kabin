@@ -1,10 +1,10 @@
 import { Card } from '@app/components/card/card';
-import { formatAvsenderMottaker } from '@app/components/documents/avsender-mottaker';
+import { formatAvsenderMottaker } from '@app/components/documents/journalpost/avsender-mottaker';
 import { Journalposttype } from '@app/components/journalposttype/journalposttype';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
+import { DocumentViewerContext, isViewedUploadedDokument } from '@app/pages/registrering/document-viewer-context';
 import { type IArkivertDocument, JournalposttypeEnum } from '@app/types/dokument';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Table, Tag } from '@navikt/ds-react';
@@ -100,6 +100,7 @@ const ViewDocumentButton = ({ dokument }: VirewDocumentButtonProps) => {
 
   const isViewing =
     viewedDokument !== null &&
+    !isViewedUploadedDokument(viewedDokument) &&
     viewedDokument.dokumentInfoId === dokument.dokumentInfoId &&
     viewedDokument.journalpostId === dokument.journalpostId;
 

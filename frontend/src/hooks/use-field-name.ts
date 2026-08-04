@@ -3,6 +3,8 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { ValidationFieldNames } from '@app/types/validation';
 
 export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNames.KLAGER>, string> = {
+  [ValidationFieldNames.INNGAAENDE_KANAL]: 'Inngående kanal',
+  [ValidationFieldNames.DOKUMENTER]: 'Opplastede dokumenter',
   [ValidationFieldNames.MOTTATT_KLAGEINSTANS]: 'Mottatt klageinstans',
   [ValidationFieldNames.MOTTATT_VEDTAKSINSTANS]: 'Mottatt vedtaksinstans',
   [ValidationFieldNames.FRIST]: 'Frist',

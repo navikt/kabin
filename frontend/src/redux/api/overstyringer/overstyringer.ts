@@ -22,7 +22,7 @@ import type {
   SetSaksbehandlerIdentResponse,
   SetYtelseResponse,
 } from '@app/redux/api/overstyringer/response-types';
-import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
+import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/draft-updates';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import type { IPart } from '@app/types/common';

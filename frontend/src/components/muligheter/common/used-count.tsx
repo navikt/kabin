@@ -15,7 +15,11 @@ export const UsedCount = ({ sourceOfExistingBehandlinger }: Props) => {
   }
 
   return (
-    <Tooltip content={tooltipContent(sourceOfExistingBehandlinger)} className="whitespace-pre-wrap text-left">
+    <Tooltip
+      content={tooltipContent(sourceOfExistingBehandlinger)}
+      maxChar={Number.POSITIVE_INFINITY}
+      className="whitespace-pre-wrap text-left"
+    >
       <Tag variant="warning" size="small" className="whitespace-nowrap">
         Brukt {usedCount} gang{usedCount !== 1 ? 'er' : ''}
       </Tag>

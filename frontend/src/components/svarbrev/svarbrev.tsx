@@ -2,14 +2,16 @@ import { Card } from '@app/components/card/card';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
 import { VarsletFrist } from '@app/components/svarbrev/varslet-frist';
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsAnkeSource } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import { Alert, HStack, Loader, ToggleGroup } from '@navikt/ds-react';
+import { Alert, HStack, InlineMessage, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 enum SvarbrevOptionEnum {
@@ -40,19 +42,31 @@ const SendSvarbrevToggle = () => {
         value={svarbrev.send === true ? SvarbrevOptionEnum.SEND : SvarbrevOptionEnum.DONT_SEND}
         onChange={(value) => setSend({ send: value === SvarbrevOptionEnum.SEND, id })}
       >
-        <ToggleGroup.Item value={SvarbrevOptionEnum.SEND}>Send svarbrev</ToggleGroup.Item>
-        <ToggleGroup.Item value={SvarbrevOptionEnum.DONT_SEND}>Ikke send svarbrev</ToggleGroup.Item>
+        <ToggleItem value={SvarbrevOptionEnum.SEND}>Send svarbrev</ToggleItem>
+        <ToggleItem value={SvarbrevOptionEnum.DONT_SEND}>Ikke send svarbrev</ToggleItem>
       </ToggleGroup>
     </HStack>
   );
 };
 
-export const Svarbrev = () => (
-  <>
-    <SendSvarbrevToggle />
-    <SvarbrevInput />
-  </>
-);
+export const Svarbrev = () => {
+  const isAnkeSource = useIsAnkeSource();
+
+  if (isAnkeSource) {
+    return (
+      <Card title="Svarbrev">
+        <InlineMessage status="info">Svarbrev skal ikke sendes for ankesak fra Trygderetten.</InlineMessage>
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      <SendSvarbrevToggle />
+      <SvarbrevInput />
+    </>
+  );
+};
 
 const SvarbrevInput = () => {
   const { typeId, svarbrev, mulighet, mulighetIsBasedOnJournalpost } = useRegistrering();

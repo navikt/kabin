@@ -132,6 +132,18 @@
       transform: scaleX(0);
     }
   }
+
+  --animate-progress-sweep: progress-sweep 1.8s ease-in-out infinite;
+
+  @keyframes progress-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(250%);
+    }
+  }
 }
 
 html {
@@ -153,7 +165,7 @@ body,
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: clip;
   font-size: 16px;
 }
 

@@ -7,7 +7,7 @@ import type { IJournalpostAvsenderMottaker, ISak } from '@app/types/dokument';
 import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 
 interface InfoProps {
-  label: string;
+  label: React.ReactNode;
   children: React.ReactNode;
 }
 
