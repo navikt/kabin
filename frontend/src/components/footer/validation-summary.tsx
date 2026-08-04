@@ -38,7 +38,14 @@ const Section = ({ properties, section }: IValidationSection) => (
 const Field = ({ field, reason }: IValidationError) => (
   <li>
     <strong>{`${useFieldName(field)}: `}</strong>
-    <Link href={`#${field}`} className="inline">
+    <Link
+      href={`#${field}`}
+      className="inline"
+      onClick={(event) => {
+        event.preventDefault();
+        document.getElementById(field)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }}
+    >
       {reason}
     </Link>
   </li>

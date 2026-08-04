@@ -1,4 +1,5 @@
 import { Address } from '@app/components/svarbrev/address/address';
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { Receiver } from '@app/redux/api/registreringer/types';
 import { type IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
@@ -53,21 +54,21 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
           size="small"
           value={isLoading ? HandlingEnum.AUTO : handling}
           onChange={isLoading ? () => undefined : onHandlingChange}
-          variant={isLoading ? 'neutral' : 'action'}
+          data-color={isLoading ? 'neutral' : 'accent'}
           aria-disabled={isLoading}
         >
-          <ToggleGroup.Item value={HandlingEnum.AUTO} aria-disabled={isLoading}>
+          <ToggleItem value={HandlingEnum.AUTO} aria-disabled={isLoading}>
             {UTSENDINGSKANAL[part.utsendingskanal]}
-          </ToggleGroup.Item>
+          </ToggleItem>
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT} aria-disabled={isLoading}>
+            <ToggleItem value={HandlingEnum.CENTRAL_PRINT} aria-disabled={isLoading}>
               Sentral utskrift
-            </ToggleGroup.Item>
+            </ToggleItem>
           ) : null}
           {part.utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT} aria-disabled={isLoading}>
+            <ToggleItem value={HandlingEnum.LOCAL_PRINT} aria-disabled={isLoading}>
               Lokal utskrift
-            </ToggleGroup.Item>
+            </ToggleItem>
           ) : null}
         </ToggleGroup>
 

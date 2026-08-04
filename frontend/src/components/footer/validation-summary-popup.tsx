@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export const ValidationSummaryPopup = () => {
   const id = useRegistreringId();
-  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const [, { error }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}:finish` });
 
   const hasValidationError = error !== undefined && 'status' in error && error.status === 400;
   const [isOpen, setIsOpen] = useState(hasValidationError);

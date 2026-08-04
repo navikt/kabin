@@ -2,7 +2,7 @@ import { Datepicker } from '@app/components/date-picker/date-picker';
 import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetMottattVedtaksinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
@@ -17,11 +17,12 @@ const LABEL = FIELD_NAMES[ID];
 export const EditMottattVedtaksinstans = () => {
   const { overstyringer, typeId } = useRegistrering();
   const { journalpost } = useJournalpost();
+  const isUploadedDocuments = useIsUploadedDocuments();
   const canEdit = useCanEdit();
 
   const { mottattVedtaksinstans } = overstyringer;
 
-  if (typeId !== SaksTypeEnum.KLAGE || journalpost === undefined) {
+  if (typeId !== SaksTypeEnum.KLAGE || (!isUploadedDocuments && journalpost === undefined)) {
     return null;
   }
 
@@ -29,7 +30,9 @@ export const EditMottattVedtaksinstans = () => {
     return <ReadOnlyTime id={ID} label={LABEL} value={mottattVedtaksinstans} />;
   }
 
-  return <RenderEditMottattNav value={mottattVedtaksinstans} toDate={journalpost.datoOpprettet} />;
+  const toDate = isUploadedDocuments ? new Date().toISOString() : (journalpost?.datoOpprettet ?? null);
+
+  return <RenderEditMottattNav value={mottattVedtaksinstans} toDate={toDate} />;
 };
 
 interface Props {

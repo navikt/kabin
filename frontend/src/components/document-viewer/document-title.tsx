@@ -1,7 +1,7 @@
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { FeilTag, PolTag } from '@app/components/documents/document/document-warnings';
+import { FeilTag, PolTag } from '@app/components/documents/journalpost/document/document-warnings';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { DocumentViewerContext } from '@app/pages/registrering/document-viewer-context';
+import { DocumentViewerContext, isViewedUploadedDokument } from '@app/pages/registrering/document-viewer-context';
 import { Skjerming, VariantFormat } from '@app/types/dokument';
 import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Switch, Tag, Tooltip } from '@navikt/ds-react';
@@ -15,7 +15,7 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
   const { journalpost } = useJournalpost();
   const { dokument, viewDokument } = useContext(DocumentViewerContext);
 
-  if (dokument === null) {
+  if (dokument === null || isViewedUploadedDokument(dokument)) {
     return null;
   }
 
@@ -60,7 +60,7 @@ interface VariantProps extends RedactedSwitchProps {
 const Variant = ({ format, ...props }: VariantProps) => {
   const { dokument } = useContext(DocumentViewerContext);
 
-  if (!dokument) {
+  if (dokument === null || isViewedUploadedDokument(dokument)) {
     return null;
   }
 
@@ -87,7 +87,7 @@ interface RedactedSwitchProps {
 const RedactedSwitch = ({ showRedacted, setShowRedacted, hasRedactedDocument }: RedactedSwitchProps) => {
   const { dokument } = useContext(DocumentViewerContext);
 
-  if (!hasRedactedDocument || dokument === null) {
+  if (!hasRedactedDocument || dokument === null || isViewedUploadedDokument(dokument)) {
     return null;
   }
 

@@ -19,7 +19,7 @@ export const StatusHeading = ({ headingText, alertText, behandlingId, registreri
     padding="space-12"
     borderRadius="4"
     shadow="dialog"
-    className="sticky -top-27.5 z-1 mx-auto mb-6 w-250"
+    className="sticky -top-27.5 z-20 mb-6 w-full"
   >
     <VStack gap="space-8">
       <Alert variant="success">

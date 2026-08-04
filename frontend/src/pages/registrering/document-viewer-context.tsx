@@ -5,7 +5,18 @@ export interface ViewedVedlegg extends IVedlegg {
   journalpostId: string;
 }
 
-type IViewedDocument = IArkivertDocument | ViewedVedlegg | null;
+export interface ViewedUploadedDokument {
+  kind: 'uploaded';
+  registreringId: string;
+  dokumentId: string;
+  name: string;
+  contentType: string;
+}
+
+export type IViewedDocument = IArkivertDocument | ViewedVedlegg | ViewedUploadedDokument | null;
+
+export const isViewedUploadedDokument = (dokument: NonNullable<IViewedDocument>): dokument is ViewedUploadedDokument =>
+  'kind' in dokument && dokument.kind === 'uploaded';
 
 interface IDocumentViewerContext {
   dokument: IViewedDocument;

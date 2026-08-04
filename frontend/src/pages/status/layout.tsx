@@ -9,7 +9,7 @@ interface StyledCardProps extends Omit<ComponentProps<typeof Card>, 'style'> {
 
 export const StyledCard = ({ gridArea, className = '', style, ...props }: StyledCardProps) => (
   <div className="overflow-hidden bg-ax-bg-default" style={{ gridArea, ...style }}>
-    <Card className={className} {...props} />
+    <Card className={`${className} mx-1 mt-1 mb-2`} {...props} />
   </div>
 );
 
@@ -32,7 +32,7 @@ interface DataContainerProps {
 
 export const DataContainer = ({ className = '', style, children, ...props }: DataContainerProps) => (
   <section
-    className={`mx-auto grid w-250 gap-6 ${className}`}
+    className={`mx-auto grid w-full gap-4 ${className}`}
     style={{
       gridTemplateAreas: "'journalpost case' 'svarbrev-metadata mulighet' 'svarbrev-pdf svarbrev-pdf'",
       gridTemplateColumns: '1fr 1fr',

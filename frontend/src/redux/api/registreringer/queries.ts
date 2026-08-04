@@ -5,9 +5,7 @@ import {
   type DraftRegistrering,
   type FinishedRegistreringListItem,
   GET_FERDIGE_REGISTRERINGER_PARAMS,
-  type Overstyringer,
   type Registrering,
-  type Svarbrev,
 } from '@app/redux/api/registreringer/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type {
@@ -110,7 +108,7 @@ export const setUferdigRegistrering = (data: DraftRegistrering) =>
       setRegistreringFn(draft, data),
     ),
   );
-const updateUferdigRegistrering = (id: string, update: UpdateFn) =>
+export const updateUferdigRegistrering = (id: string, update: UpdateFn) =>
   reduxStore.dispatch(
     queriesSlice.util.updateQueryData('getUferdigeRegistreringer', undefined, (draft) =>
       draft.map((d) => (d.id === id ? update(d) : d)),
@@ -140,28 +138,4 @@ export const removeFerdigRegistrering = (id: string) =>
     ),
   );
 
-type UpdateFn<T extends Registrering = DraftRegistrering, R extends Registrering = T> = (draft: T) => R;
-
-// All drafts
-export const updateDrafts = (id: string, update: UpdateFn<DraftRegistrering>): (() => void) => {
-  const patchResult = updateRegistrering(id, (draft) => (draft.finished === null ? update(draft) : draft));
-  const unfinishedPatchResult = updateUferdigRegistrering(id, update);
-
-  return () => {
-    patchResult.undo();
-    unfinishedPatchResult.undo();
-  };
-};
-
-interface PartialDraftRegistrering extends Partial<Omit<DraftRegistrering, 'overstyringer' | 'svarbrev'>> {
-  overstyringer?: Partial<Overstyringer>;
-  svarbrev?: Partial<Svarbrev>;
-}
-
-export const pessimisticUpdate = (id: string, response: PartialDraftRegistrering = {}) =>
-  updateDrafts(id, (draft) => ({
-    ...draft,
-    ...response,
-    overstyringer: { ...draft.overstyringer, ...response.overstyringer },
-    svarbrev: { ...draft.svarbrev, ...response.svarbrev },
-  }));
+export type UpdateFn<T extends Registrering = DraftRegistrering, R extends Registrering = T> = (draft: T) => R;

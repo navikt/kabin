@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/; // 2020-10-29
 const isoTimeRegex = /^\d{2}:\d{2}:\d{2}\.?\d*$/; // 14:25:19.734593
 const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d*Z?$/; // 2020-10-29T14:25:19.734593Z
@@ -25,6 +27,15 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
 
   return `${prettyDate} ${prettyTime}`;
 };
+
+/** Returns the current local date-time formatted the same way the backend formats `created`
+ * timestamps: local time, no timezone offset/`Z`, e.g. `2026-08-07T16:30:15.753848774`. Used for
+ * documents added optimistically on the client, before the server has confirmed them, so their
+ * `created` value sorts correctly next to server-provided ones with a plain string comparison —
+ * the browser can only measure millisecond precision, so the remaining sub-millisecond digits of
+ * the backend's nanosecond precision are zero-padded rather than measured. */
+export const nowAsBackendDateTime = (now = new Date(), lastDigit = 0): ISODateTime =>
+  `${format(now, "yyyy-MM-dd'T'HH:mm:ss.SSS")}${lastDigit.toString(10).padStart(6, '0')}`;
 
 export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime): prettyDateTime | null =>
   isoDateToPretty(isoDateTimeToIsoDate(isoDateTime));

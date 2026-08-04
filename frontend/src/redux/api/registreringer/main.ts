@@ -90,11 +90,7 @@ const mainSlice = registreringApi.injectEndpoints({
 });
 
 const isFerdigRegistrering = (registrering: BaseRegistrering): registrering is FinishedRegistrering =>
-  registrering.finished !== null &&
-  registrering.journalpostId !== null &&
-  registrering.typeId !== null &&
-  registrering.mulighet !== null &&
-  registrering.behandlingId !== null;
+  registrering.finished !== null;
 
 export const { useCreateRegistreringMutation, useDeleteRegistreringMutation, useFinishRegistreringMutation } =
   mainSlice;

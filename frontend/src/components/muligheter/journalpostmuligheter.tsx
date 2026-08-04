@@ -1,5 +1,5 @@
-import type { CanBeSelected } from '@app/components/documents/document/types';
-import { DocumentsBase } from '@app/components/documents/documents-base';
+import type { CanBeSelected } from '@app/components/documents/journalpost/document/types';
+import { JournalpostList } from '@app/components/documents/journalpost/journalpost-list';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
@@ -8,11 +8,7 @@ import type { IArkivertDocument } from '@app/types/dokument';
 import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { skipToken } from '@reduxjs/toolkit/query';
 
-interface Props {
-  title: string;
-}
-
-export const Journalpostmuligheter = ({ title }: Props) => {
+export const Journalpostmuligheter = () => {
   const { sakenGjelderValue, mulighet, journalpostId, typeId } = useRegistrering();
   const { data, isLoading, isFetching, refetch } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
   const { id } = useRegistrering();
@@ -48,14 +44,13 @@ export const Journalpostmuligheter = ({ title }: Props) => {
   };
 
   return (
-    <DocumentsBase
+    <JournalpostList
       dokumenter={data?.dokumenter.filter((d) => d.journalpostId !== journalpostId)}
       isLoading={isLoading || isFetching}
       refetch={refetch}
       selectJournalpost={[createOnMouseDown, selectIsLoading]}
       getIsSelected={(id) => mulighet?.id === id}
       getCanBeSelected={getCanBeSelected}
-      heading={title}
     />
   );
 };

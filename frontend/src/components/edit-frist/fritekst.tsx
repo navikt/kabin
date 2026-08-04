@@ -1,3 +1,4 @@
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import {
   useSetSvarbrevCustomTextMutation,
@@ -36,8 +37,8 @@ export const Fritekst = () => {
         size="small"
         label="Overstyr fritekst om svartid"
       >
-        <ToggleGroup.Item value="false" label="Uendret" />
-        <ToggleGroup.Item value="true" label="Overstyr" />
+        <ToggleItem value="false" label="Uendret" />
+        <ToggleItem value="true" label="Overstyr" />
       </ToggleGroup>
       <TextField
         className="grow"

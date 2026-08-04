@@ -53,7 +53,7 @@ const EditableAdditionalKabalMuligheter = () => {
   const { id, additionalKabalMuligheter } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetAdditionalKabalMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
-  const error = useValidationError(ValidationFieldNames.BEHANDLING_ID);
+  const error = useValidationError(ValidationFieldNames.ADDITIONAL_KABAL_MULIGHET);
 
   if (additionalKabalMuligheter.length === 0) {
     return null;
@@ -81,7 +81,7 @@ const EditableAdditionalKabalMuligheter = () => {
         showOnlySelectedLabel="Vis kun valgt tidligere behandling i Kabal"
       />
 
-      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+      <ValidationErrorMessage error={error} id={ValidationFieldNames.ADDITIONAL_KABAL_MULIGHET} />
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 

@@ -1,3 +1,4 @@
+import type { InngaaendeKanal } from '@app/redux/api/registreringer/types';
 import type { RegistreringType } from '@app/types/common';
 import type {
   IAdditionalKabalMulighet,
@@ -35,4 +36,41 @@ export interface SearchPartWithUtsendingskanalParams {
   identifikator: string;
   sakenGjelderId: string;
   ytelseId: string;
+}
+
+interface CreateDokumentUploadDocument {
+  contentType: string;
+  name: string;
+}
+
+export interface CreateDokumentUploadsParams {
+  id: string;
+  documents: CreateDokumentUploadDocument[];
+}
+
+export interface SetDokumentSortIndexParams {
+  id: string;
+  dokumentId: string;
+  sortIndex: number;
+}
+
+export interface SetInngaaendeKanalParams {
+  id: string;
+  inngaaendeKanal: InngaaendeKanal;
+}
+
+export interface SetDokumentNameParams {
+  id: string;
+  dokumentId: string;
+  name: string;
+}
+
+export interface DeleteDokumentParams {
+  id: string;
+  dokumentId: string;
+}
+
+export interface ResetDokumentStatusParams {
+  id: string;
+  dokumentIds: string[];
 }

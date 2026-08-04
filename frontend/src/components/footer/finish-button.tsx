@@ -7,15 +7,15 @@ import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Checkbox, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Checkbox, HStack, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { id, typeId } = useRegistrering();
-  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
-  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
+  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}:finish` });
+  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}:delete` });
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
   const closeConfirm = () => setShowConfirm(false);
@@ -41,8 +41,8 @@ export const FinishButton = () => {
 const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const navigate = useNavigate();
   const registrering = useRegistrering();
-  const { id, typeId, journalpostId, mulighet, sakenGjelderValue, svarbrev } = registrering;
-  const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const { id, typeId, svarbrev } = registrering;
+  const [finish, { isLoading }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}:finish` });
   const [arenaBekreft, setArenaBekreft] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
@@ -53,11 +53,8 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
     return null;
   }
 
-  const text = getText(typeId, svarbrev?.send === true);
-
-  const error = journalpostId === null || mulighet === null || sakenGjelderValue === null;
   const isArenaAnke = typeId === SaksTypeEnum.ANKE && getIsArenaFagsystem(mulighetResult, journalpost);
-  const disabled = error || isLoading || (isArenaAnke && !arenaBekreft);
+  const disabled = isLoading || (isArenaAnke && !arenaBekreft);
 
   return (
     <Box
@@ -75,22 +72,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
     >
       <VStack gap="space-16" ref={ref}>
         <Alert size="small" variant="info" inline>
-          <BodyShort size="small" spacing>
-            {text}
-          </BodyShort>
-          {error ? (
-            <ErrorSummary size="small" heading="Følgende må fylles ut først">
-              {sakenGjelderValue === null ? (
-                <ErrorSummary.Item href="#sakengjelder">Du må velge en person.</ErrorSummary.Item>
-              ) : null}
-              {journalpostId === null ? (
-                <ErrorSummary.Item href="#documents">Du må velge en journalpost.</ErrorSummary.Item>
-              ) : null}
-              {mulighet === null ? (
-                <ErrorSummary.Item href="#mulighet">Du må velge en mulighet.</ErrorSummary.Item>
-              ) : null}
-            </ErrorSummary>
-          ) : null}
+          {getText(typeId, svarbrev?.send === true)}
         </Alert>
         {isArenaAnke ? (
           <Checkbox checked={arenaBekreft} onChange={(e) => setArenaBekreft(e.target.checked)} size="small">

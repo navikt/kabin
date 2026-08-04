@@ -4,7 +4,8 @@ import { Footer } from '@app/components/footer/footer';
 import { DocumentViewerContextState } from '@app/pages/registrering/document-viewer-context';
 import { LeftColumn, RightColumn, StyledMain } from '@app/pages/registrering/layout';
 import { Person } from '@app/pages/registrering/person/person';
-import { TypeInput, TypeSelect } from '@app/pages/registrering/type-input';
+import { TypeInput } from '@app/pages/registrering/type-input';
+import { TypeSelect } from '@app/pages/registrering/type-select';
 
 export const RegistreringPage = () => (
   <DocumentViewerContextState>

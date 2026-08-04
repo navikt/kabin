@@ -1,3 +1,4 @@
+import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPES,
@@ -22,12 +23,12 @@ export const UnitType = ({ disabled = false, value, onChange }: Props) => (
       }
     }}
     size="small"
-    variant="neutral"
     aria-disabled={disabled}
     aria-readonly={disabled}
+    data-color={disabled ? 'neutral' : 'accent'}
   >
     {BEHANDLINGSTID_UNIT_TYPES.map((t) => (
-      <ToggleGroup.Item
+      <ToggleItem
         key={t}
         value={t}
         label={BEHANDLINGSTID_UNIT_TYPE_NAMES[t]}

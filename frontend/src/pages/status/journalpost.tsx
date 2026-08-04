@@ -1,4 +1,4 @@
-import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
+import { ReadOnlyLogiskeVedlegg } from '@app/components/documents/journalpost/document/logiske-vedlegg/read-only/logiske-vedlegg-list';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { FORMAT } from '@app/domain/date-formats';
 import { useFullTemaNameFromId } from '@app/hooks/kodeverk';

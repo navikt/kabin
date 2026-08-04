@@ -1,5 +1,5 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/queries';
+import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/draft-updates';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import type {
   AddReceiverParams,

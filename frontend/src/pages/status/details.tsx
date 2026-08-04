@@ -6,6 +6,8 @@ import { Journalpost } from '@app/pages/status/journalpost';
 import { StyledCard } from '@app/pages/status/layout';
 import { Mulighet } from '@app/pages/status/mulighet';
 import { Svarbrev } from '@app/pages/status/svarbrev';
+import { UploadedDocuments } from '@app/pages/status/uploaded-documents';
+import { Source } from '@app/redux/api/registreringer/types';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
 import { parseISO } from 'date-fns';
@@ -43,7 +45,9 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
 export const StatusDetails = ({ id, status }: Props) => {
   const {
     typeId,
+    source,
     journalpost,
+    uploadedDocuments,
     mottattKlageinstans,
     frist,
     klager,
@@ -67,7 +71,11 @@ export const StatusDetails = ({ id, status }: Props) => {
 
   return (
     <>
-      <Journalpost title={journalpostTitle} journalpost={journalpost} />
+      {source === Source.JOURNALPOST ? (
+        <Journalpost title={journalpostTitle} journalpost={journalpost} />
+      ) : (
+        <UploadedDocuments uploadedDocuments={uploadedDocuments} />
+      )}
 
       <StyledCard title="Saksinfo" gridArea="case" titleSize="medium">
         {typeId === SaksTypeEnum.KLAGE ? (

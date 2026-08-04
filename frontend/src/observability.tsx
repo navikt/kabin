@@ -15,10 +15,6 @@ const getTelemetryCollectorURL = (): string | undefined => {
     return 'https://telemetry.ekstern.dev.nav.no/collect';
   }
 
-  if (window.location.hostname === 'localhost') {
-    return '/collect';
-  }
-
   return undefined;
 };
 

@@ -18,18 +18,20 @@ import { Heading } from '@navikt/ds-react';
 export interface PartReadProps extends ActionsProps, EnterSearchModeCallback {
   error?: string;
   id?: string;
+  /** Hides the actions (set/remove/search), so the part can only be changed elsewhere. */
+  readOnly?: boolean;
 }
 
 export const SakenGjelder = (props: Omit<PartReadProps, 'partField'>) => (
   <PartReadInternal {...props} id="sakenGjelder" />
 );
 
-export const PartRead = (props: PartReadProps) => {
+export const PartRead = ({ readOnly, ...rest }: PartReadProps) => {
   const canEdit = useCanEdit();
 
   return (
-    <PartReadInternal {...props} id={props.partField}>
-      {canEdit ? <Actions {...props} /> : null}
+    <PartReadInternal {...rest} id={rest.partField}>
+      {canEdit && readOnly !== true ? <Actions {...rest} /> : null}
     </PartReadInternal>
   );
 };

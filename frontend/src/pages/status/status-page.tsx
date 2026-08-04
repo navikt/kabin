@@ -18,7 +18,7 @@ export const Status = ({ registrering, alertText, headingText }: Props) => {
   const Container = isLoading || data === undefined ? LoadingContainer : DataContainer;
 
   return (
-    <main className="pt-4">
+    <main className="w-full max-w-300 pt-4">
       <StatusHeading alertText={alertText} headingText={headingText} behandlingId={behandlingId} registreringId={id} />
       <Container>
         <DetailsLoader data={data} isLoading={isLoading} id={id} isError={isError} />

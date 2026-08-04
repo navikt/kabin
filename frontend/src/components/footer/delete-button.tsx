@@ -9,8 +9,8 @@ export const DeleteButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const id = useRegistreringId();
 
-  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
-  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}finish` });
+  const [, { isLoading: isDeleting }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}:delete` });
+  const [, { isLoading: isFinishing }] = useFinishRegistreringMutation({ fixedCacheKey: `${id}:finish` });
 
   return (
     <Box position="relative">
@@ -36,7 +36,7 @@ const Confirm = ({ close }: { close: () => void }) => {
 
   useOnClickOutside(close, ref);
 
-  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}delete` });
+  const [deleteRegistrering, { isLoading }] = useDeleteRegistreringMutation({ fixedCacheKey: `${id}:delete` });
 
   return (
     <Box

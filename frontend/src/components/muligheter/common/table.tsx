@@ -7,7 +7,7 @@ import { isoDateToPretty } from '@app/domain/date';
 import { isDateAfter } from '@app/functions/date';
 import { useFagsystemName, useFullTemaNameFromId } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import type {
   SetAdditionalKabalMulighetParams,
@@ -66,6 +66,7 @@ interface RowProps extends CommonProps {
 const Row = ({ mulighet, setMulighetHook, selectedMulighet }: RowProps) => {
   const { id } = useRegistrering();
   const { journalpost } = useJournalpost();
+  const isUploadedDocuments = useIsUploadedDocuments();
   const [setMulighet, { isLoading }] = setMulighetHook();
   const temaName = useFullTemaNameFromId(mulighet.temaId);
   const fagsystemName = useFagsystemName(mulighet.originalFagsystemId);
@@ -74,16 +75,20 @@ const Row = ({ mulighet, setMulighetHook, selectedMulighet }: RowProps) => {
   const isSelected = selectedMulighet?.id === mulighet.id;
 
   const isValid = useMemo(() => {
-    if (journalpost === undefined) {
-      return false;
-    }
-
     if (mulighet.vedtakDate === null) {
       return true;
     }
 
+    if (isUploadedDocuments) {
+      return !isDateAfter(mulighet.vedtakDate, new Date().toISOString());
+    }
+
+    if (journalpost === undefined) {
+      return false;
+    }
+
     return !isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet);
-  }, [journalpost, mulighet.vedtakDate]);
+  }, [journalpost, isUploadedDocuments, mulighet.vedtakDate]);
 
   const selectMulighet = useCallback(
     (e: React.MouseEvent) => {
