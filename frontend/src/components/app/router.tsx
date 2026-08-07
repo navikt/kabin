@@ -12,7 +12,7 @@ import { StatusPage } from '@app/pages/status/status';
 import { Role } from '@app/types/bruker';
 import { Theme, VStack } from '@navikt/ds-react';
 import { Suspense } from 'react';
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router';
 
 export const Router = () => (
   <Suspense fallback={<RouterLoader />}>

@@ -2,7 +2,7 @@ import { NoAccessPage } from '@app/components/app/no-access-page';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import type { Role } from '@app/types/bruker';
 import { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 interface Props {
   roles: Role[];

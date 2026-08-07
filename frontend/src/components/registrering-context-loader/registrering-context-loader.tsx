@@ -5,7 +5,7 @@ import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
 import type { Registrering } from '@app/redux/api/registreringer/types';
 import { VStack } from '@navikt/ds-react';
 import { createContext } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router';
 
 export const RegistreringContext = createContext<Registrering>({} as Registrering);
 

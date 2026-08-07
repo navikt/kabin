@@ -65,6 +65,10 @@ jobs:
       - name: Rename bunfig to global config name
         run: mv bunfig.toml .bunfig.toml
 
+      - name: Install common dependencies
+        shell: bash
+        run: bun install --frozen-lockfile --ignore-scripts
+
       - name: Install frontend dependencies
         shell: bash
         working-directory: frontend

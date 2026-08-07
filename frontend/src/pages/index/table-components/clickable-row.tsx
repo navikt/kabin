@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 interface Props extends Omit<React.HTMLAttributes<HTMLTableRowElement>, 'onClick'> {
   path: string;
