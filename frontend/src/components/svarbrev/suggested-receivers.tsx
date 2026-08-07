@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
-  const { id, svarbrev } = useRegistrering();
+  const { id, svarbrev, typeId } = useRegistrering();
   const [addReceiver, { isLoading }] = useAddSvarbrevReceiverMutation();
   const [remove] = useRemoveSvarbrevReceiverMutation();
 
@@ -51,7 +51,7 @@ export const SuggestedReceivers = ({ suggestedReceivers }: Props) => {
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
                   <span>
-                    {part.name} ({getTypeNames(typeList)})
+                    {part.name} ({getTypeNames(typeList, typeId)})
                   </span>
                   <PartStatusList statusList={part.statusList} />
                 </StyledReceiverContent>
