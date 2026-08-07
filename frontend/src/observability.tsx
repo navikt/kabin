@@ -2,7 +2,7 @@ import { ENVIRONMENT } from '@app/environment';
 import { createReactRouterV7Options, ReactIntegration } from '@grafana/faro-react';
 import { faro, getWebInstrumentations, initializeFaro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
-import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router';
 
 const SERVICE_NAME = 'kabin-frontend-client';
 

@@ -9,7 +9,7 @@ import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, Checkbox, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export const FinishButton = () => {
   const [showConfirm, setShowConfirm] = useState(false);

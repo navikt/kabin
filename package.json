@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "lint": "biome check"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.6"
+  }
+}

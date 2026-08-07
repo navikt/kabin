@@ -3,7 +3,7 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { Status } from '@app/pages/status/status-page';
 import { isDraftRegistrering } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 
 export const StatusPage = () => {
   const registrering = useRegistrering();

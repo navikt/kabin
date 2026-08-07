@@ -1,6 +1,6 @@
 {
   "root": true,
-  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -27,7 +27,7 @@
       "test": "recommended"
     },
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "performance": {
         "noDelete": "error",
         "noBarrelFile": "error",
@@ -38,10 +38,10 @@
         "noReExportAll": "error"
       },
       "a11y": {
-        "recommended": true
+        "preset": "recommended"
       },
       "security": {
-        "recommended": true,
+        "preset": "recommended",
         "noSecrets": "off"
       },
       "nursery": {

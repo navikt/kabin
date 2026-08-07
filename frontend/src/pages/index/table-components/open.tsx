@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 
 interface Props {
   path: string;

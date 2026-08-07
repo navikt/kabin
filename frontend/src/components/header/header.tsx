@@ -1,6 +1,6 @@
 import { User } from '@app/components/header/user-menu/user';
 import { InternalHeader, Spacer } from '@navikt/ds-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 
 export const NavHeader = () => (
   <InternalHeader>

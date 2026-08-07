@@ -5,7 +5,7 @@ import { useIsOwner } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { Button, HStack } from '@navikt/ds-react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 
 export const Footer = () => {
   const isOwner = useIsOwner();
