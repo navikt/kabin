@@ -1,5 +1,4 @@
 import { getKlagerTitle } from '@app/functions/get-klager-name';
-import { useRegistrering } from '@app/hooks/use-registrering';
 import type { RegistreringType } from '@app/types/common';
 
 export enum ReceiverType {
@@ -21,8 +20,7 @@ const getTypeName = (type: ReceiverType, registreringType: RegistreringType): st
   }
 };
 
-export const getTypeNames = (types: ReceiverType[]): string => {
-  const { typeId } = useRegistrering();
+export const getTypeNames = (types: ReceiverType[], typeId: RegistreringType | null): string => {
   const [first, second, third] = types;
 
   if (first === undefined || typeId === null) {

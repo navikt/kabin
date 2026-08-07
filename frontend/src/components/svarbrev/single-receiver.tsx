@@ -4,6 +4,7 @@ import { StyledBrevmottaker, StyledReceiverContent } from '@app/components/svarb
 import { ShowOptionsOrWarning } from '@app/components/svarbrev/receiver-options-warning';
 import { getTypeNames } from '@app/components/svarbrev/type-name';
 import type { PartSuggestedReceiver } from '@app/components/svarbrev/types';
+import { useRegistrering } from '@app/hooks/use-registrering';
 import { IdType } from '@app/types/common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Label, Tooltip } from '@navikt/ds-react';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const SingleReceiver = ({ receiver: singleReceiver }: Props) => {
+  const { typeId } = useRegistrering();
   const { part, typeList } = singleReceiver;
   const isPerson = part.type === IdType.FNR;
 
@@ -26,7 +28,7 @@ export const SingleReceiver = ({ receiver: singleReceiver }: Props) => {
               {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
             </Tooltip>
             <span>
-              {part.name} ({getTypeNames(typeList)})
+              {part.name} ({getTypeNames(typeList, typeId)})
             </span>
             <PartStatusList statusList={part.statusList} />
           </StyledReceiverContent>
