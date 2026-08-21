@@ -14,7 +14,7 @@ import {
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
 import type { IPart } from '@app/types/common';
-import { Alert, HStack, Search } from '@navikt/ds-react';
+import { HStack, InlineMessage, Search } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useMemo, useState } from 'react';
@@ -139,9 +139,9 @@ const PartSearchInternal = ({
         </HStack>
 
         {isPartInvalid ? (
-          <Alert variant="warning" size="small" inline>
+          <InlineMessage status="warning" size="small">
             Er du sikker på at du har valgt riktig?
-          </Alert>
+          </InlineMessage>
         ) : null}
 
         <SearchResult

@@ -1,10 +1,10 @@
+import { Alert } from '@app/components/alert/alert';
 import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/layout';
 import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 import { useGetStatusQuery } from '@app/redux/api/status';
 import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
-import { Alert } from '@navikt/ds-react';
 
 interface Props {
   registrering: FinishedRegistrering;

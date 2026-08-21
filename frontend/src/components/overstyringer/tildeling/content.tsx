@@ -5,7 +5,7 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { type ISaksbehandlereParams, useGetSaksbehandlereQuery } from '@app/redux/api/saksbehandlere';
 import type { ISaksbehandler } from '@app/types/common';
-import { Alert, Select } from '@navikt/ds-react';
+import { InlineMessage, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 export const Content = () => {
@@ -20,17 +20,17 @@ export const Content = () => {
 
   if (typeId === null) {
     return (
-      <Alert size="small" variant="info" inline>
+      <InlineMessage size="small" status="info">
         Velg type først.
-      </Alert>
+      </InlineMessage>
     );
   }
 
   if (ytelseId === null) {
     return (
-      <Alert size="small" variant="info" inline>
+      <InlineMessage size="small" status="info">
         Velg ytelse først.
-      </Alert>
+      </InlineMessage>
     );
   }
 

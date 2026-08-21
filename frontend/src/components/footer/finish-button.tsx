@@ -7,7 +7,7 @@ import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ArrowUndoIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Checkbox, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, Checkbox, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -71,9 +71,9 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
       className="z-1"
     >
       <VStack gap="space-16" ref={ref}>
-        <Alert size="small" variant="info" inline>
+        <InlineMessage size="small" status="info">
           {getText(typeId, svarbrev?.send === true)}
-        </Alert>
+        </InlineMessage>
         {isArenaAnke ? (
           <Checkbox checked={arenaBekreft} onChange={(e) => setArenaBekreft(e.target.checked)} size="small">
             Jeg bekrefter at jeg har opprettet en anke i Arena

@@ -11,7 +11,7 @@ import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import { Alert, HStack, InlineMessage, Loader, ToggleGroup } from '@navikt/ds-react';
+import { HStack, InlineMessage, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 enum SvarbrevOptionEnum {
@@ -28,9 +28,9 @@ const SendSvarbrevToggle = () => {
   if (!canEdit) {
     return svarbrev.send === true ? null : (
       <HStack align="center" justify="center" height="42px" flexShrink="0">
-        <Alert variant="info" size="small" inline>
+        <InlineMessage status="info" size="small">
           Svarbrev sendes ikke
-        </Alert>
+        </InlineMessage>
       </HStack>
     );
   }
@@ -92,9 +92,9 @@ const SvarbrevInput = () => {
   if (ytelseId === null) {
     return (
       <HStack align="center" justify="center" height="42px" flexShrink="0">
-        <Alert variant="info" size="small" inline>
+        <InlineMessage status="info" size="small">
           Velg ytelse
-        </Alert>
+        </InlineMessage>
       </HStack>
     );
   }

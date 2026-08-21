@@ -11,7 +11,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetGosysOppgaverQuery } from '@app/redux/api/oppgaver';
 import { SaksTypeEnum } from '@app/types/common';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, BodyLong, Heading, InfoCard, Table, Tag } from '@navikt/ds-react';
+import { BodyLong, Heading, InfoCard, InlineMessage, Table, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 export const GosysOppgaver = () => {
@@ -44,9 +44,9 @@ const ReadOnlyGosysOppgaver = () => {
           Gosys-oppgave
         </Heading>
 
-        <Alert variant="info" size="small" inline>
+        <InlineMessage status="info" size="small">
           Ingen Gosys-oppgave valgt
-        </Alert>
+        </InlineMessage>
       </Card>
     );
   }

@@ -11,7 +11,7 @@ import { useSetYtelseIdMutation } from '@app/redux/api/overstyringer/overstyring
 import { SaksTypeEnum } from '@app/types/common';
 import { FagsystemId } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, Heading, Select, Tag } from '@navikt/ds-react';
+import { Heading, InlineMessage, Select, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 const ID = ValidationFieldNames.YTELSE_ID;
@@ -65,9 +65,9 @@ const PredefinedYtelse = ({ ytelseId }: PredefinedYtelseProps) => (
   <section className="col-[1]" aria-labelledby={HEADING_ID}>
     {HEADING}
     {ytelseId === null ? (
-      <Alert variant="error" size="small" inline data-testid={ID}>
+      <InlineMessage status="error" size="small" data-testid={ID}>
         Teknisk feil: Ytelse mangler. Kontakt Team Klage.
-      </Alert>
+      </InlineMessage>
     ) : (
       <YtelseTag ytelseId={ytelseId} data-testid={ID} />
     )}

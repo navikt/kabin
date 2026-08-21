@@ -9,7 +9,7 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { DEFAULT_SVARBREV_NAME } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { SaksTypeEnum } from '@app/types/common';
-import { Alert } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useEffect, useState } from 'react';
 
@@ -19,9 +19,9 @@ export const Preview = () => {
 
   if (overstyringer.mottattKlageinstans === null) {
     return (
-      <Alert variant="info" size="small" inline>
+      <InlineMessage status="info" size="small">
         Velg mottatt klageinstans først.
-      </Alert>
+      </InlineMessage>
     );
   }
 

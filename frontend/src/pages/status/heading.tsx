@@ -2,8 +2,8 @@ import { ExternalLinkButton } from '@app/components/link-button/link-button';
 import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
-import { HouseIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { CheckmarkCircleFillIcon, HouseIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { Link as RouterLink } from 'react-router';
 
 interface StatusHeadingProps {
@@ -22,15 +22,23 @@ export const StatusHeading = ({ headingText, alertText, behandlingId, registreri
     className="sticky -top-27.5 z-20 mb-6 w-full"
   >
     <VStack gap="space-8">
-      <Alert variant="success">
+      <Box
+        asChild
+        background="success-soft"
+        borderColor="success"
+        borderWidth="1"
+        borderRadius="8"
+        paddingBlock="space-12"
+        paddingInline="space-16"
+        className="flex items-center gap-x-2"
+      >
         <Heading level="1" size="medium">
+          <CheckmarkCircleFillIcon />
           {headingText}
         </Heading>
-      </Alert>
+      </Box>
 
-      <Alert variant="info" inline>
-        {alertText}
-      </Alert>
+      <InlineMessage status="info">{alertText}</InlineMessage>
 
       <NewRegistrering orientation="horizontal" />
       <HStack align="center" justify="start" gap="space-8" width="100%">
