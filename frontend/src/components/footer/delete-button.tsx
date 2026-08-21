@@ -1,7 +1,7 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useDeleteRegistreringMutation, useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
-import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -52,9 +52,9 @@ const Confirm = ({ close }: { close: () => void }) => {
       shadow="dialog"
     >
       <VStack as="section" ref={ref} gap="space-8">
-        <Alert size="small" inline variant="warning">
+        <InlineMessage size="small" status="warning">
           Er du sikker på at du vil slette denne registreringen?
-        </Alert>
+        </InlineMessage>
         <HStack justify="space-between" gap="space-8" wrap={false}>
           <Button
             data-color="danger"

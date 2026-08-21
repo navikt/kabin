@@ -1,5 +1,5 @@
+import { Alert } from '@app/components/alert/alert';
 import { isDateAfter } from '@app/functions/date';
-import { Alert } from '@navikt/ds-react';
 
 interface Props {
   datoOpprettet?: string;
@@ -17,9 +17,5 @@ export const Warning = ({ datoOpprettet, vedtakDate }: Props) => {
     return null;
   }
 
-  return (
-    <Alert variant="error" size="small">
-      Vedtaksdato kan ikke være etter dato for valgt journalpost.
-    </Alert>
-  );
+  return <Alert variant="error">Vedtaksdato kan ikke være etter dato for valgt journalpost.</Alert>;
 };

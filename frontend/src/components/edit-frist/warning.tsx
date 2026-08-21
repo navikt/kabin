@@ -1,10 +1,10 @@
+import { Alert } from '@app/components/alert/alert';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
 import { SaksTypeEnum } from '@app/types/common';
-import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, differenceInMonths, isValid, parseISO } from 'date-fns';
 
@@ -47,7 +47,7 @@ export const Warning = ({ unitTypeId, units }: Props) => {
 
   if (Math.abs(differenceInMonths(overstyringFristdato, svarbrevFristdato)) > 5) {
     return (
-      <Alert size="small" variant="warning">
+      <Alert variant="warning">
         Du har endret foreslått frist med <strong>mer enn seks måneder</strong>. Er du sikker på at dette er riktig?
       </Alert>
     );

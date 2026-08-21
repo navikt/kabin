@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
@@ -20,7 +21,6 @@ import { useRegistrering } from '@app/hooks/use-registrering';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
 
 export const TypeInput = () => {
   const { id, typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
@@ -177,7 +177,7 @@ const WillCreateNewJournalpostInfo = () => {
   const toId = <b>{journalpostAndMulighet.toId ?? 'ukjent'}</b>;
 
   return (
-    <Alert variant="info" size="small">
+    <Alert variant="info">
       Journalposten er tidligere journalført på fagsak-ID {fromId}. Ved opprettelse av behandling i Kabal vil innholdet
       kopieres over i en ny journalpost på fagsak-ID {toId}.
     </Alert>

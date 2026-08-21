@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { CardMedium } from '@app/components/card/card';
 import { DokumentDropzone } from '@app/components/documents/upload/dokument-dropzone';
 import { DokumentRow } from '@app/components/documents/upload/dokument-row/dokument-row';
@@ -17,7 +18,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import type { RegistreringDokument } from '@app/redux/api/registreringer/types';
 import { DOKUMENT_TERMINAL_STATUSES, DokumentStatus } from '@app/redux/api/registreringer/types';
 import { ValidationFieldNames } from '@app/types/validation';
-import { Alert, BodyShort, HStack, ProgressBar, type ProgressBarProps, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, ProgressBar, type ProgressBarProps, VStack } from '@navikt/ds-react';
 import { type DragEvent, memo, type Ref } from 'react';
 
 const NON_RESUMABLE_STATUSES: DokumentStatus[] = [DokumentStatus.UPLOADING];
@@ -148,9 +149,7 @@ export const UploadDokumenter = () => {
         </DokumentDropzone>
       </CardMedium>
 
-      <Alert variant="info" size="small">
-        Opplastede dokumenter blir journalført ved fullføring.
-      </Alert>
+      <Alert variant="info">Opplastede dokumenter blir journalført ved fullføring.</Alert>
     </>
   );
 };

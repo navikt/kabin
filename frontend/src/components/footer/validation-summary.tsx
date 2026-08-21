@@ -1,7 +1,8 @@
+import { Alert } from '@app/components/alert/alert';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
 import type { IValidationError, IValidationSection } from '@app/types/validation';
-import { Alert, Link } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 
 interface Props {
   sections: IValidationSection[];

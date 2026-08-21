@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { Address } from '@app/components/svarbrev/address/address';
 import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
@@ -5,7 +6,7 @@ import type { Receiver } from '@app/redux/api/registreringer/types';
 import { type IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 
 interface Props {
@@ -86,7 +87,7 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
       </HStack>
       <HStack align="center" gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
-          <Alert size="small" variant="info">
+          <Alert variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
           </Alert>
         ) : null}

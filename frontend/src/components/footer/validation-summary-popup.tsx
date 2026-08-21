@@ -1,9 +1,10 @@
+import { Alert } from '@app/components/alert/alert';
 import { isApiError, isValidationResponse, isValidationSection } from '@app/components/footer/error-type-guard';
 import { StyledHeader, ValidationSummary } from '@app/components/footer/validation-summary';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useFinishRegistreringMutation } from '@app/redux/api/registreringer/main';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, HStack } from '@navikt/ds-react';
+import { BodyShort, HStack, InlineMessage } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
@@ -32,12 +33,12 @@ export const ValidationSummaryPopup = () => {
   return (
     <>
       <button type="button" className="cursor-pointer whitespace-nowrap border-0 bg-transparent" onClick={toggleOpen}>
-        <Alert variant="warning" inline>
+        <InlineMessage status="warning">
           <HStack align="center" wrap={false}>
             <span>Feil i utfyllingen</span>
             <Icon />
           </HStack>
-        </Alert>
+        </InlineMessage>
       </button>
       {isOpen ? (
         <div className="absolute right-4 bottom-16 w-100">
