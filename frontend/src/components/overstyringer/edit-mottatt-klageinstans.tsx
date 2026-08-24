@@ -59,14 +59,17 @@ const FromJournalpostToNow = () => {
 };
 
 const useFromDate = () => {
-  const { mulighet, fromJournalpost } = useMulighet();
+  const { mulighet, fromJournalpost, typeId } = useMulighet();
   const additionalKabalMulighet = useAdditionalKabalMulighet();
 
   if (fromJournalpost) {
     return undefined;
   }
 
-  const vedtakDate = additionalKabalMulighet?.vedtakDate ?? mulighet?.vedtakDate;
+  const compareDate =
+    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? mulighet?.kjennelseMottatt : mulighet?.vedtakDate;
+
+  const vedtakDate = additionalKabalMulighet?.vedtakDate ?? compareDate;
 
   return typeof vedtakDate === 'string' ? parseISO(vedtakDate) : undefined;
 };

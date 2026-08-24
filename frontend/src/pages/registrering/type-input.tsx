@@ -7,8 +7,7 @@ import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
 import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
-import { Klagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
-import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
+import { Klagemuligheter, LoadingKlagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { Omgjøringskravmuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';

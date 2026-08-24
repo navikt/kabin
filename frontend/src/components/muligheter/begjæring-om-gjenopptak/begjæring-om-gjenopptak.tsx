@@ -1,8 +1,8 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { LoadingNonKlagemuligheter } from '@app/components/muligheter/common/loading-non-klage-muligheter';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
-import { MulighetTable } from '@app/components/muligheter/common/table';
-import { NonKlageTableHeaders } from '@app/components/muligheter/common/table-headers';
+import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
+import { MuligheterTable } from '@app/components/muligheter/common/table/table';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import {
@@ -15,7 +15,6 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetNonAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IBegjæringOmGjenopptakMulighet } from '@app/types/mulighet';
@@ -90,11 +89,7 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content
-        begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter}
-        isLoading={isLoading}
-        selectedMulighet={mulighet}
-      />
+      <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
@@ -102,15 +97,16 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 interface ContentProps {
   begjæringOmGjenopptakMuligheter: IBegjæringOmGjenopptakMulighet[] | undefined;
   isLoading: boolean;
-  selectedMulighet: IBegjæringOmGjenopptakMulighet | undefined;
 }
 
-const Content = ({ begjæringOmGjenopptakMuligheter, isLoading, selectedMulighet }: ContentProps) => {
+const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
     return (
-      <LoadingNonKlagemuligheter label="Muligheter for beegjæring om gjenopptak">
-        <NonKlageTableHeaders />
-      </LoadingNonKlagemuligheter>
+      <LoadingMuligheter
+        label="Muligheter for begjæring om gjenopptak"
+        columns={COLUMNS}
+        type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
+      />
     );
   }
 
@@ -127,13 +123,22 @@ const Content = ({ begjæringOmGjenopptakMuligheter, isLoading, selectedMulighet
   }
 
   return (
-    <MulighetTable
+    <MuligheterTable
       label="Muligheter for begjæring om gjenopptak"
-      headers={<NonKlageTableHeaders />}
       muligheter={begjæringOmGjenopptakMuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      setMulighetHook={useSetNonAnkemulighetMutation}
-      selectedMulighet={selectedMulighet ?? null}
+      columns={COLUMNS}
+      type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
     />
   );
 };
+
+const COLUMNS: (keyof IBegjæringOmGjenopptakMulighet)[] = [
+  'typeId',
+  'fagsakId',
+  'temaId',
+  'ytelseId',
+  'kjennelseMottatt',
+  'originalFagsystemId',
+  'sourceOfExistingBehandlinger',
+];

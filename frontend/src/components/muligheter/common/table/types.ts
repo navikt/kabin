@@ -1,0 +1,12 @@
+export enum MulighetType {
+  KLAGE = 'KLAGE',
+  ANKE = 'ANKE',
+  OMGJØRINGSKRAV = 'OMGJØRINGSKRAV',
+  BEGJÆRING_OM_GJENOPPTAK = 'BEGJÆRING_OM_GJENOPPTAK',
+  ADDITIONAL_KABAL_MULIGHET = 'ADDITIONAL_KABAL_MULIGHET',
+}
+
+export type OtherMulighetType =
+  | MulighetType.ADDITIONAL_KABAL_MULIGHET
+  | MulighetType.ANKE
+  | MulighetType.OMGJØRINGSKRAV;

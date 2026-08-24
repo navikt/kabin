@@ -2,13 +2,13 @@ import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
-import { StyledButtonCell } from '@app/components/muligheter/common/table-components';
 import { isoDateTimeToPrettyDate, isoDateToPretty } from '@app/domain/date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetTemaQuery } from '@app/redux/api/kodeverk';
 import { useSetOppgaveIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import type { IGosysOppgave } from '@app/types/gosys-oppgave';
 import { BodyLong, Box, Button, Heading, Table, Tooltip, VStack } from '@navikt/ds-react';
+import type { ComponentProps } from 'react';
 
 export const Row = ({
   id,
@@ -106,4 +106,10 @@ const Beskrivelse = ({ beskrivelse }: { beskrivelse: string | null }) => (
       <BodyLong className="whitespace-pre">{beskrivelse ?? 'Ingen beskrivelse tilgjengelig.'}</BodyLong>
     </Box>
   </VStack>
+);
+
+interface StyledButtonCellProps extends ComponentProps<typeof Table.DataCell> {}
+
+const StyledButtonCell = ({ className = '', ...props }: StyledButtonCellProps) => (
+  <Table.DataCell className={`text-center ${className}`} {...props} />
 );
