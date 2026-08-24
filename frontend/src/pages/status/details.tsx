@@ -33,12 +33,11 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
 const getMulighetTitle = (typeId: RegistreringType): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
-      return 'Valgt klagevedtak';
     case SaksTypeEnum.ANKE:
-      return 'Valgt ankevedtak';
     case SaksTypeEnum.OMGJØRINGSKRAV:
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return 'Valgt vedtak';
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return 'Valgt kjennelse';
   }
 };
 
