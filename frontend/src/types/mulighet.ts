@@ -31,6 +31,7 @@ export interface IAnkemulighet extends IBasemulighet {
   readonly vedtakDate: string | null;
   readonly typeId: SaksTypeEnum;
   readonly sourceOfExistingBehandlinger: ExistingBehandling[];
+  readonly kjennelseMottatt: string | null;
 }
 
 export interface IOmgjøringskravmulighet extends IAnkemulighet {}
@@ -48,3 +49,6 @@ export interface ExistingBehandling {
   /** LocalDateTime */
   completed: string | null;
 }
+
+// Not klage- or begjæring om gjenopptak-mulighet
+export type OtherMulighet = IAnkemulighet | IOmgjøringskravmulighet | IAdditionalKabalMulighet;

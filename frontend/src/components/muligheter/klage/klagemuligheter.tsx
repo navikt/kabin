@@ -1,8 +1,8 @@
 import { Card, CardSmall } from '@app/components/card/card';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
-import { Klagemulighet } from '@app/components/muligheter/klage/klagemulighet';
-import { LoadingKlagemuligheter } from '@app/components/muligheter/klage/loading-klagemuligheter';
-import { TableHeaders } from '@app/components/muligheter/klage/table-headers';
+import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
+import { MuligheterTable } from '@app/components/muligheter/common/table/table';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedKlagemulighet, SelectedKlagemulighetBody } from '@app/components/selected/selected-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -15,7 +15,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import type { IKlagemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const Klagemuligheter = () => {
@@ -58,7 +58,7 @@ const EditableKlagemuligheter = () => {
     return null;
   }
 
-  if (!isExpanded && mulighet !== null) {
+  if (!isExpanded && mulighet !== undefined) {
     return <SelectedKlagemulighet onClick={() => setIsExpanded(true)} />;
   }
 
@@ -88,11 +88,7 @@ interface ContentProps {
 
 const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return (
-      <LoadingKlagemuligheter>
-        <TableHeaders />
-      </LoadingKlagemuligheter>
-    );
+    return <LoadingKlagemuligheter />;
   }
 
   if (klagemuligheter === undefined) {
@@ -108,15 +104,24 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
   }
 
   return (
-    <div className="overflow-y-auto">
-      <Table zebraStripes size="small" id={ValidationFieldNames.MULIGHET} aria-label="Klagemuligheter">
-        <TableHeaders />
-        <Table.Body>
-          {klagemuligheter.map((klagemulighet) => (
-            <Klagemulighet key={klagemulighet.id} klagemulighet={klagemulighet} />
-          ))}
-        </Table.Body>
-      </Table>
-    </div>
+    <MuligheterTable
+      label="Klagemuligheter"
+      muligheter={klagemuligheter}
+      fieldName={ValidationFieldNames.MULIGHET}
+      columns={COLUMNS}
+      type={MulighetType.KLAGE}
+    />
   );
 };
+
+const COLUMNS: (keyof IKlagemulighet)[] = [
+  'fagsakId',
+  'temaId',
+  'vedtakDate',
+  'klageBehandlendeEnhet',
+  'originalFagsystemId',
+];
+
+export const LoadingKlagemuligheter = () => (
+  <LoadingMuligheter label="Klagemuligheter" columns={COLUMNS} type={MulighetType.KLAGE} />
+);

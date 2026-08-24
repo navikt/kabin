@@ -1,8 +1,8 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { LoadingNonKlagemuligheter } from '@app/components/muligheter/common/loading-non-klage-muligheter';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
-import { MulighetTable } from '@app/components/muligheter/common/table';
-import { NonKlageTableHeaders } from '@app/components/muligheter/common/table-headers';
+import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
+import { MuligheterTable } from '@app/components/muligheter/common/table/table';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import {
@@ -15,7 +15,6 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IAnkemulighet } from '@app/types/mulighet';
@@ -85,7 +84,7 @@ const EditableAnkemuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} selectedMulighet={mulighet} />
+      <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
@@ -93,16 +92,11 @@ const EditableAnkemuligheter = () => {
 interface ContentProps {
   ankemuligheter: IAnkemulighet[] | undefined;
   isLoading: boolean;
-  selectedMulighet: IAnkemulighet | undefined;
 }
 
-const Content = ({ ankemuligheter, isLoading, selectedMulighet }: ContentProps) => {
+const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return (
-      <LoadingNonKlagemuligheter label="Ankemuligheter">
-        <NonKlageTableHeaders />
-      </LoadingNonKlagemuligheter>
-    );
+    return <LoadingMuligheter label="Ankemuligheter" columns={COLUMNS} type={MulighetType.ANKE} />;
   }
 
   if (ankemuligheter === undefined) {
@@ -118,13 +112,22 @@ const Content = ({ ankemuligheter, isLoading, selectedMulighet }: ContentProps) 
   }
 
   return (
-    <MulighetTable
+    <MuligheterTable
       label="Ankemuligheter"
-      headers={<NonKlageTableHeaders />}
       muligheter={ankemuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      setMulighetHook={useSetAnkemulighetMutation}
-      selectedMulighet={selectedMulighet ?? null}
+      columns={COLUMNS}
+      type={MulighetType.ANKE}
     />
   );
 };
+
+const COLUMNS: (keyof IAnkemulighet)[] = [
+  'typeId',
+  'fagsakId',
+  'temaId',
+  'ytelseId',
+  'vedtakDate',
+  'originalFagsystemId',
+  'sourceOfExistingBehandlinger',
+];

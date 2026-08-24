@@ -1,19 +1,7 @@
 import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { SaksTypeEnum } from '@app/types/common';
-import type {
-  IAdditionalKabalMulighet,
-  IAnkemulighet,
-  IBasemulighet,
-  IBegjæringOmGjenopptakMulighet,
-  IOmgjøringskravmulighet,
-} from '@app/types/mulighet';
-
-type NonKlagemulighet =
-  | IAnkemulighet
-  | IOmgjøringskravmulighet
-  | IBegjæringOmGjenopptakMulighet
-  | IAdditionalKabalMulighet;
+import type { IBasemulighet, OtherMulighet } from '@app/types/mulighet';
 
 export const useBasemulighetProp = <K extends keyof IBasemulighet>(key: K): IBasemulighet[K] | null => {
   const { mulighet, fromJournalpost } = useMulighet();
@@ -26,7 +14,7 @@ export const useBasemulighetProp = <K extends keyof IBasemulighet>(key: K): IBas
   return additionalKabalMulighet?.[key] ?? mulighet?.[key] ?? null;
 };
 
-export const useNonKlagemulighetProp = <K extends keyof NonKlagemulighet>(key: K): NonKlagemulighet[K] | null => {
+export const useNonKlagemulighetProp = <K extends keyof OtherMulighet>(key: K): OtherMulighet[K] | null => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();
   const additionalKabalMulighet = useAdditionalKabalMulighet();
 

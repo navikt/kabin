@@ -1,8 +1,8 @@
 import { Card } from '@app/components/card/card';
-import { LoadingNonKlagemuligheter } from '@app/components/muligheter/common/loading-non-klage-muligheter';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
-import { MulighetTable } from '@app/components/muligheter/common/table';
-import { NonKlageTableHeaders } from '@app/components/muligheter/common/table-headers';
+import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
+import { MuligheterTable } from '@app/components/muligheter/common/table/table';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import {
@@ -15,7 +15,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetAdditionalKabalMulighetMutation } from '@app/redux/api/registreringer/mutations';
 import { useLazyGetAdditionalKabalMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import type { IAdditionalKabalMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -96,13 +95,13 @@ interface ContentProps {
 }
 
 const Content = ({ muligheter, isLoading }: ContentProps) => {
-  const mulighet = useAdditionalKabalMulighet();
-
   if (isLoading) {
     return (
-      <LoadingNonKlagemuligheter label="Tidligere behandlinger i Kabal som anken gjelder">
-        <NonKlageTableHeaders />
-      </LoadingNonKlagemuligheter>
+      <LoadingMuligheter
+        label="Tidligere behandlinger i Kabal som anken gjelder"
+        columns={COLUMNS}
+        type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
+      />
     );
   }
 
@@ -115,13 +114,22 @@ const Content = ({ muligheter, isLoading }: ContentProps) => {
   }
 
   return (
-    <MulighetTable
+    <MuligheterTable
       label="Kabal-muligheter"
-      headers={<NonKlageTableHeaders />}
       muligheter={muligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      setMulighetHook={useSetAdditionalKabalMulighetMutation}
-      selectedMulighet={mulighet}
+      columns={COLUMNS}
+      type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
     />
   );
 };
+
+const COLUMNS: (keyof IAdditionalKabalMulighet)[] = [
+  'typeId',
+  'fagsakId',
+  'temaId',
+  'ytelseId',
+  'vedtakDate',
+  'originalFagsystemId',
+  'sourceOfExistingBehandlinger',
+];

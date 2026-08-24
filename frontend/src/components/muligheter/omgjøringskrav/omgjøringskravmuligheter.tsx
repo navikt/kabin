@@ -1,8 +1,8 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { LoadingNonKlagemuligheter } from '@app/components/muligheter/common/loading-non-klage-muligheter';
 import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
-import { MulighetTable } from '@app/components/muligheter/common/table';
-import { NonKlageTableHeaders } from '@app/components/muligheter/common/table-headers';
+import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
+import { MuligheterTable } from '@app/components/muligheter/common/table/table';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import {
@@ -15,7 +15,6 @@ import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetNonAnkemulighetMutation } from '@app/redux/api/registreringer/mutations';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IOmgjøringskravmulighet } from '@app/types/mulighet';
@@ -85,11 +84,7 @@ const EditableOmgjøringskravmuligheter = () => {
 
       <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
 
-      <Content
-        omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter}
-        isLoading={isLoading}
-        selectedMulighet={mulighet}
-      />
+      <Content omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter} isLoading={isLoading} />
     </CardSmall>
   );
 };
@@ -97,16 +92,11 @@ const EditableOmgjøringskravmuligheter = () => {
 interface ContentProps {
   omgjøringskravmuligheter: IOmgjøringskravmulighet[] | undefined;
   isLoading: boolean;
-  selectedMulighet: IOmgjøringskravmulighet | undefined;
 }
 
-const Content = ({ omgjøringskravmuligheter, isLoading, selectedMulighet }: ContentProps) => {
+const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return (
-      <LoadingNonKlagemuligheter label="Omgjøringskravmuligheter">
-        <NonKlageTableHeaders />
-      </LoadingNonKlagemuligheter>
-    );
+    return <LoadingMuligheter label="Omgjøringskravmuligheter" columns={COLUMNS} type={MulighetType.OMGJØRINGSKRAV} />;
   }
 
   if (omgjøringskravmuligheter === undefined) {
@@ -122,13 +112,22 @@ const Content = ({ omgjøringskravmuligheter, isLoading, selectedMulighet }: Con
   }
 
   return (
-    <MulighetTable
+    <MuligheterTable
       label="Omgjøringskravmuligheter"
-      headers={<NonKlageTableHeaders />}
       muligheter={omgjøringskravmuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      setMulighetHook={useSetNonAnkemulighetMutation}
-      selectedMulighet={selectedMulighet ?? null}
+      columns={COLUMNS}
+      type={MulighetType.OMGJØRINGSKRAV}
     />
   );
 };
+
+const COLUMNS: (keyof IOmgjøringskravmulighet)[] = [
+  'typeId',
+  'fagsakId',
+  'temaId',
+  'ytelseId',
+  'vedtakDate',
+  'originalFagsystemId',
+  'sourceOfExistingBehandlinger',
+];
