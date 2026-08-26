@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { isValidMulighetDate } from '@app/components/muligheter/common/is-valid-mulighet-date';
+import { getInvalidMulighetDateMessage, isValidMulighetDate } from '@app/components/muligheter/common/mulighet-date';
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { FORMAT } from '@app/domain/date-formats';
 import { addDays, format, subDays } from 'date-fns';
 
@@ -55,5 +56,38 @@ describe('isValidMulighetDate', () => {
 
       expect(isValidMulighetDate('2022-01-01', false, undefined)).toBe(false);
     });
+  });
+});
+
+describe('getInvalidMulighetDateMessage', () => {
+  it('names the date after the kjennelse for begjæring om gjenopptak', () => {
+    expect.assertions(2);
+
+    expect(getInvalidMulighetDateMessage(MulighetType.BEGJÆRING_OM_GJENOPPTAK, false)).toBe(
+      'Kjennelsesdato kan ikke være etter dato for valgt journalpost',
+    );
+    expect(getInvalidMulighetDateMessage(MulighetType.BEGJÆRING_OM_GJENOPPTAK, true)).toBe(
+      'Kjennelsesdato kan ikke være frem i tid',
+    );
+  });
+
+  it('names the date after the vedtak for every other mulighet', () => {
+    expect.assertions(3);
+
+    expect(getInvalidMulighetDateMessage(MulighetType.ANKE, false)).toBe(
+      'Vedtaksdato kan ikke være etter dato for valgt journalpost',
+    );
+    expect(getInvalidMulighetDateMessage(MulighetType.OMGJØRINGSKRAV, false)).toBe(
+      'Vedtaksdato kan ikke være etter dato for valgt journalpost',
+    );
+    expect(getInvalidMulighetDateMessage(MulighetType.ADDITIONAL_KABAL_MULIGHET, false)).toBe(
+      'Vedtaksdato kan ikke være etter dato for valgt journalpost',
+    );
+  });
+
+  it('refers to today instead of the journalpost for uploaded documents', () => {
+    expect.assertions(1);
+
+    expect(getInvalidMulighetDateMessage(MulighetType.ANKE, true)).toBe('Vedtaksdato kan ikke være frem i tid');
   });
 });
