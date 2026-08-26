@@ -8,13 +8,13 @@ enum ComparisonResult {
 }
 
 const compareDates = (a: string, b: string): number => {
-  const aParsed = parse(a.substring(0, FORMAT.length), FORMAT, new Date());
+  const aParsed = parseDate(a);
 
   if (!isValid(aParsed)) {
     throw new Error(`Invalid date: ${a}`);
   }
 
-  const bParsed = parse(b.substring(0, FORMAT.length), FORMAT, new Date());
+  const bParsed = parseDate(b);
 
   if (!isValid(bParsed)) {
     throw new Error(`Invalid date: ${b}`);
@@ -30,6 +30,8 @@ const compareDates = (a: string, b: string): number => {
 
   return ComparisonResult.BEFORE;
 };
+
+export const parseDate = (date: string) => parse(date.substring(0, FORMAT.length), FORMAT, new Date());
 
 export const isDateAfter = (maybeAfter: string, base: string): boolean =>
   compareDates(maybeAfter, base) === ComparisonResult.AFTER;
