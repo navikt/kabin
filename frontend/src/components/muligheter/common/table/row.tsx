@@ -51,7 +51,7 @@ export const Row = (props: Props) => {
 
   const getCursorClass = () => (isValid && canEdit ? 'cursor-pointer' : 'cursor-default');
   const getBackgroundClass = () =>
-    isValid && isSelected ? 'bg-ax-bg-danger-soft hover:bg-ax-bg-danger-moderate-hover' : '';
+    !isValid && isSelected ? 'bg-ax-bg-danger-soft hover:bg-ax-bg-danger-moderate-hover' : '';
 
   const isLoading = isLoadingAnkemulighet || isLoadingNonAnkemulighet || isLoadingAdditionalKabalMulighet;
 
