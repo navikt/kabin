@@ -1,59 +1,21 @@
 import { FORMAT } from '@app/domain/date-formats';
-import { isAfter, isEqual, isValid, parse } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 
-enum ComparisonResult {
-  BEFORE = -1,
-  EQUAL = 0,
-  AFTER = 1,
-}
+/**
+ * Parses the date part of an ISO date or date-time string, ignoring any timestamp.
+ * The result is local midnight, so it can be compared with date-fns functions like `isAfter` and `isPast`.
+ *
+ * The truncation is required, not just convenience: date-fns `parse` returns an invalid date when the
+ * input has trailing characters the format did not consume, so passing a full date-time would fail.
+ *
+ * @throws if the string does not start with a valid `yyyy-MM-dd` date.
+ */
+export const parseDate = (date: string): Date => {
+  const parsed = parse(date.substring(0, FORMAT.length), FORMAT, new Date());
 
-const compareDates = (a: string, b: string): number => {
-  const aParsed = parseDate(a);
-
-  if (!isValid(aParsed)) {
-    throw new Error(`Invalid date: ${a}`);
+  if (!isValid(parsed)) {
+    throw new Error(`Invalid date: ${date}`);
   }
 
-  const bParsed = parseDate(b);
-
-  if (!isValid(bParsed)) {
-    throw new Error(`Invalid date: ${b}`);
-  }
-
-  if (isEqual(aParsed, bParsed)) {
-    return ComparisonResult.EQUAL;
-  }
-
-  if (isAfter(aParsed, bParsed)) {
-    return ComparisonResult.AFTER;
-  }
-
-  return ComparisonResult.BEFORE;
-};
-
-export const parseDate = (date: string) => parse(date.substring(0, FORMAT.length), FORMAT, new Date());
-
-export const isDateAfter = (maybeAfter: string, base: string): boolean =>
-  compareDates(maybeAfter, base) === ComparisonResult.AFTER;
-
-/** @public */
-export const isDateBefore = (maybeBefore: string, base: string): boolean =>
-  compareDates(maybeBefore, base) === ComparisonResult.BEFORE;
-
-/** @public */
-export const isDateEqual = (maybeEqual: string, base: string): boolean =>
-  compareDates(maybeEqual, base) === ComparisonResult.EQUAL;
-
-/** @public */
-export const isDateBeforeOrEqual = (maybeBefore: string, base: string): boolean => {
-  const comparison = compareDates(maybeBefore, base);
-
-  return comparison === ComparisonResult.BEFORE || comparison === ComparisonResult.EQUAL;
-};
-
-/** @public */
-export const isDateAfterOrEqual = (maybeAfter: string, base: string): boolean => {
-  const comparison = compareDates(maybeAfter, base);
-
-  return comparison === ComparisonResult.AFTER || comparison === ComparisonResult.EQUAL;
+  return parsed;
 };

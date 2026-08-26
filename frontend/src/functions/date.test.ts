@@ -1,131 +1,30 @@
 import { describe, expect, it } from 'bun:test';
-import { isDateAfter, isDateAfterOrEqual, isDateBefore, isDateBeforeOrEqual, isDateEqual } from '@app/functions/date';
+import { parseDate } from '@app/functions/date';
 
-describe('isDate', () => {
-  it('before', () => {
+describe('parseDate', () => {
+  it('parses an ISO date as local midnight', () => {
     expect.assertions(1);
 
-    const actual = isDateAfter('2022-01-01', '2023-01-01');
-    expect(actual).toBe(false);
+    const actual = parseDate('2022-01-01');
+    expect(actual).toEqual(new Date(2022, 0, 1));
   });
 
-  it('equal', () => {
+  it('should ignore timestamp', () => {
     expect.assertions(1);
 
-    const actual = isDateAfter('2022-01-01', '2022-01-01');
-    expect(actual).toBe(false);
+    const actual = parseDate('2021-01-01T23:59:59.999Z');
+    expect(actual).toEqual(new Date(2021, 0, 1));
   });
 
-  it('after', () => {
+  it('throws on malformed date', () => {
     expect.assertions(1);
 
-    const actual = isDateAfter('2022-01-01', '2021-01-01');
-    expect(actual).toBe(true);
+    expect(() => parseDate('01.01.2022')).toThrow('Invalid date: 01.01.2022');
   });
 
-  it('after - should ignore timestamp', () => {
+  it('throws on out of range date', () => {
     expect.assertions(1);
 
-    const actual = isDateAfter('2021-01-01T23:59:59.999Z', '2021-01-01');
-    expect(actual).toBe(false);
-  });
-});
-
-describe('isDateBefore', () => {
-  it('before', () => {
-    expect.assertions(1);
-
-    const actual = isDateBefore('2022-01-01', '2023-01-01');
-    expect(actual).toBe(true);
-  });
-
-  it('equal', () => {
-    expect.assertions(1);
-
-    const actual = isDateBefore('2022-01-01', '2022-01-01');
-    expect(actual).toBe(false);
-  });
-
-  it('after', () => {
-    expect.assertions(1);
-
-    const actual = isDateBefore('2022-01-01', '2021-01-01');
-    expect(actual).toBe(false);
-  });
-});
-
-describe('isDateEqual', () => {
-  it('before', () => {
-    expect.assertions(1);
-
-    const actual = isDateEqual('2022-01-01', '2023-01-01');
-    expect(actual).toBe(false);
-  });
-
-  it('equal', () => {
-    expect.assertions(1);
-
-    const actual = isDateEqual('2022-01-01', '2022-01-01');
-    expect(actual).toBe(true);
-  });
-
-  it('after', () => {
-    expect.assertions(1);
-
-    const actual = isDateEqual('2022-01-01', '2021-01-01');
-    expect(actual).toBe(false);
-  });
-
-  it('equal - should ignore timestamp', () => {
-    expect.assertions(1);
-
-    const actual = isDateEqual('2021-01-01T23:59:59.999Z', '2021-01-01');
-    expect(actual).toBe(true);
-  });
-});
-
-describe('isDateBeforeOrEqual', () => {
-  it('before', () => {
-    expect.assertions(1);
-
-    const actual = isDateBeforeOrEqual('2022-01-01', '2023-01-01');
-    expect(actual).toBe(true);
-  });
-
-  it('equal', () => {
-    expect.assertions(1);
-
-    const actual = isDateBeforeOrEqual('2022-01-01', '2022-01-01');
-    expect(actual).toBe(true);
-  });
-
-  it('after', () => {
-    expect.assertions(1);
-
-    const actual = isDateBeforeOrEqual('2022-01-01', '2021-01-01');
-    expect(actual).toBe(false);
-  });
-});
-
-describe('isDateAfterOrEqual', () => {
-  it('before', () => {
-    expect.assertions(1);
-
-    const actual = isDateAfterOrEqual('2022-01-01', '2023-01-01');
-    expect(actual).toBe(false);
-  });
-
-  it('equal', () => {
-    expect.assertions(1);
-
-    const actual = isDateAfterOrEqual('2022-01-01', '2022-01-01');
-    expect(actual).toBe(true);
-  });
-
-  it('after', () => {
-    expect.assertions(1);
-
-    const actual = isDateAfterOrEqual('2022-01-01', '2021-01-01');
-    expect(actual).toBe(true);
+    expect(() => parseDate('2022-13-01')).toThrow('Invalid date: 2022-13-01');
   });
 });
