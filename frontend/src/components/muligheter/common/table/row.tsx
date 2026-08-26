@@ -1,6 +1,7 @@
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { Cell } from '@app/components/muligheter/common/table/cell';
 import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
+import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
@@ -35,11 +36,26 @@ interface KlagemulighetRowsProps extends CommonProps {
   columns: (keyof IKlagemulighet)[];
 }
 
+const useIsSelected = (type: MulighetType, mulighetId: string): boolean => {
+  const additionalKabalMulighet = useAdditionalKabalMulighet();
+  const { mulighet: selectedMulighet } = useMulighet();
+
+  switch (type) {
+    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
+      return additionalKabalMulighet?.id === mulighetId;
+    case MulighetType.ANKE:
+    case MulighetType.OMGJØRINGSKRAV:
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
+    case MulighetType.KLAGE: {
+      return selectedMulighet?.id === mulighetId;
+    }
+  }
+};
+
 type Props = OtherRowsProps | BegjæringOmGjenopptakMulighetRowsProps | KlagemulighetRowsProps;
 
 export const Row = (props: Props) => {
   const { mulighet, type, isValid } = props;
-  const { mulighet: selectedMulighet } = useMulighet();
   const { id } = useRegistrering();
   const canEdit = useCanEdit();
   const [setAnkemulighet, { isLoading: isLoadingAnkemulighet }] = useSetAnkemulighetMutation();
@@ -47,7 +63,7 @@ export const Row = (props: Props) => {
   const [setAdditionalKabalMulighet, { isLoading: isLoadingAdditionalKabalMulighet }] =
     useSetAdditionalKabalMulighetMutation();
 
-  const isSelected = selectedMulighet?.id === mulighet.id;
+  const isSelected = useIsSelected(type, mulighet.id);
 
   const getCursorClass = () => (isValid && canEdit ? 'cursor-pointer' : 'cursor-default');
   const getBackgroundClass = () =>
@@ -59,37 +75,25 @@ export const Row = (props: Props) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (!isValid) {
+      if (!isValid || isSelected) {
         return;
       }
 
-      if (selectedMulighet === null || selectedMulighet?.id !== mulighet.id) {
-        switch (type) {
-          case MulighetType.ANKE:
-            setAnkemulighet({ id, mulighet });
-            break;
-          case MulighetType.ADDITIONAL_KABAL_MULIGHET:
-            setAdditionalKabalMulighet({ id, mulighet });
-            break;
-          case MulighetType.OMGJØRINGSKRAV:
-          case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
-          case MulighetType.KLAGE:
-            setNonAnkemulighet({ id, mulighet });
-            break;
-        }
+      switch (type) {
+        case MulighetType.ANKE:
+          setAnkemulighet({ id, mulighet });
+          break;
+        case MulighetType.ADDITIONAL_KABAL_MULIGHET:
+          setAdditionalKabalMulighet({ id, mulighet });
+          break;
+        case MulighetType.OMGJØRINGSKRAV:
+        case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
+        case MulighetType.KLAGE:
+          setNonAnkemulighet({ id, mulighet });
+          break;
       }
     },
-    [
-      isValid,
-      mulighet,
-      id,
-      selectedMulighet?.id,
-      selectedMulighet,
-      setAnkemulighet,
-      setNonAnkemulighet,
-      setAdditionalKabalMulighet,
-      type,
-    ],
+    [isValid, mulighet, id, isSelected, setAnkemulighet, setNonAnkemulighet, setAdditionalKabalMulighet, type],
   );
 
   return (
