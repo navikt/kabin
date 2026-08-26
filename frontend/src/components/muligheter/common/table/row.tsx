@@ -93,7 +93,11 @@ export const Row = (props: Props) => {
   );
 
   return (
-    <Table.Row className={`rounded ${getCursorClass()} ${getBackgroundClass()}`}>
+    <Table.Row
+      selected={isSelected}
+      onClick={selectMulighet}
+      className={`rounded ${getCursorClass()} ${getBackgroundClass()}`}
+    >
       <Columns {...props} />
       <Table.DataCell className="text-center">
         <SelectMulighet
