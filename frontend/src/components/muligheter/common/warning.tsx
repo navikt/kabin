@@ -1,5 +1,6 @@
 import { Alert } from '@app/components/alert/alert';
-import { isDateAfter } from '@app/functions/date';
+import { parseDate } from '@app/functions/date';
+import { isAfter } from 'date-fns';
 
 interface Props {
   datoOpprettet?: string;
@@ -11,7 +12,7 @@ export const Warning = ({ datoOpprettet, vedtakDate }: Props) => {
     return null;
   }
 
-  const isInvalid = isDateAfter(vedtakDate, datoOpprettet);
+  const isInvalid = isAfter(parseDate(vedtakDate), parseDate(datoOpprettet));
 
   if (!isInvalid) {
     return null;
