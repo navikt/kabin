@@ -11,7 +11,6 @@ import {
 } from '@app/components/selected/selected-non-klagemulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -50,7 +49,6 @@ const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
 
 const EditableBegjæringOmGjenopptakMuligheter = () => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();
-  const { journalpost } = useJournalpost();
   const { muligheter, id } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -87,7 +85,7 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
+      <Warning date={mulighet?.kjennelseMottatt} label="Kjennelsesdato" />
 
       <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
     </CardSmall>

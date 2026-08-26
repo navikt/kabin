@@ -12,7 +12,6 @@ import {
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useLazyGetAdditionalKabalMuligheterQuery } from '@app/redux/api/registreringer/queries';
@@ -48,7 +47,6 @@ const ReadOnlyAdditionalKabalMuligheter = () => {
 
 const EditableAdditionalKabalMuligheter = () => {
   const mulighet = useAdditionalKabalMulighet();
-  const { journalpost } = useJournalpost();
   const { id, additionalKabalMuligheter } = useRegistrering();
   const [refetch, { isFetching, isLoading }] = useLazyGetAdditionalKabalMuligheterQuery();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -82,7 +80,7 @@ const EditableAdditionalKabalMuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.ADDITIONAL_KABAL_MULIGHET} />
 
-      <Warning datoOpprettet={journalpost?.datoOpprettet} vedtakDate={mulighet?.vedtakDate} />
+      <Warning date={mulighet?.vedtakDate} label="Vedtaksdato" />
 
       <Content muligheter={additionalKabalMuligheter} isLoading={isLoading} />
     </Card>
