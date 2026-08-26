@@ -102,6 +102,7 @@ export const Row = (props: Props) => {
           isValid={isValid}
           isLoading={isLoading}
           mulighetId={mulighet.id}
+          type={type}
         />
       </Table.DataCell>
     </Table.Row>

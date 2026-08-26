@@ -1,3 +1,4 @@
+import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { parseDate } from '@app/functions/date';
 import { isAfter, isPast } from 'date-fns';
 
@@ -27,4 +28,23 @@ export const isValidMulighetDate = (
   }
 
   return !isAfter(parseDate(date), parseDate(journalpostDate));
+};
+
+/** Explains why a mulighet is rejected by `isValidMulighetDate`. */
+export const getInvalidMulighetDateMessage = (type: MulighetType, isUploadedDocuments: boolean): string =>
+  isUploadedDocuments
+    ? `${getDateLabel(type)} kan ikke være frem i tid`
+    : `${getDateLabel(type)} kan ikke være etter dato for valgt journalpost`;
+
+/** Names the date the way the table column header does. */
+const getDateLabel = (type: MulighetType): string => {
+  switch (type) {
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
+      return 'Kjennelsesdato';
+    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
+    case MulighetType.ANKE:
+    case MulighetType.KLAGE:
+    case MulighetType.OMGJØRINGSKRAV:
+      return 'Vedtaksdato';
+  }
 };

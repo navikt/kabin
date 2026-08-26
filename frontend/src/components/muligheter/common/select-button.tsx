@@ -1,5 +1,8 @@
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { getInvalidMulighetDateMessage } from '@app/components/muligheter/common/mulighet-date';
+import type { MulighetType } from '@app/components/muligheter/common/table/types';
 import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsUploadedDocuments } from '@app/hooks/use-journalpost';
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
@@ -9,10 +12,11 @@ interface Props {
   isValid: boolean;
   isLoading: boolean;
   mulighetId: string;
+  type: MulighetType;
 }
 
-export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighetId }: Props) => {
-  const [icon, buttonText, title] = useButtonProps(isSelected, isValid);
+export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighetId, type }: Props) => {
+  const [icon, buttonText, title] = useButtonProps(isSelected, isValid, type);
   const canEdit = useCanEdit();
 
   if (!canEdit) {
@@ -43,7 +47,10 @@ export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighe
 const useButtonProps = (
   isSelected: boolean,
   isValid: boolean,
+  type: MulighetType,
 ): [React.ReactNode, undefined, string] | [null, string, undefined] => {
+  const isUploadedDocuments = useIsUploadedDocuments();
+
   if (isSelected) {
     return [<CheckmarkCircleFillIconColored key="icon" />, undefined, 'Valgt'];
   }
@@ -55,6 +62,6 @@ const useButtonProps = (
   return [
     <CircleSlashIcon key="icon" aria-hidden />,
     undefined,
-    'Vedtaksdato kan ikke være etter dato for valgt journalpost',
+    getInvalidMulighetDateMessage(type, isUploadedDocuments),
   ];
 };

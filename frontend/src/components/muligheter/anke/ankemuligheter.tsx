@@ -80,7 +80,7 @@ const EditableAnkemuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning date={mulighet?.vedtakDate} label="Vedtaksdato" />
+      <Warning date={mulighet?.vedtakDate} type={MulighetType.ANKE} />
 
       <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} />
     </CardSmall>

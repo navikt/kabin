@@ -1,4 +1,4 @@
-import { isValidMulighetDate } from '@app/components/muligheter/common/is-valid-mulighet-date';
+import { isValidMulighetDate } from '@app/components/muligheter/common/mulighet-date';
 import { Row } from '@app/components/muligheter/common/table/row';
 import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';

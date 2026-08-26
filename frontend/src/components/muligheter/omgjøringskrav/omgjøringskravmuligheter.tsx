@@ -80,7 +80,7 @@ const EditableOmgjøringskravmuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning date={mulighet?.vedtakDate} label="Vedtaksdato" />
+      <Warning date={mulighet?.vedtakDate} type={MulighetType.OMGJØRINGSKRAV} />
 
       <Content omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter} isLoading={isLoading} />
     </CardSmall>

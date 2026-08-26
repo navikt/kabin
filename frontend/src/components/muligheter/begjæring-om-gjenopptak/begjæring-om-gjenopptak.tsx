@@ -85,7 +85,7 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning date={mulighet?.kjennelseMottatt} label="Kjennelsesdato" />
+      <Warning date={mulighet?.kjennelseMottatt} type={MulighetType.BEGJÆRING_OM_GJENOPPTAK} />
 
       <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
     </CardSmall>
