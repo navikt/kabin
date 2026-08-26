@@ -1,9 +1,10 @@
 import { Row } from '@app/components/muligheter/common/table/row';
 import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
-import { isDateAfter } from '@app/functions/date';
+import { isDateAfter, parseDate } from '@app/functions/date';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { Table } from '@navikt/ds-react';
+import { isPast } from 'date-fns';
 import type { JSX } from 'react/jsx-runtime';
 
 interface OtherMulighetProps {
@@ -36,7 +37,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
     }
 
     if (isUploadedDocuments) {
-      return !isDateAfter(mulighet.vedtakDate, new Date().toISOString());
+      return isPast(parseDate(mulighet.vedtakDate));
     }
 
     if (journalpost === undefined) {
@@ -52,7 +53,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
     }
 
     if (isUploadedDocuments) {
-      return !isDateAfter(mulighet.kjennelseMottatt, new Date().toISOString());
+      return isPast(parseDate(mulighet.kjennelseMottatt));
     }
 
     if (journalpost === undefined) {
