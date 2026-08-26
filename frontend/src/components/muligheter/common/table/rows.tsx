@@ -1,10 +1,9 @@
+import { isValidMulighetDate } from '@app/components/muligheter/common/is-valid-mulighet-date';
 import { Row } from '@app/components/muligheter/common/table/row';
 import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
-import { isDateAfter, parseDate } from '@app/functions/date';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { Table } from '@navikt/ds-react';
-import { isPast } from 'date-fns';
 import type { JSX } from 'react/jsx-runtime';
 
 interface OtherMulighetProps {
@@ -31,43 +30,15 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
   const { journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
 
-  const isValidOtherMulighet = (mulighet: OtherMulighet) => {
-    if (mulighet.vedtakDate === null) {
-      return true;
-    }
+  const isValidDate = (date: string | null) =>
+    isValidMulighetDate(date, isUploadedDocuments, journalpost?.datoOpprettet);
 
-    if (isUploadedDocuments) {
-      return isPast(parseDate(mulighet.vedtakDate));
-    }
-
-    if (journalpost === undefined) {
-      return false;
-    }
-
-    return !isDateAfter(mulighet.vedtakDate, journalpost.datoOpprettet);
-  };
-
-  const isValidGBMulighet = (mulighet: IBegjæringOmGjenopptakMulighet) => {
-    if (mulighet.kjennelseMottatt === null) {
-      return true;
-    }
-
-    if (isUploadedDocuments) {
-      return isPast(parseDate(mulighet.kjennelseMottatt));
-    }
-
-    if (journalpost === undefined) {
-      return false;
-    }
-
-    return !isDateAfter(mulighet.kjennelseMottatt, journalpost.datoOpprettet);
-  };
-
+  // Klagemulighet has no date to validate - always valid.
   if (type === MulighetType.KLAGE) {
     return (
       <Table.Body>
         {muligheter.map((m) => (
-          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidKlagemulighet} />
+          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid />
         ))}
       </Table.Body>
     );
@@ -77,7 +48,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
     return (
       <Table.Body>
         {muligheter.map((m) => (
-          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={() => isValidGBMulighet(m)} />
+          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.kjennelseMottatt)} />
         ))}
       </Table.Body>
     );
@@ -86,11 +57,8 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
   return (
     <Table.Body>
       {muligheter.map((m) => (
-        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={() => isValidOtherMulighet(m)} />
+        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.vedtakDate)} />
       ))}
     </Table.Body>
   );
 };
-
-// Klagemulighet has no validation - always valid
-const isValidKlagemulighet = () => true;

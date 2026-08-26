@@ -14,7 +14,7 @@ import { Table } from '@navikt/ds-react';
 import { type JSX, useCallback } from 'react';
 
 interface CommonProps {
-  isValid: () => boolean;
+  isValid: boolean;
 }
 
 interface OtherRowsProps extends CommonProps {
@@ -49,19 +49,17 @@ export const Row = (props: Props) => {
 
   const isSelected = selectedMulighet?.id === mulighet.id;
 
-  const getCursorClass = () => (valid && canEdit ? 'cursor-pointer' : 'cursor-default');
+  const getCursorClass = () => (isValid && canEdit ? 'cursor-pointer' : 'cursor-default');
   const getBackgroundClass = () =>
-    valid && isSelected ? 'bg-ax-bg-danger-soft hover:bg-ax-bg-danger-moderate-hover' : '';
+    isValid && isSelected ? 'bg-ax-bg-danger-soft hover:bg-ax-bg-danger-moderate-hover' : '';
 
   const isLoading = isLoadingAnkemulighet || isLoadingNonAnkemulighet || isLoadingAdditionalKabalMulighet;
-
-  const valid = isValid();
 
   const selectMulighet = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      if (!valid) {
+      if (!isValid) {
         return;
       }
 
@@ -82,7 +80,7 @@ export const Row = (props: Props) => {
       }
     },
     [
-      valid,
+      isValid,
       mulighet,
       id,
       selectedMulighet?.id,
@@ -101,7 +99,7 @@ export const Row = (props: Props) => {
         <SelectMulighet
           isSelected={isSelected}
           select={selectMulighet}
-          isValid={valid}
+          isValid={isValid}
           isLoading={isLoading}
           mulighetId={mulighet.id}
         />
