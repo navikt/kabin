@@ -99,8 +99,9 @@ export const StatusDetails = ({ id, status }: Props) => {
         fagsakId={fagsakId}
         fagsystemId={fagsystemId}
         sakenGjelder={sakenGjelder}
-        vedtakDate={vedtakDate}
+        mulighetDate={typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? status.kjennelseMottatt : vedtakDate}
         ytelseId={ytelseId}
+        mulighetDateLabel={typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? 'Kjennelsesdato' : 'Vedtaksdato'}
       />
 
       {svarbrev === null ? null : <Svarbrev svarbrev={svarbrev} id={id} />}
