@@ -3,8 +3,9 @@ import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/commo
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
+import { KLAGEMULIGHETER_COLUMNS } from '@app/components/muligheter/klage/columns';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import { SelectedKlagemulighet, SelectedKlagemulighetBody } from '@app/components/selected/selected-klagemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -38,7 +39,12 @@ const ReadOnlyKlagemulighet = () => {
   return (
     <Card>
       <HeaderReadOnly>Vedtaket klagen gjelder</HeaderReadOnly>
-      <SelectedKlagemulighetBody {...mulighet} />
+      <SelectedMulighetBody
+        muligheter={[mulighet]}
+        tableLabel="Valgt klagemulighet"
+        columns={KLAGEMULIGHETER_COLUMNS}
+        type={MulighetType.KLAGE}
+      />
     </Card>
   );
 };
@@ -59,7 +65,16 @@ const EditableKlagemuligheter = () => {
   }
 
   if (!isExpanded && mulighet !== undefined) {
-    return <SelectedKlagemulighet onClick={() => setIsExpanded(true)} />;
+    return (
+      <SelectedMulighet
+        onClick={() => setIsExpanded(true)}
+        buttonLabel="Vis alle klagemuligheter"
+        columns={KLAGEMULIGHETER_COLUMNS}
+        tableLabel="Vedtaket klagen gjelder"
+        type={MulighetType.KLAGE}
+        muligheter={[mulighet]}
+      />
+    );
   }
 
   return (
@@ -108,20 +123,13 @@ const Content = ({ klagemuligheter, isLoading }: ContentProps) => {
       label="Klagemuligheter"
       muligheter={klagemuligheter}
       fieldName={ValidationFieldNames.MULIGHET}
-      columns={COLUMNS}
+      columns={KLAGEMULIGHETER_COLUMNS}
       type={MulighetType.KLAGE}
+      selectable
     />
   );
 };
 
-const COLUMNS: (keyof IKlagemulighet)[] = [
-  'fagsakId',
-  'temaId',
-  'vedtakDate',
-  'klageBehandlendeEnhet',
-  'originalFagsystemId',
-];
-
 export const LoadingKlagemuligheter = () => (
-  <LoadingMuligheter label="Klagemuligheter" columns={COLUMNS} type={MulighetType.KLAGE} />
+  <LoadingMuligheter label="Klagemuligheter" columns={KLAGEMULIGHETER_COLUMNS} type={MulighetType.KLAGE} selectable />
 );

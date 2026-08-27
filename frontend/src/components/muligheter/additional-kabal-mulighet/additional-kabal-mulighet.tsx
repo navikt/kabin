@@ -5,10 +5,7 @@ import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import {
-  SelectedNonKlageMulighet,
-  SelectedNonKlageMulighetBody,
-} from '@app/components/selected/selected-non-klagemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -40,7 +37,12 @@ const ReadOnlyAdditionalKabalMuligheter = () => {
   return (
     <Card>
       <HeaderReadOnly>Vedtaket saken gjelder</HeaderReadOnly>
-      <SelectedNonKlageMulighetBody {...mulighet} />
+      <SelectedMulighetBody
+        muligheter={[mulighet]}
+        tableLabel="Valgt tidligere behandling i Kabal"
+        columns={COLUMNS}
+        type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
+      />
     </Card>
   );
 };
@@ -62,7 +64,14 @@ const EditableAdditionalKabalMuligheter = () => {
 
   if (!isExpanded && mulighet !== null) {
     return (
-      <SelectedNonKlageMulighet onClick={() => setIsExpanded(true)} label="Vis alle tidligere behandlinger i Kabal" />
+      <SelectedMulighet
+        onClick={() => setIsExpanded(true)}
+        buttonLabel="Vis alle tidligere behandlinger i Kabal"
+        columns={COLUMNS}
+        tableLabel="Vedtaket saken gjelder"
+        type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
+        muligheter={[mulighet]}
+      />
     );
   }
 
@@ -99,6 +108,7 @@ const Content = ({ muligheter, isLoading }: ContentProps) => {
         label="Tidligere behandlinger i Kabal som anken gjelder"
         columns={COLUMNS}
         type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
+        selectable
       />
     );
   }
@@ -118,6 +128,7 @@ const Content = ({ muligheter, isLoading }: ContentProps) => {
       fieldName={ValidationFieldNames.MULIGHET}
       columns={COLUMNS}
       type={MulighetType.ADDITIONAL_KABAL_MULIGHET}
+      selectable
     />
   );
 };

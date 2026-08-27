@@ -25,7 +25,11 @@ interface BegjæringOmGjenopptakMuligheterProps {
 
 type Props = OtherMuligheterProps | KlagemuligheterProps | BegjæringOmGjenopptakMuligheterProps;
 
-export const LoadingMuligheter = ({ label, ...props }: Props) => (
+interface Selectable {
+  selectable: boolean;
+}
+
+export const LoadingMuligheter = ({ label, ...props }: Props & Selectable) => (
   <Table size="small" id={ValidationFieldNames.MULIGHET} aria-label={label}>
     <MulighetHeaders {...props} />
     <LoadingRows {...props} />
@@ -49,7 +53,7 @@ interface LoadingKlagemuligheter {
 
 type LoadingRowsProps = LoadingOtherMuligheter | LoadingKlagemuligheter | LoadingBegjæringOmGjenopptakMuligheter;
 
-const LoadingRows = (props: LoadingRowsProps) => (
+const LoadingRows = (props: LoadingRowsProps & Selectable) => (
   <Table.Body>
     <LoadingRow {...props} />
     <LoadingRow {...props} />
@@ -58,10 +62,10 @@ const LoadingRows = (props: LoadingRowsProps) => (
   </Table.Body>
 );
 
-const LoadingRow = (props: LoadingRowsProps) => (
+const LoadingRow = ({ selectable, ...props }: LoadingRowsProps & Selectable) => (
   <Table.Row>
     <LoadingCells {...props} />
-    <SelectRowButton />
+    {selectable ? <SelectRowButton /> : null}
   </Table.Row>
 );
 

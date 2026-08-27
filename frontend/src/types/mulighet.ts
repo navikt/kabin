@@ -51,4 +51,8 @@ export interface ExistingBehandling {
 }
 
 // Not klage- or begjæring om gjenopptak-mulighet
-export type OtherMulighet = IAnkemulighet | IOmgjøringskravmulighet | IAdditionalKabalMulighet;
+export type OtherMulighet =
+  | IAnkemulighet
+  | IOmgjøringskravmulighet
+  | IAdditionalKabalMulighet
+  | IBegjæringOmGjenopptakMulighet;

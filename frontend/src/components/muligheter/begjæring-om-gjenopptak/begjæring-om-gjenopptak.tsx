@@ -5,10 +5,7 @@ import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import {
-  SelectedNonKlageMulighet,
-  SelectedNonKlageMulighetBody,
-} from '@app/components/selected/selected-non-klagemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -42,7 +39,12 @@ const ReadOnlyBegjæringOmGjenopptakMulighet = () => {
   return (
     <Card>
       <HeaderReadOnly>Vedtaket begjæringen om gjenopptak gjelder</HeaderReadOnly>
-      <SelectedNonKlageMulighetBody {...mulighet} />
+      <SelectedMulighetBody
+        muligheter={[mulighet]}
+        tableLabel="Valgt begjæring om gjenopptak"
+        columns={COLUMNS}
+        type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
+      />
     </Card>
   );
 };
@@ -64,9 +66,13 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
 
   if (!isExpanded && mulighet !== undefined) {
     return (
-      <SelectedNonKlageMulighet
+      <SelectedMulighet
         onClick={() => setIsExpanded(true)}
-        label="Vis alle muligheter for begjæring om gjenopptak"
+        buttonLabel="Vis alle muligheter for begjæring om gjenopptak"
+        columns={COLUMNS}
+        tableLabel="Vedtaket begjæringen om gjenopptak gjelder"
+        type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
+        muligheter={[mulighet]}
       />
     );
   }
@@ -104,6 +110,7 @@ const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) 
         label="Muligheter for begjæring om gjenopptak"
         columns={COLUMNS}
         type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
+        selectable
       />
     );
   }
@@ -127,6 +134,7 @@ const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) 
       fieldName={ValidationFieldNames.MULIGHET}
       columns={COLUMNS}
       type={MulighetType.BEGJÆRING_OM_GJENOPPTAK}
+      selectable
     />
   );
 };
