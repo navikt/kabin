@@ -47,7 +47,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(closeConfirm, ref);
   const mulighetResult = useMulighet();
-  const { journalpost } = useJournalpostFromMulighet();
+  const { data: journalpost } = useJournalpostFromMulighet();
 
   if (typeId === null) {
     return null;

@@ -184,7 +184,7 @@ const WillCreateNewJournalpostInfo = () => {
 };
 
 const useJournalpostAndMulighet = () => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const { mulighet, fromJournalpost } = useMulighet();
   const additionalKabalMulighet = useAdditionalKabalMulighet();
 

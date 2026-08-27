@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const SelectedDocument = ({ onClick }: Props) => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
 
   if (journalpost === undefined) {
     return null;

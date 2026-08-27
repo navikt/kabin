@@ -28,7 +28,7 @@ type MulighetProps = OtherMulighetProps | KlagemulighetProps | BegjæringOmGjeno
 type Props = MulighetProps & { selectable: boolean };
 
 export const MulighetRows = ({ type, columns, muligheter, ...p }: Props): JSX.Element => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
 
   const isValidDate = (date: string | null) =>

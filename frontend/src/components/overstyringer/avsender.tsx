@@ -17,7 +17,7 @@ interface Props {
 export const Avsender = ({ options }: Props) => {
   const { overstyringer } = useRegistrering();
   const { avsender } = overstyringer;
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
   const isAnkeSource = useIsAnkeSource();
   const error = useValidationError(ValidationFieldNames.AVSENDER);
