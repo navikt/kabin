@@ -76,4 +76,5 @@ export type IOmgjøringskravstatus = IBaseStatus & {
 export type IBegjæringOmGjenopptakStatus = IBaseStatus & {
   typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
   vedtakDate: string | null;
+  kjennelseMottatt: string | null;
 };

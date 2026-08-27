@@ -9,16 +9,27 @@ interface Props {
   fagsystemId: string;
   sakenGjelder: IPart;
   title: string;
-  vedtakDate: string | null;
+  mulighetDate: string | null;
+  mulighetDateLabel: string;
   ytelseId: string;
 }
 
-export const Mulighet = ({ title, sakenGjelder, ytelseId, vedtakDate, fagsystemId, fagsakId }: Props) => (
+export const Mulighet = ({
+  title,
+  sakenGjelder,
+  ytelseId,
+  mulighetDate,
+  fagsystemId,
+  fagsakId,
+  mulighetDateLabel,
+}: Props) => (
   <StyledCard title={title} gridArea="mulighet" titleSize="medium">
     <Part title="Saken gjelder" part={sakenGjelder} />
 
-    <InfoItem label="Vedtaksdato">
-      {vedtakDate === null ? 'Ukjent' : (isoDateToPretty(vedtakDate) ?? isoDateTimeToPretty(vedtakDate) ?? vedtakDate)}
+    <InfoItem label={mulighetDateLabel}>
+      {mulighetDate === null
+        ? 'Ukjent'
+        : (isoDateToPretty(mulighetDate) ?? isoDateTimeToPretty(mulighetDate) ?? mulighetDate)}
     </InfoItem>
 
     <InfoItem label="Ytelse">
