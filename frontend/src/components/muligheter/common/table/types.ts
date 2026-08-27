@@ -9,5 +9,4 @@ export enum MulighetType {
 export type OtherMulighetType =
   | MulighetType.ADDITIONAL_KABAL_MULIGHET
   | MulighetType.ANKE
-  | MulighetType.OMGJØRINGSKRAV
-  | MulighetType.BEGJÆRING_OM_GJENOPPTAK;
+  | MulighetType.OMGJØRINGSKRAV;

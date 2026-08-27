@@ -1,7 +1,7 @@
 import { Card } from '@app/components/card/card';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import type { MulighetType, OtherMulighetType } from '@app/components/muligheter/common/table/types';
-import type { IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
+import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack } from '@navikt/ds-react';
@@ -21,13 +21,19 @@ interface Other {
   columns: (keyof OtherMulighet)[];
 }
 
+interface BegjæringOmGjenopptak {
+  muligheter: IBegjæringOmGjenopptakMulighet[];
+  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
+  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
+}
+
 interface Klage {
   muligheter: IKlagemulighet[];
   type: MulighetType.KLAGE;
   columns: (keyof IKlagemulighet)[];
 }
 
-type MulighetProps = Other | Klage;
+type MulighetProps = Other | BegjæringOmGjenopptak | Klage;
 type BodyProps = MulighetProps & CommonProps;
 type Props = MulighetProps & NonTableProps & CommonProps;
 

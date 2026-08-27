@@ -121,6 +121,7 @@ const getOtherColumnWidth = (column: keyof OtherMulighet): number => {
     case 'fullmektig':
     case 'hjemmelIdList':
     case 'klager':
+    case 'mulighetTypeId':
     case 'previousSaksbehandler':
     case 'requiresGosysOppgave':
     case 'id':
@@ -143,6 +144,7 @@ const getKlageColumnWidth = (column: keyof IKlagemulighet): number => {
       return 200;
     case 'currentFagsystemId':
     case 'requiresGosysOppgave':
+    case 'mulighetTypeId':
     case 'id':
     case 'sakenGjelder':
       throw new Error(`Unsupported key: ${column} for getKlageColumnWidth`);

@@ -71,6 +71,7 @@ export const Cell = ({ column, mulighet }: Props): JSX.Element => {
     case 'currentFagsystemId':
     case 'requiresGosysOppgave':
     case 'sakenGjelder':
+    case 'mulighetTypeId':
     case 'id':
     case 'fullmektig':
     case 'hjemmelIdList':

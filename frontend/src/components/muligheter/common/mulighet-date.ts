@@ -1,6 +1,61 @@
-import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { parseDate } from '@app/functions/date';
+import { SaksTypeEnum } from '@app/types/common';
+import type {
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IKlagemulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
 import { isAfter, isPast } from 'date-fns';
+
+/** The date-carrying subset of every mulighet, derived from the real types so it tracks them.
+ * `mulighetTypeId` discriminates, so the switches below are exhaustive. `IAdditionalKabalMulighet`
+ * is covered by the `IAnkemulighet` member, since it inherits `SaksTypeEnum.ANKE`. */
+export type KlagemulighetDates = Pick<IKlagemulighet, 'mulighetTypeId' | 'vedtakDate'>;
+export type AnkemulighetDates = Pick<IAnkemulighet, 'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'>;
+export type OmgjøringskravmulighetDates = Pick<
+  IOmgjøringskravmulighet,
+  'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'
+>;
+export type BegjæringOmGjenopptakMulighetDates = Pick<
+  IBegjæringOmGjenopptakMulighet,
+  'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'
+>;
+
+export type MulighetDates =
+  | KlagemulighetDates
+  | AnkemulighetDates
+  | OmgjøringskravmulighetDates
+  | BegjæringOmGjenopptakMulighetDates;
+
+/**
+ * The date of a mulighet that everything else is measured against: the date shown in the table,
+ * validated by `isValidMulighetDate` and used as the lower bound for `Mottatt Nav klageinstans`.
+ *
+ * `null` means the mulighet has no such date, not that it is invalid.
+ */
+export const getMulighetDate = (mulighet: MulighetDates): string | null => {
+  switch (mulighet.mulighetTypeId) {
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return mulighet.kjennelseMottatt;
+    case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+    case SaksTypeEnum.KLAGE:
+      return mulighet.vedtakDate;
+  }
+};
+
+/** Names the date returned by `getMulighetDate` the way the table column header does. */
+export const getMulighetDateLabel = (mulighet: MulighetDates): string => {
+  switch (mulighet.mulighetTypeId) {
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return KJENNELSESDATO;
+    case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+    case SaksTypeEnum.KLAGE:
+      return VEDTAKSDATO;
+  }
+};
 
 /**
  * A mulighet is valid when its date is not after the date of the documents it will be registered on.
@@ -31,20 +86,10 @@ export const isValidMulighetDate = (
 };
 
 /** Explains why a mulighet is rejected by `isValidMulighetDate`. */
-export const getInvalidMulighetDateMessage = (type: MulighetType, isUploadedDocuments: boolean): string =>
+export const getInvalidMulighetDateMessage = (mulighet: MulighetDates, isUploadedDocuments: boolean): string =>
   isUploadedDocuments
-    ? `${getDateLabel(type)} kan ikke være frem i tid`
-    : `${getDateLabel(type)} kan ikke være etter dato for valgt journalpost`;
+    ? `${getMulighetDateLabel(mulighet)} kan ikke være frem i tid`
+    : `${getMulighetDateLabel(mulighet)} kan ikke være etter dato for valgt journalpost`;
 
-/** Names the date the way the table column header does. */
-const getDateLabel = (type: MulighetType): string => {
-  switch (type) {
-    case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
-      return 'Kjennelsesdato';
-    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
-    case MulighetType.ANKE:
-    case MulighetType.KLAGE:
-    case MulighetType.OMGJØRINGSKRAV:
-      return 'Vedtaksdato';
-  }
-};
+const VEDTAKSDATO = 'Vedtaksdato';
+const KJENNELSESDATO = 'Kjennelsesdato';

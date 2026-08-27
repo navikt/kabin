@@ -15,11 +15,13 @@ export interface IBasemulighet {
   readonly originalFagsystemId: string;
   readonly currentFagsystemId: FagsystemId;
   readonly requiresGosysOppgave: boolean;
+  readonly mulighetTypeId: SaksTypeEnum;
 }
 
 export interface IKlagemulighet extends IBasemulighet {
   readonly klageBehandlendeEnhet: string;
   readonly vedtakDate: string;
+  readonly mulighetTypeId: SaksTypeEnum.KLAGE;
 }
 
 export interface IAnkemulighet extends IBasemulighet {
@@ -32,11 +34,16 @@ export interface IAnkemulighet extends IBasemulighet {
   readonly typeId: SaksTypeEnum;
   readonly sourceOfExistingBehandlinger: ExistingBehandling[];
   readonly kjennelseMottatt: string | null;
+  readonly mulighetTypeId: SaksTypeEnum.ANKE;
 }
 
-export interface IOmgjøringskravmulighet extends IAnkemulighet {}
+export interface IOmgjøringskravmulighet extends Omit<IAnkemulighet, 'mulighetTypeId'> {
+  readonly mulighetTypeId: SaksTypeEnum.OMGJØRINGSKRAV;
+}
 
-export interface IBegjæringOmGjenopptakMulighet extends IAnkemulighet {}
+export interface IBegjæringOmGjenopptakMulighet extends Omit<IAnkemulighet, 'mulighetTypeId'> {
+  readonly mulighetTypeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+}
 
 export interface IAdditionalKabalMulighet extends IAnkemulighet {}
 
@@ -51,8 +58,8 @@ export interface ExistingBehandling {
 }
 
 // Not klage- or begjæring om gjenopptak-mulighet
-export type OtherMulighet =
-  | IAnkemulighet
-  | IOmgjøringskravmulighet
-  | IAdditionalKabalMulighet
-  | IBegjæringOmGjenopptakMulighet;
+export type OtherMulighet = IAnkemulighet | IOmgjøringskravmulighet | IAdditionalKabalMulighet;
+
+/** Every kind of mulighet. Discriminated by `mulighetTypeId`, except `IAdditionalKabalMulighet`,
+ * which is indistinguishable from `IAnkemulighet` - see `MulighetType` for that distinction. */
+export type IMulighet = IKlagemulighet | OtherMulighet | IBegjæringOmGjenopptakMulighet;

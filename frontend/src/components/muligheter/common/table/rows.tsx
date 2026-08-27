@@ -1,4 +1,4 @@
-import { isValidMulighetDate } from '@app/components/muligheter/common/mulighet-date';
+import { getMulighetDate, isValidMulighetDate } from '@app/components/muligheter/common/mulighet-date';
 import { Row } from '@app/components/muligheter/common/table/row';
 import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
@@ -49,7 +49,7 @@ export const MulighetRows = ({ type, columns, muligheter, ...p }: Props): JSX.El
     return (
       <Table.Body>
         {muligheter.map((m) => (
-          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.kjennelseMottatt)} {...p} />
+          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(getMulighetDate(m))} {...p} />
         ))}
       </Table.Body>
     );
@@ -58,7 +58,7 @@ export const MulighetRows = ({ type, columns, muligheter, ...p }: Props): JSX.El
   return (
     <Table.Body>
       {muligheter.map((m) => (
-        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.vedtakDate)} {...p} />
+        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(getMulighetDate(m))} {...p} />
       ))}
     </Table.Body>
   );

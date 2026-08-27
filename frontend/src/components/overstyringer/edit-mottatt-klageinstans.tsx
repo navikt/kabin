@@ -1,15 +1,15 @@
 import { Datepicker } from '@app/components/date-picker/date-picker';
 import { ReadOnlyTime } from '@app/components/read-only-info/read-only-info';
 import { FORMAT } from '@app/domain/date-formats';
-import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
-import { useMulighet } from '@app/hooks/use-mulighet';
+import { useMulighetDate } from '@app/hooks/use-mulighet-date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
+import type { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { parseISO, subMonths } from 'date-fns';
 import { type JSX, useCallback, useMemo } from 'react';
@@ -59,19 +59,9 @@ const FromJournalpostToNow = () => {
 };
 
 const useFromDate = () => {
-  const { mulighet, fromJournalpost, typeId } = useMulighet();
-  const additionalKabalMulighet = useAdditionalKabalMulighet();
+  const mulighetDate = useMulighetDate();
 
-  if (fromJournalpost) {
-    return undefined;
-  }
-
-  const compareDate =
-    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? mulighet?.kjennelseMottatt : mulighet?.vedtakDate;
-
-  const vedtakDate = additionalKabalMulighet?.vedtakDate ?? compareDate;
-
-  return typeof vedtakDate === 'string' ? parseISO(vedtakDate) : undefined;
+  return mulighetDate === null ? undefined : parseISO(mulighetDate);
 };
 
 const FromVedtakToJournalpost = () => {
@@ -82,14 +72,13 @@ const FromVedtakToJournalpost = () => {
 
   const fromDate = useFromDate();
 
-  const toDate = isUploadedDocuments
-    ? new Date()
-    : journalpost === undefined
-      ? undefined
-      : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
+  const toDate = isUploadedDocuments ? new Date() : getToDate(journalpost);
 
   return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
 };
+
+const getToDate = (journalpost: IArkivertDocument | undefined): Date | undefined =>
+  journalpost === undefined ? undefined : parseISO(journalpost.datoOpprettet.substring(0, FORMAT.length));
 
 const getSelectedDate = (mottattKlageinstans: string | null) =>
   mottattKlageinstans === null ? undefined : parseISO(mottattKlageinstans);

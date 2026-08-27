@@ -1,6 +1,6 @@
 import { Alert } from '@app/components/alert/alert';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
+import { useMulighetDate } from '@app/hooks/use-mulighet-date';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
@@ -16,7 +16,7 @@ interface Props {
 export const Warning = ({ unitTypeId, units }: Props) => {
   const ytelseId = useYtelseId();
   const { typeId, fromJournalpost } = useMulighet();
-  const vedtakDate = useNonKlagemulighetProp('vedtakDate');
+  const mulighetDate = useMulighetDate();
   const { data: svarbrevSetting } = useGetSvarbrevSettingQuery(
     typeId === null || ytelseId === null ? skipToken : { ytelseId, typeId },
   );
@@ -25,11 +25,11 @@ export const Warning = ({ unitTypeId, units }: Props) => {
     return null;
   }
 
-  if (vedtakDate === null) {
+  if (mulighetDate === null) {
     return null;
   }
 
-  const mottattKlageinstansDate = parseISO(vedtakDate);
+  const mottattKlageinstansDate = parseISO(mulighetDate);
 
   if (!isValid(mottattKlageinstansDate)) {
     return null;
