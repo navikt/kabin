@@ -1,7 +1,7 @@
 import { YtelseTag } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
-import { useBasemulighetProp, useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
+import { useBasemulighetProp, useOtherMulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useTemaId } from '@app/hooks/use-tema-id';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -20,7 +20,7 @@ const HEADING_ID = 'ytelse-heading';
 export const Ytelse = () => {
   const { typeId } = useMulighet();
   const currentFagsystemId = useBasemulighetProp('currentFagsystemId');
-  const ytelseId = useNonKlagemulighetProp('ytelseId');
+  const ytelseId = useOtherMulighetProp('ytelseId');
   const canEdit = useCanEdit();
 
   if (!canEdit) {
