@@ -25,7 +25,7 @@ import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useJournalpost } from '@app/hooks/use-journalpost';
-import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
+import { useOtherMulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
@@ -74,7 +74,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
 
-  const defaultMulighetFullmektig = useNonKlagemulighetProp('fullmektig');
+  const defaultMulighetFullmektig = useOtherMulighetProp('fullmektig');
 
   if (isLoading) {
     return (

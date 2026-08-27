@@ -14,7 +14,7 @@ export const useBasemulighetProp = <K extends keyof IBasemulighet>(key: K): IBas
   return additionalKabalMulighet?.[key] ?? mulighet?.[key] ?? null;
 };
 
-export const useNonKlagemulighetProp = <K extends keyof OtherMulighet>(
+export const useOtherMulighetProp = <K extends keyof OtherMulighet>(
   key: K,
 ): (OtherMulighet | IBegjæringOmGjenopptakMulighet)[K] | null => {
   const { typeId, mulighet, fromJournalpost } = useMulighet();

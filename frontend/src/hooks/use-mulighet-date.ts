@@ -5,7 +5,7 @@ import { useMulighet } from '@app/hooks/use-mulighet';
 /**
  * The relevant date of the selected mulighet - `kjennelseMottatt` for begjæring om gjenopptak and
  * `vedtakDate` for every other type. Prefers the additional Kabal mulighet when one is selected,
- * like `useBasemulighetProp` and `useNonKlagemulighetProp`.
+ * like `useBasemulighetProp` and `useOtherMulighetProp`.
  *
  * `null` when the mulighet is based on a journalpost, since that has no date to derive.
  */

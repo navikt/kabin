@@ -11,7 +11,7 @@ import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
-import { useNonKlagemulighetProp } from '@app/hooks/use-mulighet-prop';
+import { useOtherMulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetSaksbehandlerIdentMutation } from '@app/redux/api/overstyringer/overstyringer';
@@ -65,7 +65,7 @@ export const Tildeling = ({ saksbehandlerFromMulighetLabel }: Props) => {
 };
 
 const Actions = ({ saksbehandlerFromMulighetLabel }: Props) => {
-  const previousSaksbehandler = useNonKlagemulighetProp('previousSaksbehandler');
+  const previousSaksbehandler = useOtherMulighetProp('previousSaksbehandler');
 
   return (
     <PartActionsContainer>
