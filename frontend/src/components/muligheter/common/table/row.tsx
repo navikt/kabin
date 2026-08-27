@@ -1,6 +1,6 @@
 import { SelectMulighet } from '@app/components/muligheter/common/select-button';
 import { Cell } from '@app/components/muligheter/common/table/cell';
-import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
+import { type MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
 import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-mulighet';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -10,32 +10,18 @@ import {
   useSetAnkemulighetMutation,
   useSetNonAnkemulighetMutation,
 } from '@app/redux/api/registreringer/mutations';
-import { SaksTypeEnum } from '@app/types/common';
-import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { Table } from '@navikt/ds-react';
 import { type JSX, useCallback } from 'react';
 
-interface CommonProps {
-  isValid: boolean;
-}
-
-interface OtherRowsProps extends CommonProps {
-  type: OtherMulighetType;
-  mulighet: OtherMulighet;
-  columns: (keyof OtherMulighet)[];
-}
-
-interface BegjæringOmGjenopptakMulighetRowsProps extends CommonProps {
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-  mulighet: IBegjæringOmGjenopptakMulighet;
-  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
-}
-
-interface KlagemulighetRowsProps extends CommonProps {
-  type: MulighetType.KLAGE;
-  mulighet: IKlagemulighet;
-  columns: (keyof IKlagemulighet)[];
-}
+type Props = {
+  [T in MulighetType]: {
+    isValid: boolean;
+    selectable: boolean;
+    type: T;
+    mulighet: MulighetMap[T];
+    columns: (keyof MulighetMap[T])[];
+  };
+}[MulighetType];
 
 const useIsSelected = (type: MulighetType, mulighetId: string): boolean => {
   const additionalKabalMulighet = useAdditionalKabalMulighet();
@@ -53,9 +39,7 @@ const useIsSelected = (type: MulighetType, mulighetId: string): boolean => {
   }
 };
 
-type Props = OtherRowsProps | BegjæringOmGjenopptakMulighetRowsProps | KlagemulighetRowsProps;
-
-export const Row = (props: Props & { selectable: boolean }) => {
+export const Row = (props: Props) => {
   const { mulighet, type, isValid, selectable } = props;
   const { id } = useRegistrering();
   const canEdit = useCanEdit();
@@ -80,25 +64,17 @@ export const Row = (props: Props & { selectable: boolean }) => {
         return;
       }
 
-      // `type` and `mulighet` always agree, but the props are not correlated, so `mulighetTypeId`
-      // is what actually narrows the mulighet for each setter.
       switch (type) {
         case MulighetType.ANKE:
-          if (mulighet.mulighetTypeId === SaksTypeEnum.ANKE) {
-            setAnkemulighet({ id, mulighet });
-          }
+          setAnkemulighet({ id, mulighet });
           break;
         case MulighetType.ADDITIONAL_KABAL_MULIGHET:
-          if (mulighet.mulighetTypeId === SaksTypeEnum.ANKE) {
-            setAdditionalKabalMulighet({ id, mulighet });
-          }
+          setAdditionalKabalMulighet({ id, mulighet });
           break;
         case MulighetType.OMGJØRINGSKRAV:
         case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
         case MulighetType.KLAGE:
-          if (mulighet.mulighetTypeId !== SaksTypeEnum.ANKE) {
-            setNonAnkemulighet({ id, mulighet });
-          }
+          setNonAnkemulighet({ id, mulighet });
           break;
       }
     },
@@ -138,16 +114,19 @@ const SelectCell = ({ mulighet, type, isValid, isLoading, selectMulighet }: Sele
   );
 };
 
-const Columns = ({ columns, mulighet, type }: Props): JSX.Element[] => {
-  // Need this to satisfy TS
+// Every case renders the same cell, but each one has to be listed separately for TS to keep
+// `columns` and `mulighet` correlated.
+const Columns = ({ type, columns, mulighet }: Props): JSX.Element[] => {
   switch (type) {
     case MulighetType.KLAGE:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
     case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
-    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
     case MulighetType.ANKE:
+      return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
     case MulighetType.OMGJØRINGSKRAV:
+      return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
+    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
   }
 };
