@@ -1,27 +1,13 @@
-import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
-import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
+import { type MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
 import { Table } from '@navikt/ds-react';
 import type { JSX } from 'react/jsx-runtime';
 
-interface OtherMulighetHeaderCellProps {
-  type: OtherMulighetType;
-  column: keyof OtherMulighet;
-}
-
-interface BegjæringOmGjenopptakMulighetHeaderCellProps {
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-  column: keyof IBegjæringOmGjenopptakMulighet;
-}
-
-interface KlagemulighetHeaderCellProps {
-  type: MulighetType.KLAGE;
-  column: keyof IKlagemulighet;
-}
-
-type HeaderCellProps =
-  | OtherMulighetHeaderCellProps
-  | KlagemulighetHeaderCellProps
-  | BegjæringOmGjenopptakMulighetHeaderCellProps;
+type HeaderCellProps = {
+  [T in MulighetType]: {
+    type: T;
+    column: keyof MulighetMap[T];
+  };
+}[MulighetType];
 
 const HeaderCell = ({ column, type }: HeaderCellProps): JSX.Element => {
   switch (column) {
@@ -56,24 +42,17 @@ const HeaderCell = ({ column, type }: HeaderCellProps): JSX.Element => {
   }
 };
 
-interface OtherMulighetProps {
-  columns: (keyof OtherMulighet)[];
-  type: OtherMulighetType;
-}
+type HeaderCellsProps = {
+  [T in MulighetType]: {
+    type: T;
+    columns: (keyof MulighetMap[T])[];
+  };
+}[MulighetType];
 
-interface KlagemulighetProps {
-  columns: (keyof IKlagemulighet)[];
-  type: MulighetType.KLAGE;
-}
+type Props = HeaderCellsProps & { selectable: boolean };
 
-interface BegjæringOmGjenopptakProps {
-  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-}
-
-type Props = OtherMulighetProps | KlagemulighetProps | BegjæringOmGjenopptakProps;
-
-export const MulighetHeaders = ({ selectable, ...props }: Props & { selectable: boolean }) => (
+// The rest of `props` is spread as a whole to keep `type` and `columns` correlated.
+export const MulighetHeaders = ({ selectable, ...props }: Props) => (
   <Table.Header className="sticky top-0 z-1 bg-ax-bg-default">
     <Table.Row className="whitespace-nowrap">
       <HeaderCells {...props} />
@@ -83,15 +62,19 @@ export const MulighetHeaders = ({ selectable, ...props }: Props & { selectable: 
   </Table.Header>
 );
 
-const HeaderCells = ({ columns, type }: Props): JSX.Element[] => {
+// Every case renders the same header cells, but each one has to be listed separately for TS to
+// keep `type` and `column` correlated.
+const HeaderCells = ({ type, columns }: HeaderCellsProps): JSX.Element[] => {
   switch (type) {
     case MulighetType.KLAGE:
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
     case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
-    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
     case MulighetType.ANKE:
+      return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
     case MulighetType.OMGJØRINGSKRAV:
+      return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
+    case MulighetType.ADDITIONAL_KABAL_MULIGHET:
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
   }
 };

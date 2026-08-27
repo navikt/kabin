@@ -1,3 +1,11 @@
+import type {
+  IAdditionalKabalMulighet,
+  IAnkemulighet,
+  IBegjæringOmGjenopptakMulighet,
+  IKlagemulighet,
+  IOmgjøringskravmulighet,
+} from '@app/types/mulighet';
+
 export enum MulighetType {
   KLAGE = 'KLAGE',
   ANKE = 'ANKE',
@@ -6,7 +14,14 @@ export enum MulighetType {
   ADDITIONAL_KABAL_MULIGHET = 'ADDITIONAL_KABAL_MULIGHET',
 }
 
-export type OtherMulighetType =
-  | MulighetType.ADDITIONAL_KABAL_MULIGHET
-  | MulighetType.ANKE
-  | MulighetType.OMGJØRINGSKRAV;
+/** The mulighet each `MulighetType` renders. Map over it to correlate a `type` with its mulighet,
+ * so that narrowing `type` also narrows the mulighet. `ANKE` and `ADDITIONAL_KABAL_MULIGHET` share
+ * the same mulighet shape, which is why `MulighetType` - and not `mulighetTypeId` - is the
+ * discriminant in the tables. */
+export interface MulighetMap {
+  [MulighetType.KLAGE]: IKlagemulighet;
+  [MulighetType.ANKE]: IAnkemulighet;
+  [MulighetType.OMGJØRINGSKRAV]: IOmgjøringskravmulighet;
+  [MulighetType.BEGJÆRING_OM_GJENOPPTAK]: IBegjæringOmGjenopptakMulighet;
+  [MulighetType.ADDITIONAL_KABAL_MULIGHET]: IAdditionalKabalMulighet;
+}

@@ -1,59 +1,30 @@
 import { MulighetHeaders } from '@app/components/muligheter/common/table/headers';
-import { MulighetType, type OtherMulighetType } from '@app/components/muligheter/common/table/types';
+import { type MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
 import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Skeleton, Table } from '@navikt/ds-react';
 import type { JSX } from 'react';
 
-interface OtherMuligheterProps {
-  type: OtherMulighetType;
-  label: string;
-  columns: (keyof OtherMulighet)[];
-}
+type LoadingCellsProps = {
+  [T in MulighetType]: {
+    type: T;
+    columns: (keyof MulighetMap[T])[];
+  };
+}[MulighetType];
 
-interface KlagemuligheterProps {
-  type: MulighetType.KLAGE;
-  label: string;
-  columns: (keyof IKlagemulighet)[];
-}
+type LoadingRowsProps = LoadingCellsProps & { selectable: boolean };
 
-interface BegjæringOmGjenopptakMuligheterProps {
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-  label: string;
-  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
-}
+type Props = LoadingRowsProps & { label: string };
 
-type Props = OtherMuligheterProps | KlagemuligheterProps | BegjæringOmGjenopptakMuligheterProps;
-
-interface Selectable {
-  selectable: boolean;
-}
-
-export const LoadingMuligheter = ({ label, ...props }: Props & Selectable) => (
+// The rest of `props` is spread as a whole to keep `type` and `columns` correlated.
+export const LoadingMuligheter = ({ label, ...props }: Props) => (
   <Table size="small" id={ValidationFieldNames.MULIGHET} aria-label={label}>
     <MulighetHeaders {...props} />
     <LoadingRows {...props} />
   </Table>
 );
 
-interface LoadingOtherMuligheter {
-  type: OtherMulighetType;
-  columns: (keyof OtherMulighet)[];
-}
-
-interface LoadingBegjæringOmGjenopptakMuligheter {
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
-}
-
-interface LoadingKlagemuligheter {
-  type: MulighetType.KLAGE;
-  columns: (keyof IKlagemulighet)[];
-}
-
-type LoadingRowsProps = LoadingOtherMuligheter | LoadingKlagemuligheter | LoadingBegjæringOmGjenopptakMuligheter;
-
-const LoadingRows = (props: LoadingRowsProps & Selectable) => (
+const LoadingRows = (props: LoadingRowsProps) => (
   <Table.Body>
     <LoadingRow {...props} />
     <LoadingRow {...props} />
@@ -62,14 +33,16 @@ const LoadingRows = (props: LoadingRowsProps & Selectable) => (
   </Table.Body>
 );
 
-const LoadingRow = ({ selectable, ...props }: LoadingRowsProps & Selectable) => (
+const LoadingRow = ({ selectable, ...props }: LoadingRowsProps) => (
   <Table.Row>
     <LoadingCells {...props} />
     {selectable ? <SelectRowButton /> : null}
   </Table.Row>
 );
 
-const LoadingCells = ({ columns, type }: LoadingRowsProps): JSX.Element[] => {
+// The three groups render identically, but TS needs the correlated cases to narrow `columns`
+// together with `type`.
+const LoadingCells = ({ type, columns }: LoadingCellsProps): JSX.Element[] => {
   switch (type) {
     case MulighetType.KLAGE:
       return columns.map((column) => (

@@ -1,28 +1,20 @@
+import type { MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
 import { TypeName } from '@app/components/muligheter/common/type-name';
 import { UsedCount } from '@app/components/muligheter/common/used-count';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { isoDateToPretty } from '@app/domain/date';
 import { useFagsystemName, useFullTemaNameFromId, useVedtaksenhetName } from '@app/hooks/kodeverk';
-import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { Table, Tag } from '@navikt/ds-react';
 import type { JSX } from 'react/jsx-runtime';
 
-interface KlagemulighetCellProps {
-  column: keyof IKlagemulighet;
-  mulighet: IKlagemulighet;
-}
-
-interface OtherMulighetCellProps {
-  column: keyof OtherMulighet;
-  mulighet: OtherMulighet;
-}
-
-interface BegjæringOmGjenopptakCellProps {
-  column: keyof IBegjæringOmGjenopptakMulighet;
-  mulighet: IBegjæringOmGjenopptakMulighet;
-}
-
-type Props = OtherMulighetCellProps | KlagemulighetCellProps | BegjæringOmGjenopptakCellProps;
+/** `column` is the discriminant - narrowing it also narrows `mulighet` to the muligheter that
+ * actually have that column. */
+type Props = {
+  [T in MulighetType]: {
+    column: keyof MulighetMap[T];
+    mulighet: MulighetMap[T];
+  };
+}[MulighetType];
 
 export const Cell = ({ column, mulighet }: Props): JSX.Element => {
   switch (column) {

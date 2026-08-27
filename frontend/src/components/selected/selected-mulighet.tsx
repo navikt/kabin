@@ -1,7 +1,6 @@
 import { Card } from '@app/components/card/card';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
-import type { MulighetType, OtherMulighetType } from '@app/components/muligheter/common/table/types';
-import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
+import type { MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack } from '@navikt/ds-react';
@@ -15,28 +14,19 @@ interface NonTableProps {
   buttonLabel: string;
 }
 
-interface Other {
-  muligheter: OtherMulighet[];
-  type: OtherMulighetType;
-  columns: (keyof OtherMulighet)[];
-}
+/** Correlates `type`, `muligheter` and `columns`, so that narrowing `type` narrows the other two. */
+type MulighetProps = {
+  [T in MulighetType]: {
+    muligheter: MulighetMap[T][];
+    type: T;
+    columns: (keyof MulighetMap[T])[];
+  };
+}[MulighetType];
 
-interface BegjæringOmGjenopptak {
-  muligheter: IBegjæringOmGjenopptakMulighet[];
-  type: MulighetType.BEGJÆRING_OM_GJENOPPTAK;
-  columns: (keyof IBegjæringOmGjenopptakMulighet)[];
-}
-
-interface Klage {
-  muligheter: IKlagemulighet[];
-  type: MulighetType.KLAGE;
-  columns: (keyof IKlagemulighet)[];
-}
-
-type MulighetProps = Other | BegjæringOmGjenopptak | Klage;
 type BodyProps = MulighetProps & CommonProps;
 type Props = MulighetProps & NonTableProps & CommonProps;
 
+// The rest of `props` is spread as a whole to keep `type`, `muligheter` and `columns` correlated.
 export const SelectedMulighet = ({ onClick, buttonLabel, ...props }: Props) => (
   <Card>
     <Header>
