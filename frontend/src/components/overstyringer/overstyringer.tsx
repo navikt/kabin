@@ -45,7 +45,7 @@ interface Props {
 }
 
 const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | typeof skipToken => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const { sakenGjelderValue, overstyringer } = useRegistrering();
 
   if (
@@ -66,7 +66,7 @@ const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | type
 const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
   const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const avsenderMottakerParams = useAvsenderMottakerParams();
   const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
   const { sakenGjelder, isLoading, error, refetch } = useSakenGjelderPart();

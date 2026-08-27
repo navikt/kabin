@@ -12,7 +12,7 @@ interface Props extends VariantProps {
 }
 
 export const DocumentTitle = ({ url, ...props }: Props) => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const { dokument, viewDokument } = useContext(DocumentViewerContext);
 
   if (dokument === null || isViewedUploadedDokument(dokument)) {

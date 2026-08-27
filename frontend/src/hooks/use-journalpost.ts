@@ -18,17 +18,13 @@ export const useIsUploadedDocumentsSource = () => useRegistrering().source === S
 
 export const useJournalpost = () => {
   const { journalpostId } = useRegistrering();
-  const { data, ...rest } = useGetArkivertDokumentQuery(journalpostId ?? skipToken);
-
-  return { journalpost: data, ...rest };
+  return useGetArkivertDokumentQuery(journalpostId ?? skipToken);
 };
 
 export const useJournalpostFromMulighet = () => {
   const { mulighet, mulighetIsBasedOnJournalpost } = useRegistrering();
 
-  const { data, ...rest } = useGetArkivertDokumentQuery(
+  return useGetArkivertDokumentQuery(
     mulighetIsBasedOnJournalpost && typeof mulighet?.id === 'string' ? mulighet.id : skipToken,
   );
-
-  return { journalpost: data, ...rest };
 };

@@ -5,7 +5,7 @@ import { useBasemulighetProp } from '@app/hooks/use-mulighet-prop';
 export const useTemaId = (): string | null => {
   const { fromJournalpost } = useMulighet();
   const temaId = useBasemulighetProp('temaId');
-  const { journalpost } = useJournalpostFromMulighet();
+  const { data: journalpost } = useJournalpostFromMulighet();
 
   if (fromJournalpost) {
     return journalpost === undefined ? null : journalpost.temaId;

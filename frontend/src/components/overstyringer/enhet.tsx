@@ -20,7 +20,7 @@ const FIELD_NAME = ValidationFieldNames.FORRIGE_BEHANDLENDE_ENHET_ID;
 export const Enhet = () => {
   const { overstyringer } = useRegistrering();
   const { fromJournalpost, typeId } = useMulighet();
-  const { journalpost } = useJournalpostFromMulighet();
+  const { data: journalpost } = useJournalpostFromMulighet();
 
   const show =
     fromJournalpost &&

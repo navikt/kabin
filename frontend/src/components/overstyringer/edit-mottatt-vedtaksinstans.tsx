@@ -16,7 +16,7 @@ const LABEL = FIELD_NAMES[ID];
 
 export const EditMottattVedtaksinstans = () => {
   const { overstyringer, typeId } = useRegistrering();
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
   const canEdit = useCanEdit();
 

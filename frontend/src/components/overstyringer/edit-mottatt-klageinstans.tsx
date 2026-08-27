@@ -39,7 +39,7 @@ export const EditMottattKlageinstans = (): JSX.Element | null => {
 
 const FromJournalpostToNow = () => {
   const { overstyringer } = useRegistrering();
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 
@@ -66,7 +66,7 @@ const useFromDate = () => {
 
 const FromVedtakToJournalpost = () => {
   const { overstyringer } = useRegistrering();
-  const { journalpost } = useJournalpost();
+  const { data: journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
 

@@ -16,7 +16,7 @@ interface Props {
  * and picked a journalpost that is older than the date of the mulighet. Invalid muligheter cannot
  * be selected in the first place, see `Row`. */
 export const Warning = ({ mulighet }: Props) => {
-  const { journalpost } = useJournalpost();
+  const { data: journalpost, isSuccess } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
 
   if (mulighet === undefined || mulighet === null) {
@@ -29,8 +29,10 @@ export const Warning = ({ mulighet }: Props) => {
     return null;
   }
 
-  // The journalpost has not loaded yet, so there is nothing to compare with.
-  if (!isUploadedDocuments && journalpost === undefined) {
+  // The journalpost has not loaded yet, so there is nothing to compare with. Uploaded documents
+  // have no journalpost to load, so the query is skipped and never succeeds - the date is
+  // validated against today instead, see `isValidMulighetDate`.
+  if (!isUploadedDocuments && !isSuccess) {
     return null;
   }
 
