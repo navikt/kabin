@@ -5,10 +5,7 @@ import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import {
-  SelectedNonKlageMulighet,
-  SelectedNonKlageMulighetBody,
-} from '@app/components/selected/selected-non-klagemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -42,7 +39,12 @@ const ReadOnlyAnkemulighet = () => {
   return (
     <Card>
       <HeaderReadOnly>Vedtaket anken gjelder</HeaderReadOnly>
-      <SelectedNonKlageMulighetBody {...mulighet} />
+      <SelectedMulighetBody
+        muligheter={[mulighet]}
+        tableLabel="Valgt ankemulighet"
+        columns={COLUMNS}
+        type={MulighetType.ANKE}
+      />
     </Card>
   );
 };
@@ -63,7 +65,16 @@ const EditableAnkemuligheter = () => {
   }
 
   if (!isExpanded && mulighet !== undefined) {
-    return <SelectedNonKlageMulighet onClick={() => setIsExpanded(true)} label="Vis alle ankemuligheter" />;
+    return (
+      <SelectedMulighet
+        onClick={() => setIsExpanded(true)}
+        buttonLabel="Vis alle ankemuligheter"
+        columns={COLUMNS}
+        tableLabel="Vedtaket anken gjelder"
+        type={MulighetType.ANKE}
+        muligheter={[mulighet]}
+      />
+    );
   }
 
   return (
@@ -94,7 +105,7 @@ interface ContentProps {
 
 const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return <LoadingMuligheter label="Ankemuligheter" columns={COLUMNS} type={MulighetType.ANKE} />;
+    return <LoadingMuligheter label="Ankemuligheter" columns={COLUMNS} type={MulighetType.ANKE} selectable />;
   }
 
   if (ankemuligheter === undefined) {
@@ -116,6 +127,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
       fieldName={ValidationFieldNames.MULIGHET}
       columns={COLUMNS}
       type={MulighetType.ANKE}
+      selectable
     />
   );
 };

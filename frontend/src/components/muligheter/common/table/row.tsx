@@ -54,8 +54,8 @@ const useIsSelected = (type: MulighetType, mulighetId: string): boolean => {
 
 type Props = OtherRowsProps | BegjæringOmGjenopptakMulighetRowsProps | KlagemulighetRowsProps;
 
-export const Row = (props: Props) => {
-  const { mulighet, type, isValid } = props;
+export const Row = (props: Props & { selectable: boolean }) => {
+  const { mulighet, type, isValid, selectable } = props;
   const { id } = useRegistrering();
   const canEdit = useCanEdit();
   const [setAnkemulighet, { isLoading: isLoadingAnkemulighet }] = useSetAnkemulighetMutation();
@@ -65,7 +65,7 @@ export const Row = (props: Props) => {
 
   const isSelected = useIsSelected(type, mulighet.id);
 
-  const getCursorClass = () => (isValid && canEdit ? 'cursor-pointer' : 'cursor-default');
+  const getCursorClass = () => (selectable && isValid && canEdit ? 'cursor-pointer' : 'cursor-default');
   const getBackgroundClass = () =>
     !isValid && isSelected ? 'bg-ax-bg-danger-soft hover:bg-ax-bg-danger-moderate-hover' : '';
 
@@ -99,21 +99,34 @@ export const Row = (props: Props) => {
   return (
     <Table.Row
       selected={isSelected}
-      onClick={selectMulighet}
+      onClick={selectable ? selectMulighet : undefined}
       className={`rounded ${getCursorClass()} ${getBackgroundClass()}`}
     >
       <Columns {...props} />
-      <Table.DataCell className="text-center">
-        <SelectMulighet
-          isSelected={isSelected}
-          select={selectMulighet}
-          isValid={isValid}
-          isLoading={isLoading}
-          mulighetId={mulighet.id}
-          type={type}
-        />
-      </Table.DataCell>
+      {selectable ? <SelectCell {...props} selectMulighet={selectMulighet} isLoading={isLoading} /> : null}
     </Table.Row>
+  );
+};
+
+interface SelectCellProps {
+  selectMulighet: (e: React.MouseEvent) => void;
+  isLoading: boolean;
+}
+
+const SelectCell = ({ mulighet, type, isValid, isLoading, selectMulighet }: SelectCellProps & Props) => {
+  const isSelected = useIsSelected(type, mulighet.id);
+
+  return (
+    <Table.DataCell className="text-center">
+      <SelectMulighet
+        isSelected={isSelected}
+        select={selectMulighet}
+        isValid={isValid}
+        isLoading={isLoading}
+        mulighetId={mulighet.id}
+        type={type}
+      />
+    </Table.DataCell>
   );
 };
 

@@ -8,6 +8,7 @@ import { Table } from '@navikt/ds-react';
 interface CommonProps {
   fieldName: ValidationFieldNames;
   label: string;
+  selectable: boolean;
 }
 
 interface OtherMulighetTableProps extends CommonProps {

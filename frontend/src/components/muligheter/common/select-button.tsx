@@ -6,7 +6,7 @@ import { useIsUploadedDocuments } from '@app/hooks/use-journalpost';
 import { CircleSlashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
-interface Props {
+export interface SelectMulighetProps {
   isSelected: boolean;
   select: (e: React.MouseEvent) => void;
   isValid: boolean;
@@ -15,7 +15,7 @@ interface Props {
   type: MulighetType;
 }
 
-export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighetId, type }: Props) => {
+export const SelectMulighet = ({ isSelected, select, isValid, isLoading, mulighetId, type }: SelectMulighetProps) => {
   const [icon, buttonText, title] = useButtonProps(isSelected, isValid, type);
   const canEdit = useCanEdit();
 

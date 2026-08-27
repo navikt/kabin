@@ -72,13 +72,12 @@ interface BegjæringOmGjenopptakProps {
 
 type Props = OtherMulighetProps | KlagemulighetProps | BegjæringOmGjenopptakProps;
 
-export const MulighetHeaders = (props: Props) => (
+export const MulighetHeaders = ({ selectable, ...props }: Props & { selectable: boolean }) => (
   <Table.Header className="sticky top-0 z-1 bg-ax-bg-default">
     <Table.Row className="whitespace-nowrap">
       <HeaderCells {...props} />
 
-      {/* Select row button */}
-      <Table.HeaderCell />
+      {selectable ? <Table.HeaderCell /> : null}
     </Table.Row>
   </Table.Header>
 );

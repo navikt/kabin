@@ -45,7 +45,12 @@ const queriesSlice = registreringApi.injectEndpoints({
     }),
 
     getRegistrering: builder.query<Registrering, string>({
-      query: (id) => `/registreringer/${id}`,
+      query: (id) => {
+        if (id === undefined || id === 'undefined') {
+          throw new Error('getRegistrering: id is undefined');
+        }
+        return `/registreringer/${id}`;
+      },
       providesTags: (_, __, id) => [{ id, type: RegistreringTagType.REGISTRERING }],
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;

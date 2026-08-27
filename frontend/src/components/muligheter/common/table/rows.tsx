@@ -24,9 +24,10 @@ interface BegjæringOmGjenopptakMulighetProps {
   columns: (keyof IBegjæringOmGjenopptakMulighet)[];
 }
 
-type Props = OtherMulighetProps | KlagemulighetProps | BegjæringOmGjenopptakMulighetProps;
+type MulighetProps = OtherMulighetProps | KlagemulighetProps | BegjæringOmGjenopptakMulighetProps;
+type Props = MulighetProps & { selectable: boolean };
 
-export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element => {
+export const MulighetRows = ({ type, columns, muligheter, ...p }: Props): JSX.Element => {
   const { journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
 
@@ -38,7 +39,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
     return (
       <Table.Body>
         {muligheter.map((m) => (
-          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid />
+          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid {...p} />
         ))}
       </Table.Body>
     );
@@ -48,7 +49,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
     return (
       <Table.Body>
         {muligheter.map((m) => (
-          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.kjennelseMottatt)} />
+          <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.kjennelseMottatt)} {...p} />
         ))}
       </Table.Body>
     );
@@ -57,7 +58,7 @@ export const MulighetRows = ({ type, columns, muligheter }: Props): JSX.Element 
   return (
     <Table.Body>
       {muligheter.map((m) => (
-        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.vedtakDate)} />
+        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValidDate(m.vedtakDate)} {...p} />
       ))}
     </Table.Body>
   );

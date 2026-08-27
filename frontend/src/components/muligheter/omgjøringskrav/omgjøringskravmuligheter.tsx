@@ -5,10 +5,7 @@ import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
 import { Placeholder } from '@app/components/placeholder/placeholder';
-import {
-  SelectedNonKlageMulighet,
-  SelectedNonKlageMulighetBody,
-} from '@app/components/selected/selected-non-klagemulighet';
+import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
@@ -42,7 +39,12 @@ const ReadOnlyOmgjøringskravmulighet = () => {
   return (
     <Card>
       <HeaderReadOnly>Vedtaket omgjøringskravet gjelder</HeaderReadOnly>
-      <SelectedNonKlageMulighetBody {...mulighet} />
+      <SelectedMulighetBody
+        muligheter={[mulighet]}
+        tableLabel="Valgt omgjøringskravmulighet"
+        columns={COLUMNS}
+        type={MulighetType.OMGJØRINGSKRAV}
+      />
     </Card>
   );
 };
@@ -63,7 +65,16 @@ const EditableOmgjøringskravmuligheter = () => {
   }
 
   if (!isExpanded && mulighet !== undefined) {
-    return <SelectedNonKlageMulighet onClick={() => setIsExpanded(true)} label="Vis alle omgjøringskravmuligheter" />;
+    return (
+      <SelectedMulighet
+        onClick={() => setIsExpanded(true)}
+        buttonLabel="Vis alle omgjøringskravmuligheter"
+        columns={COLUMNS}
+        tableLabel="Vedtaket omgjøringskravet gjelder"
+        type={MulighetType.OMGJØRINGSKRAV}
+        muligheter={[mulighet]}
+      />
+    );
   }
 
   return (
@@ -94,7 +105,14 @@ interface ContentProps {
 
 const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
   if (isLoading) {
-    return <LoadingMuligheter label="Omgjøringskravmuligheter" columns={COLUMNS} type={MulighetType.OMGJØRINGSKRAV} />;
+    return (
+      <LoadingMuligheter
+        label="Omgjøringskravmuligheter"
+        columns={COLUMNS}
+        type={MulighetType.OMGJØRINGSKRAV}
+        selectable
+      />
+    );
   }
 
   if (omgjøringskravmuligheter === undefined) {
@@ -116,6 +134,7 @@ const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
       fieldName={ValidationFieldNames.MULIGHET}
       columns={COLUMNS}
       type={MulighetType.OMGJØRINGSKRAV}
+      selectable
     />
   );
 };
