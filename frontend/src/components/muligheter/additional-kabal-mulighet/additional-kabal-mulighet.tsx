@@ -89,7 +89,7 @@ const EditableAdditionalKabalMuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.ADDITIONAL_KABAL_MULIGHET} />
 
-      <Warning date={mulighet?.vedtakDate} type={MulighetType.ADDITIONAL_KABAL_MULIGHET} />
+      <Warning mulighet={mulighet} />
 
       <Content muligheter={additionalKabalMuligheter} isLoading={isLoading} />
     </Card>

@@ -10,6 +10,7 @@ import {
   useSetAnkemulighetMutation,
   useSetNonAnkemulighetMutation,
 } from '@app/redux/api/registreringer/mutations';
+import { SaksTypeEnum } from '@app/types/common';
 import type { IBegjæringOmGjenopptakMulighet, IKlagemulighet, OtherMulighet } from '@app/types/mulighet';
 import { Table } from '@navikt/ds-react';
 import { type JSX, useCallback } from 'react';
@@ -79,17 +80,25 @@ export const Row = (props: Props & { selectable: boolean }) => {
         return;
       }
 
+      // `type` and `mulighet` always agree, but the props are not correlated, so `mulighetTypeId`
+      // is what actually narrows the mulighet for each setter.
       switch (type) {
         case MulighetType.ANKE:
-          setAnkemulighet({ id, mulighet });
+          if (mulighet.mulighetTypeId === SaksTypeEnum.ANKE) {
+            setAnkemulighet({ id, mulighet });
+          }
           break;
         case MulighetType.ADDITIONAL_KABAL_MULIGHET:
-          setAdditionalKabalMulighet({ id, mulighet });
+          if (mulighet.mulighetTypeId === SaksTypeEnum.ANKE) {
+            setAdditionalKabalMulighet({ id, mulighet });
+          }
           break;
         case MulighetType.OMGJØRINGSKRAV:
         case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
         case MulighetType.KLAGE:
-          setNonAnkemulighet({ id, mulighet });
+          if (mulighet.mulighetTypeId !== SaksTypeEnum.ANKE) {
+            setNonAnkemulighet({ id, mulighet });
+          }
           break;
       }
     },
@@ -123,8 +132,7 @@ const SelectCell = ({ mulighet, type, isValid, isLoading, selectMulighet }: Sele
         select={selectMulighet}
         isValid={isValid}
         isLoading={isLoading}
-        mulighetId={mulighet.id}
-        type={type}
+        mulighet={mulighet}
       />
     </Table.DataCell>
   );

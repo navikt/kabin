@@ -46,6 +46,7 @@ const HeaderCell = ({ column, type }: HeaderCellProps): JSX.Element => {
     case 'fullmektig':
     case 'hjemmelIdList':
     case 'klager':
+    case 'mulighetTypeId':
     case 'previousSaksbehandler':
     case 'currentFagsystemId':
     case 'id':

@@ -1,22 +1,31 @@
 import { Alert } from '@app/components/alert/alert';
-import { getInvalidMulighetDateMessage, isValidMulighetDate } from '@app/components/muligheter/common/mulighet-date';
-import type { MulighetType } from '@app/components/muligheter/common/table/types';
+import {
+  getInvalidMulighetDateMessage,
+  getMulighetDate,
+  isValidMulighetDate,
+} from '@app/components/muligheter/common/mulighet-date';
 import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
+import type { IMulighet } from '@app/types/mulighet';
 
 interface Props {
-  /** The date of the selected mulighet that the documents will be registered on. */
-  date: string | null | undefined;
-  type: MulighetType;
+  /** The already selected mulighet that the documents will be registered on. */
+  mulighet: IMulighet | null | undefined;
 }
 
 /** Warns when the already selected mulighet became invalid, typically because the user went back
  * and picked a journalpost that is older than the date of the mulighet. Invalid muligheter cannot
  * be selected in the first place, see `Row`. */
-export const Warning = ({ date, type }: Props) => {
+export const Warning = ({ mulighet }: Props) => {
   const { journalpost } = useJournalpost();
   const isUploadedDocuments = useIsUploadedDocuments();
 
-  if (date === undefined || date === null) {
+  if (mulighet === undefined || mulighet === null) {
+    return null;
+  }
+
+  const date = getMulighetDate(mulighet);
+
+  if (date === null) {
     return null;
   }
 
@@ -29,5 +38,5 @@ export const Warning = ({ date, type }: Props) => {
     return null;
   }
 
-  return <Alert variant="error">{getInvalidMulighetDateMessage(type, isUploadedDocuments)}.</Alert>;
+  return <Alert variant="error">{getInvalidMulighetDateMessage(mulighet, isUploadedDocuments)}.</Alert>;
 };

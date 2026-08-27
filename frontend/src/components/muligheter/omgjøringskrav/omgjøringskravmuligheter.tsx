@@ -91,7 +91,7 @@ const EditableOmgjøringskravmuligheter = () => {
 
       <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning date={mulighet?.vedtakDate} type={MulighetType.OMGJØRINGSKRAV} />
+      <Warning mulighet={mulighet} />
 
       <Content omgjøringskravmuligheter={muligheter.omgjoeringskravmuligheter} isLoading={isLoading} />
     </CardSmall>
