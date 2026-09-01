@@ -5,7 +5,7 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
+import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 export const Journalpostmuligheter = () => {
@@ -33,11 +33,19 @@ export const Journalpostmuligheter = () => {
       return [false, 'Ingen fagsak tilknyttet.'];
     }
 
-    if (
-      (typeId === SaksTypeEnum.KLAGE || typeId === SaksTypeEnum.ANKE) &&
-      document.sak.fagsystemId !== FAGSYSTEM_ARENA
-    ) {
-      return [false, 'Opprettelse av klage eller anke basert på journalpost er bare tilgjengelig for saker fra Arena.'];
+    const { fagsystemId } = document.sak;
+
+    if (typeId === SaksTypeEnum.ANKE) {
+      return fagsystemId === FAGSYSTEM_ARENA
+        ? [true, undefined]
+        : [false, 'Opprettelse av anke basert på journalpost er bare tilgjengelig for saker fra Arena.'];
+    }
+
+    if (typeId === SaksTypeEnum.KLAGE) {
+      // Treat fagsystem Arbeidsoppfølging as Arena: https://nav-it.slack.com/archives/G01CTUC8LSU/p1787141984237739
+      return fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING || fagsystemId === FAGSYSTEM_ARENA
+        ? [true, undefined]
+        : [false, 'Opprettelse av klage basert på journalpost er bare tilgjengelig for saker fra Arena.'];
     }
 
     return [true, undefined];
