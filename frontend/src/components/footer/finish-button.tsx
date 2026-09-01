@@ -53,6 +53,7 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
     return null;
   }
 
+  // Not necessary to check for Arbeidsoppfølging here, because AO only applies to Klage
   const isArenaAnke = typeId === SaksTypeEnum.ANKE && getIsArenaFagsystem(mulighetResult, journalpost);
   const disabled = isLoading || (isArenaAnke && !arenaBekreft);
 
