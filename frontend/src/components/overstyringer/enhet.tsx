@@ -10,7 +10,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useGetLatestYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetForrigeBehandlendeEnhetIdMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
-import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA } from '@app/types/fagsystem';
+import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS } from '@app/types/fagsystem';
 import type { IKodeverkSimpleValue, IYtelserLatest } from '@app/types/kodeverk';
 import { ValidationFieldNames } from '@app/types/validation';
 import { InlineMessage, Label, Skeleton, Tag } from '@navikt/ds-react';
@@ -26,9 +26,11 @@ const showArena = (
 const showArbeidsoppfolging = (
   typeId: SaksTypeEnum | null,
   fagsystemId: string | undefined,
-): typeId is SaksTypeEnum.KLAGE => typeId === SaksTypeEnum.KLAGE && fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING;
+): typeId is SaksTypeEnum.KLAGE =>
+  typeId === SaksTypeEnum.KLAGE && (fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING || fagsystemId === FAGSYSTEM_GOSYS);
 
 // https://nav-it.slack.com/archives/G01CTUC8LSU/p1787141984237739
+// https://nav-it.slack.com/archives/G01CTUC8LSU/p1788425945624739
 const shouldShow = (typeId: SaksTypeEnum | null, fagsystemId: string | undefined) =>
   showArena(typeId, fagsystemId) || showArbeidsoppfolging(typeId, fagsystemId);
 
