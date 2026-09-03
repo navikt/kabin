@@ -19,6 +19,8 @@ export const AddressField = ({
   required = false,
   error = false,
   pattern,
+  // https://nav-it.slack.com/archives/G01CTUC8LSU/p1782392686456559?thread_ts=1782386695.702119&cid=G01CTUC8LSU
+  maxLength = 128,
   ...props
 }: Props) => {
   const isOverridden = (value ?? '') !== (originalValue ?? '');
@@ -27,6 +29,7 @@ export const AddressField = ({
 
   return (
     <TextField
+      maxLength={maxLength}
       size="small"
       label={
         <FieldLabel>
