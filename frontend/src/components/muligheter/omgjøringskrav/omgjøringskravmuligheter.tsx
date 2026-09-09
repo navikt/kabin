@@ -1,5 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
+import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
@@ -16,7 +16,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import type { IOmgjøringskravmulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const Omgjøringskravmuligheter = () => {
@@ -38,7 +38,9 @@ const ReadOnlyOmgjøringskravmulighet = () => {
 
   return (
     <Card>
-      <HeaderReadOnly>Vedtaket omgjøringskravet gjelder</HeaderReadOnly>
+      <Heading level="1" size="small">
+        Vedtaket omgjøringskravet gjelder
+      </Heading>
       <SelectedMulighetBody
         muligheter={[mulighet]}
         tableLabel="Valgt omgjøringskravmulighet"

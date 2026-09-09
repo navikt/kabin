@@ -74,3 +74,14 @@ export interface ResetDokumentStatusParams {
   id: string;
   dokumentIds: string[];
 }
+
+export interface SetTrygderettenSaksnummerParams {
+  id: string;
+  trygderettenSaksnummer: string;
+}
+
+export interface SetTrygderettenSaksnummerResponse {
+  id: string;
+  trygderettenSaksnummer: string;
+  modified: string;
+}

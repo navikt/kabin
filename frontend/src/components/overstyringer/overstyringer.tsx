@@ -17,6 +17,7 @@ import { MottattDateError } from '@app/components/overstyringer/mottatt-date-err
 import { Part } from '@app/components/overstyringer/part';
 import { SakenGjelder } from '@app/components/overstyringer/part-read/part-read';
 import type { ISetPart } from '@app/components/overstyringer/part-read/types';
+import { SaksnrITr } from '@app/components/overstyringer/saksnr-i-tr';
 import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
 import { FieldNames } from '@app/components/overstyringer/types';
 import { useSakenGjelderPart } from '@app/components/overstyringer/use-saken-gjelder-part';
@@ -31,7 +32,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
 import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
-import type { IPart } from '@app/types/common';
+import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
@@ -213,7 +214,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
 };
 
 export const Overstyringer = ({ title, ...props }: Props) => {
-  const { mulighet } = useRegistrering();
+  const { mulighet, typeId } = useRegistrering();
   const ytelseId = useYtelseId();
 
   if (typeof mulighet?.id !== 'string') {
@@ -233,6 +234,7 @@ export const Overstyringer = ({ title, ...props }: Props) => {
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
           <EditFrist />
+          {typeId === SaksTypeEnum.ANKE_AFTER_2027 ? <SaksnrITr /> : null}
         </HStack>
         <MottattDateError />
       </VStack>

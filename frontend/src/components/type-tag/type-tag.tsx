@@ -24,6 +24,7 @@ export const TypeTag = ({ typeId }: Props) => {
 const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
   [SaksTypeEnum.KLAGE]: 'alt1',
   [SaksTypeEnum.ANKE]: 'success-filled',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'alt3-filled',
   [SaksTypeEnum.ANKE_I_TR]: 'error-filled',
   [SaksTypeEnum.TR_OPPHEVET]: 'alt2-filled',
   [SaksTypeEnum.OMGJØRINGSKRAV]: 'info-filled',
@@ -33,7 +34,8 @@ const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
 
 const SAKSTYPE_TO_NAME: Record<SaksTypeEnum, string> = {
   [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke',
+  [SaksTypeEnum.ANKE]: 'Anke før 1.1.27',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke',
   [SaksTypeEnum.ANKE_I_TR]: 'Anke i trygderetten',
   [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter TR opphevet',
   [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',

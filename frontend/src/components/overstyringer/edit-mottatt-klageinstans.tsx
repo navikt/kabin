@@ -7,6 +7,7 @@ import { useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpo
 import { useMulighetDate } from '@app/hooks/use-mulighet-date';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
+import { useGetFeatureToggleQuery } from '@app/redux/api/feature-toggles';
 import { useSetMottattKlageinstansMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
@@ -34,6 +35,8 @@ export const EditMottattKlageinstans = (): JSX.Element | null => {
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return <FromVedtakToJournalpost />;
+    case SaksTypeEnum.ANKE_AFTER_2027:
+      return <From2027ToNow />;
   }
 };
 
@@ -75,6 +78,16 @@ const FromVedtakToJournalpost = () => {
   const toDate = isUploadedDocuments ? new Date() : getToDate(journalpost);
 
   return <RenderEditMottattNav value={selectedDate} fromDate={fromDate} toDate={toDate} />;
+};
+
+const From2027ToNow = () => {
+  const { overstyringer } = useRegistrering();
+  const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
+  const { data } = useGetFeatureToggleQuery('kabin-fake-mottatt-klageinstans-constraint');
+
+  const fromDate = data?.enabled === true ? '2026-09-09' : '2027-01-01';
+
+  return <RenderEditMottattNav value={selectedDate} fromDate={new Date(fromDate)} />;
 };
 
 const getToDate = (journalpost: IArkivertDocument | undefined): Date | undefined =>

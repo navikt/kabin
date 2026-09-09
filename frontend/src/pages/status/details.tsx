@@ -22,6 +22,7 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.KLAGE:
       return 'Valgt journalpost';
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Journalført anke';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
@@ -34,6 +35,7 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Valgt vedtak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:

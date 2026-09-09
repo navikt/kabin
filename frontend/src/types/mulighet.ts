@@ -45,6 +45,10 @@ export interface IBegjæringOmGjenopptakMulighet extends Omit<IAnkemulighet, 'mu
   readonly mulighetTypeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
 }
 
+export interface IAnkemulighetAfter2027 extends Omit<IAnkemulighet, 'mulighetTypeId'> {
+  readonly mulighetTypeId: SaksTypeEnum.ANKE_AFTER_2027;
+}
+
 export interface IAdditionalKabalMulighet extends IAnkemulighet {}
 
 export interface ExistingBehandling {
