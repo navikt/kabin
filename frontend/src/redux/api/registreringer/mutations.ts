@@ -8,6 +8,8 @@ import type {
   SetAdditionalKabalMulighetParams,
   SetAnkemulighetParams,
   SetNonAnkemulighetParams,
+  SetTrygderettenSaksnummerParams,
+  SetTrygderettenSaksnummerResponse,
   SetTypeParams,
 } from '@app/redux/api/registreringer/param-types';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
@@ -225,6 +227,23 @@ const mutationsSlice = registreringApi.injectEndpoints({
         }
       },
     }),
+    setSaksnrITr: builder.mutation<SetTrygderettenSaksnummerResponse, SetTrygderettenSaksnummerParams>({
+      query: ({ id, ...body }) => ({
+        url: `/registreringer/${id}/trygderetten-saksnummer`,
+        method: 'PUT',
+        body,
+      }),
+      onQueryStarted: async ({ id, trygderettenSaksnummer }, { queryFulfilled }) => {
+        const undo = updateDrafts(id, (draft) => ({ ...draft, trygderettenSaksnummer }));
+
+        try {
+          const { data } = await queryFulfilled;
+          pessimisticUpdate(id, data);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -238,6 +257,7 @@ export const {
   useSetMulighetBasedOnJournalpostMutation,
   useSetNonAnkemulighetMutation,
   useSetAdditionalKabalMulighetMutation,
+  useSetSaksnrITrMutation,
 } = mutationsSlice;
 
 /** Fields the API sets as a side effect of `setSource`, tracked so the ones that are known up
@@ -283,7 +303,7 @@ const withSourceSideEffects = (draft: DraftRegistrering, source: Source): DraftR
     ? {
         ...draft,
         source,
-        typeId: SaksTypeEnum.ANKE,
+        typeId: SaksTypeEnum.ANKE_AFTER_2027,
         mulighetIsBasedOnJournalpost: false,
         uploadedDocuments: { ...draft.uploadedDocuments, inngaaendeKanal: InngaaendeKanal.ALTINN_INNBOKS },
       }

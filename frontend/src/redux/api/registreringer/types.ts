@@ -105,7 +105,8 @@ export interface BaseRegistrering {
   createdBy: string;
   muligheter: {
     klagemuligheter: IKlagemulighet[];
-    ankemuligheter: IAnkemulighet[];
+    ankemuligheterFoer2027: IAnkemulighet[];
+    ankemuligheterEtter2027: IAnkemulighet[];
     omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
     gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
     muligheterFetched: string; // DateTime
@@ -114,6 +115,7 @@ export interface BaseRegistrering {
   additionalKabalMulighet: { id: string } | null;
   source: Source;
   uploadedDocuments: UploadedDocuments;
+  trygderettenSaksnummer: string | null;
 }
 
 export interface DraftRegistrering extends BaseRegistrering {

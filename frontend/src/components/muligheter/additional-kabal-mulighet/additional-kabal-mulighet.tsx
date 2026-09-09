@@ -1,5 +1,5 @@
 import { Card } from '@app/components/card/card';
-import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
+import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
@@ -15,6 +15,7 @@ import { useLazyGetAdditionalKabalMuligheterQuery } from '@app/redux/api/registr
 import type { IAdditionalKabalMulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
+import { Heading } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const AdditionalKabalMuligheter = () => {
@@ -36,7 +37,9 @@ const ReadOnlyAdditionalKabalMuligheter = () => {
 
   return (
     <Card>
-      <HeaderReadOnly>Vedtaket saken gjelder</HeaderReadOnly>
+      <Heading level="1" size="small">
+        Vedtaket saken gjelder
+      </Heading>
       <SelectedMulighetBody
         muligheter={[mulighet]}
         tableLabel="Valgt tidligere behandling i Kabal"

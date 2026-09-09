@@ -114,19 +114,22 @@ export enum SaksTypeEnum {
   OMGJØRINGSKRAV = '5',
   BEGJÆRING_OM_GJENOPPTAK = '6',
   BEGJÆRING_OM_GJENOPPTAK_I_TR = '7',
+  ANKE_AFTER_2027 = '8',
 }
 
 export type RegistreringType =
   | SaksTypeEnum.KLAGE
   | SaksTypeEnum.ANKE
   | SaksTypeEnum.OMGJØRINGSKRAV
-  | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+  | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
+  | SaksTypeEnum.ANKE_AFTER_2027;
 
 export const isType = (type: string): type is RegistreringType =>
   type === SaksTypeEnum.KLAGE ||
   type === SaksTypeEnum.ANKE ||
   type === SaksTypeEnum.OMGJØRINGSKRAV ||
-  type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+  type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
+  type === SaksTypeEnum.ANKE_AFTER_2027;
 
 export interface ISaksbehandler {
   navIdent: string;
@@ -146,4 +149,5 @@ export const TYPE_NAME: Record<SaksTypeEnum, string> = {
   [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'Begjæring om gjenopptak',
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'Begjæring om gjenopptak i Trygderetten',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke etter 1.1.27',
 };

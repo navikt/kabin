@@ -20,6 +20,12 @@ interface AnkeResult {
   mulighet: IAnkemulighet | undefined;
 }
 
+interface AnkeAfter2027Result {
+  typeId: SaksTypeEnum.ANKE_AFTER_2027;
+  fromJournalpost: false;
+  mulighet: IAnkemulighet | undefined;
+}
+
 interface OmgjøringskravResult {
   typeId: SaksTypeEnum.OMGJØRINGSKRAV;
   fromJournalpost: false;
@@ -47,6 +53,7 @@ interface NoneResult {
 export const useMulighet = ():
   | KlageResult
   | AnkeResult
+  | AnkeAfter2027Result
   | OmgjøringskravResult
   | BegjæringOmGjenopptakResult
   | JournalpostmulighetResult
@@ -54,11 +61,12 @@ export const useMulighet = ():
   const {
     typeId,
     mulighet,
-    muligheter: { ankemuligheter, klagemuligheter, omgjoeringskravmuligheter, gjenopptaksmuligheter },
+    muligheter: { ankemuligheterFoer2027, klagemuligheter, omgjoeringskravmuligheter, gjenopptaksmuligheter },
     mulighetIsBasedOnJournalpost,
   } = useRegistrering();
 
-  const ankemulighet = selectMulighet(ankemuligheter, mulighet);
+  const ankemulighet = selectMulighet(ankemuligheterFoer2027, mulighet);
+  const ankeAfter2027mulighet = selectMulighet(ankemuligheterFoer2027, mulighet);
   const klagemulighet = selectMulighet(klagemuligheter, mulighet);
   const omgjøringskravmulighet = selectMulighet(omgjoeringskravmuligheter, mulighet);
   const gjenopptaksmulighet = selectMulighet(gjenopptaksmuligheter, mulighet);
@@ -69,6 +77,10 @@ export const useMulighet = ():
 
   if (typeId === SaksTypeEnum.ANKE) {
     return { typeId, mulighet: ankemulighet, fromJournalpost: false };
+  }
+
+  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
+    return { typeId, mulighet: ankeAfter2027mulighet, fromJournalpost: false };
   }
 
   if (typeId === SaksTypeEnum.KLAGE) {

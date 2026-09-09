@@ -31,6 +31,7 @@ export enum ValidationFieldNames {
   SVARBREV_INPUT = 'svarbrevInput',
   ADDITIONAL_KABAL_MULIGHET = 'additionalKabalMulighetId',
   FORRIGE_BEHANDLENDE_ENHET_ID = 'forrigeBehandlendeEnhetId',
+  TRYGDERETTEN_SAKSNUMMER = 'trygderettenSaksnummer',
   // Frontend specific
   MULIGHET = 'mulighet',
   ENHET = 'enhet',

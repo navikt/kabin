@@ -6,6 +6,7 @@ export const getKlagerTitle = (registreringType: RegistreringType | null): strin
     case SaksTypeEnum.KLAGE:
       return 'Klager';
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Ankende part';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Den som krever omgjøring';

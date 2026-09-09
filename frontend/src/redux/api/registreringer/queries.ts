@@ -18,7 +18,8 @@ import type {
 
 interface MuligheterResponse {
   klagemuligheter: IKlagemulighet[];
-  ankemuligheter: IAnkemulighet[];
+  ankemuligheterFoer2027: IAnkemulighet[];
+  ankemuligheterEtter2027: IAnkemulighet[];
   omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
   gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
   muligheterFetched: string;

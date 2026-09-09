@@ -116,7 +116,8 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
 
 const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
   switch (type) {
-    case SaksTypeEnum.ANKE: {
+    case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027: {
       if (sendSvarbrev) {
         return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av anken.';
       }
