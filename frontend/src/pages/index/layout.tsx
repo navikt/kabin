@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react';
 interface ContainerProps extends Omit<ComponentProps<typeof VStack>, 'as'> {}
 
 export const Container = ({ className = '', ...props }: ContainerProps) => (
-  <VStack as="section" width="100%" className={className} {...props} />
+  <VStack as="section" width="100%" align="center" className={className} {...props} />
 );
 
 interface TableAndPaginationProps {
