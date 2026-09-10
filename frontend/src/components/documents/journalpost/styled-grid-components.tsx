@@ -46,7 +46,7 @@ export const StyledGrid = ({
     style={{
       gridTemplateRows: 'min-content min-content',
       gridTemplateColumns:
-        '32px minmax(250px, 2fr) minmax(150px, 1fr) 85px minmax(170px, 2fr) 110px 100px 90px 30px 55px 20px',
+        '32px minmax(250px, 2fr) minmax(142px, 1fr) 85px minmax(170px, 2fr) 110px 100px 90px 30px 55px 20px',
       gridTemplateAreas: `'${gridTemplateAreas.join(' ')}' '${'logiske-vedlegg '.repeat(gridTemplateAreas.length).trimEnd()}'`,
       ...style,
     }}
