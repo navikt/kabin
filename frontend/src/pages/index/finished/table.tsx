@@ -24,7 +24,13 @@ export const FinishedTable = ({ registreringer, sortState, onSortChange }: Regis
 
   return (
     <TableAndPagination>
-      <Table zebraStripes size="small" sort={sortState} onSortChange={onSortChange} style={{ whiteSpace: 'nowrap' }}>
+      <Table
+        zebraStripes
+        size="small"
+        sort={sortState}
+        onSortChange={onSortChange}
+        className="white-space-nowrap w-fit"
+      >
         <FinishedHeaders sortState={sortState} onSortChange={onSortChange} />
 
         <Table.Body>
