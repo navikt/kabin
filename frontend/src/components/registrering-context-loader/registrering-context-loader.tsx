@@ -1,13 +1,10 @@
 import { LoadingRegistrering } from '@app/components/loading-registrering/loading-registrering';
 import { LoadingStatus } from '@app/components/loading-status/loading-status';
+import { RegistreringContext } from '@app/components/registrering-context-loader/registrering-context';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useGetRegistreringQuery } from '@app/redux/api/registreringer/queries';
-import type { Registrering } from '@app/redux/api/registreringer/types';
 import { VStack } from '@navikt/ds-react';
-import { createContext } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
-
-export const RegistreringContext = createContext<Registrering>({} as Registrering);
 
 export const RegistreringContextLoader = () => (
   <VStack width="100%" flexGrow="1" align="center" overflow="auto">
