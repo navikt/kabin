@@ -1,5 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { HeaderEditable, HeaderReadOnly } from '@app/components/muligheter/common/mulighet-header';
+import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
@@ -16,7 +16,7 @@ import { SaksTypeEnum } from '@app/types/common';
 import type { IAnkemulighet } from '@app/types/mulighet';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ParagraphIcon } from '@navikt/aksel-icons';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const Ankemuligheter = () => {
@@ -38,7 +38,9 @@ const ReadOnlyAnkemulighet = () => {
 
   return (
     <Card>
-      <HeaderReadOnly>Vedtaket anken gjelder</HeaderReadOnly>
+      <Heading level="1" size="small">
+        Vedtaket anken gjelder
+      </Heading>
       <SelectedMulighetBody
         muligheter={[mulighet]}
         tableLabel="Valgt ankemulighet"
@@ -93,7 +95,7 @@ const EditableAnkemuligheter = () => {
 
       <Warning mulighet={mulighet} />
 
-      <Content ankemuligheter={muligheter.ankemuligheter} isLoading={isLoading} />
+      <Content ankemuligheter={muligheter.ankemuligheterFoer2027} isLoading={isLoading} />
     </CardSmall>
   );
 };

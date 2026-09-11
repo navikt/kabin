@@ -4,12 +4,12 @@ import { InternalSvarbrevInput } from '@app/components/svarbrev/input';
 import { VarsletFrist } from '@app/components/svarbrev/varslet-frist';
 import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useIsAnkeSource } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useRegistreringId } from '@app/hooks/use-registrering-id';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useSetSvarbrevSendMutation } from '@app/redux/api/svarbrev/svarbrev';
 import { useGetSvarbrevSettingQuery } from '@app/redux/api/svarbrev-settings';
+import { SaksTypeEnum } from '@app/types/common';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { HStack, InlineMessage, Loader, ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query/react';
@@ -50,9 +50,9 @@ const SendSvarbrevToggle = () => {
 };
 
 export const Svarbrev = () => {
-  const isAnkeSource = useIsAnkeSource();
+  const { typeId } = useRegistrering();
 
-  if (isAnkeSource) {
+  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return (
       <Card title="Svarbrev">
         <InlineMessage status="info">Svarbrev skal ikke sendes for ankesak fra Trygderetten.</InlineMessage>

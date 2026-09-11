@@ -24,6 +24,7 @@ export const FIELD_NAMES: Record<Exclude<ValidationFieldNames, ValidationFieldNa
   [ValidationFieldNames.REASON_NO_LETTER]: 'Skriv kort hvordan du har varslet på annen måte',
   [ValidationFieldNames.ADDITIONAL_KABAL_MULIGHET]: 'Tidligere behandling i Kabal',
   [ValidationFieldNames.FORRIGE_BEHANDLENDE_ENHET_ID]: 'Enhet som kvalitetsvurdering skal knyttes til',
+  [ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER]: 'Saksnummer i Trygderetten',
 };
 
 export const useFieldName = (field: ValidationFieldNames) => {

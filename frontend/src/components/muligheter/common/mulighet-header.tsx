@@ -1,6 +1,6 @@
 import type { Mulighet } from '@app/redux/api/registreringer/types';
 import { ArrowsCirclepathIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, HStack } from '@navikt/ds-react';
 
 interface Props {
   toggleExpanded: () => void;
@@ -10,6 +10,7 @@ interface Props {
   id: string;
   showOnlySelectedLabel: string;
   label: string;
+  children?: React.ReactNode;
 }
 
 export const HeaderEditable = ({
@@ -20,21 +21,26 @@ export const HeaderEditable = ({
   id,
   showOnlySelectedLabel,
   label,
+  children,
 }: Props) => (
-  <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
-    <Heading level="1" size="small">
-      {label}
-    </Heading>
+  <HStack justify="space-between">
+    <HStack align="center" gap="space-4">
+      <Heading level="1" size="small">
+        {label}
+      </Heading>
 
-    <Button
-      data-color="neutral"
-      size="xsmall"
-      variant="tertiary"
-      onClick={() => refetch(id)}
-      loading={isFetching}
-      icon={<ArrowsCirclepathIcon aria-hidden />}
-      title="Oppdater"
-    />
+      <Button
+        data-color="neutral"
+        size="xsmall"
+        variant="tertiary"
+        onClick={() => refetch(id)}
+        loading={isFetching}
+        icon={<ArrowsCirclepathIcon aria-hidden />}
+        title="Oppdater"
+      />
+
+      {children}
+    </HStack>
 
     {mulighet === undefined ? null : (
       <Button
@@ -46,13 +52,5 @@ export const HeaderEditable = ({
         icon={<ChevronUpIcon aria-hidden />}
       />
     )}
-  </div>
-);
-
-export const HeaderReadOnly = ({ children }: { children: string }) => (
-  <div className="grid grid-cols-[min-content_min-content_1fr] gap-1 whitespace-nowrap">
-    <Heading level="1" size="small">
-      {children}
-    </Heading>
-  </div>
+  </HStack>
 );
