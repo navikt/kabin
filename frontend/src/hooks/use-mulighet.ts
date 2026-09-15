@@ -3,6 +3,7 @@ import type { Mulighet } from '@app/redux/api/registreringer/types';
 import { SaksTypeEnum } from '@app/types/common';
 import type {
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -16,6 +17,12 @@ interface KlageResult {
 
 interface AnkeResult {
   typeId: SaksTypeEnum.ANKE;
+  fromJournalpost: false;
+  mulighet: IAnkemulighet | undefined;
+}
+
+interface AnkeAfter2027Result {
+  typeId: SaksTypeEnum.ANKE_AFTER_2027;
   fromJournalpost: false;
   mulighet: IAnkemulighet | undefined;
 }
@@ -47,6 +54,7 @@ interface NoneResult {
 export const useMulighet = ():
   | KlageResult
   | AnkeResult
+  | AnkeAfter2027Result
   | OmgjøringskravResult
   | BegjæringOmGjenopptakResult
   | JournalpostmulighetResult
@@ -54,11 +62,18 @@ export const useMulighet = ():
   const {
     typeId,
     mulighet,
-    muligheter: { ankemuligheter, klagemuligheter, omgjoeringskravmuligheter, gjenopptaksmuligheter },
+    muligheter: {
+      ankemuligheterFoer2027,
+      ankemuligheterEtter2027,
+      klagemuligheter,
+      omgjoeringskravmuligheter,
+      gjenopptaksmuligheter,
+    },
     mulighetIsBasedOnJournalpost,
   } = useRegistrering();
 
-  const ankemulighet = selectMulighet(ankemuligheter, mulighet);
+  const ankemulighet = selectMulighet(ankemuligheterFoer2027, mulighet);
+  const ankeAfter2027mulighet = selectMulighet(ankemuligheterEtter2027, mulighet);
   const klagemulighet = selectMulighet(klagemuligheter, mulighet);
   const omgjøringskravmulighet = selectMulighet(omgjoeringskravmuligheter, mulighet);
   const gjenopptaksmulighet = selectMulighet(gjenopptaksmuligheter, mulighet);
@@ -69,6 +84,10 @@ export const useMulighet = ():
 
   if (typeId === SaksTypeEnum.ANKE) {
     return { typeId, mulighet: ankemulighet, fromJournalpost: false };
+  }
+
+  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
+    return { typeId, mulighet: ankeAfter2027mulighet, fromJournalpost: false };
   }
 
   if (typeId === SaksTypeEnum.KLAGE) {
@@ -87,7 +106,12 @@ export const useMulighet = ():
 };
 
 const selectMulighet = <
-  T extends IKlagemulighet | IAnkemulighet | IBegjæringOmGjenopptakMulighet | IOmgjøringskravmulighet,
+  T extends
+    | IKlagemulighet
+    | IAnkemulighet
+    | IAnkemulighetAfter2027
+    | IBegjæringOmGjenopptakMulighet
+    | IOmgjøringskravmulighet,
 >(
   muligheter: T[],
   mulighet: Mulighet | null,

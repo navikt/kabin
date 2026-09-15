@@ -3,7 +3,7 @@ import { Warning } from '@app/components/date-picker/warning';
 import { prettyDateToISO } from '@app/domain/date';
 import { FORMAT, PRETTY_FORMAT } from '@app/domain/date-formats';
 import { type DateInputProps, DatePicker } from '@navikt/ds-react';
-import { format } from 'date-fns';
+import { format, isAfter, isBefore, isSameDay } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 
 interface Props {
@@ -94,7 +94,7 @@ export const Datepicker = ({
     >
       <DatePicker.Input
         id={id}
-        error={error}
+        error={error ?? getBoundsError(fromDate, toDate, value)}
         label={label}
         disabled={disabled}
         value={input}
@@ -105,4 +105,20 @@ export const Datepicker = ({
       <Warning date={value} threshold={warningThreshold} />
     </DatePicker>
   );
+};
+
+const getBoundsError = (fromDate: Date, toDate: Date, value?: Date): string | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (isBefore(value, fromDate) && !isSameDay(value, fromDate)) {
+    return `Datoen kan ikke være før ${format(fromDate, PRETTY_FORMAT)}`;
+  }
+
+  if (isAfter(value, toDate) && !isSameDay(value, toDate)) {
+    return `Datoen kan ikke være etter ${format(toDate, PRETTY_FORMAT)}`;
+  }
+
+  return undefined;
 };
