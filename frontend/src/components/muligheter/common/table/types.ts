@@ -1,6 +1,7 @@
 import type {
   IAdditionalKabalMulighet,
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -9,6 +10,7 @@ import type {
 export enum MulighetType {
   KLAGE = 'KLAGE',
   ANKE = 'ANKE',
+  ANKE_AFTER_2027 = 'ANKE_AFTER_2027',
   OMGJØRINGSKRAV = 'OMGJØRINGSKRAV',
   BEGJÆRING_OM_GJENOPPTAK = 'BEGJÆRING_OM_GJENOPPTAK',
   ADDITIONAL_KABAL_MULIGHET = 'ADDITIONAL_KABAL_MULIGHET',
@@ -21,6 +23,7 @@ export enum MulighetType {
 export interface MulighetMap {
   [MulighetType.KLAGE]: IKlagemulighet;
   [MulighetType.ANKE]: IAnkemulighet;
+  [MulighetType.ANKE_AFTER_2027]: IAnkemulighetAfter2027;
   [MulighetType.OMGJØRINGSKRAV]: IOmgjøringskravmulighet;
   [MulighetType.BEGJÆRING_OM_GJENOPPTAK]: IBegjæringOmGjenopptakMulighet;
   [MulighetType.ADDITIONAL_KABAL_MULIGHET]: IAdditionalKabalMulighet;

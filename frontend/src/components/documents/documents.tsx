@@ -4,6 +4,7 @@ import { UploadDokumenter } from '@app/components/documents/upload/upload-dokume
 import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { useGetFeatureToggleQuery } from '@app/redux/api/feature-toggles';
 import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetJournalpostIdMutation, useSetSourceMutation } from '@app/redux/api/registreringer/mutations';
 import { Source } from '@app/redux/api/registreringer/types';
@@ -64,17 +65,7 @@ export const Dokumenter = () => {
             label="Last opp"
             disabled={!canEdit}
           />
-          {/* Disabled until Anke fra TR is implemented in Kabin API, Kabel, Kaptein and Kaka */}
-          <Tooltip content="Kommer 01.01.2027">
-            <span>
-              <ToggleItem
-                value={Source.ANKE}
-                icon={<InboxDownIcon aria-hidden />}
-                label="Anke fra Trygderetten"
-                disabled
-              />
-            </span>
-          </Tooltip>
+          <AnkeFraTrygderettenButton />
         </ToggleGroup>
       </HStack>
 
@@ -91,5 +82,30 @@ export const Dokumenter = () => {
         <UploadDokumenter />
       )}
     </VStack>
+  );
+};
+
+const AnkeFraTrygderettenButton = () => {
+  const { data: ankeAfter2027Toggle } = useGetFeatureToggleQuery('anke-after-2027');
+  const canEdit = useCanEdit();
+  const featureEnabled = ankeAfter2027Toggle?.enabled === true;
+
+  const children = (
+    <ToggleItem
+      value={Source.ANKE}
+      icon={<InboxDownIcon aria-hidden />}
+      label="Anke fra Trygderetten"
+      disabled={!featureEnabled || !canEdit}
+    />
+  );
+
+  if (featureEnabled) {
+    return children;
+  }
+
+  return (
+    <Tooltip content="Kommer 01.01.2027">
+      <span>{children}</span>
+    </Tooltip>
   );
 };

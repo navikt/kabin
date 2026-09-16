@@ -11,6 +11,7 @@ import { reduxStore } from '@app/redux/configure-store';
 import type {
   IAdditionalKabalMulighet,
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -18,7 +19,8 @@ import type {
 
 interface MuligheterResponse {
   klagemuligheter: IKlagemulighet[];
-  ankemuligheter: IAnkemulighet[];
+  ankemuligheterFoer2027: IAnkemulighet[];
+  ankemuligheterEtter2027: IAnkemulighetAfter2027[];
   omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
   gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
   muligheterFetched: string;

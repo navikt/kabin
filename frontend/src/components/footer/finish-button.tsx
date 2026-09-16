@@ -54,7 +54,10 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
   }
 
   // Not necessary to check for Arbeidsoppfølging here, because AO only applies to Klage
-  const isArenaAnke = typeId === SaksTypeEnum.ANKE && getIsArenaFagsystem(mulighetResult, journalpost);
+  const isArenaAnke =
+    (typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) &&
+    getIsArenaFagsystem(mulighetResult, journalpost);
+
   const disabled = isLoading || (isArenaAnke && !arenaBekreft);
 
   return (
@@ -116,7 +119,8 @@ const Confirm = ({ closeConfirm }: { closeConfirm: () => void }) => {
 
 const getText = (type: RegistreringType, sendSvarbrev: boolean) => {
   switch (type) {
-    case SaksTypeEnum.ANKE: {
+    case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027: {
       if (sendSvarbrev) {
         return 'Du fullfører nå registrering av anken. Anken blir journalført og klar for saksbehandling i Kabal, og svarbrev sendes. Bekreft at du ønsker å fullføre registrering av anken.';
       }

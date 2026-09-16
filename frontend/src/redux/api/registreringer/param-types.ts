@@ -3,6 +3,7 @@ import type { RegistreringType } from '@app/types/common';
 import type {
   IAdditionalKabalMulighet,
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -19,7 +20,7 @@ export interface SetTypeParams {
 
 export interface SetAnkemulighetParams {
   id: string;
-  mulighet: IAnkemulighet;
+  mulighet: IAnkemulighet | IAnkemulighetAfter2027;
 }
 
 export interface SetNonAnkemulighetParams {
@@ -73,4 +74,15 @@ export interface DeleteDokumentParams {
 export interface ResetDokumentStatusParams {
   id: string;
   dokumentIds: string[];
+}
+
+export interface SetTrygderettenSaksnummerParams {
+  id: string;
+  trygderettenSaksnummer: string;
+}
+
+export interface SetTrygderettenSaksnummerResponse {
+  id: string;
+  trygderettenSaksnummer: string;
+  modified: string;
 }

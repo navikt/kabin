@@ -5,6 +5,8 @@ import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gos
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional-kabal-mulighet/additional-kabal-mulighet';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
+import { AnkemuligheterAfter2027 } from '@app/components/muligheter/anke/ankemuligheter-after-2027';
+import { OldJournalpostWarning } from '@app/components/muligheter/anke/old-anke-warning';
 import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
 import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
 import { Klagemuligheter, LoadingKlagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
@@ -17,9 +19,11 @@ import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-muli
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
+import { FraJournalpostToggle } from '@app/pages/registrering/fra-journalpost-toggle';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
+import { Heading, HStack } from '@navikt/ds-react';
 
 export const TypeInput = () => {
   const { id, typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
@@ -39,6 +43,40 @@ export const TypeInput = () => {
   }
 
   const klagerLabel = getKlagerTitle(typeId);
+
+  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
+    return mulighetIsBasedOnJournalpost ? (
+      <>
+        <Journalpostmuligheter
+          heading={
+            <HStack gap="space-16">
+              <Heading size="small">Velg journalposten anken gjelder</Heading>
+              <FraJournalpostToggle />
+            </HStack>
+          }
+        />
+        <OldJournalpostWarning />
+        <WillCreateNewJournalpostInfo />
+        <AdditionalKabalMuligheter />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass anken"
+          klagerLabel={klagerLabel}
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
+      <>
+        <AnkemuligheterAfter2027 />
+        <WillCreateNewJournalpostInfo />
+        <AdditionalKabalMuligheter />
+        <GosysOppgaver />
+        <Overstyringer title="Tilpass anken" klagerLabel={klagerLabel} saksbehandlerFromMulighetLabel="Fra klagen" />
+        <Svarbrev />
+      </>
+    );
+  }
 
   if (typeId === SaksTypeEnum.ANKE) {
     return mulighetIsBasedOnJournalpost ? (

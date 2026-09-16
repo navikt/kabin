@@ -22,7 +22,7 @@ export const StatusPage = () => {
     );
   }
 
-  if (registrering.typeId === SaksTypeEnum.ANKE) {
+  if (registrering.typeId === SaksTypeEnum.ANKE || registrering.typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return (
       <Status
         registrering={registrering}

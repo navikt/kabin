@@ -27,13 +27,14 @@ const BEGJÆRING_OM_GJENOPPTAK_SECTIONS: Record<SectionNames, string> = {
   [SectionNames.SVARBREV]: 'Svarbrev',
 };
 
-const useSections = () => {
+const useSections = (): Record<SectionNames, string> => {
   const { typeId } = useRegistrering();
 
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
       return KLAGE_SECTIONS;
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return ANKE_SECTIONS;
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return OMGJØRINGSKRAV_SECTIONS;

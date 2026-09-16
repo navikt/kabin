@@ -20,8 +20,9 @@ const FIELD_NAME = ValidationFieldNames.FORRIGE_BEHANDLENDE_ENHET_ID;
 const showArena = (
   typeId: SaksTypeEnum | null,
   fagsystemId: string | undefined,
-): typeId is SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE =>
-  (typeId === SaksTypeEnum.KLAGE || typeId === SaksTypeEnum.ANKE) && fagsystemId === FAGSYSTEM_ARENA;
+): typeId is SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE | SaksTypeEnum.ANKE_AFTER_2027 =>
+  (typeId === SaksTypeEnum.KLAGE || typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) &&
+  fagsystemId === FAGSYSTEM_ARENA;
 
 const showArbeidsoppfolging = (
   typeId: SaksTypeEnum | null,
@@ -50,7 +51,11 @@ export const Enhet = () => {
   return <EnhetInternal typeId={typeId} />;
 };
 
-const EnhetInternal = ({ typeId }: { typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE }) => {
+interface EnhetInternalProps {
+  typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE | SaksTypeEnum.ANKE_AFTER_2027;
+}
+
+const EnhetInternal = ({ typeId }: EnhetInternalProps) => {
   const { overstyringer, id } = useRegistrering();
   const { data = [], isLoading: ytelserIsLoading, isSuccess: ytelserIsSuccess } = useGetLatestYtelserQuery();
   const [setEnhet, { isLoading }] = useSetForrigeBehandlendeEnhetIdMutation();
@@ -114,11 +119,15 @@ const enhetToEntry = (enhet: IKodeverkSimpleValue): Entry<string> => ({
   ),
 });
 
-const getEnheter = (typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE, ytelse: IYtelserLatest): IKodeverkSimpleValue[] => {
+const getEnheter = (
+  typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE | SaksTypeEnum.ANKE_AFTER_2027,
+  ytelse: IYtelserLatest,
+): IKodeverkSimpleValue[] => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
       return ytelse.enheter;
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return ytelse.klageenheter;
   }
 };

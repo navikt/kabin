@@ -123,7 +123,7 @@ const ErrorMessage = () => {
     );
   }
 
-  if (typeId === SaksTypeEnum.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return (
       <WarningCard>
         Ankesaken har ikke en oppgave i Gosys, og du må derfor opprette en. Kabal bruker denne oppgaven til å gi beskjed
