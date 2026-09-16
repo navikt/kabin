@@ -4,6 +4,7 @@ import type { IAddress, IPart, RegistreringType } from '@app/types/common';
 import type {
   IAdditionalKabalMulighet,
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -105,7 +106,8 @@ export interface BaseRegistrering {
   createdBy: string;
   muligheter: {
     klagemuligheter: IKlagemulighet[];
-    ankemuligheter: IAnkemulighet[];
+    ankemuligheterFoer2027: IAnkemulighet[];
+    ankemuligheterEtter2027: IAnkemulighetAfter2027[];
     omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
     gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
     muligheterFetched: string; // DateTime
@@ -114,6 +116,7 @@ export interface BaseRegistrering {
   additionalKabalMulighet: { id: string } | null;
   source: Source;
   uploadedDocuments: UploadedDocuments;
+  trygderettenSaksnummer: string | null;
 }
 
 export interface DraftRegistrering extends BaseRegistrering {

@@ -11,13 +11,14 @@ import type { IArkivertDocument } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import type { BaseSelectDocumentProps } from './document/types';
 
 interface Props extends BaseSelectDocumentProps {
   dokumenter: IArkivertDocument[] | undefined;
   isLoading: boolean;
   refetch: () => void;
+  heading?: JSX.Element;
 }
 
 export const JournalpostList = ({
@@ -27,6 +28,7 @@ export const JournalpostList = ({
   selectJournalpost,
   getIsSelected,
   getCanBeSelected,
+  heading,
 }: Props) => {
   const { sakenGjelderValue, journalpostId } = useRegistrering();
   const canEdit = useCanEdit();
@@ -47,6 +49,8 @@ export const JournalpostList = ({
 
   return (
     <CardMedium id="documents" ariaLabel="Velg journalpost">
+      {heading}
+
       {journalpostId === null ? null : (
         <div className="flex justify-end">
           <Button

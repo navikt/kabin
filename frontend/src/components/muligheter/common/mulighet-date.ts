@@ -2,6 +2,7 @@ import { parseDate } from '@app/functions/date';
 import { SaksTypeEnum } from '@app/types/common';
 import type {
   IAnkemulighet,
+  IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
   IKlagemulighet,
   IOmgjøringskravmulighet,
@@ -13,6 +14,9 @@ import { isAfter, isPast } from 'date-fns';
  * is covered by the `IAnkemulighet` member, since it inherits `SaksTypeEnum.ANKE`. */
 export type KlagemulighetDates = Pick<IKlagemulighet, 'mulighetTypeId' | 'vedtakDate'>;
 export type AnkemulighetDates = Pick<IAnkemulighet, 'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'>;
+
+type AnkemulighetEtter2027Dates = Pick<IAnkemulighetAfter2027, 'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'>;
+
 export type OmgjøringskravmulighetDates = Pick<
   IOmgjøringskravmulighet,
   'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'
@@ -26,7 +30,8 @@ export type MulighetDates =
   | KlagemulighetDates
   | AnkemulighetDates
   | OmgjøringskravmulighetDates
-  | BegjæringOmGjenopptakMulighetDates;
+  | BegjæringOmGjenopptakMulighetDates
+  | AnkemulighetEtter2027Dates;
 
 /**
  * The date of a mulighet that everything else is measured against: the date shown in the table,
@@ -39,6 +44,7 @@ export const getMulighetDate = (mulighet: MulighetDates): string | null => {
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return mulighet.kjennelseMottatt;
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.OMGJØRINGSKRAV:
     case SaksTypeEnum.KLAGE:
       return mulighet.vedtakDate;
@@ -51,6 +57,7 @@ export const getMulighetDateLabel = (mulighet: MulighetDates): string => {
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return KJENNELSESDATO;
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.OMGJØRINGSKRAV:
     case SaksTypeEnum.KLAGE:
       return VEDTAKSDATO;

@@ -6,7 +6,11 @@ import { SaksTypeEnum } from '@app/types/common';
 import { Checkbox } from '@navikt/ds-react';
 import type { ChangeEventHandler } from 'react';
 
-export const FraJournalpostToggle = () => {
+interface Props {
+  className?: string;
+}
+
+export const FraJournalpostToggle = ({ className }: Props) => {
   const { mulighetIsBasedOnJournalpost, id, typeId } = useRegistrering();
   const [setMulighetBasedOnJournalpost, { isLoading }] = useSetMulighetIsBasedOnJournalpostMutation();
   const { data } = useGetFeatureToggleQuery('mulighet-is-based-on-journalpost');
@@ -28,7 +32,13 @@ export const FraJournalpostToggle = () => {
   };
 
   return (
-    <Checkbox size="small" checked={mulighetIsBasedOnJournalpost} onChange={onChange} disabled={!canEdit || isLoading}>
+    <Checkbox
+      className={className}
+      size="small"
+      checked={mulighetIsBasedOnJournalpost}
+      onChange={onChange}
+      disabled={!canEdit || isLoading}
+    >
       Fra journalpost
     </Checkbox>
   );

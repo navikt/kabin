@@ -57,24 +57,37 @@ export interface SvarbrevStatus {
   receivers: Receiver[];
 }
 
-export type IAnkestatus = IBaseStatus & {
+type IAnkestatus = IBaseStatus & {
   typeId: SaksTypeEnum.ANKE;
   vedtakDate: string | null;
 };
 
-export type IKlagestatus = IBaseStatus & {
+type IAnkeAfter2027Status = IBaseStatus & {
+  typeId: SaksTypeEnum.ANKE_AFTER_2027;
+  vedtakDate: string | null;
+  trygderettenSaksnummer: string;
+};
+
+type IKlagestatus = IBaseStatus & {
   typeId: SaksTypeEnum.KLAGE;
   mottattVedtaksinstans: string;
   vedtakDate: string;
 };
 
-export type IOmgjøringskravstatus = IBaseStatus & {
+type IOmgjøringskravstatus = IBaseStatus & {
   typeId: SaksTypeEnum.OMGJØRINGSKRAV;
   vedtakDate: string | null;
 };
 
-export type IBegjæringOmGjenopptakStatus = IBaseStatus & {
+type IBegjæringOmGjenopptakStatus = IBaseStatus & {
   typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
   vedtakDate: string | null;
   kjennelseMottatt: string | null;
 };
+
+export type IStatus =
+  | IAnkestatus
+  | IAnkeAfter2027Status
+  | IKlagestatus
+  | IOmgjøringskravstatus
+  | IBegjæringOmGjenopptakStatus;

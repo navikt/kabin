@@ -57,7 +57,7 @@ const OppgaveHelpText = ({ typeId }: { typeId: SaksTypeEnum | null }) => {
     );
   }
 
-  if (typeId === SaksTypeEnum.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return (
       <HelpText>
         Du må velge oppgave i Gosys. Dersom ankesaken ikke har en oppgave i Gosys, må du opprette en. Kabal bruker denne

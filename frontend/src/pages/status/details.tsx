@@ -1,5 +1,5 @@
 import { getKlagerTitle } from '@app/functions/get-klager-name';
-import { NavEmployee, Part } from '@app/pages/status/common-components';
+import { InfoItem, NavEmployee, Part } from '@app/pages/status/common-components';
 import { DateInfoItem, getDifference } from '@app/pages/status/date';
 import { getDuration } from '@app/pages/status/duration';
 import { Journalpost } from '@app/pages/status/journalpost';
@@ -9,12 +9,12 @@ import { Svarbrev } from '@app/pages/status/svarbrev';
 import { UploadedDocuments } from '@app/pages/status/uploaded-documents';
 import { Source } from '@app/redux/api/registreringer/types';
 import { type RegistreringType, SaksTypeEnum } from '@app/types/common';
-import type { IAnkestatus, IBegjæringOmGjenopptakStatus, IKlagestatus, IOmgjøringskravstatus } from '@app/types/status';
+import type { IStatus } from '@app/types/status';
 import { parseISO } from 'date-fns';
 
 interface Props {
   id: string;
-  status: IAnkestatus | IKlagestatus | IOmgjøringskravstatus | IBegjæringOmGjenopptakStatus;
+  status: IStatus;
 }
 
 const getJournalpostTitle = (typeId: RegistreringType): string => {
@@ -22,6 +22,7 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.KLAGE:
       return 'Valgt journalpost';
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Journalført anke';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
@@ -34,6 +35,7 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Valgt vedtak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
@@ -84,11 +86,19 @@ export const StatusDetails = ({ id, status }: Props) => {
         <DateInfoItem label="Frist" date={frist}>
           {getDifference(mottattKlageinstansDate, parseISO(frist))}
         </DateInfoItem>
-        <DateInfoItem label="Varslet frist" date={varsletFrist}>
-          {varsletFristUnits === null || varsletFristUnitTypeId === null
-            ? undefined
-            : getDuration(varsletFristUnits, varsletFristUnitTypeId)}
-        </DateInfoItem>
+
+        {typeId === SaksTypeEnum.ANKE_AFTER_2027 ? null : (
+          <DateInfoItem label="Varslet frist" date={varsletFrist}>
+            {varsletFristUnits === null || varsletFristUnitTypeId === null
+              ? undefined
+              : getDuration(varsletFristUnits, varsletFristUnitTypeId)}
+          </DateInfoItem>
+        )}
+
+        {typeId === SaksTypeEnum.ANKE_AFTER_2027 ? (
+          <InfoItem label="Saksnummer hos Trygderetten">{status.trygderettenSaksnummer}</InfoItem>
+        ) : null}
+
         <Part title={klagerTitle} part={klager} />
         <Part title="Fullmektig" part={fullmektig} />
         <NavEmployee title="Tildelt saksbehandler" employee={tildeltSaksbehandler} />
