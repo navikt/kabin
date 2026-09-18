@@ -81,7 +81,7 @@ const PermitteringWarning = () => {
   const { data: journalpost } = useJournalpostFromMulighet();
   const { hjemmelIdList } = overstyringer;
 
-  if (typeId !== SaksTypeEnum.KLAGE && typeId !== SaksTypeEnum.ANKE) {
+  if (typeId === null || !PERMITTERING_WARNING_SAKSTYPER.includes(typeId)) {
     return null;
   }
 
@@ -104,3 +104,5 @@ const PermitteringWarning = () => {
 };
 
 const FTRL_4_7_PERMITTERINGSÅRSAK = 'FTRL_4_7_PERMITTERINGSAARSAK';
+
+const PERMITTERING_WARNING_SAKSTYPER = [SaksTypeEnum.KLAGE, SaksTypeEnum.ANKE, SaksTypeEnum.ANKE_AFTER_2027];
