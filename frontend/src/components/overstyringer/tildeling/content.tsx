@@ -66,7 +66,7 @@ export const useSaksbehandlereParams = (): ISaksbehandlereParams | typeof skipTo
     return skipToken;
   }
 
-  return { ytelseId, fnr: sakenGjelderValue };
+  return { ytelseId, fnr: sakenGjelderValue, typeId };
 };
 
 export const useSaksbehandler = (): ISaksbehandler | null => {
