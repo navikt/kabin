@@ -1,5 +1,5 @@
 import { INNSTILLINGER_BASE_QUERY } from '@app/redux/api/common';
-import type { ISaksbehandler } from '@app/types/common';
+import type { ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 interface ISaksbehandlereResponse {
@@ -9,6 +9,7 @@ interface ISaksbehandlereResponse {
 export interface ISaksbehandlereParams {
   ytelseId: string;
   fnr: string;
+  typeId: SaksTypeEnum;
 }
 
 export const saksbehandlereApi = createApi({
