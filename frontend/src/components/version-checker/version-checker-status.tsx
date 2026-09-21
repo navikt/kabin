@@ -4,7 +4,7 @@ import { UpdateRequest, VERSION_CHECKER } from '@app/components/version-checker/
 import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
 import { CogRotationIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const IGNORE_UPDATE_KEY = 'ignoreUpdate';
@@ -14,7 +14,7 @@ const UPDATE_TOAST_TIMEOUT: number = Number.POSITIVE_INFINITY;
 const UPDATED_TOAST_TIMEOUT: number = 5_000;
 
 export const VersionCheckerStatus = () => {
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [ignoredAt, setIgnoredAt] = useState(getIgnoredAt());
   const ignoredUntil = ignoredAt === 0 ? 0 : ignoredAt + IGNORE_UPDATE_TIMEOUT;
   const closeToast = useRef<() => void>(() => undefined);
@@ -48,7 +48,7 @@ export const VersionCheckerStatus = () => {
 
       if (isRequired && !isNonDisturbPage) {
         closeToast.current();
-        modalRef.current?.showModal();
+        setIsOpen(true);
       } else {
         showToast(isRequired);
       }
@@ -86,47 +86,51 @@ export const VersionCheckerStatus = () => {
     }
   }, []);
 
-  const onCloseModal = useCallback(() => {
-    pushEvent('close_update_modal', 'update');
-    const now = Date.now();
-    setIgnoredAt(now);
-    window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
-    showToast(true);
-  }, [showToast]);
+  const onOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      setIsOpen(nextOpen);
 
-  const onIgnoreModal = useCallback(() => modalRef.current?.close(), []);
+      if (nextOpen) {
+        return;
+      }
+
+      pushEvent('close_update_modal', 'update');
+      const now = Date.now();
+      setIgnoredAt(now);
+      window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
+      showToast(true);
+    },
+    [showToast],
+  );
 
   return (
-    <Modal
-      onClose={onCloseModal}
-      closeOnBackdropClick
-      header={{
-        heading: 'Ny versjon av Kabin er tilgjengelig!',
-      }}
-      ref={modalRef}
-      width={500}
-    >
-      <Modal.Body>
-        <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="primary"
-          icon={<CogRotationIcon aria-hidden />}
-          onClick={() => {
-            pushEvent('click_update_modal', 'update');
-            window.location.reload();
-          }}
-          data-testid="update-button"
-          size="medium"
-        >
-          Oppdater Kabin
-        </Button>
-        <Button data-color="neutral" variant="secondary" onClick={onIgnoreModal} size="medium">
-          Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <Dialog.Popup width="500px">
+        <Dialog.Header>
+          <Dialog.Title>Ny versjon av Kabin er tilgjengelig!</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            variant="primary"
+            icon={<CogRotationIcon aria-hidden />}
+            onClick={() => {
+              pushEvent('click_update_modal', 'update');
+              window.location.reload();
+            }}
+            data-testid="update-button"
+            size="medium"
+          >
+            Oppdater Kabin
+          </Button>
+          <Button data-color="neutral" variant="secondary" onClick={() => onOpenChange(false)} size="medium">
+            Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 
