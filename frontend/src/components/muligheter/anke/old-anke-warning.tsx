@@ -1,4 +1,5 @@
 import { parseDate } from '@app/functions/date';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { SaksTypeEnum } from '@app/types/common';
@@ -31,8 +32,9 @@ interface Props {
 
 export const OldAnkemulighetWarning = ({ ankemulighet }: Props) => {
   const isOldAnke = useIsOldAnke(ankemulighet);
+  const canEdit = useCanEdit();
 
-  if (!isOldAnke) {
+  if (!isOldAnke || !canEdit) {
     return null;
   }
 
@@ -76,8 +78,9 @@ const WarningMessage = ({ id }: WarningMessageProps) => {
 export const OldJournalpostWarning = () => {
   const { mulighetIsBasedOnJournalpost } = useRegistrering();
   const { data, isSuccess } = useJournalpostFromMulighet();
+  const canEdit = useCanEdit();
 
-  if (!mulighetIsBasedOnJournalpost || !isSuccess) {
+  if (!mulighetIsBasedOnJournalpost || !isSuccess || !canEdit) {
     return null;
   }
 
