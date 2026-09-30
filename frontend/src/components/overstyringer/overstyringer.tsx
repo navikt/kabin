@@ -25,7 +25,7 @@ import { Ytelse } from '@app/components/overstyringer/ytelse';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { avsenderIsPart, avsenderMottakerToPart } from '@app/domain/converters';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import { useJournalpost } from '@app/hooks/use-journalpost';
+import { useIsAnkeSource, useJournalpost } from '@app/hooks/use-journalpost';
 import { useOtherMulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -71,6 +71,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   const avsenderMottakerParams = useAvsenderMottakerParams();
   const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
   const { sakenGjelder, isLoading, error, refetch } = useSakenGjelderPart();
+  const isAnkeSource = useIsAnkeSource();
 
   const klagerError = useValidationError(ValidationFieldNames.KLAGER);
   const fullmektigError = useValidationError(ValidationFieldNames.FULLMEKTIG);
@@ -146,12 +147,15 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
         }
       : null;
 
-  const avsenderOption: ISetPart<IPart | null> = {
-    label: 'Avsender',
-    defaultPart: avsenderMottakerToPart(avsender),
-    title: 'Avsender',
-    icon: <AvsenderIcon aria-hidden />,
-  };
+  // For anke fra Trygderetten, avsender is Trygderetten, which can never be a party in the case.
+  const avsenderOption: ISetPart<IPart | null> | null = isAnkeSource
+    ? null
+    : {
+        label: 'Avsender',
+        defaultPart: avsenderMottakerToPart(avsender),
+        title: 'Avsender',
+        icon: <AvsenderIcon aria-hidden />,
+      };
 
   const journalpostAvsenderOption: ISetPart<IPart | null> | null =
     journalpost?.avsenderMottaker?.id === avsender?.identifikator
