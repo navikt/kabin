@@ -35,5 +35,10 @@ const RegistreringLoader = ({ children }: Props) => {
     return <Navigate to="/" replace />;
   }
 
-  return <RegistreringContext.Provider value={data}>{children}</RegistreringContext.Provider>;
+  // Remount on registrering change, so no local state from the previous registrering is carried over.
+  return (
+    <RegistreringContext.Provider key={data.id} value={data}>
+      {children}
+    </RegistreringContext.Provider>
+  );
 };
