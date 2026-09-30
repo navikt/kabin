@@ -20,10 +20,15 @@ interface Props {
 
 const RegistreringLoader = ({ children }: Props) => {
   const registreringId = useRegistreringId();
-  const { data, isLoading, isSuccess } = useGetRegistreringQuery(registreringId);
+  // `currentData` is only defined for the current `registreringId`, unlike `data`, which keeps the previous registrering while the next one is fetched.
+  const { currentData, isError } = useGetRegistreringQuery(registreringId);
   const location = useLocation();
 
-  if (isLoading) {
+  if (isError) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (currentData === undefined) {
     if (location.pathname.endsWith('/status')) {
       return <LoadingStatus />;
     }
@@ -31,13 +36,9 @@ const RegistreringLoader = ({ children }: Props) => {
     return <LoadingRegistrering />;
   }
 
-  if (!isSuccess) {
-    return <Navigate to="/" replace />;
-  }
-
   // Remount on registrering change, so no local state from the previous registrering is carried over.
   return (
-    <RegistreringContext.Provider key={data.id} value={data}>
+    <RegistreringContext.Provider key={currentData.id} value={currentData}>
       {children}
     </RegistreringContext.Provider>
   );
