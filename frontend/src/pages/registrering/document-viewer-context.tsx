@@ -1,3 +1,4 @@
+import { useRegistrering } from '@app/hooks/use-registrering';
 import type { IArkivertDocument, IVedlegg } from '@app/types/dokument';
 import { createContext, useState } from 'react';
 
@@ -33,7 +34,15 @@ interface Props {
 }
 
 export const DocumentViewerContextState = ({ children }: Props) => {
+  const { sakenGjelderValue } = useRegistrering();
   const [dokument, setDokument] = useState<IViewedDocument | null>(null);
+  const [previousSakenGjelderValue, setPreviousSakenGjelderValue] = useState(sakenGjelderValue);
+
+  // Reset during render, so the previous person's document is never rendered for the new person.
+  if (previousSakenGjelderValue !== sakenGjelderValue) {
+    setPreviousSakenGjelderValue(sakenGjelderValue);
+    setDokument(null);
+  }
 
   return (
     <DocumentViewerContext.Provider value={{ viewDokument: setDokument, dokument }}>
