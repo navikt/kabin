@@ -1,6 +1,6 @@
 import { useRegistrering } from '@app/hooks/use-registrering';
 import type { IArkivertDocument, IVedlegg } from '@app/types/dokument';
-import { createContext, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 
 export interface ViewedVedlegg extends IVedlegg {
   journalpostId: string;
@@ -44,9 +44,10 @@ export const DocumentViewerContextState = ({ children }: Props) => {
     setDokument(null);
   }
 
-  return (
-    <DocumentViewerContext.Provider value={{ viewDokument: setDokument, dokument }}>
-      {children}
-    </DocumentViewerContext.Provider>
-  );
+  // Memoized, so registrering updates don't re-render consumers. The document URLs are cache-busted on every render.
+  // `dokument` and `setDokument` are stable enough, but the `value` object is not.
+  // `setDokument` is completely stable and cannot be put in useMemo dependencies.
+  const value = useMemo(() => ({ viewDokument: setDokument, dokument }), [dokument]);
+
+  return <DocumentViewerContext.Provider value={value}>{children}</DocumentViewerContext.Provider>;
 };
