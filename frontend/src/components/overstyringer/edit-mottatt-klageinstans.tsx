@@ -83,7 +83,7 @@ const FromVedtakToJournalpost = () => {
 const From2027ToNow = () => {
   const { overstyringer } = useRegistrering();
   const selectedDate = getSelectedDate(overstyringer.mottattKlageinstans);
-  const { data } = useGetFeatureToggleQuery('kabin-fake-mottatt-klageinstans-constraint');
+  const { data } = useGetFeatureToggleQuery('kabin-fake-date-constraint');
 
   const fromDate = data?.enabled === true ? '2026-09-09' : '2027-01-01';
 

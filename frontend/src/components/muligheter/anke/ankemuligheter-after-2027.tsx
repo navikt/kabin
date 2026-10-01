@@ -1,5 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { OldAnkemulighetWarning } from '@app/components/muligheter/anke/old-anke-warning';
+import { AnkemulighetWarningForAnkeAfter2027 } from '@app/components/muligheter/anke/old-anke-warning';
 import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
@@ -102,7 +102,7 @@ const EditableAnkemuligheter = () => {
 
         <Content ankemuligheter={muligheter.ankemuligheterEtter2027} isLoading={isLoading} />
       </CardSmall>
-      <OldAnkemulighetWarning ankemulighet={mulighet} />
+      <AnkemulighetWarningForAnkeAfter2027 mulighet={mulighet} />
     </>
   );
 };
