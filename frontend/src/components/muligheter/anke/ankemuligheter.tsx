@@ -1,4 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
+import { AnkemulighetWarningForAnkeBefore2027 } from '@app/components/muligheter/anke/old-anke-warning';
 import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
@@ -80,23 +81,26 @@ const EditableAnkemuligheter = () => {
   }
 
   return (
-    <CardSmall>
-      <HeaderEditable
-        toggleExpanded={() => setIsExpanded(!isExpanded)}
-        refetch={refetch}
-        isFetching={isFetching}
-        mulighet={mulighet}
-        id={id}
-        label="Velg vedtaket anken gjelder"
-        showOnlySelectedLabel="Vis kun valgt ankemulighet"
-      />
+    <>
+      <CardSmall>
+        <HeaderEditable
+          toggleExpanded={() => setIsExpanded(!isExpanded)}
+          refetch={refetch}
+          isFetching={isFetching}
+          mulighet={mulighet}
+          id={id}
+          label="Velg vedtaket anken gjelder"
+          showOnlySelectedLabel="Vis kun valgt ankemulighet"
+        />
 
-      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+        <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning mulighet={mulighet} />
+        <Warning mulighet={mulighet} />
 
-      <Content ankemuligheter={muligheter.ankemuligheterFoer2027} isLoading={isLoading} />
-    </CardSmall>
+        <Content ankemuligheter={muligheter.ankemuligheterFoer2027} isLoading={isLoading} />
+      </CardSmall>
+      <AnkemulighetWarningForAnkeBefore2027 mulighet={mulighet} />
+    </>
   );
 };
 
