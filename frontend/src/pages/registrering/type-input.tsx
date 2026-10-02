@@ -4,12 +4,12 @@ import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional-kabal-mulighet/additional-kabal-mulighet';
-import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
-import { AnkemuligheterAfter2027 } from '@app/components/muligheter/anke/ankemuligheter-after-2027';
 import {
   JournalpostForAnkeAfter2027Warning,
   JournalpostForAnkeBefore2027Warning,
-} from '@app/components/muligheter/anke/old-anke-warning';
+} from '@app/components/muligheter/anke/ankemulighet-warnings';
+import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
+import { AnkemuligheterAfter2027 } from '@app/components/muligheter/anke/ankemuligheter-after-2027';
 import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
 import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
 import { Klagemuligheter, LoadingKlagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';

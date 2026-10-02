@@ -1,5 +1,5 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { AnkemulighetWarningForAnkeAfter2027 } from '@app/components/muligheter/anke/old-anke-warning';
+import { AnkemulighetWarningForAnkeAfter2027 } from '@app/components/muligheter/anke/ankemulighet-warnings';
 import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
