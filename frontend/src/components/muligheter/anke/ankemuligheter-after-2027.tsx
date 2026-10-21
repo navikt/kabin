@@ -1,10 +1,10 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { AnkemulighetWarningForAnkeAfter2027 } from '@app/components/muligheter/anke/ankemulighet-warnings';
 import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
+import { MulighetWarningForSakFraTRAfter2027 } from '@app/components/muligheter/sak-fra-tr-after-2027-warnings';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -12,7 +12,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { FraJournalpostToggle } from '@app/pages/registrering/fra-journalpost-toggle';
 import { useLazyGetMuligheterQuery } from '@app/redux/api/registreringer/queries';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IAnkemulighetAfter2027 } from '@app/types/mulighet';
@@ -92,9 +91,7 @@ const EditableAnkemuligheter = () => {
           id={id}
           label="Velg vedtaket anken gjelder"
           showOnlySelectedLabel="Vis kun valgt ankemulighet"
-        >
-          <FraJournalpostToggle className="ml-4" />
-        </HeaderEditable>
+        />
 
         <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
@@ -102,7 +99,7 @@ const EditableAnkemuligheter = () => {
 
         <Content ankemuligheter={muligheter.ankemuligheterEtter2027} isLoading={isLoading} />
       </CardSmall>
-      <AnkemulighetWarningForAnkeAfter2027 mulighet={mulighet} />
+      <MulighetWarningForSakFraTRAfter2027 mulighet={mulighet} />
     </>
   );
 };

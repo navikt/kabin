@@ -70,6 +70,8 @@ const HeaderCells = ({ type, columns }: HeaderCellsProps): JSX.Element[] => {
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
     case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
+      return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
     case MulighetType.ANKE:
       return columns.map((column) => <HeaderCell key={column} column={column} type={type} />);
     case MulighetType.ANKE_AFTER_2027:

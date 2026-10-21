@@ -4,6 +4,7 @@ import type {
   IAnkemulighet,
   IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
+  IBegjæringOmGjenopptakMulighetAfter2027,
   IKlagemulighet,
   IOmgjøringskravmulighet,
 } from '@app/types/mulighet';
@@ -25,13 +26,18 @@ export type BegjæringOmGjenopptakMulighetDates = Pick<
   IBegjæringOmGjenopptakMulighet,
   'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'
 >;
+type BegjæringOmGjenopptakAfter2027Dates = Pick<
+  IBegjæringOmGjenopptakMulighetAfter2027,
+  'mulighetTypeId' | 'vedtakDate' | 'kjennelseMottatt'
+>;
 
 export type MulighetDates =
   | KlagemulighetDates
   | AnkemulighetDates
   | OmgjøringskravmulighetDates
   | BegjæringOmGjenopptakMulighetDates
-  | AnkemulighetEtter2027Dates;
+  | AnkemulighetEtter2027Dates
+  | BegjæringOmGjenopptakAfter2027Dates;
 
 /**
  * The date of a mulighet that everything else is measured against: the date shown in the table,
@@ -42,6 +48,7 @@ export type MulighetDates =
 export const getMulighetDate = (mulighet: MulighetDates): string | null => {
   switch (mulighet.mulighetTypeId) {
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return mulighet.kjennelseMottatt;
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.ANKE_AFTER_2027:
@@ -55,6 +62,7 @@ export const getMulighetDate = (mulighet: MulighetDates): string | null => {
 export const getMulighetDateLabel = (mulighet: MulighetDates): string => {
   switch (mulighet.mulighetTypeId) {
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return KJENNELSESDATO;
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.ANKE_AFTER_2027:

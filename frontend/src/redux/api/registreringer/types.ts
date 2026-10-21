@@ -6,6 +6,7 @@ import type {
   IAnkemulighet,
   IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
+  IBegjæringOmGjenopptakMulighetAfter2027,
   IKlagemulighet,
   IOmgjøringskravmulighet,
 } from '@app/types/mulighet';
@@ -67,7 +68,7 @@ export enum Source {
   /** Anke received through Altinn. Behaves like `UPLOADED_DOCUMENTS`, except `inngaaendeKanal`,
    * `typeId` and `overstyringer.avsender` are set by the API when the source is selected, and
    * cannot be changed by the user. */
-  ANKE = 'ANKE',
+  ANKE = 'ANKE', // TODO: rename?
 }
 
 /** Sources whose documents are uploaded files rather than an existing journalpost. */
@@ -109,7 +110,8 @@ export interface BaseRegistrering {
     ankemuligheterFoer2027: IAnkemulighet[];
     ankemuligheterEtter2027: IAnkemulighetAfter2027[];
     omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
-    gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
+    gjenopptaksmuligheterFoer2027: IBegjæringOmGjenopptakMulighet[];
+    gjenopptaksmuligheterEtter2027: IBegjæringOmGjenopptakMulighetAfter2027[];
     muligheterFetched: string; // DateTime
   };
   additionalKabalMuligheter: IAdditionalKabalMulighet[];
