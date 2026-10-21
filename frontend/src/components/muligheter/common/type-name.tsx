@@ -1,4 +1,5 @@
-import { type SaksTypeEnum, TYPE_NAME } from '@app/types/common';
+import { useSakstypeName } from '@app/hooks/kodeverk';
+import type { SaksTypeEnum } from '@app/types/common';
 import { Tag } from '@navikt/ds-react';
 
 interface Props {
@@ -6,9 +7,11 @@ interface Props {
 }
 
 export const TypeName = ({ typeId }: Props) => {
+  const [isLoading, name] = useSakstypeName(typeId);
+
   return (
     <Tag data-color="info" variant="outline" size="small">
-      {TYPE_NAME[typeId]}
+      {isLoading ? 'Laster...' : name}
     </Tag>
   );
 };
