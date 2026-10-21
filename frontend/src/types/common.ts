@@ -141,13 +141,3 @@ export interface DateRange {
   to?: Date | undefined;
 }
 
-export const TYPE_NAME: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke',
-  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
-  [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter Trygderetten opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'Begjæring om gjenopptak',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'Begjæring om gjenopptak i Trygderetten',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke etter 1.1.27',
-};
