@@ -115,6 +115,9 @@ export enum SaksTypeEnum {
   BEGJÆRING_OM_GJENOPPTAK = '6',
   BEGJÆRING_OM_GJENOPPTAK_I_TR = '7',
   ANKE_AFTER_2027 = '8',
+  ANKE_I_TR_AFTER_2027 = '9',
+  BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 = '10',
+  BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027 = '11',
 }
 
 export type RegistreringType =
@@ -122,14 +125,16 @@ export type RegistreringType =
   | SaksTypeEnum.ANKE
   | SaksTypeEnum.OMGJØRINGSKRAV
   | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
-  | SaksTypeEnum.ANKE_AFTER_2027;
+  | SaksTypeEnum.ANKE_AFTER_2027
+  | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
 
 export const isType = (type: string): type is RegistreringType =>
   type === SaksTypeEnum.KLAGE ||
   type === SaksTypeEnum.ANKE ||
   type === SaksTypeEnum.OMGJØRINGSKRAV ||
   type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
-  type === SaksTypeEnum.ANKE_AFTER_2027;
+  type === SaksTypeEnum.ANKE_AFTER_2027 ||
+  type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
 
 export interface ISaksbehandler {
   navIdent: string;
@@ -140,4 +145,3 @@ export interface DateRange {
   from: Date | undefined;
   to?: Date | undefined;
 }
-

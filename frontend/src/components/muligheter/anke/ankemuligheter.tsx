@@ -1,10 +1,10 @@
 import { Card, CardSmall } from '@app/components/card/card';
-import { AnkemulighetWarningForAnkeBefore2027 } from '@app/components/muligheter/anke/ankemulighet-warnings';
 import { HeaderEditable } from '@app/components/muligheter/common/mulighet-header';
 import { LoadingMuligheter } from '@app/components/muligheter/common/table/loading-muligheter';
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
+import { MulighetWarningForSakFraTRBefore2027 } from '@app/components/muligheter/sak-fra-tr-after-2027-warnings';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -99,7 +99,7 @@ const EditableAnkemuligheter = () => {
 
         <Content ankemuligheter={muligheter.ankemuligheterFoer2027} isLoading={isLoading} />
       </CardSmall>
-      <AnkemulighetWarningForAnkeBefore2027 mulighet={mulighet} />
+      <MulighetWarningForSakFraTRBefore2027 mulighet={mulighet} />
     </>
   );
 };

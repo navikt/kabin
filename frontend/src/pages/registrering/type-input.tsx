@@ -4,16 +4,17 @@ import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional-kabal-mulighet/additional-kabal-mulighet';
-import {
-  JournalpostForAnkeAfter2027Warning,
-  JournalpostForAnkeBefore2027Warning,
-} from '@app/components/muligheter/anke/ankemulighet-warnings';
 import { Ankemuligheter } from '@app/components/muligheter/anke/ankemuligheter';
 import { AnkemuligheterAfter2027 } from '@app/components/muligheter/anke/ankemuligheter-after-2027';
 import { BegjæringOmGjenopptakMuligheter } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak';
+import { BegjæringOmGjenopptakMuligheterAfter2027 } from '@app/components/muligheter/begjæring-om-gjenopptak/begjæring-om-gjenopptak-after-2027';
 import { Journalpostmuligheter } from '@app/components/muligheter/journalpostmuligheter';
 import { Klagemuligheter, LoadingKlagemuligheter } from '@app/components/muligheter/klage/klagemuligheter';
 import { Omgjøringskravmuligheter } from '@app/components/muligheter/omgjøringskrav/omgjøringskravmuligheter';
+import {
+  JournalpostForSakFraTRAfter2027Warning,
+  JournalpostForSakFraTRBefore2027Warning,
+} from '@app/components/muligheter/sak-fra-tr-after-2027-warnings';
 import { Overstyringer } from '@app/components/overstyringer/overstyringer';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
@@ -22,11 +23,9 @@ import { useAdditionalKabalMulighet } from '@app/hooks/use-additional-kabal-muli
 import { useJournalpost } from '@app/hooks/use-journalpost';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useRegistrering } from '@app/hooks/use-registrering';
-import { FraJournalpostToggle } from '@app/pages/registrering/fra-journalpost-toggle';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import { DocPencilIcon, TasklistStartIcon } from '@navikt/aksel-icons';
-import { Heading, HStack } from '@navikt/ds-react';
 
 export const TypeInput = () => {
   const { id, typeId, mulighetIsBasedOnJournalpost } = useRegistrering();
@@ -50,15 +49,8 @@ export const TypeInput = () => {
   if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return mulighetIsBasedOnJournalpost ? (
       <>
-        <Journalpostmuligheter
-          heading={
-            <HStack gap="space-16">
-              <Heading size="small">Velg journalposten anken gjelder</Heading>
-              <FraJournalpostToggle />
-            </HStack>
-          }
-        />
-        <JournalpostForAnkeAfter2027Warning />
+        <Journalpostmuligheter />
+        <JournalpostForSakFraTRAfter2027Warning />
         <WillCreateNewJournalpostInfo />
         <AdditionalKabalMuligheter />
         <GosysOppgaver />
@@ -85,7 +77,7 @@ export const TypeInput = () => {
     return mulighetIsBasedOnJournalpost ? (
       <>
         <Journalpostmuligheter />
-        <JournalpostForAnkeBefore2027Warning />
+        <JournalpostForSakFraTRBefore2027Warning />
         <WillCreateNewJournalpostInfo />
         <AdditionalKabalMuligheter />
         <GosysOppgaver />
@@ -176,6 +168,35 @@ export const TypeInput = () => {
     ) : (
       <>
         <BegjæringOmGjenopptakMuligheter />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass begjæringen om gjenopptak"
+          klagerLabel="Den som begjærer gjenopptak"
+          saksbehandlerFromMulighetLabel="Fra tidligere behandling"
+        />
+        <Svarbrev />
+      </>
+    );
+  }
+
+  if (typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027) {
+    return mulighetIsBasedOnJournalpost ? (
+      <>
+        <Journalpostmuligheter />
+        <JournalpostForSakFraTRAfter2027Warning />
+        <WillCreateNewJournalpostInfo />
+        <GosysOppgaver />
+        <Overstyringer
+          title="Tilpass begjæringen om gjenopptak"
+          klagerLabel="Den som begjærer gjenopptak"
+          saksbehandlerFromMulighetLabel="Fra journalpost"
+        />
+        <Svarbrev />
+      </>
+    ) : (
+      <>
+        <BegjæringOmGjenopptakMuligheterAfter2027 />
         <WillCreateNewJournalpostInfo />
         <GosysOppgaver />
         <Overstyringer

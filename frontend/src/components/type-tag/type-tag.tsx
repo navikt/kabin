@@ -18,22 +18,25 @@ export const TypeTag = ({ typeId }: Props) => {
   return <NonNullableTypeTag typeId={typeId} />;
 };
 
-const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
-  [SaksTypeEnum.KLAGE]: 'alt1',
-  [SaksTypeEnum.ANKE]: 'success-filled',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'alt3-filled',
-  [SaksTypeEnum.ANKE_I_TR]: 'error-filled',
-  [SaksTypeEnum.TR_OPPHEVET]: 'alt2-filled',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info-filled',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'warning-filled',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral-filled',
+const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['data-color']> = {
+  [SaksTypeEnum.KLAGE]: 'meta-purple',
+  [SaksTypeEnum.ANKE]: 'success',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'brand-magenta',
+  [SaksTypeEnum.ANKE_I_TR]: 'danger',
+  [SaksTypeEnum.ANKE_I_TR_AFTER_2027]: 'brand-beige',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info',
+  [SaksTypeEnum.TR_OPPHEVET]: 'meta-lime',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'success',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027]: 'brand-magenta',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027]: 'warning',
 };
 
 const NonNullableTypeTag = ({ typeId }: { typeId: SaksTypeEnum }) => {
   const [isLoading, name] = useSakstypeName(typeId);
 
   return (
-    <Tag size="small" variant={SAKSTYPE_TO_TAG_VARIANT[typeId]}>
+    <Tag size="small" data-color={SAKSTYPE_TO_TAG_VARIANT[typeId]}>
       {isLoading ? 'Laster...' : name}
     </Tag>
   );

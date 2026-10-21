@@ -59,6 +59,7 @@ const LoadingCells = ({ type, columns }: LoadingCellsProps): JSX.Element[] => {
     case MulighetType.ADDITIONAL_KABAL_MULIGHET:
     case MulighetType.ANKE:
     case MulighetType.ANKE_AFTER_2027:
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
     case MulighetType.OMGJØRINGSKRAV:
       return columns.map((column) => (
         <Table.DataCell key={column} style={{ width: getOtherColumnWidth(column) }}>

@@ -1,6 +1,7 @@
 import { ToggleItem } from '@app/components/toggle-item/toggle-item';
+import { useSakstypeName } from '@app/hooks/kodeverk';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useIsUploadedDocuments, useIsUploadedDocumentsSource } from '@app/hooks/use-journalpost';
+import { useIsAnkeSource, useIsUploadedDocuments, useIsUploadedDocumentsSource } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { FraJournalpostToggle } from '@app/pages/registrering/fra-journalpost-toggle';
 import { useSetTypeMutation } from '@app/redux/api/registreringer/mutations';
@@ -12,11 +13,9 @@ export const TypeSelect = () => {
   const [setType] = useSetTypeMutation({ fixedCacheKey: id });
   const canEdit = useCanEdit();
   const isUploadedDocuments = useIsUploadedDocuments();
-  const isUploadedDocumentsSource = useIsUploadedDocumentsSource();
 
-  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
-    return null;
-  }
+  const readOnly = !canEdit;
+  const toggleGroupItems = useToggleGroupItems(readOnly);
 
   const onChange = (newTypeId: string) => {
     if (!isType(newTypeId)) {
@@ -25,8 +24,6 @@ export const TypeSelect = () => {
 
     setType({ id, typeId: newTypeId });
   };
-
-  const readOnly = !canEdit;
 
   if (!readOnly && (isUploadedDocuments ? uploadedDocuments.dokumenter.length === 0 : journalpostId === null)) {
     return (
@@ -42,26 +39,43 @@ export const TypeSelect = () => {
   return (
     <HStack justify="center" align="center" gap="space-16">
       <ToggleGroup onChange={onChange} value={typeId ?? 'none'} size="small" key={typeId === null ? 'none' : 'some'}>
-        {isUploadedDocumentsSource ? null : (
-          <ToggleItem value={SaksTypeEnum.KLAGE} disabled={readOnly}>
-            Klage
-          </ToggleItem>
-        )}
-
-        <ToggleItem value={SaksTypeEnum.ANKE} disabled={readOnly}>
-          Anke
-        </ToggleItem>
-
-        <ToggleItem value={SaksTypeEnum.OMGJØRINGSKRAV} disabled={readOnly}>
-          Omgjøringskrav
-        </ToggleItem>
-
-        <ToggleItem value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK} disabled={readOnly}>
-          Begjæring om gjenopptak
-        </ToggleItem>
+        {toggleGroupItems}
       </ToggleGroup>
 
       <FraJournalpostToggle />
     </HStack>
+  );
+};
+
+const useToggleGroupItems = (disabled: boolean) => {
+  const isSakFraTr = useIsAnkeSource();
+  const isUploadedDocumentsSource = useIsUploadedDocumentsSource();
+
+  if (isSakFraTr) {
+    return (
+      <>
+        <ToggleGroupItem value={SaksTypeEnum.ANKE_AFTER_2027} disabled={disabled} />
+        <ToggleGroupItem value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027} disabled={disabled} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      {isUploadedDocumentsSource ? null : <ToggleGroupItem value={SaksTypeEnum.KLAGE} disabled={disabled} />}
+      <ToggleGroupItem value={SaksTypeEnum.ANKE} disabled={disabled} />
+      <ToggleGroupItem value={SaksTypeEnum.OMGJØRINGSKRAV} disabled={disabled} />
+      <ToggleGroupItem value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK} disabled={disabled} />
+    </>
+  );
+};
+
+const ToggleGroupItem = ({ value, disabled }: { value: SaksTypeEnum; disabled: boolean }) => {
+  const name = useSakstypeName(value);
+
+  return (
+    <ToggleItem value={value} disabled={disabled}>
+      {name}
+    </ToggleItem>
   );
 };
