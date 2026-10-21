@@ -1,3 +1,4 @@
+import { useSakstypeName } from '@app/hooks/kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
 import { Tag, type TagProps } from '@navikt/ds-react';
 
@@ -14,11 +15,7 @@ export const TypeTag = ({ typeId }: Props) => {
     );
   }
 
-  return (
-    <Tag size="small" variant={SAKSTYPE_TO_TAG_VARIANT[typeId]}>
-      {SAKSTYPE_TO_NAME[typeId]}
-    </Tag>
-  );
+  return <NonNullableTypeTag typeId={typeId} />;
 };
 
 const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
@@ -32,13 +29,12 @@ const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral-filled',
 };
 
-const SAKSTYPE_TO_NAME: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke før 1.1.27',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke',
-  [SaksTypeEnum.ANKE_I_TR]: 'Anke i trygderetten',
-  [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter TR opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'Begjæring om gjenopptak',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'Begjæring om gjenopptak i trygderetten',
+const NonNullableTypeTag = ({ typeId }: { typeId: SaksTypeEnum }) => {
+  const [isLoading, name] = useSakstypeName(typeId);
+
+  return (
+    <Tag size="small" variant={SAKSTYPE_TO_TAG_VARIANT[typeId]}>
+      {isLoading ? 'Laster...' : name}
+    </Tag>
+  );
 };
