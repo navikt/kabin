@@ -1,5 +1,6 @@
+import { useSakstypeName } from '@app/hooks/kodeverk';
 import { SaksTypeEnum } from '@app/types/common';
-import { Tag, type TagProps } from '@navikt/ds-react';
+import { Skeleton, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   typeId: SaksTypeEnum | null;
@@ -14,15 +15,7 @@ export const TypeTag = ({ typeId }: Props) => {
     );
   }
 
-  return (
-    <Tag
-      size="small"
-      variant={typeId === SaksTypeEnum.KLAGE ? 'outline' : 'strong'}
-      data-color={SAKSTYPE_TO_TAG_COLOR[typeId]}
-    >
-      {SAKSTYPE_TO_NAME[typeId]}
-    </Tag>
-  );
+  return <NonNullableTypeTag typeId={typeId} />;
 };
 
 const SAKSTYPE_TO_TAG_COLOR: Record<SaksTypeEnum, TagProps['data-color']> = {
@@ -36,13 +29,16 @@ const SAKSTYPE_TO_TAG_COLOR: Record<SaksTypeEnum, TagProps['data-color']> = {
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral',
 };
 
-const SAKSTYPE_TO_NAME: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke før 1.1.27',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke',
-  [SaksTypeEnum.ANKE_I_TR]: 'Anke i trygderetten',
-  [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter TR opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'Begjæring om gjenopptak',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'Begjæring om gjenopptak i trygderetten',
+const NonNullableTypeTag = ({ typeId }: { typeId: SaksTypeEnum }) => {
+  const [isLoading, name] = useSakstypeName(typeId);
+
+  if (isLoading) {
+    return <Skeleton height="42px" />;
+  }
+
+  return (
+    <Tag size="small" variant="strong" data-color={SAKSTYPE_TO_TAG_COLOR[typeId]}>
+      {name}
+    </Tag>
+  );
 };
