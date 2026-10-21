@@ -1,7 +1,6 @@
-import { useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
+import { useGetSakstyperQuery, useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
 import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
 import type { SaksTypeEnum } from '@app/types/common';
-import { TYPE_NAME } from '@app/types/common';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import type { SortState } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -19,6 +18,7 @@ export const useSort = (
   page: number,
 ): FinishedRegistreringListItem[] => {
   const { data: ytelser = [] } = useGetSimpleYtelserQuery();
+  const { data: sakstyper = [] } = useGetSakstyperQuery();
 
   return useMemo(
     () =>
@@ -28,12 +28,12 @@ export const useSort = (
             return 0;
           }
 
-          const [aVal, bVal] = getValues(a, b, sort.orderBy, ytelser);
+          const [aVal, bVal] = getValues(a, b, sort.orderBy, ytelser, sakstyper);
 
           return sort.direction === 'ascending' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
         })
         .slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE),
-    [registreringer, page, sort, ytelser],
+    [registreringer, page, sort, ytelser, sakstyper],
   );
 };
 
@@ -42,10 +42,11 @@ const getValues = (
   b: FinishedRegistreringListItem,
   sortBy: SortProp,
   ytelser: IKodeverkSimpleValue[],
+  sakstyper: IKodeverkSimpleValue[],
 ): [string, string] => {
   switch (sortBy) {
     case 'typeId':
-      return getSakstypeNames(a, b);
+      return getSakstypeNames(a, b, sakstyper);
     case 'ytelseId':
       return getYtelseNames(a, b, ytelser);
     default:
@@ -53,18 +54,19 @@ const getValues = (
   }
 };
 
-const getSakstypeName = (typeId: SaksTypeEnum | null): string => {
+const getSakstypeName = (typeId: SaksTypeEnum | null, sakstyper: IKodeverkSimpleValue[]): string => {
   if (typeId === null) {
     return '';
   }
 
-  return TYPE_NAME[typeId];
+  return sakstyper.find((s) => s.id === typeId)?.navn ?? '';
 };
 
-const getSakstypeNames = (a: FinishedRegistreringListItem, b: FinishedRegistreringListItem): [string, string] => [
-  getSakstypeName(a.typeId),
-  getSakstypeName(b.typeId),
-];
+const getSakstypeNames = (
+  a: FinishedRegistreringListItem,
+  b: FinishedRegistreringListItem,
+  sakstyper: IKodeverkSimpleValue[],
+): [string, string] => [getSakstypeName(a.typeId, sakstyper), getSakstypeName(b.typeId, sakstyper)];
 
 const getYtelseNames = (
   a: FinishedRegistreringListItem,

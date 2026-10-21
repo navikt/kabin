@@ -1,5 +1,5 @@
 import type { MulighetMap, MulighetType } from '@app/components/muligheter/common/table/types';
-import { TypeName } from '@app/components/muligheter/common/type-name';
+import { MulighetTypeName } from '@app/components/muligheter/common/type-name';
 import { UsedCount } from '@app/components/muligheter/common/used-count';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { isoDateToPretty } from '@app/domain/date';
@@ -29,7 +29,7 @@ export const Cell = ({ column, mulighet }: Props): JSX.Element => {
     case 'typeId':
       return (
         <Table.DataCell>
-          <TypeName typeId={mulighet.typeId} />
+          <MulighetTypeName typeId={mulighet.typeId} />
         </Table.DataCell>
       );
     case 'ytelseId':
