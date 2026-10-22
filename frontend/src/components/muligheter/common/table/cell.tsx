@@ -46,8 +46,8 @@ export const Cell = ({ column, mulighet }: Props): JSX.Element => {
       );
     case 'kjennelseMottatt':
       return <Table.DataCell>{isoDateToPretty(mulighet.kjennelseMottatt) ?? ''} </Table.DataCell>;
-    case 'fagsakId':
-      return <Table.DataCell>{mulighet.fagsakId}</Table.DataCell>;
+    case 'saksnummer':
+      return <Table.DataCell>{mulighet.saksnummer}</Table.DataCell>;
     case 'temaId':
       return (
         <Table.DataCell>

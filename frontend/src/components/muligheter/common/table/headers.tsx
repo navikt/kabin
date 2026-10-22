@@ -21,8 +21,8 @@ const HeaderCell = ({ column, type }: HeaderCellProps): JSX.Element => {
       return <Table.HeaderCell>Kjennelsesdato</Table.HeaderCell>;
     case 'klageBehandlendeEnhet':
       return <Table.HeaderCell>Behandlende enhet</Table.HeaderCell>;
-    case 'fagsakId':
-      return <Table.HeaderCell>Fagsak-ID</Table.HeaderCell>;
+    case 'saksnummer':
+      return <Table.HeaderCell>Saksnummer</Table.HeaderCell>;
     case 'temaId':
       return <Table.HeaderCell>Tema</Table.HeaderCell>;
     case 'originalFagsystemId':

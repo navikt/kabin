@@ -9,7 +9,7 @@ export enum FagsystemId {
 
 export interface IBasemulighet {
   readonly id: string;
-  readonly fagsakId: string;
+  readonly saksnummer: string;
   readonly sakenGjelder: IPart;
   readonly temaId: string;
   readonly originalFagsystemId: string;

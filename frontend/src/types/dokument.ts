@@ -31,7 +31,7 @@ export interface IVedlegg {
 
 export interface ISak {
   datoOpprettet: string;
-  fagsakId: string;
+  saksnummer: string;
   fagsystemId: string;
 }
 

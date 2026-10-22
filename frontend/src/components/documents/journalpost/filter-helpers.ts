@@ -97,10 +97,10 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
       return acc;
     }
 
-    const { fagsakId } = sak;
+    const { saksnummer } = sak;
 
-    const label = fagsakId ?? 'Ukjent';
-    const value = fagsakId ?? UNKNOWN;
+    const label = saksnummer ?? 'Ukjent';
+    const value = saksnummer ?? UNKNOWN;
 
     if (acc.some((am) => am.value === value)) {
       return acc;
@@ -168,7 +168,7 @@ export const useFilteredDocuments = (
           selectedAvsenderMottakere.includes(
             avsenderMottaker?.id ?? journalfortAvNavn ?? journalfoerendeEnhet ?? UNKNOWN,
           )) &&
-        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : (sak.fagsakId ?? UNKNOWN))) &&
+        (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? NONE : (sak.saksnummer ?? UNKNOWN))) &&
         (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
         (selectedFagsystemIds.length === 0 || selectedFagsystemIds.includes(sak === null ? NONE : sak.fagsystemId)),
     );

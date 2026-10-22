@@ -143,7 +143,7 @@ const Content = ({ omgjøringskravmuligheter, isLoading }: ContentProps) => {
 
 const COLUMNS: (keyof IOmgjøringskravmulighet)[] = [
   'typeId',
-  'fagsakId',
+  'saksnummer',
   'temaId',
   'ytelseId',
   'vedtakDate',
