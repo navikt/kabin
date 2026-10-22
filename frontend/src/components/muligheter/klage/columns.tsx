@@ -1,7 +1,7 @@
 import type { IKlagemulighet } from '@app/types/mulighet';
 
 export const KLAGEMULIGHETER_COLUMNS: (keyof IKlagemulighet)[] = [
-  'fagsakId',
+  'saksnummer',
   'temaId',
   'vedtakDate',
   'klageBehandlendeEnhet',

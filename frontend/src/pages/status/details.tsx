@@ -55,7 +55,7 @@ export const StatusDetails = ({ id, status }: Props) => {
     fullmektig,
     tildeltSaksbehandler,
     svarbrev,
-    fagsakId,
+    saksnummer,
     fagsystemId,
     sakenGjelder,
     vedtakDate,
@@ -106,7 +106,7 @@ export const StatusDetails = ({ id, status }: Props) => {
 
       <Mulighet
         title={mulighetTitle}
-        fagsakId={fagsakId}
+        saksnummer={saksnummer}
         fagsystemId={fagsystemId}
         sakenGjelder={sakenGjelder}
         mulighetDate={typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? status.kjennelseMottatt : vedtakDate}

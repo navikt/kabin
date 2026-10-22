@@ -34,7 +34,7 @@ export const Journalpostmuligheter = ({ heading }: Props) => {
       return [false, 'Du har ikke tilgang til dette dokumentet.'];
     }
 
-    if (typeof document.sak?.fagsakId !== 'string') {
+    if (typeof document.sak?.saksnummer !== 'string') {
       return [false, 'Ingen fagsak tilknyttet.'];
     }
 

@@ -77,7 +77,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
               <time dateTime={datoOpprettet}>{isoDateTimeToPrettyDate(datoOpprettet) ?? ''}</time>
             </Table.DataCell>
             <Table.DataCell>{formatAvsenderMottaker(avsenderMottaker)}</Table.DataCell>
-            <Table.DataCell>{sak?.fagsakId ?? 'Ingen'}</Table.DataCell>
+            <Table.DataCell>{sak?.saksnummer ?? 'Ingen'}</Table.DataCell>
             <Table.DataCell>
               <Journalposttype journalposttype={journalposttype} />
             </Table.DataCell>

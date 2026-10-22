@@ -219,8 +219,8 @@ const WillCreateNewJournalpostInfo = () => {
 
   return (
     <Alert variant="info">
-      Journalposten er tidligere journalført på fagsak-ID {fromId}. Ved opprettelse av behandling i Kabal vil innholdet
-      kopieres over i en ny journalpost på fagsak-ID {toId}.
+      Journalposten er tidligere journalført på saksnummer {fromId}. Ved opprettelse av behandling i Kabal vil innholdet
+      kopieres over i en ny journalpost på saksnummer {toId}.
     </Alert>
   );
 };
@@ -235,7 +235,7 @@ const useJournalpostAndMulighet = () => {
   }
 
   return {
-    fromId: journalpost.sak?.fagsakId ?? null,
-    toId: additionalKabalMulighet?.fagsakId ?? mulighet.fagsakId,
+    fromId: journalpost.sak?.saksnummer ?? null,
+    toId: additionalKabalMulighet?.saksnummer ?? mulighet.saksnummer,
   };
 };

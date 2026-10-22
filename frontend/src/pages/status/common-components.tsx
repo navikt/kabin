@@ -42,8 +42,8 @@ export const Sak = ({ sak }: SakProps) => {
   return (
     <HStack gap="space-16">
       <InfoItem label="Fagsystem">{sak === null ? 'Ingen' : fagsystemName}</InfoItem>
-      <InfoItem label="Saks-ID">
-        {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.fagsakId} text={sak.fagsakId} size="xsmall" />}
+      <InfoItem label="Saksnummer">
+        {sak === null ? 'Ingen' : <StyledCopyButton copyText={sak.saksnummer} text={sak.saksnummer} size="xsmall" />}
       </InfoItem>
     </HStack>
   );

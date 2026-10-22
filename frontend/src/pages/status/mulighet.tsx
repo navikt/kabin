@@ -5,7 +5,7 @@ import { StyledCard } from '@app/pages/status/layout';
 import type { IPart } from '@app/types/common';
 
 interface Props {
-  fagsakId: string;
+  saksnummer: string;
   fagsystemId: string;
   sakenGjelder: IPart;
   title: string;
@@ -20,7 +20,7 @@ export const Mulighet = ({
   ytelseId,
   mulighetDate,
   fagsystemId,
-  fagsakId,
+  saksnummer,
   mulighetDateLabel,
 }: Props) => (
   <StyledCard title={title} gridArea="mulighet" titleSize="medium">
@@ -36,6 +36,6 @@ export const Mulighet = ({
       <YtelseTag ytelseId={ytelseId} />
     </InfoItem>
 
-    <Sak sak={{ fagsakId, fagsystemId }} />
+    <Sak sak={{ saksnummer, fagsystemId }} />
   </StyledCard>
 );

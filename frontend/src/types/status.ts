@@ -10,7 +10,7 @@ import type { IPart, ISaksbehandler, SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 
 interface IBaseStatusFields {
-  fagsakId: string;
+  saksnummer: string;
   fagsystemId: string;
   /** Date */
   frist: string;

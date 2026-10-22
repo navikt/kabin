@@ -78,7 +78,7 @@ const getOtherColumnWidth = (column: keyof OtherMulighet): number => {
   switch (column) {
     case 'typeId':
       return 230;
-    case 'fagsakId':
+    case 'saksnummer':
       return 80;
     case 'temaId':
       return 220;
@@ -106,7 +106,7 @@ const getOtherColumnWidth = (column: keyof OtherMulighet): number => {
 
 const getKlageColumnWidth = (column: keyof IKlagemulighet): number => {
   switch (column) {
-    case 'fagsakId':
+    case 'saksnummer':
       return 150;
     case 'temaId':
       return 190;

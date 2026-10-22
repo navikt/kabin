@@ -121,7 +121,7 @@ export const Dokument = ({
           {isoDateTimeToPrettyDate(datoOpprettet)}
         </HStack>
         <AvsenderMottakerNotatforer {...dokument} />
-        <SimpleTextField gridArea={GridArea.SAKS_ID}>{sak?.fagsakId ?? 'Ingen'}</SimpleTextField>
+        <SimpleTextField gridArea={GridArea.SAKS_ID}>{sak?.saksnummer ?? 'Ingen'}</SimpleTextField>
         <SimpleTextField gridArea={GridArea.FAGSYSTEM}>{sak === null ? 'Ingen' : fagsystemName}</SimpleTextField>
         <CustomTooltipField gridArea={GridArea.TYPE} tooltip={journalposttype}>
           <Journalposttype journalposttype={journalposttype} />
