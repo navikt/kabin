@@ -143,7 +143,7 @@ const Content = ({ begjæringOmGjenopptakMuligheter, isLoading }: ContentProps) 
 
 const COLUMNS: (keyof IBegjæringOmGjenopptakMulighet)[] = [
   'typeId',
-  'fagsakId',
+  'saksnummer',
   'temaId',
   'ytelseId',
   'kjennelseMottatt',

@@ -138,7 +138,7 @@ const Content = ({ muligheter, isLoading }: ContentProps) => {
 
 const COLUMNS: (keyof IAdditionalKabalMulighet)[] = [
   'typeId',
-  'fagsakId',
+  'saksnummer',
   'temaId',
   'ytelseId',
   'vedtakDate',

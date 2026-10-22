@@ -145,7 +145,7 @@ const Content = ({ ankemuligheter, isLoading }: ContentProps) => {
 
 const COLUMNS: (keyof IAnkemulighetAfter2027)[] = [
   'typeId',
-  'fagsakId',
+  'saksnummer',
   'temaId',
   'ytelseId',
   'vedtakDate',
