@@ -1,5 +1,5 @@
 import { isoDateToPretty } from '@app/domain/date';
-import { TYPE_NAME } from '@app/types/common';
+import { useGetSakstyperQuery } from '@app/redux/api/kodeverk';
 import type { ExistingBehandling } from '@app/types/mulighet';
 import { Tag, Tooltip } from '@navikt/ds-react';
 
@@ -9,17 +9,14 @@ interface Props {
 
 export const UsedCount = ({ sourceOfExistingBehandlinger }: Props) => {
   const usedCount = sourceOfExistingBehandlinger.length;
+  const content = useTooltipContent(sourceOfExistingBehandlinger);
 
   if (usedCount === 0) {
     return null;
   }
 
   return (
-    <Tooltip
-      content={tooltipContent(sourceOfExistingBehandlinger)}
-      maxChar={Number.POSITIVE_INFINITY}
-      className="whitespace-pre-wrap text-left"
-    >
+    <Tooltip content={content} maxChar={Number.POSITIVE_INFINITY} className="whitespace-pre-wrap text-left">
       <Tag variant="warning" size="small" className="whitespace-nowrap">
         Brukt {usedCount} gang{usedCount !== 1 ? 'er' : ''}
       </Tag>
@@ -27,11 +24,16 @@ export const UsedCount = ({ sourceOfExistingBehandlinger }: Props) => {
   );
 };
 
-const tooltipContent = (sourceOfExistingBehandlinger: ExistingBehandling[]) =>
-  sourceOfExistingBehandlinger
+const useTooltipContent = (sourceOfExistingBehandlinger: ExistingBehandling[]) => {
+  const { data = [] } = useGetSakstyperQuery();
+
+  return sourceOfExistingBehandlinger
     .toSorted((a, b) => b.created.localeCompare(a.created))
     .map(({ typeId, created }) => {
       const [date, time] = created.split('T');
-      return `${TYPE_NAME[typeId]} registrert ${isoDateToPretty(date)} kl. ${time?.slice(0, 5) ?? '00:00'}`;
+      const typeName = data.find(({ id }) => id === typeId)?.navn ?? typeId;
+
+      return `${typeName} registrert ${isoDateToPretty(date)} kl. ${time?.slice(0, 5) ?? '00:00'}`;
     })
     .join('\n');
+};

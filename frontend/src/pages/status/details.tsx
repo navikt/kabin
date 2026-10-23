@@ -27,6 +27,7 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Journalført begjæring om gjenopptak';
   }
 };
@@ -39,6 +40,7 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Valgt vedtak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Valgt kjennelse';
   }
 };

@@ -4,6 +4,7 @@ import { LoadingMuligheter } from '@app/components/muligheter/common/table/loadi
 import { MuligheterTable } from '@app/components/muligheter/common/table/table';
 import { MulighetType } from '@app/components/muligheter/common/table/types';
 import { Warning } from '@app/components/muligheter/common/warning';
+import { MulighetWarningForSakFraTRBefore2027 } from '@app/components/muligheter/sak-fra-tr-after-2027-warnings';
 import { Placeholder } from '@app/components/placeholder/placeholder';
 import { SelectedMulighet, SelectedMulighetBody } from '@app/components/selected/selected-mulighet';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
@@ -80,23 +81,26 @@ const EditableBegjæringOmGjenopptakMuligheter = () => {
   }
 
   return (
-    <CardSmall>
-      <HeaderEditable
-        toggleExpanded={() => setIsExpanded(!isExpanded)}
-        refetch={refetch}
-        isFetching={isFetching}
-        mulighet={mulighet}
-        id={id}
-        label="Velg behandlingen begjæringen om gjenopptak gjelder"
-        showOnlySelectedLabel="Vis kun valgt mulighet for begjæring om gjenopptak"
-      />
+    <>
+      <CardSmall>
+        <HeaderEditable
+          toggleExpanded={() => setIsExpanded(!isExpanded)}
+          refetch={refetch}
+          isFetching={isFetching}
+          mulighet={mulighet}
+          id={id}
+          label="Velg behandlingen begjæringen om gjenopptak gjelder"
+          showOnlySelectedLabel="Vis kun valgt mulighet for begjæring om gjenopptak"
+        />
 
-      <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
+        <ValidationErrorMessage error={error} id={ValidationFieldNames.BEHANDLING_ID} />
 
-      <Warning mulighet={mulighet} />
+        <Warning mulighet={mulighet} />
 
-      <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheter} isLoading={isLoading} />
-    </CardSmall>
+        <Content begjæringOmGjenopptakMuligheter={muligheter.gjenopptaksmuligheterFoer2027} isLoading={isLoading} />
+      </CardSmall>
+      <MulighetWarningForSakFraTRBefore2027 mulighet={mulighet} />
+    </>
   );
 };
 

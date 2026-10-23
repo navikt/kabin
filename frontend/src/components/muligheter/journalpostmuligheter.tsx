@@ -7,13 +7,8 @@ import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
 import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS } from '@app/types/fagsystem';
 import { skipToken } from '@reduxjs/toolkit/query';
-import type { JSX } from 'react';
 
-interface Props {
-  heading?: JSX.Element;
-}
-
-export const Journalpostmuligheter = ({ heading }: Props) => {
+export const Journalpostmuligheter = () => {
   const { sakenGjelderValue, mulighet, journalpostId, typeId } = useRegistrering();
   const { data, isLoading, isFetching, refetch } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
   const { id } = useRegistrering();
@@ -66,7 +61,6 @@ export const Journalpostmuligheter = ({ heading }: Props) => {
       selectJournalpost={[createOnMouseDown, selectIsLoading]}
       getIsSelected={(id) => mulighet?.id === id}
       getCanBeSelected={getCanBeSelected}
-      heading={heading}
     />
   );
 };

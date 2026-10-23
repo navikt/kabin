@@ -52,10 +52,10 @@ const SendSvarbrevToggle = () => {
 export const Svarbrev = () => {
   const { typeId } = useRegistrering();
 
-  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
+  if (typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027) {
     return (
       <Card title="Svarbrev">
-        <InlineMessage status="info">Svarbrev skal ikke sendes for ankesak fra Trygderetten.</InlineMessage>
+        <InlineMessage status="info">Svarbrev skal ikke sendes for sak fra Trygderetten.</InlineMessage>
       </Card>
     );
   }

@@ -34,6 +34,7 @@ export const EditMottattKlageinstans = (): JSX.Element | null => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return <FromVedtakToJournalpost />;
     case SaksTypeEnum.ANKE_AFTER_2027:
       return <From2027ToNow />;

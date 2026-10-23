@@ -34,6 +34,7 @@ const useIsSelected = (type: MulighetType, mulighetId: string): boolean => {
     case MulighetType.ANKE_AFTER_2027:
     case MulighetType.OMGJØRINGSKRAV:
     case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
     case MulighetType.KLAGE: {
       return selectedMulighet?.id === mulighetId;
     }
@@ -123,6 +124,8 @@ const Columns = ({ type, columns, mulighet }: Props): JSX.Element[] => {
     case MulighetType.KLAGE:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
     case MulighetType.BEGJÆRING_OM_GJENOPPTAK:
+      return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);
     case MulighetType.ANKE:
       return columns.map((column) => <Cell key={column} column={column} mulighet={mulighet} />);

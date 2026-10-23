@@ -11,6 +11,7 @@ export const getKlagerTitle = (registreringType: RegistreringType | null): strin
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Den som krever omgjøring';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Den som begjærer gjenopptak';
   }
 };

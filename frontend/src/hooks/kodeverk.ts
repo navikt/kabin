@@ -1,10 +1,12 @@
 import {
   useGetFagsystemerQuery,
   useGetHjemlerMapQuery,
+  useGetSakstyperQuery,
   useGetSimpleYtelserQuery,
   useGetTemaQuery,
   useGetVedtaksenheterQuery,
 } from '@app/redux/api/kodeverk';
+import type { SaksTypeEnum } from '@app/types/common';
 import { useMemo } from 'react';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
@@ -77,4 +79,14 @@ export const useHjemmelName = (hjemmelId: string): string => {
   }
 
   return data[hjemmelId] ?? hjemmelId;
+};
+
+export const useSakstypeName = (type: SaksTypeEnum): [true, undefined] | [false, string] => {
+  const { data = [], isLoading } = useGetSakstyperQuery();
+
+  if (isLoading) {
+    return [true, undefined];
+  }
+
+  return [false, data.find(({ id }) => id === type)?.navn ?? type];
 };

@@ -147,7 +147,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
         }
       : null;
 
-  // For anke fra Trygderetten, avsender is Trygderetten, which can never be a party in the case.
+  // For sak fra Trygderetten, avsender is Trygderetten, which can never be a party in the case.
   const avsenderOption: ISetPart<IPart | null> | null = isAnkeSource
     ? null
     : {
