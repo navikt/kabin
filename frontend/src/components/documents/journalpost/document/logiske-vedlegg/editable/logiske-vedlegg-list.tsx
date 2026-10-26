@@ -30,9 +30,10 @@ export const EditableLogiskeVedlegg = ({ logiskeVedlegg, dokumentInfoId, temaId,
         <LogiskeVedleggListItem key="none-create">
           <Tooltip content="Legg til logisk vedlegg">
             <Button
+              data-color="neutral"
               className="justify-start"
               size="xsmall"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => setIsOpen(true)}
               icon={<PlusCircleIcon aria-hidden />}
               iconPosition="right"

@@ -19,7 +19,11 @@ export const FinishedTable = ({ registreringer, sortState, onSortChange }: Regis
   const sorted = useSort(registreringer, sortState, page);
 
   if (registreringer.length === 0) {
-    return <InlineMessage status="info">Ingen fullførte registreringer</InlineMessage>;
+    return (
+      <InlineMessage status="info" size="small">
+        Ingen fullførte registreringer
+      </InlineMessage>
+    );
   }
 
   return (

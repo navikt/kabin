@@ -116,9 +116,10 @@ export const ColumnHeaders = ({
     <>
       <HStack gap="space-8" align="center">
         <Button
+          data-color="neutral"
           className="w-50"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={resetFilters}
           disabled={resetFiltersDisabled}
           icon={<ArrowCirclepathIcon aria-hidden />}

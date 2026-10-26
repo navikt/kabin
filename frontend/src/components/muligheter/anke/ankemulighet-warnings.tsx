@@ -1,12 +1,11 @@
+import { InfoBox } from '@app/components/info-box/info-box';
 import { parseDate } from '@app/functions/date';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useGetFeatureToggleQuery } from '@app/redux/api/feature-toggles';
 import type { IAnkemulighet, IAnkemulighetAfter2027 } from '@app/types/mulighet';
-import { LocalAlert } from '@navikt/ds-react';
 import { isBefore } from 'date-fns';
-import { useState } from 'react';
 
 const START_OF_2027 = parseDate('2027-01-01');
 const FAKE_ANKE_BEFORE_2027_MULIGHET_END_DATE = parseDate('2026-06-06');
@@ -39,7 +38,11 @@ export const AnkemulighetWarningForAnkeAfter2027 = ({ mulighet }: { mulighet: IA
     return null;
   }
 
-  return <WarningMessage id={mulighet?.id}>{OLD_ANKE_WARNING_MESSAGE}</WarningMessage>;
+  return (
+    <InfoBox variant="warning" className="w-fit">
+      {OLD_ANKE_WARNING_MESSAGE}
+    </InfoBox>
+  );
 };
 
 export const AnkemulighetWarningForAnkeBefore2027 = ({ mulighet }: { mulighet: IAnkemulighet | undefined }) => {
@@ -50,35 +53,10 @@ export const AnkemulighetWarningForAnkeBefore2027 = ({ mulighet }: { mulighet: I
     return null;
   }
 
-  return <WarningMessage id={mulighet?.id}>{NEW_ANKE_WARNING_MESSAGE}</WarningMessage>;
-};
-
-interface WarningMessageProps {
-  id: string | undefined;
-  children: string;
-}
-
-const WarningMessage = ({ id, children }: WarningMessageProps) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [shownFor, setShownFor] = useState(id);
-
-  if (id !== shownFor) {
-    setShownFor(id);
-    setIsOpen(true);
-  }
-
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <LocalAlert status="warning" size="small" className="w-fit">
-      <LocalAlert.Header>
-        <LocalAlert.Title>Advarsel</LocalAlert.Title>
-        <LocalAlert.CloseButton onClick={() => setIsOpen(false)} />
-      </LocalAlert.Header>
-      <LocalAlert.Content>{children}</LocalAlert.Content>
-    </LocalAlert>
+    <InfoBox variant="warning" className="w-fit">
+      {NEW_ANKE_WARNING_MESSAGE}
+    </InfoBox>
   );
 };
 
@@ -92,7 +70,11 @@ export const JournalpostForAnkeAfter2027Warning = () => {
   }
 
   if (isTooOldAnke(data?.datoOpprettet)) {
-    return <WarningMessage id={data.journalpostId}>{OLD_ANKE_WARNING_MESSAGE}</WarningMessage>;
+    return (
+      <InfoBox variant="warning" className="w-fit">
+        {OLD_ANKE_WARNING_MESSAGE}
+      </InfoBox>
+    );
   }
 
   return null;
@@ -109,7 +91,11 @@ export const JournalpostForAnkeBefore2027Warning = () => {
   }
 
   if (isTooNew) {
-    return <WarningMessage id={data.journalpostId}>{NEW_ANKE_WARNING_MESSAGE}</WarningMessage>;
+    return (
+      <InfoBox variant="warning" className="w-fit">
+        {NEW_ANKE_WARNING_MESSAGE}
+      </InfoBox>
+    );
   }
 
   return null;

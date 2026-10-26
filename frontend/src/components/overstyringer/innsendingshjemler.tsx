@@ -1,4 +1,5 @@
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { HjemmelTag, ReadOnlyHjemler } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
@@ -10,7 +11,7 @@ import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overst
 import { SaksTypeEnum } from '@app/types/common';
 import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ValidationFieldNames } from '@app/types/validation';
-import { HStack, InlineMessage, Label, LocalAlert, VStack } from '@navikt/ds-react';
+import { HStack, InlineMessage, Label, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 
 const ID = ValidationFieldNames.HJEMMEL_ID_LIST;
@@ -93,14 +94,7 @@ const PermitteringWarning = () => {
     return null;
   }
 
-  return (
-    <LocalAlert status="warning" size="small">
-      <LocalAlert.Header>
-        <LocalAlert.Title>Advarsel</LocalAlert.Title>
-      </LocalAlert.Header>
-      <LocalAlert.Content>Husk at du må merke oppgaven i Arena med firmanavn.</LocalAlert.Content>
-    </LocalAlert>
-  );
+  return <InfoBox variant="warning">Husk at du må merke oppgaven i Arena med firmanavn.</InfoBox>;
 };
 
 const FTRL_4_7_PERMITTERINGSÅRSAK = 'FTRL_4_7_PERMITTERINGSAARSAK';

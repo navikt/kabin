@@ -3,6 +3,7 @@ import { Button, type ButtonProps } from '@navikt/ds-react';
 
 interface Props {
   variant: ButtonProps['variant'];
+  'data-color'?: ButtonProps['data-color'];
   size: ButtonProps['size'];
   href: string;
   disabled?: boolean;

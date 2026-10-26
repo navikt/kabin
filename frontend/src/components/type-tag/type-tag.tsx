@@ -15,21 +15,25 @@ export const TypeTag = ({ typeId }: Props) => {
   }
 
   return (
-    <Tag size="small" variant={SAKSTYPE_TO_TAG_VARIANT[typeId]}>
+    <Tag
+      size="small"
+      variant={typeId === SaksTypeEnum.KLAGE ? 'outline' : 'strong'}
+      data-color={SAKSTYPE_TO_TAG_COLOR[typeId]}
+    >
       {SAKSTYPE_TO_NAME[typeId]}
     </Tag>
   );
 };
 
-const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
-  [SaksTypeEnum.KLAGE]: 'alt1',
-  [SaksTypeEnum.ANKE]: 'success-filled',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'alt3-filled',
-  [SaksTypeEnum.ANKE_I_TR]: 'error-filled',
-  [SaksTypeEnum.TR_OPPHEVET]: 'alt2-filled',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info-filled',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'warning-filled',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral-filled',
+const SAKSTYPE_TO_TAG_COLOR: Record<SaksTypeEnum, TagProps['data-color']> = {
+  [SaksTypeEnum.KLAGE]: 'meta-purple',
+  [SaksTypeEnum.ANKE]: 'success',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'info',
+  [SaksTypeEnum.ANKE_I_TR]: 'danger',
+  [SaksTypeEnum.TR_OPPHEVET]: 'meta-lime',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'warning',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral',
 };
 
 const SAKSTYPE_TO_NAME: Record<SaksTypeEnum, string> = {

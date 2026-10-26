@@ -1,4 +1,4 @@
-import { Alert } from '@app/components/alert/alert';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { Address } from '@app/components/svarbrev/address/address';
 import { ToggleItem } from '@app/components/toggle-item/toggle-item';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
@@ -6,7 +6,7 @@ import type { Receiver } from '@app/redux/api/registreringer/types';
 import { type IAddress, UTSENDINGSKANAL, Utsendingskanal } from '@app/types/common';
 import { HandlingEnum } from '@app/types/receiver';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 
 interface Props {
@@ -58,18 +58,16 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
           data-color={isLoading ? 'neutral' : 'accent'}
           aria-disabled={isLoading}
         >
-          <ToggleItem value={HandlingEnum.AUTO} aria-disabled={isLoading}>
-            {UTSENDINGSKANAL[part.utsendingskanal]}
-          </ToggleItem>
+          <ToggleItem
+            value={HandlingEnum.AUTO}
+            aria-disabled={isLoading}
+            label={UTSENDINGSKANAL[part.utsendingskanal]}
+          />
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
-            <ToggleItem value={HandlingEnum.CENTRAL_PRINT} aria-disabled={isLoading}>
-              Sentral utskrift
-            </ToggleItem>
+            <ToggleItem value={HandlingEnum.CENTRAL_PRINT} aria-disabled={isLoading} label="Sentral utskrift" />
           ) : null}
           {part.utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
-            <ToggleItem value={HandlingEnum.LOCAL_PRINT} aria-disabled={isLoading}>
-              Lokal utskrift
-            </ToggleItem>
+            <ToggleItem value={HandlingEnum.LOCAL_PRINT} aria-disabled={isLoading} label="Lokal utskrift" />
           ) : null}
         </ToggleGroup>
 
@@ -87,9 +85,7 @@ export const Options = ({ part, handling, overriddenAddress, onChange, id, isLoa
       </HStack>
       <HStack align="center" gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
-          <Alert variant="info">
-            <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
-          </Alert>
+          <InfoBox variant="info">Du må skrive ut dokumentet selv og legge det til utsending.</InfoBox>
         ) : null}
       </HStack>
       {showAddress ? (

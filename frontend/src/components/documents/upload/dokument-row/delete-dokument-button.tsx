@@ -41,7 +41,7 @@ export const DeleteDokumentButton = ({ registreringId, dokumentId, abortUpload }
     <Tooltip content="Slett" delay={500}>
       <Button
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         data-color="neutral"
         loading={isDeleting}
         onClick={onClick}

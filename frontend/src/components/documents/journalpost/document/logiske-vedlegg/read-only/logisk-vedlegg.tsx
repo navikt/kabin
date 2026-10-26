@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const ReadOnlyLogiskVedlegg = ({ logiskVedlegg }: Props) => (
-  <ReadOnlyTag size="small" variant="neutral" title={logiskVedlegg.tittel}>
+  <ReadOnlyTag size="small" variant="outline" data-color="neutral" title={logiskVedlegg.tittel}>
     <span className="cursor-text truncate opacity-100">{logiskVedlegg.tittel}</span>
   </ReadOnlyTag>
 );

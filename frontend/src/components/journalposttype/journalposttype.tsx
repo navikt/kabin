@@ -8,7 +8,8 @@ interface Props {
 export const Journalposttype = ({ journalposttype }: Props) => (
   <Tag
     className="w-6"
-    variant={JOURNALPOST_TYPE_VARIANT[journalposttype]}
+    variant="outline"
+    data-color={JOURNALPOST_TYPE_COLOR[journalposttype]}
     size="small"
     title={JOURNALPOST_TYPE_NAME[journalposttype]}
   >
@@ -22,8 +23,8 @@ const JOURNALPOST_TYPE_NAME: Record<JournalposttypeEnum, string> = {
   [JournalposttypeEnum.UTGAAENDE]: 'Utgående',
 };
 
-const JOURNALPOST_TYPE_VARIANT: Record<JournalposttypeEnum, TagProps['variant']> = {
-  [JournalposttypeEnum.NOTAT]: 'alt1',
-  [JournalposttypeEnum.INNGAAENDE]: 'alt2',
-  [JournalposttypeEnum.UTGAAENDE]: 'alt3',
+const JOURNALPOST_TYPE_COLOR: Record<JournalposttypeEnum, TagProps['data-color']> = {
+  [JournalposttypeEnum.NOTAT]: 'meta-purple',
+  [JournalposttypeEnum.INNGAAENDE]: 'meta-lime',
+  [JournalposttypeEnum.UTGAAENDE]: 'info',
 };

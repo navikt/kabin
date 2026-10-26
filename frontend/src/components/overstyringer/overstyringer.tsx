@@ -1,4 +1,3 @@
-import { Alert } from '@app/components/alert/alert';
 import { CardLarge } from '@app/components/card/card';
 import { Avsender } from '@app/components/overstyringer/avsender';
 import { EditFrist } from '@app/components/overstyringer/edit-frist';
@@ -36,7 +35,7 @@ import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { ArchiveIcon, DocPencilIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Label, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -91,9 +90,11 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   if (typeof error === 'string') {
     return (
       <CardLarge title={title}>
-        <Alert variant="error">
-          <BodyShort>{error}</BodyShort>
-        </Alert>
+        <LocalAlert status="error" size="small">
+          <LocalAlert.Header>
+            <LocalAlert.Title>{error}</LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       </CardLarge>
     );
   }
@@ -101,17 +102,23 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
   if (sakenGjelder === null) {
     return (
       <CardLarge title={title}>
-        <Alert variant="error">
-          <BodyShort spacing>Kunne ikke hente saken gjelder ({formatFoedselsnummer(sakenGjelderValue)}).</BodyShort>
-          <HStack gap="space-8" align="center" asChild>
-            <BodyShort>
-              <Button variant="primary" size="small" onClick={refetch} loading={isLoading}>
-                Prøv igjen
-              </Button>
-              eller ta kontakt med Team Klage på Teams.
-            </BodyShort>
-          </HStack>
-        </Alert>
+        <LocalAlert status="error" size="small">
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              Kunne ikke hente saken gjelder ({formatFoedselsnummer(sakenGjelderValue)}).
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            <HStack gap="space-8" align="center" asChild>
+              <BodyShort>
+                <Button variant="primary" size="small" onClick={refetch} loading={isLoading}>
+                  Prøv igjen
+                </Button>
+                eller ta kontakt med Team Klage på Teams.
+              </BodyShort>
+            </HStack>
+          </LocalAlert.Content>
+        </LocalAlert>
       </CardLarge>
     );
   }

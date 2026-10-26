@@ -1,4 +1,4 @@
-import { Alert } from '@app/components/alert/alert';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
 import type { IValidationError, IValidationSection } from '@app/types/validation';
@@ -18,10 +18,10 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <Alert variant="warning">
-      <StyledHeader>Kan ikke fullføre registrering. Dette mangler:</StyledHeader>
+    <InfoBox variant="warning">
+      <h3 className="mt-0 text-base">Kan ikke fullføre registrering. Dette mangler:</h3>
       <article className="m-0 mt-2.5 p-0">{errorMessages}</article>
-    </Alert>
+    </InfoBox>
   );
 };
 
@@ -50,8 +50,4 @@ const Field = ({ field, reason }: IValidationError) => (
       {reason}
     </Link>
   </li>
-);
-
-export const StyledHeader = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="mt-0 text-base">{children}</h3>
 );

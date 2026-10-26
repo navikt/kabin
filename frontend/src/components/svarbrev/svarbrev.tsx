@@ -42,8 +42,8 @@ const SendSvarbrevToggle = () => {
         value={svarbrev.send === true ? SvarbrevOptionEnum.SEND : SvarbrevOptionEnum.DONT_SEND}
         onChange={(value) => setSend({ send: value === SvarbrevOptionEnum.SEND, id })}
       >
-        <ToggleItem value={SvarbrevOptionEnum.SEND}>Send svarbrev</ToggleItem>
-        <ToggleItem value={SvarbrevOptionEnum.DONT_SEND}>Ikke send svarbrev</ToggleItem>
+        <ToggleItem value={SvarbrevOptionEnum.SEND} label="Send svarbrev" />
+        <ToggleItem value={SvarbrevOptionEnum.DONT_SEND} label="Ikke send svarbrev" />
       </ToggleGroup>
     </HStack>
   );
@@ -55,7 +55,9 @@ export const Svarbrev = () => {
   if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return (
       <Card title="Svarbrev">
-        <InlineMessage status="info">Svarbrev skal ikke sendes for ankesak fra Trygderetten.</InlineMessage>
+        <InlineMessage status="info" size="small">
+          Svarbrev skal ikke sendes for ankesak fra Trygderetten.
+        </InlineMessage>
       </Card>
     );
   }

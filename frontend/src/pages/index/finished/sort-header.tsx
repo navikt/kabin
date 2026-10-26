@@ -30,7 +30,8 @@ interface SortButtonProps extends Props {
 
 const SortButton = ({ sortKey, children, orderBy, direction, onSortChange, className, size }: SortButtonProps) => (
   <Button
-    variant={orderBy === sortKey ? 'primary-neutral' : 'tertiary-neutral'}
+    variant={orderBy === sortKey ? 'primary' : 'tertiary'}
+    data-color="neutral"
     size={size}
     onClick={() => onSortChange?.(sortKey)}
     icon={<SortIcon sortKey={sortKey} orderBy={orderBy} direction={direction} />}

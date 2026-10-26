@@ -1,4 +1,3 @@
-import { Alert } from '@app/components/alert/alert';
 import { CardMedium } from '@app/components/card/card';
 import { DokumentDropzone } from '@app/components/documents/upload/dokument-dropzone';
 import { DokumentRow } from '@app/components/documents/upload/dokument-row/dokument-row';
@@ -8,6 +7,7 @@ import {
   useReorderDokumenter,
 } from '@app/components/documents/upload/use-reorder-dokumenter';
 import { type UploadProgressEntry, useUploadFiles } from '@app/components/documents/upload/use-upload-files';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { ValidationErrorMessage } from '@app/components/validation-error-message/validation-error-message';
 import { getDocumentCountText } from '@app/domain/document-count';
 import { formatFileSize, MAX_TOTAL_SIZE_BYTES } from '@app/domain/file-size';
@@ -149,7 +149,7 @@ export const UploadDokumenter = () => {
         </DokumentDropzone>
       </CardMedium>
 
-      <Alert variant="info">Opplastede dokumenter blir journalført ved fullføring.</Alert>
+      <InfoBox variant="info">Opplastede dokumenter blir journalført ved fullføring.</InfoBox>
     </>
   );
 };

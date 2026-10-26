@@ -30,7 +30,7 @@ export const RetryDokumentButton = ({ registreringId, dokumentId, status }: Prop
     <Tooltip content={`${getFailedMessage(status)} Klikk for å prøve igjen.`} placement="top">
       <Button
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         data-color="danger"
         loading={isRetrying}
         onClick={onClick}

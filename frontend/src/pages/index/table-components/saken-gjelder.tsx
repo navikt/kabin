@@ -58,7 +58,7 @@ export const SakenGjelder = ({ id }: Props) => {
         <CopyButton
           copyText={data.name ?? ''}
           text={data.name ?? '<mangler>'}
-          variant="neutral"
+          data-color="neutral"
           size="small"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}

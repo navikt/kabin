@@ -16,9 +16,10 @@ export const ViewDocumentButton = ({ viewDocument, isViewed, harTilgangTilArkivv
   return (
     <Tooltip content={getTooltip(isViewed, isDownload)} placement="top">
       <Button
+        data-color="neutral"
         className="[grid-area:view]"
         size="small"
-        variant="tertiary-neutral"
+        variant="tertiary"
         onMouseDown={viewDocument}
         aria-pressed={isViewed}
         aria-controls="document-viewer"

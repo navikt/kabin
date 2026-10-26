@@ -87,9 +87,10 @@ export const Header = ({
         />
         {showFjernAlle && (
           <Button
+            data-color="danger"
             className="ml-2 shrink-0"
             size="xsmall"
-            variant="danger"
+            variant="primary"
             onClick={onReset}
             icon={<TrashIcon aria-hidden />}
           >

@@ -57,7 +57,8 @@ export const Toast = memo(
     return (
       <BaseToastStyle type={type} ref={ref} key={id}>
         <StyledCloseButton
-          variant="tertiary-neutral"
+          variant="tertiary"
+          data-color="neutral"
           size="xsmall"
           onClick={slideOut}
           icon={<XMarkIcon aria-hidden />}
@@ -159,7 +160,13 @@ const TimedToast = ({ type, message, close, setExpiresAt, expiresAt, id, ref }: 
       ref={innerRef}
       key={id}
     >
-      <StyledCloseButton variant="tertiary-neutral" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+      <StyledCloseButton
+        variant="tertiary"
+        data-color="neutral"
+        size="xsmall"
+        onClick={slideOut}
+        icon={<XMarkIcon aria-hidden />}
+      />
       <Container>
         <Icon type={type} />
         <Content>{message}</Content>

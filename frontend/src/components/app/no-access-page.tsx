@@ -39,15 +39,15 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
           title="Minst én av følgende roller kreves for å se denne siden"
           description={INSTRUCTION}
           roles={requiredRoles}
-          variant="warning-moderate"
+          data-color="warning"
         />
 
-        <RoleList title="Roller brukeren din har nå" roles={user.roller} variant="info-moderate" />
+        <RoleList title="Roller brukeren din har nå" roles={user.roller} data-color="info" />
 
         <RoleList
           title="Andre roller Kabin bruker"
           roles={ALL_PUBLIC_ROLES.filter((r) => !(user.roller.includes(r) || requiredRoles.includes(r)))}
-          variant="neutral-moderate"
+          data-color="neutral"
         />
       </div>
     </Box>

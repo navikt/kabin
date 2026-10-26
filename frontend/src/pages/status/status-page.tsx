@@ -1,10 +1,10 @@
-import { Alert } from '@app/components/alert/alert';
 import { StatusDetails } from '@app/pages/status/details';
 import { StatusHeading } from '@app/pages/status/heading';
 import { DataContainer, LoadingContainer, StyledLoader } from '@app/pages/status/layout';
 import type { FinishedRegistrering } from '@app/redux/api/registreringer/types';
 import { useGetStatusQuery } from '@app/redux/api/status';
 import type { IStatus } from '@app/types/status';
+import { LocalAlert } from '@navikt/ds-react';
 
 interface Props {
   registrering: FinishedRegistrering;
@@ -36,7 +36,13 @@ interface DetailsLoaderProps {
 
 const DetailsLoader = ({ isLoading, isError, data, id }: DetailsLoaderProps) => {
   if (isError) {
-    return <Alert variant="error">Kunne ikke hente status</Alert>;
+    return (
+      <LocalAlert status="error" size="small">
+        <LocalAlert.Header>
+          <LocalAlert.Title>Kunne ikke hente status</LocalAlert.Title>
+        </LocalAlert.Header>
+      </LocalAlert>
+    );
   }
 
   if (isLoading || data === undefined || id === undefined) {

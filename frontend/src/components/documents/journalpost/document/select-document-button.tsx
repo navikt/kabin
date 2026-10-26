@@ -34,7 +34,8 @@ export const SelectDocumentButton = ({ isSelected, dokument, selectJournalpost, 
     <GridButton
       disabled={!enabled}
       size="small"
-      variant="tertiary-neutral"
+      variant="tertiary"
+      data-color="neutral"
       icon={getIcon(enabled, isSelected)}
       onMouseDown={createOnMouseDown(dokument.journalpostId)}
       aria-pressed={isSelected}

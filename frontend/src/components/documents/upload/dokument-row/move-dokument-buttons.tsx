@@ -14,8 +14,9 @@ export const MoveDokumentButtons = ({ onMoveUp, onMoveDown, canMoveUp, canMoveDo
   <HStack wrap={false}>
     <Tooltip content="Flytt opp" delay={500}>
       <Button
+        data-color="neutral"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         icon={<ChevronUpIcon aria-hidden />}
         onClick={onMoveUp}
         disabled={!canMoveUp}
@@ -24,8 +25,9 @@ export const MoveDokumentButtons = ({ onMoveUp, onMoveDown, canMoveUp, canMoveDo
 
     <Tooltip content="Flytt ned" delay={500}>
       <Button
+        data-color="neutral"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
         icon={<ChevronDownIcon aria-hidden />}
         onClick={onMoveDown}
         disabled={!canMoveDown}

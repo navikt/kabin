@@ -23,7 +23,7 @@ export const Journalpost = ({ title, journalpost }: JournalpostProps) => {
       <InfoItem label="Tittel">{tittel ?? '-'}</InfoItem>
 
       <InfoItem label="Tema">
-        <Tag variant="alt3" className="w-fit max-w-full">
+        <Tag data-color="info" variant="outline" className="w-fit max-w-full">
           <div className="truncate" title={temaName}>
             {temaName}
           </div>

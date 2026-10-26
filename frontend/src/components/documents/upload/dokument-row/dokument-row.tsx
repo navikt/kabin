@@ -174,8 +174,9 @@ export const DokumentRow = memo(
                 {canEdit ? (
                   <Tooltip content="Endre navn" delay={500}>
                     <Button
+                      data-color="neutral"
                       size="xsmall"
-                      variant="tertiary-neutral"
+                      variant="tertiary"
                       icon={<PencilIcon aria-hidden />}
                       onClick={() => setIsRenaming(true)}
                     />
