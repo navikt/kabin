@@ -20,7 +20,7 @@ interface Props {
 export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, isValid, isSaving }: Props) => {
   if (isLoading) {
     return (
-      <Render variant="alt3" isSaving={isSaving} onDismiss={dismiss}>
+      <Render data-color="info" isSaving={isSaving} onDismiss={dismiss}>
         <Loader size="medium" /> Søker...
       </Render>
     );
@@ -29,7 +29,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
   if (data !== undefined && data !== null) {
     return (
       <Render
-        variant="alt3"
+        data-color="info"
         onConfirm={() => setPart(data)}
         isSaving={isSaving}
         onDismiss={dismiss}
@@ -42,7 +42,7 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (searchString.length === 0) {
     return (
-      <Render variant="alt3" isSaving={isSaving} onDismiss={dismiss}>
+      <Render data-color="info" isSaving={isSaving} onDismiss={dismiss}>
         Søk etter person eller virksomhet
       </Render>
     );
@@ -50,21 +50,21 @@ export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, 
 
   if (!isValid) {
     return (
-      <Render variant="warning" isSaving={isSaving} onDismiss={dismiss}>
+      <Render data-color="warning" isSaving={isSaving} onDismiss={dismiss}>
         Ugyldig ID-nummer
       </Render>
     );
   }
 
   return (
-    <Render variant="warning" isSaving={isSaving} onDismiss={dismiss}>
+    <Render data-color="warning" isSaving={isSaving} onDismiss={dismiss}>
       Ingen treff på &quot;{formatId(searchString)}&quot;
     </Render>
   );
 };
 
 interface RenderProps {
-  variant: TagProps['variant'];
+  'data-color': TagProps['data-color'];
   statusList?: IPart['statusList'];
   children: React.ReactNode;
   onConfirm?: () => void;
@@ -72,7 +72,7 @@ interface RenderProps {
   isSaving: boolean;
 }
 
-const Render = ({ children, variant, statusList, onConfirm, onDismiss, isSaving }: RenderProps) => {
+const Render = ({ children, 'data-color': color, statusList, onConfirm, onDismiss, isSaving }: RenderProps) => {
   const accept =
     onConfirm === undefined ? null : (
       <CustomButton
@@ -93,14 +93,15 @@ const Render = ({ children, variant, statusList, onConfirm, onDismiss, isSaving 
         icon={<XMarkIcon aria-hidden />}
         label="Avbryt"
         keys={['esc']}
-        variant="secondary-neutral"
+        variant="secondary"
+        data-color="neutral"
       />
     );
 
   return (
     <VStack align="start" gap="space-8" style={{ gridArea: 'results' }}>
       <HStack gap="space-8" asChild wrap={false}>
-        <Tag variant={variant} size="medium">
+        <Tag variant="outline" data-color={color} size="medium">
           {children}
         </Tag>
       </HStack>

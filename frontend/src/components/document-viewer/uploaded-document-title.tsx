@@ -30,8 +30,9 @@ export const UploadedDocumentTitle = ({ name, url }: Props) => {
       </Heading>
       <Tooltip content="Lukk" placement="top">
         <Button
+          data-color="neutral"
           className="ml-auto"
-          variant="tertiary-neutral"
+          variant="tertiary"
           size="small"
           icon={<XMarkIcon aria-hidden />}
           onClick={() => viewDokument(null)}

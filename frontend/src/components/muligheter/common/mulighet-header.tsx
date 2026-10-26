@@ -44,9 +44,10 @@ export const HeaderEditable = ({
 
     {mulighet === undefined ? null : (
       <Button
+        data-color="neutral"
         className="w-fit grow-0 self-end justify-self-end"
         size="small"
-        variant="tertiary-neutral"
+        variant="tertiary"
         title={showOnlySelectedLabel}
         onClick={toggleExpanded}
         icon={<ChevronUpIcon aria-hidden />}

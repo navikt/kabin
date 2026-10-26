@@ -113,7 +113,7 @@ export const Dokument = ({
           <DocumentTitle dokument={dokument} />
         </div>
         <Tooltip content={temaName}>
-          <GridTag variant="alt3" size="small" gridArea={GridArea.TEMA}>
+          <GridTag variant="outline" data-color="info" size="small" gridArea={GridArea.TEMA}>
             <span className="w-full truncate text-left">{temaName}</span>
           </GridTag>
         </Tooltip>

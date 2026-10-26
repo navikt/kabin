@@ -42,8 +42,9 @@ export const DocumentTitle = ({ url, ...props }: Props) => {
       {isSelected ? <CheckmarkCircleFillIconColored fontSize={28} /> : null}
       <Tooltip content="Lukk" placement="top">
         <Button
+          data-color="neutral"
           className="ml-auto"
-          variant="tertiary-neutral"
+          variant="tertiary"
           size="small"
           icon={<XMarkIcon aria-hidden />}
           onClick={() => viewDokument(null)}

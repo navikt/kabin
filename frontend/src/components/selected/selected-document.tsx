@@ -69,7 +69,7 @@ const RenderDokument = ({ dokument, onClick }: RenderProps) => {
             <Table.DataCell>{tittel}</Table.DataCell>
             <Table.DataCell>{vedlegg.length}</Table.DataCell>
             <Table.DataCell>
-              <Tag className="max-w-37.5" variant="alt3" size="small" title={temaName}>
+              <Tag data-color="info" className="max-w-37.5" variant="outline" size="small" title={temaName}>
                 <div className="w-full truncate text-left">{temaName}</div>
               </Tag>
             </Table.DataCell>

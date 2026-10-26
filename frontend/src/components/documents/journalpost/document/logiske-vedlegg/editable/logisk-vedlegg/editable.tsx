@@ -52,7 +52,13 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   }
 
   return (
-    <ReadOnlyTag size="small" variant="neutral" title={logiskVedlegg.tittel} className="group min-w-22">
+    <ReadOnlyTag
+      size="small"
+      variant="outline"
+      data-color="neutral"
+      title={logiskVedlegg.tittel}
+      className="group min-w-22"
+    >
       <span
         className={`cursor-text truncate ${isFocused ? 'opacity-0' : 'opacity-100'} group-hover:opacity-0`}
         data-testid="logisk-vedlegg"

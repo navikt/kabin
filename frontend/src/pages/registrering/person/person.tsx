@@ -116,7 +116,7 @@ export const Person = () => {
           paddingInline="space-0 space-16"
         >
           <Label htmlFor={sakenGjelderLabelId}>Saken gjelder</Label>
-          <PersonDetails sakenGjelderValue={sakenGjelderValue} id={sakenGjelderLabelId} variant="success" />
+          <PersonDetails sakenGjelderValue={sakenGjelderValue} id={sakenGjelderLabelId} data-color="success" />
         </HStack>
       )}
       <HStack gap="space-4" align="start">

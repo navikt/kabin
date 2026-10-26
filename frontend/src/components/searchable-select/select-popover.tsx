@@ -181,7 +181,8 @@ export const SelectPopover = ({
             <Tooltip content={confirmLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
               <Button
                 size="small"
-                variant={hasDraftChange ? 'primary' : 'secondary-neutral'}
+                variant={hasDraftChange ? 'primary' : 'secondary'}
+                data-color={hasDraftChange ? 'accent' : 'neutral'}
                 onClick={onConfirm}
                 disabled={!hasDraftChange}
                 className="w-full"

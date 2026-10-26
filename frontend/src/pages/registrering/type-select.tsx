@@ -42,23 +42,13 @@ export const TypeSelect = () => {
   return (
     <HStack justify="center" align="center" gap="space-16">
       <ToggleGroup onChange={onChange} value={typeId ?? 'none'} size="small" key={typeId === null ? 'none' : 'some'}>
-        {isUploadedDocumentsSource ? null : (
-          <ToggleItem value={SaksTypeEnum.KLAGE} disabled={readOnly}>
-            Klage
-          </ToggleItem>
-        )}
+        {isUploadedDocumentsSource ? null : <ToggleItem value={SaksTypeEnum.KLAGE} disabled={readOnly} label="Klage" />}
 
-        <ToggleItem value={SaksTypeEnum.ANKE} disabled={readOnly}>
-          Anke
-        </ToggleItem>
+        <ToggleItem value={SaksTypeEnum.ANKE} disabled={readOnly} label="Anke" />
 
-        <ToggleItem value={SaksTypeEnum.OMGJØRINGSKRAV} disabled={readOnly}>
-          Omgjøringskrav
-        </ToggleItem>
+        <ToggleItem value={SaksTypeEnum.OMGJØRINGSKRAV} disabled={readOnly} label="Omgjøringskrav" />
 
-        <ToggleItem value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK} disabled={readOnly}>
-          Begjæring om gjenopptak
-        </ToggleItem>
+        <ToggleItem value={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK} disabled={readOnly} label="Begjæring om gjenopptak" />
       </ToggleGroup>
 
       <FraJournalpostToggle />

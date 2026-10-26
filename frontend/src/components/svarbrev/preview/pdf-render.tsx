@@ -1,9 +1,8 @@
 import { AppTheme, useAppTheme } from '@app/app-theme';
-import { Alert } from '@app/components/alert/alert';
 import { PDF_PARAMS } from '@app/components/svarbrev/preview/constants';
 import { ResponseError } from '@app/components/svarbrev/preview/create-url';
 import type { PdfLoader } from '@app/components/svarbrev/preview/pdf-loader';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, LocalAlert } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -30,10 +29,14 @@ export const RenderPdf = ({ loader }: Props) => {
 
   if (error !== null) {
     return (
-      <Alert variant="error" key={loader.key}>
-        <BodyShort>Kunne ikke generere PDF.</BodyShort>
-        <BodyShort>{getErrorMessage(error)}</BodyShort>
-      </Alert>
+      <LocalAlert status="error" size="small" key={loader.key}>
+        <LocalAlert.Header>
+          <LocalAlert.Title>Kunne ikke generere PDF.</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          <BodyShort>{getErrorMessage(error)}</BodyShort>
+        </LocalAlert.Content>
+      </LocalAlert>
     );
   }
 

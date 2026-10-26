@@ -1,7 +1,11 @@
 import { ToggleGroup } from '@navikt/ds-react';
 import type { ToggleGroupItemProps } from '@navikt/ds-react/ToggleGroup';
 
-export const ToggleItem = ({ disabled = false, className, ...rest }: ToggleGroupItemProps) => (
+export const ToggleItem = ({
+  disabled = false,
+  className,
+  ...rest
+}: Extract<ToggleGroupItemProps, { children?: never }>) => (
   <ToggleGroup.Item
     {...rest}
     disabled={disabled}

@@ -1,4 +1,4 @@
-import { Alert } from '@app/components/alert/alert';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { useMulighet } from '@app/hooks/use-mulighet';
 import { useMulighetDate } from '@app/hooks/use-mulighet-date';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
@@ -47,9 +47,9 @@ export const Warning = ({ unitTypeId, units }: Props) => {
 
   if (Math.abs(differenceInMonths(overstyringFristdato, svarbrevFristdato)) > 5) {
     return (
-      <Alert variant="warning">
+      <InfoBox variant="warning">
         Du har endret foreslått frist med <strong>mer enn seks måneder</strong>. Er du sikker på at dette er riktig?
-      </Alert>
+      </InfoBox>
     );
   }
 

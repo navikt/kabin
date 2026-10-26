@@ -1,4 +1,4 @@
-import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Search, Tag, Tooltip } from '@navikt/ds-react';
 import type { ComponentProps } from 'react';
 
 export enum GridArea {
@@ -93,7 +93,8 @@ interface GridButtonProps extends GridAreaProps {
   style?: React.CSSProperties;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'xsmall';
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'tertiary-neutral' | 'danger';
+  variant?: ButtonProps['variant'];
+  'data-color'?: ButtonProps['data-color'];
   icon?: React.ReactNode;
   onMouseDown?: React.MouseEventHandler;
   onClick?: React.MouseEventHandler;

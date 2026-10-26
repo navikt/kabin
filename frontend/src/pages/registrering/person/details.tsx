@@ -8,15 +8,15 @@ const SIZE: TagProps['size'] = 'medium';
 interface Props {
   sakenGjelderValue: string;
   id?: string;
-  variant?: TagProps['variant'];
+  'data-color'?: TagProps['data-color'];
 }
 
-export const PersonDetails = ({ sakenGjelderValue, id, variant = 'alt3' }: Props) => {
+export const PersonDetails = ({ sakenGjelderValue, id, 'data-color': color = 'info' }: Props) => {
   const { data, isFetching, isSuccess } = useGetPartQuery(sakenGjelderValue);
 
   if (isFetching) {
     return (
-      <StyledTag variant="neutral" size={SIZE} id={id}>
+      <StyledTag data-color="neutral" size={SIZE} id={id}>
         <Loader size="small" /> Laster...
       </StyledTag>
     );
@@ -28,7 +28,7 @@ export const PersonDetails = ({ sakenGjelderValue, id, variant = 'alt3' }: Props
 
   if (data === null) {
     return (
-      <StyledTag variant="warning" size={SIZE} id={id}>
+      <StyledTag data-color="warning" size={SIZE} id={id}>
         Ukjent
       </StyledTag>
     );
@@ -38,22 +38,23 @@ export const PersonDetails = ({ sakenGjelderValue, id, variant = 'alt3' }: Props
 
   if (navn === null) {
     return (
-      <StyledTag variant="warning" size={SIZE} id={id}>
+      <StyledTag data-color="warning" size={SIZE} id={id}>
         Ingen treff på &quot;{formatFoedselsnummer(data?.identifikator)}&quot;
       </StyledTag>
     );
   }
 
   return (
-    <StyledTag variant={variant} size={SIZE} id={id}>
+    <StyledTag data-color={color} size={SIZE} id={id}>
       {navn}
     </StyledTag>
   );
 };
 
-const StyledTag = (props: TagProps) => (
+const StyledTag = (props: Omit<TagProps, 'variant'>) => (
   <HStack
     as={Tag}
+    variant="outline"
     {...props}
     align="center"
     justify="center"

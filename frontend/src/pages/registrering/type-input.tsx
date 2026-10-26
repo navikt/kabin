@@ -1,7 +1,7 @@
-import { Alert } from '@app/components/alert/alert';
 import { CardLarge, CardSmall } from '@app/components/card/card';
 import { GosysOppgaver } from '@app/components/gosys-oppgaver/gosys-oppgaver';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
+import { InfoBox } from '@app/components/info-box/info-box';
 import { LoadingOverstyringer, LoadingSvarbrev } from '@app/components/loading-registrering/loading-registrering';
 import { AdditionalKabalMuligheter } from '@app/components/muligheter/additional-kabal-mulighet/additional-kabal-mulighet';
 import {
@@ -218,10 +218,10 @@ const WillCreateNewJournalpostInfo = () => {
   const toId = <b>{journalpostAndMulighet.toId ?? 'ukjent'}</b>;
 
   return (
-    <Alert variant="info">
+    <InfoBox variant="info">
       Journalposten er tidligere journalført på saksnummer {fromId}. Ved opprettelse av behandling i Kabal vil innholdet
       kopieres over i en ny journalpost på saksnummer {toId}.
-    </Alert>
+    </InfoBox>
   );
 };
 

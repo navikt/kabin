@@ -1,4 +1,4 @@
-import { Alert } from '@app/components/alert/alert';
+import { InfoBox } from '@app/components/info-box/info-box';
 import {
   getInvalidMulighetDateMessage,
   getMulighetDate,
@@ -47,7 +47,7 @@ const JournalpostWarning = ({ mulighet, date }: WarningProps) => {
   const { data: journalpost, isSuccess } = useJournalpost();
 
   return !isSuccess || isValidMulighetDate(date, false, journalpost.datoOpprettet) ? null : (
-    <Alert variant="error">{getInvalidMulighetDateMessage(mulighet, false)}.</Alert>
+    <InfoBox variant="warning">{getInvalidMulighetDateMessage(mulighet, false)}.</InfoBox>
   );
 };
 
@@ -55,5 +55,5 @@ const JournalpostWarning = ({ mulighet, date }: WarningProps) => {
  * validated against today instead, see `isValidMulighetDate`. */
 const UploadWarning = ({ mulighet, date }: WarningProps) =>
   isValidMulighetDate(date, true, undefined) ? null : (
-    <Alert variant="error">{getInvalidMulighetDateMessage(mulighet, true)}.</Alert>
+    <InfoBox variant="warning">{getInvalidMulighetDateMessage(mulighet, true)}.</InfoBox>
   );

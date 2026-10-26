@@ -4,15 +4,10 @@ import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props extends Pick<IPart, 'statusList'> {
-  /**
-   * @default undefined
-   * The variant of the tag. If undefined, the variant will be automatically set.
-   */
-  variant?: TagProps['variant'];
   className?: string;
 }
 
-export const PartStatusList = ({ statusList = [], variant, className }: Props) => {
+export const PartStatusList = ({ statusList = [], className }: Props) => {
   if (statusList.length === 0) {
     return null;
   }
@@ -20,7 +15,7 @@ export const PartStatusList = ({ statusList = [], variant, className }: Props) =
   return (
     <HStack gap="space-4" wrap className={className}>
       {statusList.map((s) => (
-        <PartStatus partStatus={s} size="small" variant={variant} key={s.status} />
+        <PartStatus partStatus={s} key={s.status} />
       ))}
     </HStack>
   );
@@ -28,21 +23,19 @@ export const PartStatusList = ({ statusList = [], variant, className }: Props) =
 
 interface IStatusProps {
   partStatus: IPersonStatus | IOrganizationStatus;
-  size?: TagProps['size'];
-  variant?: TagProps['variant'];
 }
 
-const PartStatus = ({ partStatus, size, variant = STATUS_VARIANT[partStatus.status] }: IStatusProps) => {
+const PartStatus = ({ partStatus }: IStatusProps) => {
   if (partStatus.date === null) {
     return (
-      <Tag variant={variant} size={size}>
+      <Tag variant="outline" data-color={STATUS_COLOR[partStatus.status]} size="small">
         {STATUS_NAMES[partStatus.status]}
       </Tag>
     );
   }
 
   return (
-    <Tag variant={variant} size={size}>
+    <Tag variant="outline" data-color={STATUS_COLOR[partStatus.status]} size="small">
       {STATUS_NAMES[partStatus.status]} ({isoDateToPretty(partStatus.date)})
     </Tag>
   );
@@ -64,14 +57,14 @@ const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.DELT_ANSVAR]: 'Delt ansvar',
 };
 
-const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
-  [PartStatusEnum.DEAD]: 'error',
-  [PartStatusEnum.DELETED]: 'error',
+const STATUS_COLOR: Record<PartStatusEnum, TagProps['data-color']> = {
+  [PartStatusEnum.DEAD]: 'danger',
+  [PartStatusEnum.DELETED]: 'danger',
   [PartStatusEnum.EGEN_ANSATT]: 'warning',
   [PartStatusEnum.VERGEMAAL]: 'success',
   [PartStatusEnum.FULLMAKT]: 'success',
   [PartStatusEnum.FORTROLIG]: 'info',
-  [PartStatusEnum.STRENGT_FORTROLIG]: 'alt1',
+  [PartStatusEnum.STRENGT_FORTROLIG]: 'meta-purple',
   [PartStatusEnum.RESERVERT_I_KRR]: 'warning',
   [PartStatusEnum.DELT_ANSVAR]: 'info',
 };

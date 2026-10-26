@@ -4,10 +4,10 @@ import { HStack, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   role: Role;
-  variant: TagProps['variant'];
+  'data-color': TagProps['data-color'];
 }
 
-export const RoleItem = ({ role, variant }: Props) => {
+export const RoleItem = ({ role, 'data-color': color }: Props) => {
   const formattedRole = ROLE_NAMES[role];
 
   return (
@@ -22,7 +22,7 @@ export const RoleItem = ({ role, variant }: Props) => {
         className="cursor-pointer border-none bg-transparent"
         onClick={() => navigator.clipboard.writeText(formattedRole)}
       >
-        <Tag variant={variant} size="small">
+        <Tag variant="moderate" data-color={color} size="small">
           {formattedRole} <FilesIcon aria-hidden />
         </Tag>
       </HStack>

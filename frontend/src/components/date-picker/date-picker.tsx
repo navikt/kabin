@@ -85,7 +85,6 @@ export const Datepicker = ({
       defaultSelected={value}
       selected={value}
       onSelect={onDateChange}
-      locale="nb"
       dropdownCaption
       month={month}
       onMonthChange={setMonth}

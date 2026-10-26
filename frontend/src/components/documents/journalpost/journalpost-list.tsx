@@ -54,8 +54,9 @@ export const JournalpostList = ({
       {journalpostId === null ? null : (
         <div className="flex justify-end">
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={() => setIsExpanded(false)}
             icon={<ChevronUpIcon aria-hidden />}
             title="Vis kun valgt journalpost"

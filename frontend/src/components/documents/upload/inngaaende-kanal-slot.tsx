@@ -43,12 +43,16 @@ export const InngaaendeKanalSlot = ({ registreringId, inngaaendeKanal }: Inngaae
   return (
     <Tooltip content="Inngående kanal">
       <ToggleGroup onChange={onChange} value={inngaaendeKanal ?? 'none'} size="small" key={inngaaendeKanal ?? 'none'}>
-        <ToggleItem value={InngaaendeKanal.E_POST} disabled={!canEdit}>
-          {INNGAAENDE_KANAL_NAMES[InngaaendeKanal.E_POST]}
-        </ToggleItem>
-        <ToggleItem value={InngaaendeKanal.ALTINN_INNBOKS} disabled={!canEdit}>
-          {INNGAAENDE_KANAL_NAMES[InngaaendeKanal.ALTINN_INNBOKS]}
-        </ToggleItem>
+        <ToggleItem
+          value={InngaaendeKanal.E_POST}
+          disabled={!canEdit}
+          label={INNGAAENDE_KANAL_NAMES[InngaaendeKanal.E_POST]}
+        />
+        <ToggleItem
+          value={InngaaendeKanal.ALTINN_INNBOKS}
+          disabled={!canEdit}
+          label={INNGAAENDE_KANAL_NAMES[InngaaendeKanal.ALTINN_INNBOKS]}
+        />
       </ToggleGroup>
     </Tooltip>
   );

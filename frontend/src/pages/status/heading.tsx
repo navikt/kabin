@@ -38,7 +38,9 @@ export const StatusHeading = ({ headingText, alertText, behandlingId, registreri
         </Heading>
       </Box>
 
-      <InlineMessage status="info">{alertText}</InlineMessage>
+      <InlineMessage status="info" size="small">
+        {alertText}
+      </InlineMessage>
 
       <NewRegistrering orientation="horizontal" />
       <HStack align="center" justify="start" gap="space-8" width="100%">
@@ -53,11 +55,16 @@ export const StatusHeading = ({ headingText, alertText, behandlingId, registreri
           Tilbake til forsiden
         </Button>
 
-        <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary-neutral" size="small">
+        <ExternalLinkButton href={`${KABAL_URL}/sok`} variant="secondary" data-color="neutral" size="small">
           Åpne Kabal søk
         </ExternalLinkButton>
 
-        <ExternalLinkButton href={`${KABAL_URL}/behandling/${behandlingId}`} variant="secondary-neutral" size="small">
+        <ExternalLinkButton
+          href={`${KABAL_URL}/behandling/${behandlingId}`}
+          variant="secondary"
+          data-color="neutral"
+          size="small"
+        >
           Åpne behandling i Kabal
         </ExternalLinkButton>
 

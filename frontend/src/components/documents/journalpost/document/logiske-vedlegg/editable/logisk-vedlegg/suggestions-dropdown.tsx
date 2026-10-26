@@ -15,9 +15,10 @@ export const Suggestions = ({ suggestions, activeIndex, onSelect }: Props) =>
     <ul className="absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded bg-ax-bg-default shadow-ax-shadow-dialog">
       <li>
         <Button
+          data-color="neutral"
           className="w-full cursor-pointer justify-start overflow-hidden"
           size="xsmall"
-          variant="tertiary-neutral"
+          variant="tertiary"
         >
           <span className="block w-full truncate text-left font-normal italic">Ingen forslag</span>
         </Button>
@@ -50,7 +51,8 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
       <Button
         className="w-full cursor-pointer justify-start overflow-hidden"
         size="xsmall"
-        variant={isActive ? 'primary' : 'tertiary-neutral'}
+        variant={isActive ? 'primary' : 'tertiary'}
+        data-color={isActive ? 'accent' : 'neutral'}
         onMouseDown={() => onSelect(suggestion)}
       >
         <span className="block w-full truncate text-left font-normal">{suggestion}</span>
