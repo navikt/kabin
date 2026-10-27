@@ -9,6 +9,10 @@ export const InitialFritekst = () => {
   const [setInitialCustomText] = useSetSvarbrevInitialCustomTextMutation();
 
   useEffect(() => {
+    setValue(svarbrev.initialCustomText ?? '');
+  }, [svarbrev.initialCustomText]);
+
+  useEffect(() => {
     if (value === (svarbrev.initialCustomText ?? '')) {
       return;
     }
