@@ -5,7 +5,8 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux/api/journalposter';
 import { useSetMulighetBasedOnJournalpostMutation } from '@app/redux/api/registreringer/mutations';
 import { SaksTypeEnum } from '@app/types/common';
 import type { IArkivertDocument } from '@app/types/dokument';
-import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS } from '@app/types/fagsystem';
+import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS, FAGSYSTEM_PESYS } from '@app/types/fagsystem';
+import { TEMA_ALDERSPENSJON, TEMA_UFØRETRYGD } from '@app/types/tema';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { JSX } from 'react';
 
@@ -38,24 +39,29 @@ export const Journalpostmuligheter = ({ heading }: Props) => {
       return [false, 'Ingen fagsak tilknyttet.'];
     }
 
-    const { fagsystemId } = document.sak;
+    const isKlage = typeId === SaksTypeEnum.KLAGE;
+    const isAnke = typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027;
 
-    if (typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) {
-      return fagsystemId === FAGSYSTEM_ARENA
-        ? [true, undefined]
-        : [false, 'Opprettelse av anke basert på journalpost er bare tilgjengelig for saker fra Arena.'];
+    if (!isKlage && !isAnke) {
+      return [true, undefined];
     }
 
-    if (typeId === SaksTypeEnum.KLAGE) {
-      // Treat fagsystemer Arbeidsoppfølging and Gosys as Arena: https://nav-it.slack.com/archives/G01CTUC8LSU/p1787141984237739 / https://nav-it.slack.com/archives/G01CTUC8LSU/p1788425945624739
-      return fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING ||
-        fagsystemId === FAGSYSTEM_ARENA ||
-        fagsystemId === FAGSYSTEM_GOSYS
+    const {
+      sak: { fagsystemId },
+      temaId,
+    } = document;
+
+    if (fagsystemId === FAGSYSTEM_PESYS) {
+      return temaId === TEMA_UFØRETRYGD || temaId === TEMA_ALDERSPENSJON
         ? [true, undefined]
-        : [false, 'Opprettelse av klage basert på journalpost er bare tilgjengelig for saker fra Arena.'];
+        : [false, INVALID_PESYS_TEMA_MESSAGE];
     }
 
-    return [true, undefined];
+    const isAllowedFagsystem =
+      fagsystemId === FAGSYSTEM_ARENA ||
+      (isKlage && (fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING || fagsystemId === FAGSYSTEM_GOSYS));
+
+    return isAllowedFagsystem ? [true, undefined] : [false, INVALID_ARENA_MESSAGE];
   };
 
   return (
@@ -70,3 +76,7 @@ export const Journalpostmuligheter = ({ heading }: Props) => {
     />
   );
 };
+
+const INVALID_PESYS_TEMA_MESSAGE =
+  'Opprettelse av anke basert på journalpost med fagsystem Pesys er bare tilgjengelig for journalposter med tema Uføretrygd eller Alderspensjon.';
+const INVALID_ARENA_MESSAGE = 'Opprettelse av anke basert på journalpost er bare tilgjengelig for saker fra Arena.';
