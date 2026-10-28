@@ -28,7 +28,7 @@ const Details = ({ label, children }: DetailProps) => {
 
   return (
     <Detail>
-      <span className="font-bold">{label}:</span> <code className="break-all text-xs">{children}</code>
+      <span className="font-bold">{label}:</span> <code className="text-xs break-all">{children}</code>
     </Detail>
   );
 };

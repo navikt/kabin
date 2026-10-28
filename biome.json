@@ -46,7 +46,7 @@
       },
       "nursery": {
         "useExplicitType": "off",
-        "useSortedClasses": {
+        "useTailwindSortedClasses": {
           "level": "on",
           "fix": "safe",
           "options": {}
@@ -172,6 +172,6 @@
     }
   },
   "files": {
-    "includes": ["**", "!**/*.css", "!.bruno"]
+    "includes": ["**", "!**/*.css", "!.bruno", "!nais"]
   }
 }

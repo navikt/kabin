@@ -153,7 +153,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
         ref={searchRef}
       />
       {showCountryList ? (
-        <ul className="absolute top-full left-0 z-1 max-h-50 w-full overflow-x-auto rounded bg-ax-bg-default shadow-ax-shadow-dialog">
+        <ul className="bg-ax-bg-default shadow-ax-shadow-dialog absolute top-full left-0 z-1 max-h-50 w-full overflow-x-auto rounded">
           {options.map((country, i) => (
             <CountryOption
               key={country.landkode}

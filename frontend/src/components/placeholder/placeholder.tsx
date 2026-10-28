@@ -14,7 +14,7 @@ export const Placeholder = ({ className = '', children }: PlaceholderProps) => (
     width="100%"
     flexGrow="1"
     padding="space-32"
-    className={`text-[200px] text-ax-border-neutral-subtle ${className}`}
+    className={`text-ax-border-neutral-subtle text-[200px] ${className}`}
   >
     {children}
   </HStack>

@@ -74,7 +74,7 @@ export const DokumentDropzone = ({
           Opplastede dokumenter
         </Heading>
 
-        <BodyShort size="small" className="grow text-ax-text-neutral-subtle">
+        <BodyShort size="small" className="text-ax-text-neutral-subtle grow">
           PDF, JPG, PNG eller TIFF
         </BodyShort>
 

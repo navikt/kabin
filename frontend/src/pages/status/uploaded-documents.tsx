@@ -34,7 +34,7 @@ export const UploadedDocuments = ({ uploadedDocuments }: UploadedDocumentsProps)
         label={
           <HStack justify="space-between">
             <span>Dokumenter</span>
-            <span className="font-normal text-ax-medium italic">{getDocumentCountText(sortedDokumenter.length)}</span>
+            <span className="text-ax-medium font-normal italic">{getDocumentCountText(sortedDokumenter.length)}</span>
           </HStack>
         }
       >
@@ -95,7 +95,7 @@ interface TreeConnectorProps {
 // to the hoveddokument above it (├─ for a middle attachment, └─ for the last one).
 const TreeConnector = ({ isLast }: TreeConnectorProps) => (
   <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-8 z-0 block w-8">
-    <span className={`absolute left-4 w-px bg-ax-border-neutral-subtle ${isLast ? 'top-0 h-1/2' : 'inset-y-0'}`} />
-    <span className="absolute top-1/2 left-4 h-px w-4 bg-ax-border-neutral-subtle" />
+    <span className={`bg-ax-border-neutral-subtle absolute left-4 w-px ${isLast ? 'top-0 h-1/2' : 'inset-y-0'}`} />
+    <span className="bg-ax-border-neutral-subtle absolute top-1/2 left-4 h-px w-4" />
   </span>
 );

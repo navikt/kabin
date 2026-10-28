@@ -11,7 +11,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
   };
 
   return (
-    <ul className="shrink grow list-none overflow-y-auto overflow-x-hidden" data-testid="filter-list">
+    <ul className="shrink grow list-none overflow-x-hidden overflow-y-auto" data-testid="filter-list">
       {options.map(({ value, label }) => (
         <li key={value} className="w-full pl-2" data-testid="filter-list-item" data-filterid={value}>
           <Filter

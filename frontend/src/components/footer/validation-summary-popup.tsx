@@ -32,7 +32,7 @@ export const ValidationSummaryPopup = () => {
 
   return (
     <>
-      <button type="button" className="cursor-pointer whitespace-nowrap border-0 bg-transparent" onClick={toggleOpen}>
+      <button type="button" className="cursor-pointer border-0 bg-transparent whitespace-nowrap" onClick={toggleOpen}>
         <InlineMessage status="warning" size="small">
           <HStack align="center" wrap={false}>
             <span>Feil i utfyllingen</span>
@@ -44,7 +44,7 @@ export const ValidationSummaryPopup = () => {
         <div className="absolute right-4 bottom-16 w-100">
           <button
             type="button"
-            className="absolute right-0 cursor-pointer whitespace-nowrap border-0 bg-transparent p-4"
+            className="absolute right-0 cursor-pointer border-0 bg-transparent p-4 whitespace-nowrap"
             onClick={toggleOpen}
           >
             <Icon />

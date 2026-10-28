@@ -8,7 +8,7 @@ interface StyledCardProps extends Omit<ComponentProps<typeof Card>, 'style'> {
 }
 
 export const StyledCard = ({ gridArea, className = '', style, ...props }: StyledCardProps) => (
-  <div className="overflow-hidden bg-ax-bg-default" style={{ gridArea, ...style }}>
+  <div className="bg-ax-bg-default overflow-hidden" style={{ gridArea, ...style }}>
     <Card className={`${className} mx-1 mt-1 mb-2`} {...props} />
   </div>
 );

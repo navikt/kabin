@@ -12,7 +12,7 @@ interface Props extends BaseProps {
 
 export const Suggestions = ({ suggestions, activeIndex, onSelect }: Props) =>
   suggestions.length === 0 ? (
-    <ul className="absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded bg-ax-bg-default shadow-ax-shadow-dialog">
+    <ul className="bg-ax-bg-default shadow-ax-shadow-dialog absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-x-hidden overflow-y-auto rounded">
       <li>
         <Button
           data-color="neutral"
@@ -25,7 +25,7 @@ export const Suggestions = ({ suggestions, activeIndex, onSelect }: Props) =>
       </li>
     </ul>
   ) : (
-    <ul className="absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded bg-ax-bg-default shadow-ax-shadow-dialog">
+    <ul className="bg-ax-bg-default shadow-ax-shadow-dialog absolute top-full right-0 left-0 z-2 max-h-50 w-fit max-w-100 list-none overflow-x-hidden overflow-y-auto rounded">
       {suggestions.map((suggestion, i) => (
         <Suggestion key={suggestion} isActive={i === activeIndex} suggestion={suggestion} onSelect={onSelect} />
       ))}
