@@ -17,7 +17,7 @@ export const DokumentRowProgress = ({ dokument, uploadProgress }: Props) => {
     return (
       <ProgressTrack>
         <div
-          className="h-full w-full origin-left transform-gpu bg-ax-bg-accent-strong transition-transform duration-300 ease-out will-change-transform"
+          className="bg-ax-bg-accent-strong h-full w-full origin-left transform-gpu transition-transform duration-300 ease-out will-change-transform"
           style={{ transform: `scaleX(${percent / 100})` }}
         />
       </ProgressTrack>
@@ -33,7 +33,7 @@ export const DokumentRowProgress = ({ dokument, uploadProgress }: Props) => {
   ) {
     return (
       <ProgressTrack>
-        <div className="absolute inset-y-0 left-0 w-2/5 transform-gpu animate-progress-sweep bg-ax-bg-accent-strong will-change-transform" />
+        <div className="animate-progress-sweep bg-ax-bg-accent-strong absolute inset-y-0 left-0 w-2/5 transform-gpu will-change-transform" />
       </ProgressTrack>
     );
   }

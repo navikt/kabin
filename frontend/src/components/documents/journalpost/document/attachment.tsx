@@ -37,7 +37,7 @@ export const Attachment = ({ vedlegg, dokument, isLast = false }: Props) => {
       onMouseDown={onMouseDown}
       data-testid="document-vedlegg-list-item"
       data-documentname={tittel}
-      className={`relative grid gap-x-2 pl-4 ${isViewed ? 'bg-ax-warning-200 hover:bg-ax-warning-300' : 'bg-transparent hover:bg-transparent'}before:content-[''] before:absolute before:top-3.75 before:left-0 before:block before:w-3.5 before:border-ax-border-neutral-subtle before:border-b after:absolute after:top-0 after:left-0 after:block after:w-px after:border-ax-border-neutral-subtle after:border-l after:content-[''] ${isLast ? 'after:h-4' : 'after:h-full'}
+      className={`relative grid gap-x-2 pl-4 ${isViewed ? 'bg-ax-warning-200 hover:bg-ax-warning-300' : 'bg-transparent hover:bg-transparent'}before:content-[''] before:border-ax-border-neutral-subtle after:border-ax-border-neutral-subtle before:absolute before:top-3.75 before:left-0 before:block before:w-3.5 before:border-b after:absolute after:top-0 after:left-0 after:block after:w-px after:border-l after:content-[''] ${isLast ? 'after:h-4' : 'after:h-full'}
       `}
       style={{
         gridTemplateColumns: 'max-content 1fr 30px 55px 20px',

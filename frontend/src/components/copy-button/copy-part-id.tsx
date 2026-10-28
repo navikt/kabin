@@ -25,5 +25,5 @@ export const CopyPartIdButton = ({ id, size = 'small' }: Props) => {
 };
 
 export const StyledCopyButton = ({ className = '', ...props }: CopyButtonProps) => (
-  <CopyButton className={`self-start whitespace-nowrap border-2 border-ax-border-neutral ${className}`} {...props} />
+  <CopyButton className={`border-ax-border-neutral self-start border-2 whitespace-nowrap ${className}`} {...props} />
 );

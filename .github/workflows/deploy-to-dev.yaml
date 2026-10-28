@@ -50,7 +50,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     env:
       BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-      XDG_CONFIG_HOME: ${{ github.workspace }}  
+      XDG_CONFIG_HOME: ${{ github.workspace }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -81,18 +81,18 @@ jobs:
         run: |
           cd frontend
           bun run build
-      
+
       - name: Test frontend
         shell: bash
         run: |
           cd frontend
           bun test
-      
+
       - name: Install server dependencies
         shell: bash
         working-directory: server
         run: bun install --frozen-lockfile --ignore-scripts
-      
+
       - name: Test server
         shell: bash
         run: |
@@ -138,7 +138,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
           build_args: |
             VERSION=${{ steps.version.outputs.version }}
-  
+
   deploy_to_dev:
     name: Deploy
     runs-on: ubuntu-latest

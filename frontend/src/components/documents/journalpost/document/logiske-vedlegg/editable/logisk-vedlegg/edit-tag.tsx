@@ -6,7 +6,7 @@ interface EditTagProps extends ComponentProps<typeof ReadOnlyTag> {}
 export const EditTag = forwardRef<HTMLSpanElement, EditTagProps>(({ className = '', ...props }, ref) => (
   <ReadOnlyTag
     ref={ref}
-    className={`max-w-50 bg-ax-bg-default empty:before:text-ax-text-neutral-subtle empty:before:content-[attr(aria-placeholder)] [[contenteditable='true']]:cursor-text ${className}`}
+    className={`bg-ax-bg-default empty:before:text-ax-text-neutral-subtle max-w-50 empty:before:content-[attr(aria-placeholder)] [[contenteditable='true']]:cursor-text ${className}`}
     {...props}
   />
 ));

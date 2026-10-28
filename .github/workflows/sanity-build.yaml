@@ -37,7 +37,7 @@ jobs:
         shell: bash
         working-directory: ${{ matrix.apps }}
         run: bun install --frozen-lockfile --ignore-scripts
-          
+
       - name: Restore caches for ${{ matrix.apps }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -50,7 +50,7 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun run typecheck
-            
+
       - name: Lint ${{ matrix.apps }}
         shell: bash
         run: |
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun run knip
-    
+
       - name: Test ${{ matrix.apps }}
         shell: bash
         run: |

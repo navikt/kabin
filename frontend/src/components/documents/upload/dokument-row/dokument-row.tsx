@@ -133,7 +133,7 @@ export const DokumentRow = memo(
         {isHoveddokument ? null : <TreeConnector isLast={isLastAttachment} />}
 
         <div
-          className={`relative overflow-hidden rounded ${isDragged ? 'bg-ax-bg-neutral-moderate outline-dashed outline-2 outline-ax-border-accent-strong -outline-offset-2' : isViewed ? 'bg-ax-bg-warning-moderate' : isOdd ? 'bg-ax-bg-default' : 'bg-ax-bg-neutral-moderate'}`}
+          className={`relative overflow-hidden rounded ${isDragged ? 'bg-ax-bg-neutral-moderate outline-ax-border-accent-strong outline-2 -outline-offset-2 outline-dashed' : isViewed ? 'bg-ax-bg-warning-moderate' : isOdd ? 'bg-ax-bg-default' : 'bg-ax-bg-neutral-moderate'}`}
         >
           {isDragged ? null : <DokumentRowProgress dokument={dokument} uploadProgress={uploadProgress} />}
 
@@ -254,7 +254,7 @@ const AttachmentNumber = ({ isHoveddokument, attachmentNumber, attachmentNumberW
       as="span"
       size="small"
       aria-hidden
-      className="inline-block text-right text-ax-text-neutral-subtle tabular-nums"
+      className="text-ax-text-neutral-subtle inline-block text-right tabular-nums"
       style={{ width: attachmentNumberWidth }}
     >
       {attachmentNumber}
@@ -274,7 +274,7 @@ const DragHandle = ({ onHold }: DragHandleProps) => (
       data-drag-handle
       onPointerDown={() => onHold(true)}
       onPointerUp={() => onHold(false)}
-      className="flex cursor-grab text-ax-icon-neutral-subtle active:cursor-grabbing"
+      className="text-ax-icon-neutral-subtle flex cursor-grab active:cursor-grabbing"
     >
       <DragVerticalIcon aria-hidden fontSize="1.25rem" />
     </span>
@@ -287,7 +287,7 @@ interface TreeConnectorProps {
 
 const TreeConnector = ({ isLast }: TreeConnectorProps) => (
   <span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-0 block w-8">
-    <span className={`absolute left-4 w-px bg-ax-border-neutral-subtle ${isLast ? 'top-0 h-1/2' : 'inset-y-0'}`} />
-    <span className="absolute top-1/2 left-4 h-px w-4 bg-ax-border-neutral-subtle" />
+    <span className={`bg-ax-border-neutral-subtle absolute left-4 w-px ${isLast ? 'top-0 h-1/2' : 'inset-y-0'}`} />
+    <span className="bg-ax-border-neutral-subtle absolute top-1/2 left-4 h-px w-4" />
   </span>
 );

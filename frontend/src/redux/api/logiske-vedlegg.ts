@@ -70,7 +70,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
                   }
                 }
 
-                vedleggLoop: for (const vedlegg of dokument.vedlegg) {
+                for (const vedlegg of dokument.vedlegg) {
                   if (vedlegg.dokumentInfoId !== dokumentInfoId) {
                     continue;
                   }
@@ -78,8 +78,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
                   for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
                     if (logiskVedlegg.logiskVedleggId === fakeId) {
                       logiskVedlegg.logiskVedleggId = data.logiskVedleggId;
-                      break;
-                      break vedleggLoop;
+                      continue dokumentLoop;
                     }
                   }
                 }
@@ -115,7 +114,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
                 }
               }
 
-              vedleggLoop: for (const vedlegg of dokument.vedlegg) {
+              for (const vedlegg of dokument.vedlegg) {
                 if (vedlegg.dokumentInfoId !== dokumentInfoId) {
                   continue;
                 }
@@ -123,8 +122,7 @@ const logiskeVedleggSlice = arkiverteDokumenterApi.injectEndpoints({
                 for (const logiskVedlegg of vedlegg.logiskeVedlegg) {
                   if (logiskVedlegg.logiskVedleggId === logiskVedleggId) {
                     logiskVedlegg.tittel = tittel;
-                    break;
-                    break vedleggLoop;
+                    continue dokumentLoop;
                   }
                 }
               }
