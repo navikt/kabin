@@ -25,7 +25,7 @@ export const Content = ({ className = '', ...props }: ContentProps) => (
 );
 
 export const StyledCloseButton = ({ className = '', ...props }: ButtonProps) => (
-  <Button className={`absolute top-0 right-0 text-ax-text-neutral ${className}`} {...props} />
+  <Button className={`text-ax-text-neutral absolute top-0 right-0 ${className}`} {...props} />
 );
 
 const getBackgroundClass = (type: ToastType): string => {
@@ -78,7 +78,7 @@ export const BaseToastStyle = forwardRef<HTMLElement, BaseToastProps>(
     <VStack
       as="section"
       ref={ref}
-      className={`relative w-75 rounded border p-4 text-ax-text-neutral ${getBackgroundClass(type)} ${getBorderColorClass(type)} ${className}`}
+      className={`text-ax-text-neutral relative w-75 rounded border p-4 ${getBackgroundClass(type)} ${getBorderColorClass(type)} ${className}`}
       {...props}
     >
       {children}
@@ -107,7 +107,7 @@ export const TimedToastStyle = forwardRef<HTMLElement, TimedToastProps>(
       <VStack
         as="section"
         ref={ref}
-        className={`relative w-75 rounded border p-4 text-ax-text-neutral ${getBackgroundClass(type)} ${getBorderColorClass(type)} animate-forwards animate-slide-in after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:origin-left after:animate-forwards after:animate-linear after:animate-once after:animate-timer after:bg-(--toast-after-bg) after:content-[''] ${paused ? 'after:animate-paused' : 'after:animate-play'} ${className}`}
+        className={`text-ax-text-neutral relative w-75 rounded border p-4 ${getBackgroundClass(type)} ${getBorderColorClass(type)} animate-forwards animate-slide-in after:animate-forwards after:animate-linear after:animate-once after:animate-timer after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:origin-left after:bg-(--toast-after-bg) after:content-[''] ${paused ? 'after:animate-paused' : 'after:animate-play'} ${className}`}
         style={customStyle}
         {...props}
       >

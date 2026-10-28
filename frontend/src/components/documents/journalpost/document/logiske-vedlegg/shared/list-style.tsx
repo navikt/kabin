@@ -44,5 +44,5 @@ export const LogiskeVedleggListItem = ({ className = '', style, ...props }: Logi
 interface NoAttachmentsTextProps extends ComponentProps<'span'> {}
 
 export const NoAttachmentsText = ({ className = '', ...props }: NoAttachmentsTextProps) => (
-  <span className={`whitespace-nowrap font-normal italic ${className}`} {...props} />
+  <span className={`font-normal whitespace-nowrap italic ${className}`} {...props} />
 );

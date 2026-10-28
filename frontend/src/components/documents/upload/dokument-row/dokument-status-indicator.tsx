@@ -44,7 +44,7 @@ export const DokumentStatusIndicator = ({ dokument, uploadProgress }: Props) => 
 
     return (
       <Tooltip content={`${formatFileSize(uploadProgress?.bytesPerSecond ?? 0)}/s`}>
-        <span className="inline-flex shrink-0 items-center justify-center whitespace-nowrap font-mono text-[13px] text-ax-text-neutral tabular-nums opacity-60">
+        <span className="text-ax-text-neutral inline-flex shrink-0 items-center justify-center font-mono text-[13px] whitespace-nowrap tabular-nums opacity-60">
           {percent}%
         </span>
       </Tooltip>

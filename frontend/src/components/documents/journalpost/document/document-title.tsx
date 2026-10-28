@@ -40,7 +40,7 @@ export const DocumentTitle = ({ dokument }: Props) => {
         <HStack align="center" gap="space-4" height="2rem" overflow="hidden" wrap={false}>
           <div
             data-testid="document-title"
-            className={`grow select-text truncate ${isActive ? 'font-bold' : 'font-normal'}`}
+            className={`grow truncate select-text ${isActive ? 'font-bold' : 'font-normal'}`}
           >
             {tittel}
           </div>

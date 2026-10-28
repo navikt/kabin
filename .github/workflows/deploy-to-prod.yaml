@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      
+
       - name: Get image registry
         id: image-registry
         uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # v0

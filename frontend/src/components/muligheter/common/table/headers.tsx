@@ -53,7 +53,7 @@ type Props = HeaderCellsProps & { selectable: boolean };
 
 // The rest of `props` is spread as a whole to keep `type` and `columns` correlated.
 export const MulighetHeaders = ({ selectable, ...props }: Props) => (
-  <Table.Header className="sticky top-0 z-1 bg-ax-bg-default">
+  <Table.Header className="bg-ax-bg-default sticky top-0 z-1">
     <Table.Row className="whitespace-nowrap">
       <HeaderCells {...props} />
 

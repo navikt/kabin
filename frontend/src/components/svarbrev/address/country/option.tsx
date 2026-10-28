@@ -28,7 +28,7 @@ export const CountryOption = ({ country, isFocused, isSelected, onClick }: Props
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => onClick(country)}
         icon={isSelected ? <CheckmarkIcon aria-hidden /> : null}
-        className="justify-start! w-full"
+        className="w-full justify-start!"
       >
         {country.land} ({country.landkode})
       </Button>

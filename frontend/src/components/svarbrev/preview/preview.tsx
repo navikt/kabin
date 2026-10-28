@@ -39,7 +39,7 @@ export const Preview = () => {
   }
 
   return (
-    <div className="relative w-full bg-ax-bg-default" style={{ aspectRatio: PDF_ASPECT_RATIO }}>
+    <div className="bg-ax-bg-default relative w-full" style={{ aspectRatio: PDF_ASPECT_RATIO }}>
       {rendered.toReversed().map((loader) => (
         <RenderPdf key={loader.key} loader={loader} />
       ))}
