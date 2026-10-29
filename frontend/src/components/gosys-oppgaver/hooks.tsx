@@ -16,7 +16,7 @@ export const useParams = (): IGetGosysOppgaverParams | typeof skipToken => {
   return { identifikator: sakenGjelderValue, temaId: temaId ?? undefined };
 };
 
-export const useIsEnabled = () => {
+export const useGosysOppgaverIsEnabled = () => {
   const { mulighet, fromJournalpost } = useMulighet();
   const additionalKabalMulighet = useAdditionalKabalMulighet();
 
