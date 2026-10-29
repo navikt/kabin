@@ -1,6 +1,6 @@
 import { Card } from '@app/components/card/card';
 import { Header } from '@app/components/gosys-oppgaver/header';
-import { useIsEnabled, useParams } from '@app/components/gosys-oppgaver/hooks';
+import { useGosysOppgaverIsEnabled, useParams } from '@app/components/gosys-oppgaver/hooks';
 import { LoadingGosysOppgaver } from '@app/components/gosys-oppgaver/loading-gosys-oppgaver';
 import { Row } from '@app/components/gosys-oppgaver/row';
 import { TableHeaders } from '@app/components/gosys-oppgaver/table-headers';
@@ -16,7 +16,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 
 export const GosysOppgaver = () => {
   const canEdit = useCanEdit();
-  const isEnabled = useIsEnabled();
+  const isEnabled = useGosysOppgaverIsEnabled();
 
   if (!isEnabled) {
     return null;

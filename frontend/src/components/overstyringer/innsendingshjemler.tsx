@@ -1,15 +1,14 @@
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { useGosysOppgaverIsEnabled } from '@app/components/gosys-oppgaver/hooks';
 import { InfoBox } from '@app/components/info-box/info-box';
 import { HjemmelTag, ReadOnlyHjemler } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useJournalpostFromMulighet } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
 import { useGetLatestYtelserQuery } from '@app/redux/api/kodeverk';
 import { useSetHjemmelIdListMutation } from '@app/redux/api/overstyringer/overstyringer';
 import { SaksTypeEnum } from '@app/types/common';
-import { FAGSYSTEM_ARENA } from '@app/types/fagsystem';
 import { ValidationFieldNames } from '@app/types/validation';
 import { HStack, InlineMessage, Label, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -79,14 +78,14 @@ export const Innsendingshjemler = () => {
 
 const PermitteringWarning = () => {
   const { typeId, overstyringer } = useRegistrering();
-  const { data: journalpost } = useJournalpostFromMulighet();
   const { hjemmelIdList } = overstyringer;
+  const gosysEnabled = useGosysOppgaverIsEnabled();
 
-  if (typeId === null || !PERMITTERING_WARNING_SAKSTYPER.includes(typeId)) {
+  if (!gosysEnabled) {
     return null;
   }
 
-  if (journalpost?.sak?.fagsystemId !== FAGSYSTEM_ARENA) {
+  if (typeId === null || !PERMITTERING_WARNING_SAKSTYPER.includes(typeId)) {
     return null;
   }
 
