@@ -1,3 +1,4 @@
+import { SuggestedEnhet } from '@app/components/overstyringer/suggested-enhet';
 import {
   type Entry,
   SearchableSelect,
@@ -15,7 +16,7 @@ import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS, FAGSYST
 import type { IKodeverkSimpleValue, IYtelserLatest } from '@app/types/kodeverk';
 import { TEMA_ALDERSPENSJON, TEMA_UFØRETRYGD } from '@app/types/tema';
 import { ValidationFieldNames } from '@app/types/validation';
-import { InlineMessage, Label, Skeleton, Tag } from '@navikt/ds-react';
+import { HStack, InlineMessage, Label, Skeleton, Tag, VStack } from '@navikt/ds-react';
 
 const FIELD_NAME = ValidationFieldNames.FORRIGE_BEHANDLENDE_ENHET_ID;
 
@@ -96,23 +97,30 @@ const EnhetInternal = ({ typeId }: EnhetInternalProps) => {
   const enheter = getEnheter(typeId, ytelse);
   const options: Entry<string>[] = enheter.map((e) => enhetToEntry(e));
   const selectedEntry = options.find((o) => o.value === overstyringer.forrigeBehandlendeEnhetId) ?? null;
+  const onChange = (forrigeBehandlendeEnhetId: string) => setEnhet({ id, forrigeBehandlendeEnhetId });
 
   return (
-    <div className="flex flex-col gap-2">
-      <Label size="small" htmlFor={FIELD_NAME}>
+    <VStack gap="space-12">
+      <Label size="medium" htmlFor={FIELD_NAME}>
         {FIELD_NAMES.forrigeBehandlendeEnhetId}
       </Label>
-      <SearchableSelect
-        id={FIELD_NAME}
-        label={FIELD_NAMES.forrigeBehandlendeEnhetId}
-        options={options}
-        value={selectedEntry}
-        onChange={(enhetId) => setEnhet({ id, forrigeBehandlendeEnhetId: enhetId })}
-        disabled={isLoading}
-        error={error}
-        nullLabel="Ikke valgt"
-      />
-    </div>
+
+      <HStack gap="space-8" align="end" wrap={false}>
+        <SearchableSelect
+          id={FIELD_NAME}
+          label={FIELD_NAMES.forrigeBehandlendeEnhetId}
+          options={options}
+          value={selectedEntry}
+          onChange={onChange}
+          disabled={isLoading}
+          error={error}
+          nullLabel="Ikke valgt"
+          style={{ minWidth: 0, flexGrow: 1, flexBasis: '0%' }}
+        />
+
+        <SuggestedEnhet setEnhet={onChange} selectedEnhet={overstyringer.forrigeBehandlendeEnhetId} />
+      </HStack>
+    </VStack>
   );
 };
 

@@ -249,7 +249,7 @@ export const Overstyringer = ({ title, ...props }: Props) => {
         </HStack>
         <MottattDateError />
       </VStack>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-x-2 gap-y-6">
         <Ytelse />
         <Innsendingshjemler />
         <Enhet />
