@@ -241,7 +241,7 @@ export const Overstyringer = ({ title, ...props }: Props) => {
   return (
     <CardLarge title={title}>
       <VStack gap="space-12">
-        <HStack gap="space-16">
+        <HStack gap="space-16" wrap={false}>
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
           <EditFrist />

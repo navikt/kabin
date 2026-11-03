@@ -89,7 +89,7 @@ const EditableBegjæringOmGjenopptakAfter2027 = () => {
           isFetching={isFetching}
           mulighet={mulighet}
           id={id}
-          label="Velg vedtaket begjæringen om gjenopptak gjelder"
+          label="Velg behandlingen begjæringen om gjenopptak gjelder"
           showOnlySelectedLabel="Vis kun valgt mulighet for begjæring om gjenopptak"
         />
 
