@@ -30,6 +30,9 @@ export const kodeverkApi = createApi({
     getTemaYtelser: builder.query<IKodeverkSimpleValue[], string>({
       query: (tema) => `/tema/${tema}/ytelser/latest`,
     }),
+    getSakstyper: builder.query<IKodeverkSimpleValue[], void>({
+      query: () => '/sakstyper',
+    }),
   }),
 });
 
@@ -42,4 +45,5 @@ export const {
   useGetFagsystemerQuery,
   useGetHjemlerMapQuery,
   useGetTemaYtelserQuery,
+  useGetSakstyperQuery,
 } = kodeverkApi;

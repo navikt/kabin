@@ -5,6 +5,7 @@ import type {
   IAnkemulighet,
   IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
+  IBegjæringOmGjenopptakMulighetAfter2027,
   IKlagemulighet,
   IOmgjøringskravmulighet,
 } from '@app/types/mulighet';
@@ -25,7 +26,11 @@ export interface SetAnkemulighetParams {
 
 export interface SetNonAnkemulighetParams {
   id: string;
-  mulighet: IKlagemulighet | IOmgjøringskravmulighet | IBegjæringOmGjenopptakMulighet;
+  mulighet:
+    | IKlagemulighet
+    | IOmgjøringskravmulighet
+    | IBegjæringOmGjenopptakMulighet
+    | IBegjæringOmGjenopptakMulighetAfter2027;
 }
 
 export interface SetAdditionalKabalMulighetParams {

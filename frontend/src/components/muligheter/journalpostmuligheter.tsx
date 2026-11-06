@@ -8,13 +8,8 @@ import type { IArkivertDocument } from '@app/types/dokument';
 import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA, FAGSYSTEM_GOSYS, FAGSYSTEM_PESYS } from '@app/types/fagsystem';
 import { TEMA_ALDERSPENSJON, TEMA_UFØRETRYGD } from '@app/types/tema';
 import { skipToken } from '@reduxjs/toolkit/query';
-import type { JSX } from 'react';
 
-interface Props {
-  heading?: JSX.Element;
-}
-
-export const Journalpostmuligheter = ({ heading }: Props) => {
+export const Journalpostmuligheter = () => {
   const { sakenGjelderValue, mulighet, journalpostId, typeId } = useRegistrering();
   const { data, isLoading, isFetching, refetch } = useGetArkiverteDokumenterQuery(sakenGjelderValue ?? skipToken);
   const { id } = useRegistrering();
@@ -72,7 +67,6 @@ export const Journalpostmuligheter = ({ heading }: Props) => {
       selectJournalpost={[createOnMouseDown, selectIsLoading]}
       getIsSelected={(id) => mulighet?.id === id}
       getCanBeSelected={getCanBeSelected}
-      heading={heading}
     />
   );
 };

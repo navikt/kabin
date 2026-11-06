@@ -27,7 +27,7 @@ interface SetMulighetPayload {
   mulighetId: string;
 }
 
-const mutationsSlice = registreringApi.injectEndpoints({
+export const registreringMutationsSlice = registreringApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setSakenGjelder: builder.mutation<DraftRegistrering, { id: string; sakenGjelderValue: string }>({
@@ -258,7 +258,7 @@ export const {
   useSetNonAnkemulighetMutation,
   useSetAdditionalKabalMulighetMutation,
   useSetSaksnrITrMutation,
-} = mutationsSlice;
+} = registreringMutationsSlice;
 
 /** Fields the API sets as a side effect of `setSource`, tracked so the ones that are known up
  * front can be set optimistically and selectively restored on failure. */

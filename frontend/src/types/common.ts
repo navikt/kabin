@@ -115,6 +115,9 @@ export enum SaksTypeEnum {
   BEGJÆRING_OM_GJENOPPTAK = '6',
   BEGJÆRING_OM_GJENOPPTAK_I_TR = '7',
   ANKE_AFTER_2027 = '8',
+  ANKE_I_TR_AFTER_2027 = '9',
+  BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 = '10',
+  BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027 = '11',
 }
 
 export type RegistreringType =
@@ -122,14 +125,16 @@ export type RegistreringType =
   | SaksTypeEnum.ANKE
   | SaksTypeEnum.OMGJØRINGSKRAV
   | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
-  | SaksTypeEnum.ANKE_AFTER_2027;
+  | SaksTypeEnum.ANKE_AFTER_2027
+  | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
 
 export const isType = (type: string): type is RegistreringType =>
   type === SaksTypeEnum.KLAGE ||
   type === SaksTypeEnum.ANKE ||
   type === SaksTypeEnum.OMGJØRINGSKRAV ||
   type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
-  type === SaksTypeEnum.ANKE_AFTER_2027;
+  type === SaksTypeEnum.ANKE_AFTER_2027 ||
+  type === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
 
 export interface ISaksbehandler {
   navIdent: string;
@@ -140,14 +145,3 @@ export interface DateRange {
   from: Date | undefined;
   to?: Date | undefined;
 }
-
-export const TYPE_NAME: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'Klage',
-  [SaksTypeEnum.ANKE]: 'Anke',
-  [SaksTypeEnum.ANKE_I_TR]: 'Anke i Trygderetten',
-  [SaksTypeEnum.TR_OPPHEVET]: 'Behandling etter Trygderetten opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'Omgjøringskrav',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'Begjæring om gjenopptak',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'Begjæring om gjenopptak i Trygderetten',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'Anke etter 1.1.27',
-};

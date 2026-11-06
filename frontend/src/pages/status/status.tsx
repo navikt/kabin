@@ -42,7 +42,10 @@ export const StatusPage = () => {
     );
   }
 
-  if (registrering.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) {
+  if (
+    registrering.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
+    registrering.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
+  ) {
     return (
       <Status
         registrering={registrering}

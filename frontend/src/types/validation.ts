@@ -22,7 +22,7 @@ export enum ValidationFieldNames {
   AVSENDER = 'avsender',
   KLAGER = 'klager',
   FULLMEKTIG = 'fullmektig',
-  YTELSE_ID = 'ytelseId',
+  YTELSE_ID = 'ytelse',
   HJEMMEL_ID_LIST = 'hjemmelIdList',
   BEHANDLING_ID = 'behandlingId',
   JOURNALPOST_ID = 'journalpostId',

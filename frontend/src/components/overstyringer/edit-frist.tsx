@@ -46,7 +46,7 @@ const LoadedEditFrist = () => {
 
   return (
     <Box asChild borderColor="neutral-subtle" borderWidth="0 0 0 1" paddingInline="space-16 space-0">
-      <VStack as="section" gap="space-8" aria-labelledby="fristIKabal">
+      <VStack as="section" gap="space-8" aria-labelledby="fristIKabal" className="shrink-0">
         <Label as={Heading} size="small" id="fristIKabal">
           Frist i Kabal
         </Label>
