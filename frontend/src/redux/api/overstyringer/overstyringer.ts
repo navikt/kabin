@@ -25,7 +25,7 @@ import type {
 import { pessimisticUpdate, updateDrafts } from '@app/redux/api/registreringer/draft-updates';
 import { registreringApi } from '@app/redux/api/registreringer/registrering';
 import { BehandlingstidUnitType } from '@app/types/calculate-frist';
-import type { IPart } from '@app/types/common';
+import type { IPart, ISimplePart } from '@app/types/common';
 import { addMonths, addWeeks, format } from 'date-fns';
 
 interface UpdatePartPayload {
@@ -224,23 +224,18 @@ const overstyringerSlice = registreringApi.injectEndpoints({
         }
       },
     }),
-    setAvsender: builder.mutation<SetAvsenderResponse, UpdatePartPayload>({
+    setAvsender: builder.mutation<SetAvsenderResponse, { id: string; part: ISimplePart | null }>({
       query: ({ id, part }) => ({
         url: `/registreringer/${id}/overstyringer/avsender`,
         method: 'PUT',
         body: { avsender: part },
       }),
-      onQueryStarted: async ({ id, part }, { queryFulfilled }) => {
-        const undo = updateDrafts(id, (draft) => ({
-          ...draft,
-          overstyringer: { ...draft.overstyringer, avsender: part },
-        }));
-
+      onQueryStarted: async ({ id }, { queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           pessimisticUpdate(id, data);
         } catch {
-          undo();
+          return;
         }
       },
     }),

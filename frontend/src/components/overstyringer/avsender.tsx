@@ -1,14 +1,16 @@
+import { AvsenderSearch } from '@app/components/overstyringer/avsender-write';
 import { StyledAvsenderIcon } from '@app/components/overstyringer/icons';
 import { PartContent, States, StyledContainer } from '@app/components/overstyringer/layout';
-import { Part } from '@app/components/overstyringer/part';
+import { PartRead, type PartReadProps } from '@app/components/overstyringer/part-read/part-read';
 import type { ISetPart } from '@app/components/overstyringer/part-read/types';
-import { FieldNames } from '@app/components/overstyringer/types';
+import { type BaseProps, FieldNames } from '@app/components/overstyringer/types';
 import { useIsAnkeSource, useIsUploadedDocuments, useJournalpost } from '@app/hooks/use-journalpost';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
 import { Heading, InfoCard } from '@navikt/ds-react';
+import { useState } from 'react';
 
 interface Props {
   options: ISetPart[] | undefined;
@@ -24,8 +26,7 @@ export const Avsender = ({ options }: Props) => {
 
   if (isUploadedDocuments) {
     return (
-      <Part
-        partField={FieldNames.AVSENDER}
+      <AvsenderInternal
         part={avsender}
         label="Avsender"
         icon={<StyledAvsenderIcon aria-hidden />}
@@ -63,8 +64,7 @@ export const Avsender = ({ options }: Props) => {
   }
 
   return (
-    <Part
-      partField={FieldNames.AVSENDER}
+    <AvsenderInternal
       part={avsender}
       label="Avsender"
       icon={<StyledAvsenderIcon aria-hidden />}
@@ -72,4 +72,14 @@ export const Avsender = ({ options }: Props) => {
       options={options}
     />
   );
+};
+
+const AvsenderInternal = (props: Omit<BaseProps & PartReadProps, 'partField'>) => {
+  const [isSearchMode, setIsSearchMode] = useState(false);
+
+  if (isSearchMode) {
+    return <AvsenderSearch {...props} exitSearchMode={() => setIsSearchMode(false)} />;
+  }
+
+  return <PartRead {...props} enterSearchMode={() => setIsSearchMode(true)} partField={FieldNames.AVSENDER} />;
 };

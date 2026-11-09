@@ -2,14 +2,14 @@ import { CompanyIcon, PersonIcon } from '@app/components/overstyringer/icons';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { getSakspartName } from '@app/domain/name';
 import { formatId } from '@app/functions/format-id';
-import { IdType, type IPart } from '@app/types/common';
+import { IdType, type IPart, type ISimplePart } from '@app/types/common';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack, Loader, Tag, type TagProps, Tooltip, VStack } from '@navikt/ds-react';
 
-interface Props {
+interface Props<T extends ISimplePart> {
   label: string;
-  data: IPart | undefined | null;
-  setPart: (part: IPart) => void;
+  data: T | undefined | null;
+  setPart: (part: T) => void;
   isLoading: boolean;
   dismiss?: () => void;
   searchString: string;
@@ -17,7 +17,15 @@ interface Props {
   isSaving: boolean;
 }
 
-export const SearchResult = ({ setPart, dismiss, data, isLoading, searchString, isValid, isSaving }: Props) => {
+export const SearchResult = <T extends ISimplePart>({
+  setPart,
+  dismiss,
+  data,
+  isLoading,
+  searchString,
+  isValid,
+  isSaving,
+}: Props<T>) => {
   if (isLoading) {
     return (
       <Render data-color="info" isSaving={isSaving} onDismiss={dismiss}>
@@ -130,7 +138,7 @@ const CustomButton = ({ label, keys, ...props }: CustomButtonProps) => (
 );
 
 interface IconProps {
-  part: IPart | null;
+  part: ISimplePart | null;
 }
 
 const Icon = ({ part }: IconProps) => {
