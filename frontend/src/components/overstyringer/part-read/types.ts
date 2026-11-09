@@ -1,10 +1,17 @@
-import type { IPart } from '@app/types/common';
+import type { IPart, ISimplePart } from '@app/types/common';
 
-export interface ISetPart<T extends IPart | null = IPart> {
+interface CommonProps {
   label: string;
   title: string;
-  defaultPart: T;
   icon?: React.ReactNode;
+}
+
+export interface ISetPart<T extends IPart | null = IPart> extends CommonProps {
+  defaultPart: T;
+}
+
+export interface ISetAvsender extends CommonProps {
+  defaultPart: ISimplePart | null;
 }
 
 export interface EnterSearchModeCallback {

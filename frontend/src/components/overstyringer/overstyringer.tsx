@@ -15,7 +15,7 @@ import { Innsendingshjemler } from '@app/components/overstyringer/innsendingshje
 import { MottattDateError } from '@app/components/overstyringer/mottatt-date-error';
 import { Part } from '@app/components/overstyringer/part';
 import { SakenGjelder } from '@app/components/overstyringer/part-read/part-read';
-import type { ISetPart } from '@app/components/overstyringer/part-read/types';
+import type { ISetAvsender, ISetPart } from '@app/components/overstyringer/part-read/types';
 import { SaksnrITr } from '@app/components/overstyringer/saksnr-i-tr';
 import { Tildeling } from '@app/components/overstyringer/tildeling/tildeling';
 import { FieldNames } from '@app/components/overstyringer/types';
@@ -29,8 +29,7 @@ import { useOtherMulighetProp } from '@app/hooks/use-mulighet-prop';
 import { useRegistrering } from '@app/hooks/use-registrering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useYtelseId } from '@app/hooks/use-ytelse-id';
-import { useGetPartWithUtsendingskanalQuery } from '@app/redux/api/part';
-import type { SearchPartWithUtsendingskanalParams } from '@app/redux/api/registreringer/param-types';
+import { useGetPartQuery } from '@app/redux/api/part';
 import { type IPart, SaksTypeEnum } from '@app/types/common';
 import { JournalposttypeEnum } from '@app/types/dokument';
 import { ValidationFieldNames } from '@app/types/validation';
@@ -44,31 +43,13 @@ interface Props {
   saksbehandlerFromMulighetLabel: string;
 }
 
-const useAvsenderMottakerParams = (): SearchPartWithUtsendingskanalParams | typeof skipToken => {
-  const { data: journalpost } = useJournalpost();
-  const { sakenGjelderValue, overstyringer } = useRegistrering();
-
-  if (
-    typeof journalpost?.avsenderMottaker?.id !== 'string' ||
-    sakenGjelderValue === null ||
-    overstyringer.ytelseId === null
-  ) {
-    return skipToken;
-  }
-
-  return {
-    identifikator: journalpost.avsenderMottaker.id,
-    sakenGjelderId: sakenGjelderValue,
-    ytelseId: overstyringer.ytelseId,
-  };
-};
-
 const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) => {
   const { sakenGjelderValue, overstyringer } = useRegistrering();
   const { klager, fullmektig, avsender } = overstyringer;
   const { data: journalpost } = useJournalpost();
-  const avsenderMottakerParams = useAvsenderMottakerParams();
-  const { data: avsenderMottaker } = useGetPartWithUtsendingskanalQuery(avsenderMottakerParams);
+  const { data: avsenderMottaker } = useGetPartQuery(
+    typeof journalpost?.avsenderMottaker?.id === 'string' ? journalpost.avsenderMottaker.id : skipToken,
+  );
   const { sakenGjelder, isLoading, error, refetch } = useSakenGjelderPart();
   const isAnkeSource = useIsAnkeSource();
 
@@ -164,7 +145,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
         icon: <AvsenderIcon aria-hidden />,
       };
 
-  const journalpostAvsenderOption: ISetPart<IPart | null> | null =
+  const journalpostAvsenderOption: ISetAvsender | null =
     journalpost?.avsenderMottaker?.id === avsender?.identifikator
       ? null
       : {
