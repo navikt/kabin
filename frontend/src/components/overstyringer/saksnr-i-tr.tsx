@@ -1,3 +1,4 @@
+import { isApiError, isObject } from '@app/components/footer/error-type-guard';
 import { ReadOnlyText } from '@app/components/read-only-info/read-only-info';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
@@ -10,15 +11,17 @@ import { useState } from 'react';
 
 export const SaksnrITr = () => {
   const { trygderettenSaksnummer, id } = useRegistrering();
-  const [setSaksnrITr] = useSetSaksnrITrMutation();
+  const [setSaksnrITr, { error }] = useSetSaksnrITrMutation();
   const [value, setValue] = useState(trygderettenSaksnummer ?? '');
-  const error = useValidationError(ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER);
+  const validationError = useValidationError(ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER);
   const fieldName = useFieldName(ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER);
   const canEdit = useCanEdit();
 
   if (!canEdit) {
     return <ReadOnlyText label={fieldName} value={value} id={ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER} />;
   }
+
+  const mutationError = hasData(error) && isApiError(error.data) ? error.data.detail : undefined;
 
   return (
     <TextField
@@ -27,13 +30,15 @@ export const SaksnrITr = () => {
       id={ValidationFieldNames.TRYGDERETTEN_SAKSNUMMER}
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      className="shrink"
+      error={mutationError ?? validationError}
       onBlur={() => {
-        if (trygderettenSaksnummer !== value) {
+        if (trygderettenSaksnummer !== value || error !== undefined) {
           setSaksnrITr({ id, trygderettenSaksnummer: value });
         }
       }}
-      error={error}
     />
   );
 };
+
+const hasData = (error: unknown): error is { data: Record<string, unknown> } =>
+  isObject(error) && 'data' in error && isObject(error.data);
