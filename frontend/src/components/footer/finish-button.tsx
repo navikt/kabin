@@ -159,7 +159,7 @@ const getIsArenaFagsystem = (
     return journalpost?.sak?.fagsystemId === FAGSYSTEM_ARENA;
   }
 
-  if (mulighetResult.typeId === SaksTypeEnum.ANKE) {
+  if (mulighetResult.typeId === SaksTypeEnum.ANKE || mulighetResult.typeId === SaksTypeEnum.ANKE_AFTER_2027) {
     return mulighetResult.mulighet?.originalFagsystemId === FAGSYSTEM_ARENA;
   }
 
