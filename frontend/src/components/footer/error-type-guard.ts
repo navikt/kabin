@@ -23,7 +23,7 @@ export const isIError = (error: unknown): error is IError =>
   typeof error.status === 'number' &&
   typeof error.instance === 'string';
 
-const isObject = (obj: unknown): obj is GenericObject => typeof obj === 'object' && obj !== null;
+export const isObject = (obj: unknown): obj is GenericObject => typeof obj === 'object' && obj !== null;
 
 export const isApiError = (response: unknown): response is IApiErrorReponse => isIError(response);
 
