@@ -5,6 +5,7 @@ import type {
   IAnkemulighet,
   IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
+  IBegjæringOmGjenopptakMulighetAfter2027,
   IKlagemulighet,
   IOmgjøringskravmulighet,
 } from '@app/types/mulighet';
@@ -39,6 +40,12 @@ interface BegjæringOmGjenopptakResult {
   mulighet: IBegjæringOmGjenopptakMulighet | undefined;
 }
 
+interface BegjæringOmGjenopptakAfter2027Result {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
+  fromJournalpost: false;
+  mulighet: IBegjæringOmGjenopptakMulighetAfter2027 | undefined;
+}
+
 interface JournalpostmulighetResult {
   typeId: SaksTypeEnum;
   fromJournalpost: true;
@@ -57,6 +64,7 @@ export const useMulighet = ():
   | AnkeAfter2027Result
   | OmgjøringskravResult
   | BegjæringOmGjenopptakResult
+  | BegjæringOmGjenopptakAfter2027Result
   | JournalpostmulighetResult
   | NoneResult => {
   const {
@@ -67,7 +75,8 @@ export const useMulighet = ():
       ankemuligheterEtter2027,
       klagemuligheter,
       omgjoeringskravmuligheter,
-      gjenopptaksmuligheter,
+      gjenopptaksmuligheterFoer2027,
+      gjenopptaksmuligheterEtter2027,
     },
     mulighetIsBasedOnJournalpost,
   } = useRegistrering();
@@ -76,7 +85,8 @@ export const useMulighet = ():
   const ankeAfter2027mulighet = selectMulighet(ankemuligheterEtter2027, mulighet);
   const klagemulighet = selectMulighet(klagemuligheter, mulighet);
   const omgjøringskravmulighet = selectMulighet(omgjoeringskravmuligheter, mulighet);
-  const gjenopptaksmulighet = selectMulighet(gjenopptaksmuligheter, mulighet);
+  const gjenopptaksmulighet = selectMulighet(gjenopptaksmuligheterFoer2027, mulighet);
+  const gjenopptakAfter2027Mulighet = selectMulighet(gjenopptaksmuligheterEtter2027, mulighet);
 
   if (mulighetIsBasedOnJournalpost && typeId !== null) {
     return { typeId, mulighet: mulighet ?? undefined, fromJournalpost: true };
@@ -102,6 +112,10 @@ export const useMulighet = ():
     return { typeId, mulighet: gjenopptaksmulighet, fromJournalpost: false };
   }
 
+  if (typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027) {
+    return { typeId, mulighet: gjenopptakAfter2027Mulighet, fromJournalpost: false };
+  }
+
   return { typeId, mulighet: undefined, fromJournalpost: false };
 };
 
@@ -111,6 +125,7 @@ const selectMulighet = <
     | IAnkemulighet
     | IAnkemulighetAfter2027
     | IBegjæringOmGjenopptakMulighet
+    | IBegjæringOmGjenopptakMulighetAfter2027
     | IOmgjøringskravmulighet,
 >(
   muligheter: T[],

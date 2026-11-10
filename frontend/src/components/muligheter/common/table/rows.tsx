@@ -40,6 +40,10 @@ const Rows = ({ type, columns, muligheter, selectable }: Props): JSX.Element[] =
       return muligheter.map((m) => (
         <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValid(m)} selectable={selectable} />
       ));
+    case MulighetType.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
+      return muligheter.map((m) => (
+        <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValid(m)} selectable={selectable} />
+      ));
     case MulighetType.ANKE:
       return muligheter.map((m) => (
         <Row key={m.id} mulighet={m} columns={columns} type={type} isValid={isValid(m)} selectable={selectable} />

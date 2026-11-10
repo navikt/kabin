@@ -49,6 +49,10 @@ export interface IAnkemulighetAfter2027 extends Omit<IAnkemulighet, 'mulighetTyp
   readonly mulighetTypeId: SaksTypeEnum.ANKE_AFTER_2027;
 }
 
+export interface IBegjæringOmGjenopptakMulighetAfter2027 extends Omit<IAnkemulighet, 'mulighetTypeId'> {
+  readonly mulighetTypeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
+}
+
 export interface IAdditionalKabalMulighet extends IAnkemulighet {}
 
 export interface ExistingBehandling {
@@ -66,4 +70,8 @@ export type OtherMulighet = IAnkemulighet | IAnkemulighetAfter2027 | IOmgjøring
 
 /** Every kind of mulighet. Discriminated by `mulighetTypeId`, except `IAdditionalKabalMulighet`,
  * which is indistinguishable from `IAnkemulighet` - see `MulighetType` for that distinction. */
-export type IMulighet = IKlagemulighet | OtherMulighet | IBegjæringOmGjenopptakMulighet;
+export type IMulighet =
+  | IKlagemulighet
+  | OtherMulighet
+  | IBegjæringOmGjenopptakMulighet
+  | IBegjæringOmGjenopptakMulighetAfter2027;

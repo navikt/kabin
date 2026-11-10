@@ -94,7 +94,7 @@ const AnkeFraTrygderettenButton = () => {
     <ToggleItem
       value={Source.ANKE}
       icon={<InboxDownIcon aria-hidden />}
-      label="Anke fra Trygderetten"
+      label="Sak fra Trygderetten"
       disabled={!featureEnabled || !canEdit}
     />
   );

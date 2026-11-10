@@ -39,6 +39,7 @@ const useSections = (): Record<SectionNames, string> => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return OMGJØRINGSKRAV_SECTIONS;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return BEGJÆRING_OM_GJENOPPTAK_SECTIONS;
     case null:
       return DEFAULT_SECTIONS;
