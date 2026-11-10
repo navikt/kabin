@@ -27,6 +27,7 @@ const getJournalpostTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Journalført omgjøringskrav';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Journalført begjæring om gjenopptak';
   }
 };
@@ -39,6 +40,7 @@ const getMulighetTitle = (typeId: RegistreringType): string => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Valgt vedtak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Valgt kjennelse';
   }
 };
@@ -109,9 +111,17 @@ export const StatusDetails = ({ id, status }: Props) => {
         saksnummer={saksnummer}
         fagsystemId={fagsystemId}
         sakenGjelder={sakenGjelder}
-        mulighetDate={typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? status.kjennelseMottatt : vedtakDate}
+        mulighetDate={
+          typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
+            ? status.kjennelseMottatt
+            : vedtakDate
+        }
         ytelseId={ytelseId}
-        mulighetDateLabel={typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ? 'Kjennelsesdato' : 'Vedtaksdato'}
+        mulighetDateLabel={
+          typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
+            ? 'Kjennelsesdato'
+            : 'Vedtaksdato'
+        }
       />
 
       {svarbrev === null ? null : <Svarbrev svarbrev={svarbrev} id={id} />}

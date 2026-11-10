@@ -21,12 +21,15 @@ export const TypeTag = ({ typeId }: Props) => {
 const SAKSTYPE_TO_TAG_COLOR: Record<SaksTypeEnum, TagProps['data-color']> = {
   [SaksTypeEnum.KLAGE]: 'meta-purple',
   [SaksTypeEnum.ANKE]: 'success',
-  [SaksTypeEnum.ANKE_AFTER_2027]: 'info',
+  [SaksTypeEnum.ANKE_AFTER_2027]: 'brand-magenta',
   [SaksTypeEnum.ANKE_I_TR]: 'danger',
-  [SaksTypeEnum.TR_OPPHEVET]: 'meta-lime',
+  [SaksTypeEnum.ANKE_I_TR_AFTER_2027]: 'brand-beige',
   [SaksTypeEnum.OMGJØRINGSKRAV]: 'info',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'warning',
+  [SaksTypeEnum.TR_OPPHEVET]: 'meta-lime',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'success',
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'neutral',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027]: 'brand-magenta',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027]: 'warning',
 };
 
 const NonNullableTypeTag = ({ typeId }: { typeId: SaksTypeEnum }) => {

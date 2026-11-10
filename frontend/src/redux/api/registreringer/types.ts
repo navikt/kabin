@@ -6,6 +6,7 @@ import type {
   IAnkemulighet,
   IAnkemulighetAfter2027,
   IBegjæringOmGjenopptakMulighet,
+  IBegjæringOmGjenopptakMulighetAfter2027,
   IKlagemulighet,
   IOmgjøringskravmulighet,
 } from '@app/types/mulighet';
@@ -109,7 +110,8 @@ export interface BaseRegistrering {
     ankemuligheterFoer2027: IAnkemulighet[];
     ankemuligheterEtter2027: IAnkemulighetAfter2027[];
     omgjoeringskravmuligheter: IOmgjøringskravmulighet[];
-    gjenopptaksmuligheter: IBegjæringOmGjenopptakMulighet[];
+    gjenopptaksmuligheterFoer2027: IBegjæringOmGjenopptakMulighet[];
+    gjenopptaksmuligheterEtter2027: IBegjæringOmGjenopptakMulighetAfter2027[];
     muligheterFetched: string; // DateTime
   };
   additionalKabalMuligheter: IAdditionalKabalMulighet[];

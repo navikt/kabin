@@ -85,9 +85,17 @@ type IBegjæringOmGjenopptakStatus = IBaseStatus & {
   kjennelseMottatt: string | null;
 };
 
+type IBegjæringOmGjenopptakAfter2027Status = IBaseStatus & {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
+  vedtakDate: string | null;
+  kjennelseMottatt: string | null;
+  trygderettenSaksnummer: string;
+};
+
 export type IStatus =
   | IAnkestatus
   | IAnkeAfter2027Status
   | IKlagestatus
   | IOmgjøringskravstatus
-  | IBegjæringOmGjenopptakStatus;
+  | IBegjæringOmGjenopptakStatus
+  | IBegjæringOmGjenopptakAfter2027Status;

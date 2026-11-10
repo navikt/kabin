@@ -135,7 +135,7 @@ const Parts = ({ title, klagerLabel, saksbehandlerFromMulighetLabel }: Props) =>
         }
       : null;
 
-  // For anke fra Trygderetten, avsender is Trygderetten, which can never be a party in the case.
+  // For sak fra Trygderetten, avsender is Trygderetten, which can never be a party in the case.
   const avsenderOption: ISetPart<IPart | null> | null = isAnkeSource
     ? null
     : {
@@ -226,7 +226,9 @@ export const Overstyringer = ({ title, ...props }: Props) => {
           <EditMottattVedtaksinstans />
           <EditMottattKlageinstans />
           <EditFrist />
-          {typeId === SaksTypeEnum.ANKE_AFTER_2027 ? <SaksnrITr /> : null}
+          {typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 ? (
+            <SaksnrITr />
+          ) : null}
         </HStack>
         <MottattDateError />
       </VStack>
