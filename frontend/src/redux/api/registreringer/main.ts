@@ -5,7 +5,6 @@ import {
   removeRegistrering,
   removeUferdigRegistrering,
   setRegistrering,
-  setUferdigRegistrering,
   updateFerdigRegistrering,
   updateRegistrering,
 } from '@app/redux/api/registreringer/queries';
@@ -31,7 +30,6 @@ const mainSlice = registreringApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         const { data } = await queryFulfilled;
         setRegistrering(data.id, data);
-        setUferdigRegistrering(data);
       },
     }),
 

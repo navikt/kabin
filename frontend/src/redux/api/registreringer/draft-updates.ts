@@ -1,15 +1,11 @@
-import { type UpdateFn, updateRegistrering, updateUferdigRegistrering } from '@app/redux/api/registreringer/queries';
+import { type UpdateFn, updateRegistrering } from '@app/redux/api/registreringer/queries';
 import type { DraftRegistrering, Overstyringer, Svarbrev } from '@app/redux/api/registreringer/types';
 
 // All drafts
 export const updateDrafts = (id: string, update: UpdateFn<DraftRegistrering>): (() => void) => {
   const patchResult = updateRegistrering(id, (draft) => (draft.finished === null ? update(draft) : draft));
-  const unfinishedPatchResult = updateUferdigRegistrering(id, update);
 
-  return () => {
-    patchResult.undo();
-    unfinishedPatchResult.undo();
-  };
+  return patchResult.undo;
 };
 
 export interface PartialDraftRegistrering

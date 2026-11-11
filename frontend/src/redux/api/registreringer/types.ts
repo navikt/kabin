@@ -141,12 +141,19 @@ export interface FinishedRegistrering extends BaseRegistrering {
   behandlingId: string;
 }
 
-export interface FinishedRegistreringListItem {
+interface BaseRegistreringListItem {
   id: string;
   sakenGjelderValue: string | null;
   typeId: RegistreringType | null; // Samme type-IDer som i Kodeverket.
   ytelseId: string | null;
   created: string;
+}
+
+export interface DraftRegistreringListItem extends BaseRegistreringListItem {
+  modified: string;
+}
+
+export interface FinishedRegistreringListItem extends BaseRegistreringListItem {
   /** When the registration was finished.
    * @type: DateTime
    */

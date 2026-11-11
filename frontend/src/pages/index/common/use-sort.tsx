@@ -1,5 +1,5 @@
 import { useGetSakstyperQuery, useGetSimpleYtelserQuery } from '@app/redux/api/kodeverk';
-import type { FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
+import type { DraftRegistreringListItem, FinishedRegistreringListItem } from '@app/redux/api/registreringer/types';
 import type { SaksTypeEnum } from '@app/types/common';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import type { SortState } from '@navikt/ds-react';
@@ -7,16 +7,13 @@ import { useMemo } from 'react';
 
 export const ROWS_PER_PAGE = 10;
 
-type SortProp = keyof FinishedRegistreringListItem;
+type Item = FinishedRegistreringListItem | DraftRegistreringListItem;
 
-const isSortProp = (key: string): key is SortProp =>
-  ['typeId', 'modified', 'created', 'ytelseId', 'finished'].includes(key);
+type SortKey = keyof FinishedRegistreringListItem | keyof DraftRegistreringListItem;
 
-export const useSort = (
-  registreringer: FinishedRegistreringListItem[],
-  sort: SortState | undefined,
-  page: number,
-): FinishedRegistreringListItem[] => {
+const isSortProp = (key: string, a: Item, b: Item): key is SortKey => key in a && key in b;
+
+export const useSort = <T extends Item>(registreringer: T[], sort: SortState | undefined, page: number): T[] => {
   const { data: ytelser = [] } = useGetSimpleYtelserQuery();
   const { data: sakstyper = [] } = useGetSakstyperQuery();
 
@@ -24,7 +21,7 @@ export const useSort = (
     () =>
       registreringer
         .toSorted((a, b) => {
-          if (sort === undefined || sort.direction === 'none' || !isSortProp(sort.orderBy)) {
+          if (sort === undefined || sort.direction === 'none' || !isSortProp(sort.orderBy, a, b)) {
             return 0;
           }
 
@@ -38,9 +35,9 @@ export const useSort = (
 };
 
 const getValues = (
-  a: FinishedRegistreringListItem,
-  b: FinishedRegistreringListItem,
-  sortBy: SortProp,
+  a: Item,
+  b: Item,
+  sortBy: SortKey,
   ytelser: IKodeverkSimpleValue[],
   sakstyper: IKodeverkSimpleValue[],
 ): [string, string] => {
@@ -49,6 +46,11 @@ const getValues = (
       return getSakstypeNames(a, b, sakstyper);
     case 'ytelseId':
       return getYtelseNames(a, b, ytelser);
+    case 'behandlingId':
+    case 'finished':
+      return [isFinished(a) ? a[sortBy] : '', isFinished(b) ? b[sortBy] : ''];
+    case 'modified':
+      return [isFinished(a) ? '' : a.modified, isFinished(b) ? '' : b.modified];
     default:
       return [a[sortBy] ?? '', b[sortBy] ?? ''];
   }
@@ -56,23 +58,20 @@ const getValues = (
 
 const getSakstypeName = (typeId: SaksTypeEnum | null, sakstyper: IKodeverkSimpleValue[]): string => {
   if (typeId === null) {
-    return '';
+    return 'Ikke satt';
   }
 
   return sakstyper.find((s) => s.id === typeId)?.navn ?? '';
 };
 
-const getSakstypeNames = (
-  a: FinishedRegistreringListItem,
-  b: FinishedRegistreringListItem,
-  sakstyper: IKodeverkSimpleValue[],
-): [string, string] => [getSakstypeName(a.typeId, sakstyper), getSakstypeName(b.typeId, sakstyper)];
+const getSakstypeNames = (a: Item, b: Item, sakstyper: IKodeverkSimpleValue[]): [string, string] => [
+  getSakstypeName(a.typeId, sakstyper),
+  getSakstypeName(b.typeId, sakstyper),
+];
 
-const getYtelseNames = (
-  a: FinishedRegistreringListItem,
-  b: FinishedRegistreringListItem,
-  ytelser: IKodeverkSimpleValue[],
-): [string, string] => [
+const getYtelseNames = (a: Item, b: Item, ytelser: IKodeverkSimpleValue[]): [string, string] => [
   a.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === a.ytelseId)?.navn ?? ''),
   b.ytelseId === null ? 'Ingen' : (ytelser.find((y) => y.id === b.ytelseId)?.navn ?? ''),
 ];
+
+const isFinished = (item: Item): item is FinishedRegistreringListItem => 'finished' in item;
