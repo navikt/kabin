@@ -1,0 +1,35 @@
+import { SortHeader } from '@app/pages/index/common/sort-header';
+import { type SortState, Table, type TableProps } from '@navikt/ds-react';
+
+interface Props {
+  sortState: SortState;
+  onSortChange: TableProps['onSortChange'];
+}
+
+export const DraftHeaders = ({ sortState, onSortChange }: Props) => {
+  const { direction, orderBy } = sortState;
+  const common = { direction, orderBy, onSortChange };
+
+  return (
+    <Table.Header>
+      <Table.Row>
+        <Table.ColumnHeader colSpan={2}>Saken gjelder</Table.ColumnHeader>
+
+        <SortHeader {...common} sortKey="typeId">
+          Type
+        </SortHeader>
+        <SortHeader {...common} sortKey="ytelseId">
+          Ytelse
+        </SortHeader>
+        <SortHeader {...common} sortKey="created">
+          Opprettet
+        </SortHeader>
+        <SortHeader {...common} sortKey="modified">
+          Endret
+        </SortHeader>
+
+        <Table.HeaderCell />
+      </Table.Row>
+    </Table.Header>
+  );
+};

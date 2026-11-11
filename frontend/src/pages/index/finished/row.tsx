@@ -1,5 +1,5 @@
+import { GoToRegistrering } from '@app/components/go-to-registrering-button/go-to-registrering-button';
 import { ExternalLinkButton } from '@app/components/link-button/link-button';
-import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { TypeTag } from '@app/components/type-tag/type-tag';
 import { YtelseTag } from '@app/components/ytelse-tag/ytelse-tag';
 import { KABAL_URL } from '@app/constants';
@@ -38,7 +38,7 @@ export const FinishedRow = ({ registrering }: { registrering: FinishedRegistreri
       <Table.DataCell>
         <HStack justify="center" gap="space-4">
           <OpenButton path={path}>Status</OpenButton>
-          <SeUtfylling registreringId={registrering.id} />
+          <GoToRegistrering registreringId={registrering.id} />
           <OpenKabal {...registrering} />
         </HStack>
       </Table.DataCell>

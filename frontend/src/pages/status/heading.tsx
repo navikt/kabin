@@ -1,5 +1,5 @@
+import { GoToRegistrering } from '@app/components/go-to-registrering-button/go-to-registrering-button';
 import { ExternalLinkButton } from '@app/components/link-button/link-button';
-import { SeUtfylling } from '@app/components/se-utfylling-button/se-utfylling-button';
 import { KABAL_URL } from '@app/constants';
 import { NewRegistrering } from '@app/pages/status/new-registrering';
 import { CheckmarkCircleFillIcon, HouseIcon } from '@navikt/aksel-icons';
@@ -68,7 +68,7 @@ export const StatusHeading = ({ headingText, alertText, behandlingId, registreri
           Åpne behandling i Kabal
         </ExternalLinkButton>
 
-        <SeUtfylling registreringId={registreringId} />
+        <GoToRegistrering registreringId={registreringId} />
       </HStack>
     </VStack>
   </Box>

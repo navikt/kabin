@@ -4,9 +4,10 @@ import { Link } from 'react-router';
 
 interface Props {
   registreringId: string;
+  children?: string;
 }
 
-export const SeUtfylling = ({ registreringId }: Props) => (
+export const GoToRegistrering = ({ registreringId, children = 'Se utfylling' }: Props) => (
   <Button
     data-color="neutral"
     as={Link}
@@ -14,7 +15,10 @@ export const SeUtfylling = ({ registreringId }: Props) => (
     variant="secondary"
     size="small"
     icon={<DocPencilIcon aria-hidden role="presentation" />}
+    onClick={(e) => {
+      e.stopPropagation();
+    }}
   >
-    Se utfylling
+    {children}
   </Button>
 );

@@ -1,4 +1,4 @@
-import { ROWS_PER_PAGE, useSort } from '@app/pages/index/drafts/use-sort';
+import { ROWS_PER_PAGE, useSort } from '@app/pages/index/common/use-sort';
 import { FinishedHeaders } from '@app/pages/index/finished/headers';
 import { FinishedRow } from '@app/pages/index/finished/row';
 import { TableAndPagination } from '@app/pages/index/layout';

@@ -1,8 +1,8 @@
 import { IS_LOCALHOST } from '@app/redux/api/common';
-import { setRegistreringFn } from '@app/redux/api/registreringer/helpers';
 import { RegistreringTagType, registreringApi } from '@app/redux/api/registreringer/registrering';
 import {
   type DraftRegistrering,
+  type DraftRegistreringListItem,
   type FinishedRegistreringListItem,
   GET_FERDIGE_REGISTRERINGER_PARAMS,
   type Registrering,
@@ -35,17 +35,8 @@ const queriesSlice = registreringApi.injectEndpoints({
       query: ({ sidenDager }) => `/registreringer/ferdige?sidenDager=${sidenDager}`,
     }),
 
-    getUferdigeRegistreringer: builder.query<DraftRegistrering[], void>({
+    getUferdigeRegistreringer: builder.query<DraftRegistreringListItem[], void>({
       query: () => '/registreringer/uferdige',
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-
-        for (const registrering of data) {
-          setRegistrering(registrering.id, registrering);
-
-          dispatch(queriesSlice.util.upsertQueryData('getMuligheter', registrering.id, registrering.muligheter));
-        }
-      },
     }),
 
     getRegistrering: builder.query<Registrering, string>({
@@ -98,6 +89,7 @@ export const {
   useGetFerdigeRegistreringerQuery,
   useGetRegistreringQuery,
   useLazyGetAdditionalKabalMuligheterQuery,
+  useGetUferdigeRegistreringerQuery,
 } = queriesSlice;
 
 // Registrering
@@ -109,20 +101,6 @@ export const removeRegistrering = (id: string) =>
 
 export const setRegistrering = (id: string, data: Registrering) =>
   reduxStore.dispatch(queriesSlice.util.upsertQueryData('getRegistrering', id, data));
-
-// Uferdig registrering
-export const setUferdigRegistrering = (data: DraftRegistrering) =>
-  reduxStore.dispatch(
-    queriesSlice.util.updateQueryData('getUferdigeRegistreringer', undefined, (draft) =>
-      setRegistreringFn(draft, data),
-    ),
-  );
-export const updateUferdigRegistrering = (id: string, update: UpdateFn) =>
-  reduxStore.dispatch(
-    queriesSlice.util.updateQueryData('getUferdigeRegistreringer', undefined, (draft) =>
-      draft.map((d) => (d.id === id ? update(d) : d)),
-    ),
-  );
 
 export const removeUferdigRegistrering = (id: string) =>
   reduxStore.dispatch(

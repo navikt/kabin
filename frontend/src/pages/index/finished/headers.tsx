@@ -1,4 +1,4 @@
-import { SortHeader } from '@app/pages/index/finished/sort-header';
+import { SortHeader } from '@app/pages/index/common/sort-header';
 import { type SortState, Table, type TableProps } from '@navikt/ds-react';
 
 interface Props {
